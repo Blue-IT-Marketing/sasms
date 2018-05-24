@@ -1,0 +1,104 @@
+application: sa-sms
+version: 2
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+includes:
+- navigation.yaml
+- admin.yaml
+- dashboard.yaml
+- accounts.yaml
+- contact.yaml
+- about.yaml
+- mysms.yaml
+- myemail.yaml
+- contacts.yaml
+- tasks.yaml
+- affiliate.yaml
+- advertise.yaml
+- surveys.yaml
+- myendpoints.yaml
+- fax.yaml
+- blog.yaml
+- marketing.yaml
+- clicksend.yaml
+handlers:
+
+- url: /favicon.ico
+  static_files: static/dist/img/favicon.ico
+  upload: static/dist/img/favicon.ico
+  secure: always
+
+- url: /static
+  static_dir: static
+  secure: always
+
+- url: /static/bootstrap
+  static_dir: static/boostrap
+  secure: always
+
+- url: /service.js
+  static_files: static/service.js
+  upload: static/service.js
+  expiration: 0m
+
+
+- url: /static/sw/sw-toolbox.js
+  static_files: static/sw/sw-toolbox.js
+  upload: static/sw/sw-toolbox.js
+  expiration: 0m
+
+- url: /_ah/mail/.+
+  login: admin
+  script: myemail.app
+
+- url: .*
+  script: main.app
+  secure: always
+
+libraries:
+
+- name: webapp2
+  version: "2.5.2"
+
+- name: jinja2
+  version: "latest"
+
+- name: ssl
+  version: "latest"
+
+inbound_services:
+- mail
+- warmup
+- channel_presence
+
+env_variables:
+    MJ_APIKEY_PUBLIC: XXXXX
+    MJ_APIKEY_PRIVATE: XXXXX
+    MAILJET_SENDER: XXXXX
+    SENDGRID_API_KEY: XXXXX
+    NEWS_LETTERS_SENDER: XXXXX
+    TWILIO_ACCOUNT_SID: XXXXX
+    TWILIO_AUTH_TOKEN: XXXXX
+    FACEBOOK_GRAPH_API_KEY : XXXXX
+    TWITTER_CONSUMER_API : XXXXX
+    TWITTER_CONSUMER_SECRET : XXXXX
+    TWITTER_ACCESS_TOKEN_KEY : XXXXX
+    TWITTER_ACCESS_TOKEN_SECRET : XXXXX
+    CLICK_SEND_API_KEY : XXXXX
+    CLICK_SEND_AUTH : XXXXX
+    CLICK_SEND_LOGIN : XXXXX
+    CLICK_SEND_FROM_EMAIL : XXXXX
+    BIM_INTERNAL_API : XXXXX
+    BIM_INTERNAL_SECRET : XXXXX
+    PORTAL_VODACOM_LOGIN : XXXXX
+    PORTAL_VODACOM_PASSWORD : XXXXX
+    PORTAL_VODACOM_CSV_EMAIL : XXXXX
+    PORTAL_VODACOM_EMAIL : XXXXX
+    PORTAL_VODACOM_SENDER_EMAIL : XXXXX
+    PORTAL_BUDGET_LOGIN : XXXXX
+    PORTAL_BUDGET_PASSWORD : XXXXX
+
+
+
