@@ -1,0 +1,9 @@
+
+[
+  {
+    "Bulk SMS Credits":"{{ strBulkSMSCredit }}",
+    "Advertising Credits":"{{ strAdvertisingCredit }}",
+    "Survey Credits": "{{ strSurveyCredit }}",
+    "Affiliate Credits": "{{ strAffiliateCredit }}"
+  }
+]

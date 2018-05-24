@@ -1,0 +1,281 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Account</h3>
+    </div>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#AccountDetails" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-user"> </i> Account Details</button></a></li>
+        <li><a href="#Credits" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-credit-card"> </i> Credits </button> </a> </li>
+        <li><a href="#ProformaInvoice" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-piggy-bank"> </i> Proforma Invoices</button> </a> </li>
+        <li><a href="#DepositVerification" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-ok"> </i> Deposit Verification</button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="AccountDetails">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"><i class="glyphicon glyphicon-user"> </i> Account Details </h3>
+                </div>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="strNames" class="col-sm-3 control-label pull-left">Names</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-user"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strNames" value="{{ thisFaxAccount.strNames }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strSurname" class="col-sm-3 control-label pull-left">Surname</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-user"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strSurname" value="{{ thisFaxAccount.strSurname }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strCell" class="col-sm-3 control-label pull-left">Cell</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-phone"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strCell" value="{{ thisFaxAccount.strCell }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strTel" class="col-sm-3 control-label pull-left">Tel</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-phone-alt"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strTel" value="{{ thisFaxAccount.strTel }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-envelope"> </i>
+                                </div>
+                                <input type="email" class="form-control" id="strEmail" value="{{ thisFaxAccount.strEmail }}">
+                                <label id="result"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strWebsite" class="col-sm-3 control-label pull-left">Website</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-link"> </i>
+                                </div>
+                                <input type="url" class="form-control" id="strWebsite" value="{{ thisFaxAccount.strWebsite }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-primary btn-block" id="UpdateAccountDetailsButt"><strong><i class="fa fa-cloud"> </i> Update Account </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <div id="AccountINFDIV"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane" id="Credits">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"> </i> Advertising Credits</h3>
+                </div>
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="strTotalCredits" class="col-sm-3 control-label pull-left">Present Credits (SMS)</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-user"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strTotalCredits" value="{{ thisFaxAccount.strCreditInPages }}" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strAddCredits" class="col-sm-3 control-label pull-left">Add Credits</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-money"> </i>
+                                </div>
+                                <select id="strAddCredits" class="form-control">
+                                    <option value="100">100</option>
+                                    <option value="500">500</option>
+                                    <option value="1000">1000</option>
+                                    <option value="2000">2000</option>
+                                    <option value="3000">3000</option>
+                                    <option value="4000">4000</option>
+                                    <option value="5000">5000</option>
+                                    <option value="10000">10,000</option>
+                                    <option value="15000">15,000</option>
+                                    <option value="20000">20,000</option>
+                                    <option value="250000">25,000</option>
+                                    <option value="30000">30,000</option>
+                                    <option value="35000">35,000</option>
+                                    <option value="40000">40,000</option>
+                                    <option value="45000">45,000</option>
+                                    <option value="50000">50,000</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strPaymentMethod" class="col-sm-3 control-label pull-left">Payment Method</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-credit-card"> </i>
+                                </div>
+                                <select id="strPaymentMethod" class="form-control">
+                                    <option value="EFT" disabled="disabled">EFT</option>
+                                    <option value="DirectDeposit" default="default">Direct Deposit</option>
+                                    <option value="CreditCard" disabled="disabled">Credit/Debit Card</option>
+                                    <option value="PayPal" disabled="disabled">PayPal</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left" ></label>
+                        <div class="col-xs-6">
+                          <p class="lead">Payment Methods:</p>
+                          <img src="/static/dist/img/credit/visa.png" alt="Visa">
+                          <img src="/static/dist/img/credit/mastercard.png" alt="Mastercard">
+                          <img src="/static/dist/img/credit/paypal2.png" alt="Paypal">
+
+                          <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                              <span class="fa fancybox-bg">Note that all Credit Purchases are non refundable</span>
+                          </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-primary btn-block" id="AddCreditsButt"><strong><i class="fa fa-cc-paypal"> </i> Add Credits </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <div id="AddCreditsINFDIV"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane" id="ProformaInvoice">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> <i class="glyphicon glyphicon-ok"> </i> Proforma Invoices</h3>
+                </div>
+                <table id="ProformaInvoicesTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td>Reference</td>
+                            <td>Credits</td>
+                            <td>Deposit Amount</td>
+                            <td>Print</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>{{ thisFaxAccount.strTopUpReference }}</td>
+                            <td>{{ thisFaxAccount.strTopUpCredit }}</td>
+                            <td>{{ thisFaxAccount.strTotalTopUpCost }}</td>
+                            <td><a href="{{ thisFaxAccount.strTopUpInvoiceLink }}"> Print Invoice</a> </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Reference</td>
+                            <td>Credits</td>
+                            <td>Deposit Amount</td>
+                            <td>Print</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane" id="DepositVerification">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> <i class="glyphicon glyphicon-ok"> </i> Deposit Verification </h3>
+                    <br><small>Note that your reference must always be the same on your proforma invoice as it is on your deposit slip</small><br>
+                    <small>And you must always remember to indicate the actual reference number on your deposit slip in the space provided</small>
+                </div>
+                <form class="form-horizontal">
+                    <input type="hidden" class="hidden" id="strTopUpReference" value="{{ thisFaxAccount.strTopUpReference }}">
+                    <div class="form-group">
+                        <label for="strYourReferenceNumber" class="col-sm-3 control-label pull-left">Reference On Slip</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-file"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strYourReferenceNumber">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strDepositSlipFile" class="col-sm-3 control-label pull-left">Deposit Slip</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-file"> </i>
+                                </div>
+                                <input type="file" class="btn btn-primary btn-block" id="strDepositSlipFile">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-primary btn-block" id="UploadDepositSlipButt"><strong><i class="glyphicon glyphicon-file"> </i> Upload Deposit Slip </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <div id="UploadDepositSlipINFDIV"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/dist/js/client.js"></script>
+<script src="/static/dist/js/pages/fax/account.js"></script>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#ProformaInvoicesTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

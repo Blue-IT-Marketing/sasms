@@ -1,0 +1,5 @@
+cell,email,names,surname{% for thisContact in thisContactList %}
+{{ thisContact.strCell}},{{ thisContact.strEmail }},{{ thisContact.strNames }},{{ thisContact.strSurname }}
+{% endfor %}
+
+

@@ -1,0 +1,15 @@
+<script src="https://smtpjs.com/smtp.js">
+</script>
+
+
+Email.sendWithAttachment(
+    "from@you.com",
+    "to@them.com",
+    "Subject",
+    "Body",
+    "host.yourisp.com",
+    "username",
+    "password",
+    "http://url-where-your-attachment-file-is-stored");
+
+

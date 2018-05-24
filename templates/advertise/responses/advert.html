@@ -1,0 +1,40 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="../../../static/plugins/datatables/dataTables.bootstrap.css">
+<!-- advert responses -->
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Advert Responses</h3>
+    </div>
+    <table id="ThisPaidTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Cell</td>
+                <td>Response</td>
+                <td>Date</td>
+                <td>Time</td>
+            </tr>
+        </thead>
+        <tbody>
+        {%  for thisResponse in  thisResponsesList %}
+            <tr>
+                <td>{{ thisResponse.strCell }}</td>
+                <td>{{ thisResponse.strResponse }}</td>
+                <td>{{ thisResponse.strDateReceived }}</td>
+                <td>{{ thisResponse.strTimeReceived }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Cell</td>
+                <td>Response</td>
+                <td>Date</td>
+                <td>Time</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<!-- DataTables -->
+<script src="../../../static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../../static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#ThisPaidTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

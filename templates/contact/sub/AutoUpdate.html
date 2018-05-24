@@ -1,0 +1,34 @@
+<div class="direct-chat-messages">
+    <!-- Message. Default to the left -->
+    {%  for thisComment in thisCommentList %}
+      {% if thisComment.isClientComment == true  %}
+        <!-- Message to the right -->
+        <div class="direct-chat-msg">
+          <div class="direct-chat-info clearfix">
+            <span class="direct-chat-timestamp pull-left">{{ thisComment.strCommentDate }} {{ thisComment.strCommentTime }}</span>
+          </div>
+
+          <div class="direct-chat-text">
+            {{ thisComment.strComment }}
+          </div>
+          <!-- /.direct-chat-text -->
+        </div>
+      {%  else %}
+        <!-- Message to the right -->
+        <div class="direct-chat-msg right">
+          <div class="direct-chat-info clearfix">
+            <span class="direct-chat-timestamp pull-left">{{ thisComment.strCommentDate }} {{ thisComment.strCommentTime }}</span>
+          </div>
+          <div class="direct-chat-text">
+            {{ thisComment.strComment }}
+          </div>
+          <!-- /.direct-chat-text -->
+        </div>
+      {%  endif %}
+  {%  endfor %}
+  </div>
+{%  if thisTicket is defined %}
+<input type="hidden" class="hidden" id="strTicketID" value="{{ thisTicket.strTicketID }}">
+<input type="hidden" class="hidden" id="strThreadID" value="{{ thisThread.strThreadID }}">
+<input type="hidden" class="hidden" id="strUserID" value="{{ thisTicket.strUserID }}">
+{% endif %}

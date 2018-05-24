@@ -1,0 +1,203 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Survey Questions</h3>
+    </div>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#MyQuestionsTab" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-user"> </i> My Questions</button></a></li>
+            <li><a href="#ManageQuestionsTab" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-adjust"> </i> Manage Questions</button> </a> </li>
+        </ul>
+        <div class="tab-content">
+            <div class="active tab-pane" id="MyQuestionsTab">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> My Survey</h3>
+                        <input type="hidden" class="hidden" id="strSurveyID" value="{{ vstrSurveyID }}">
+                    </div>
+                         <div class="row">
+                                <div class="col-md-6">
+                                  <div class="box box-solid">
+                                    <div class="box-header with-border">
+                                      <h3 class="box-title">{{ thisSurvey.strName }}</h3><br>
+                                      <small>{{ thisSurvey.strDescription }}</small>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                        <div class="box box-header with-border">
+                                            <h3 class="box-title">Survey Questions</h3>
+                                        </div>
+                                      <div class="box-group" id="accordion">
+                                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                                        {% for thisQuestion in thisMultiChoiceSurveyList %}
+                                            <div class="panel box box-success">
+                                              <div class="box-header with-border">
+                                                <h4 class="box-title">
+                                                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ loop.index0 }}">
+                                                    {{ thisQuestion.strQuestion }}
+                                                  </a>
+                                                </h4>
+                                              </div>
+                                              <div id="collapse{{ loop.index0 }}" class="panel-collapse collapse">
+                                                <div class="box-body">
+                                                    <ul class="list-group-unbordered">
+                                                        <li class="list-group-item">{{ thisQuestion.strChoiceOne }}</li>
+                                                        <li class="list-group-item">{{ thisQuestion.strChoiceTwo }}</li>
+                                                        <li class="list-group-item">{{ thisQuestion.strChoiceThree }}</li>
+                                                        <li class="list-group-item">{{ thisQuestion.strChoiceFour }}</li>
+
+                                                    </ul>
+                                                </div>
+                                              </div>
+                                            </div>
+                                      {% endfor %}
+                                      </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                  </div>
+                                  <!-- /.box -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-md-6">
+                                          <div class="box box-solid">
+                                            <div class="box-header with-border">
+                                              <h3 class="box-title">Using Surveys</h3>
+                                            </div>
+                                            <!-- /.box-header -->
+                                            <div class="box-body">
+                                              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                                                <ol class="carousel-indicators">
+                                                  <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                                  <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
+                                                  <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+                                                </ol>
+                                                <div class="carousel-inner">
+                                                  <div class="item active">
+                                                    <img src="http://placehold.it/900x500/39CCCC/ffffff&text=Use+Manage+Questions+Tab" alt="Use Manage Questions Tab">
+
+                                                    <div class="carousel-caption">
+                                                      Your Manage Questions tab is useful for creating a survey Question, together with its own multi choice answer options
+                                                    </div>
+                                                  </div>
+                                                  <div class="item">
+                                                    <img src="http://placehold.it/900x500/39CCCC/ffffff&text=Edit+Survey+Question+Button" alt="Edit Survey Question Button">
+
+                                                    <div class="carousel-caption">
+                                                      Edit Survey Question Button is found just below the survey options / (Multi choice answers) click it to edit our survey question
+                                                    </div>
+                                                  </div>
+                                                  <div class="item">
+                                                    <img src="http://placehold.it/900x500/39CCCC/ffffff&text=Add+Survey+Contacts" alt="Add Survey Contacts">
+
+                                                    <div class="carousel-caption">
+                                                      Use Manage Survey Contacts Buttons to assign the targets for your survey , you can either use your own contacts or use those in existing databases by demographics
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                                                  <span class="fa fa-angle-left"></span>
+                                                </a>
+                                                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                                                  <span class="fa fa-angle-right"></span>
+                                                </a>
+                                              </div>
+                                            </div>
+                                            <!-- /.box-body -->
+                                          </div>
+                                          <!-- /.box -->
+                                        </div>
+                                <!-- /.col -->
+                              </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="ManageQuestionsTab">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> Manage Questions</h3>
+                        <br><small>Required fields are marked with an asterik</small>
+                    </div>
+
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="strQuestion" class="col-sm-3 control-label pull-left">Question *</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                                    </div>
+                                    <textarea id="strQuestion" class="form-control" required="required" onkeyup="countChar(this)"></textarea>
+                                    <label class="label label-info" id="charNumQ"></label>
+                                    <!-- Lenght limit 60 -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strChoiceOne" class="col-sm-3 control-label pull-left">First Choice *</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strChoiceOne" required="required" onkeyup="countChar1(this)">
+                                    <label class="label label-info" id="charNum1"></label>
+                                    <!-- Length limit 15 Characters -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strChoiceTwo" class="col-sm-3 control-label pull-left">Second Choice *</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strChoiceTwo" required="required" onkeyup="countChar2(this)">
+                                    <label class="label label-info" id="charNum2"></label>
+                                    <!-- Length limit 15 Characters -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strChoiceThree" class="col-sm-3 control-label pull-left">Third Choice</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strChoiceThree" onkeyup="countChar3(this)">
+                                    <label class="label label-info" id="charNum3"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strChoiceFour" class="col-sm-3 control-label pull-left">Fourth Choice</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strChoiceFour"  onkeyup="countChar4(this)">
+                                    <label class="label label-info" id="charNum4"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="UploadQuestionButt"><strong><i class="fa fa-cloud-upload"> </i> Upload Survey Question </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <div id="UploadQuestionINFDIV"></div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/dist/js/pages/surveys/multi/surveyquestions.js"></script>

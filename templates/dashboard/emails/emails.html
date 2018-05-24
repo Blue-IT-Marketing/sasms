@@ -1,0 +1,40 @@
+
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+
+
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Emails</h3>
+    </div>
+    <table id="EmailsListTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Names</td>
+                <td>Email</td>
+                <td>Subject</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for thisEmail in thisInboxList %}
+            <tr>
+                <td><a href="/dashboard/emails/{{ thisEmail.strThreadID }}">{{ thisEmail.strFromName }}</a></td>
+                <td>{{ thisEmail.strFromAddress }}</td>
+                <td>{{ thisEmail.strSubject }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Names</td>
+                <td>Email</td>
+                <td>Subject</td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script> $(function () {$('#EmailsListTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

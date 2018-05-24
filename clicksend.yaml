@@ -1,0 +1,7 @@
+
+
+handlers:
+
+- url: /sms/clicksend/.*
+  script: mysms.app
+  secure: always

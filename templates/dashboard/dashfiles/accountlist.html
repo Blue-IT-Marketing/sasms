@@ -1,0 +1,145 @@
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Account List</h3>
+    </div>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#ActiveAccounts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="fa fa-server"> </i> Active Accounts</button></a></li>
+        <li><a href="#UnActivatedAccounts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="fa fa-server"> </i> New Accounts</button> </a> </li>
+        <li><a href="#SuspendedAccounts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="fa fa-server"> </i> Suspended</button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="ActiveAccounts">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Active Accounts</h3>
+                </div>
+                <table id="ActiveAccountsTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Cell</td>
+                            <td>Tel</td>
+                            <td>Email</td>
+                            <td>Website</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {%  for thisOrg in thisActiveList %}
+                        <tr>
+                            <td><a href="/thisorg/{{ thisOrg.strOrganizationID }}">{{ thisOrg.strOrganizationName }}</a></td>
+                            <td>{{ thisOrg.strCell }}</td>
+                            <td>{{ thisOrg.strTel }}</td>
+                            <td>{{ thisOrg.strEmail }}</td>
+                            <td>{{ thisOrg.strWebsite }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Name</td>
+                            <td>Cell</td>
+                            <td>Tel</td>
+                            <td>Email</td>
+                            <td>Website</td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+
+
+            </div>
+
+        </div>
+        <div class="tab-pane" id="UnActivatedAccounts">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> New Accounts</h3>
+                </div>
+                <table id="NewAccountsTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Cell</td>
+                            <td>Tel</td>
+                            <td>Email</td>
+                            <td>Website</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {%  for thisOrg in thisNewAccountsList %}
+                        <tr>
+                            <td><a href="/thisorg/{{ thisOrg.strOrganizationID }}">{{ thisOrg.strOrganizationName }}</a></td>
+                            <td>{{ thisOrg.strCell }}</td>
+                            <td>{{ thisOrg.strTel }}</td>
+                            <td>{{ thisOrg.strEmail }}</td>
+                            <td>{{ thisOrg.strWebsite }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Name</td>
+                            <td>Cell</td>
+                            <td>Tel</td>
+                            <td>Email</td>
+                            <td>Website</td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+
+
+            </div>
+        </div>
+        <div class="tab-pane" id="SuspendedAccounts">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Suspended Accounts</h3>
+                </div>
+                <table id="SuspendedAccountsTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Cell</td>
+                            <td>Tel</td>
+                            <td>Email</td>
+                            <td>Website</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {%  for thisOrg in thisSuspendedList %}
+                        <tr>
+                            <td><a href="/thisorg/{{ thisOrg.strOrganizationID }}">{{ thisOrg.strOrganizationName }}</a></td>
+                            <td>{{ thisOrg.strCell }}</td>
+                            <td>{{ thisOrg.strTel }}</td>
+                            <td>{{ thisOrg.strEmail }}</td>
+                            <td>{{ thisOrg.strWebsite }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Name</td>
+                            <td>Cell</td>
+                            <td>Tel</td>
+                            <td>Email</td>
+                            <td>Website</td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script> $(function () {$('#ActiveAccountsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script> $(function () {$('#NewAccountsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script> $(function () {$('#SuspendedAccountsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

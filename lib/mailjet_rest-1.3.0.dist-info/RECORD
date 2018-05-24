@@ -1,0 +1,13 @@
+mailjet_rest/__init__.py,sha256=cVE_o5dK7DjqvFBEmDhaUKTy9zmyIYC45Y_KPbKV_7E,120
+mailjet_rest/_version.py,sha256=F5mW07pSyGrqDNY2Ehr-UpDzpBtN-FsYU0QGZWf6PJE,22
+mailjet_rest/client.py,sha256=AMC8bfAjbGkRF6KlQLxbXO5fkMMmNJD2QSHGxChIcgs,5658
+mailjet_rest-1.3.0.dist-info/DESCRIPTION.rst,sha256=OCTuuN6LcWulhHS3d5rfjdsQtW22n7HENFRh6jC6ego,10
+mailjet_rest-1.3.0.dist-info/METADATA,sha256=I2IOXDrt89rbAkua2kToF9Lbb2_mZVUGzcQGVrmt22E,989
+mailjet_rest-1.3.0.dist-info/RECORD,,
+mailjet_rest-1.3.0.dist-info/WHEEL,sha256=ZjEnM9ajJj3CC6PFLEd3wiDD9cvgsTK9wvIqII7XxRs,98
+mailjet_rest-1.3.0.dist-info/metadata.json,sha256=auKGgiCPUmWCBHTdg3owD1V_X4hksh0mCsGJoPYKEf8,1159
+mailjet_rest-1.3.0.dist-info/top_level.txt,sha256=6D0ZqkKddJlKjI-hgb-OMgwu9ZHQguIptPd0v-CQHhw,13
+mailjet_rest-1.3.0.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+mailjet_rest/__init__.pyc,,
+mailjet_rest/_version.pyc,,
+mailjet_rest/client.pyc,,

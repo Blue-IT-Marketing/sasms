@@ -1,0 +1,13 @@
+
+
+
+Surveys ----
+
+#TODO-Sending messages from credits
+
+#TODO-listening to responses
+
+#TODO-meaning response listener must check the message id against the messages
+#TODO-if the message is from a survey this must trigger the next questions
+
+#TODO-if the message is from an advert then the answer must only be kept on responses the same as on bulk sms and contact manager

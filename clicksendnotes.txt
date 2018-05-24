@@ -1,0 +1,408 @@
+FORMAT: 1A
+HOST: https://api-mapper.clicksend.com/http/v2/
+
+# ClickSend HTTP API v2
+
+ClickSend provides a HTTP API to enable developers to integrate SMS functionality into their applications.
+All services are accessible using either HTTP or HTTPS protocols.
+
+**NOTE:** You will need to create a free account to use the API.
+ You can [**Register Here**] (https://dashboard.clicksend.com/#/signup/step1/).
+
+
+# API URL
+The API should always be accessed over SSL.
+
+Base URL:
+
+```
+https://api-mapper.clicksend.com/http/v2/
+```
+
+# Authentication
+
+Your credentials should be used in the URL or the post body.
+
+**Either:**
+
+    username - Your API username
+    key - Your API key
+
+**OR**
+
+    username - Your subaccount username
+    key - Your subaccount password
+
+# Response Codes
+The API will always respond with a 200 OK HTTP status code.
+
+|Response Code| Error Text | Description |
+|---|---|---|
+|`0000`|Success|Message added to queue OK.|
+|`2006`|Missing credentials|Not enough information has been supplied for authentication. Please ensure that your Username and Unique Key are supplied in your request.|
+|`2007`|Account not activated|Your account has not been activated.|
+|`2015`|Invalid recipient|The destination mobile number is invalid.|
+|`2016`|Throttled|Identical message already sent to this recipient. Please try again in a few seconds.|
+|`2017`|Invalid sender id|Invalid Sender ID. Please ensure Sender ID is no longer than 11 characters (if alphanumeric), and contains no spaces.|
+|`2018`|Low credit|You have reached the end of your message credits. You will need to purchase more message credits.|
+|`2022`|Invalid credentials|Your Username or Unique Key is incorrect.|
+|`2051`|Empty message|Message is empty.|
+|`2052`|Too many recipients|Too many recipients.|
+|`2100-2199`|Internal error|Internal error.|
+
+
+# Security
+
+To ensure privacy, we recommend you use HTTPS for all API requests.
+
+
+# Incoming SMS/Reply Options
+
+There are 5 options for handling message replies:
+
+1. Send the reply as an email to a nominated email address.
+
+2. Send the reply as an email to the original user who sent the message.
+
+3. Send the reply as an SMS to a nominated mobile number.
+
+4. Push - POST the reply to your website or application.
+
+    If you prefer, we can push message replies to your server as they arrive with us.
+
+    1. Log into your account.
+    2. Click on 'SMS' then 'Settings' tab.
+    3. Click on the 'Reply/Incoming SMS Settings' menu.
+    4. Select 'Forward to URL'.
+    5. Enter the URL and click 'Save'.
+
+    The following parameters will be POSTED to the URL specified.
+
+    | Parameter | Type | Description |
+|---|---|---|
+| `from` |string| Recipient Mobile Number that sent the reply message. |
+| `message` |string| Reply SMS message body. |
+| `originalmessage` |string| Original SMS message body. |
+| `originalmessageid` |string| Original SMS message ID. Returned when originally sending the message. |
+| `originalsenderid` |string| Original mobile number (sender ID) that the SMS was sent from. |
+| `customstring` |string| A custom string used when sending the original message. |
+| `username` |string| The API username used to send the original message. |
+
+
+5. [**Pull**] (http://docs.clicksendhttpapiv2.apiary.io/#reference/sms/receive-an-sms/receive-an-sms) - Use our API to poll for replies.
+
+    Receive SMS by polling your Inbox.
+    You can poll our server and retrieve new Messages at a time that suits you.
+
+    1. Log into your account.
+    2. Click on 'SMS' then 'Settings' tab.
+    3. Click on the 'Reply/Incoming SMS Settings' menu.
+    4. Select 'Poll our server' and click 'Save'.
+
+# Delivery Reports
+**PUSH**
+
+If you prefer, we can push message replies to your server as they arrive with us.
+
+1. Log into your account.
+2. Click on 'SMS' then 'Settings' tab.
+3. Click on the 'SMS Delivery Report Settings' menu.
+4. Select 'Forward to URL'.
+5. Enter the URL and click 'Save'.
+
+The following parameters will be POSTED to the URL specified.
+
+| Parameter | Type | Description |
+|---|---|---|
+|`messageid`|string|SMS message ID. Returned when originally sending the message.|
+|`status`|string|Delivery status. Either 'Delivered' or 'Undelivered'.|
+|`status_code`|integer|Delivery status code. The temporary status codes can update at any time.|
+|`customstring`|string|A custom string used when sending the original message.|
+|`username`|string|The API username used to send the original message.|
+
+**PULL**
+
+Receive delivery reports by polling.
+You can poll our server and retrieve delivery reports at a time that suits you.
+
+1. Log into your account.
+2. Click on 'SMS' then 'Settings' tab.
+3. Click on the 'SMS Delivery Report Settings' menu.
+4. Select 'Poll our server' and click 'Save'.
+
+**Note:** a delivery report won't be generated when using a test number.
+
+# Testing
+
+## Test Credentials
+
+These API credentials can be used to test specific scenarios.
+
+**Note:** you will need to create a free account to test other scenarios. Refer to introduction.
+
+| API Username | API Key | Description |
+|---|---|---|---|
+| `nocredit` | `D83DED51-9E35-4D42-9BB9-0E34B7CA85AE` | This account has no credit. |
+| `notactive` | `D83DED51-9E35-4D42-9BB9-0E34B7CA85AE` | This account is not active. |
+| `banned` | `D83DED51-9E35-4D42-9BB9-0E34B7CA85AE` | This account is banned. |
+
+## Test SMS Numbers
+
+The following numbers can be used when testing. No messages will be sent, and your account won't be charged. A success response will be returned.
+
+- `+61411111111`
+- `+61422222222`
+- `+61433333333`
+- `+61444444444`
+- `+14055555555`
+- `+14055555666`
+- `+447777777777`
+- `+447778888888`
+- `+8615555555555`
+
+A message added to queue 'Success' response will be returned. No SMS will actually be sent. This won't use any of your credit.
+A delivery report won't be generated when using a test number.
+
+## Group SMS
+
+### Send an SMS [POST /send.php]
+
+***HTTP POST:***   Ideal for up to 1000 simultaneous recipients in each API call.
+
+**For example:**
+
+```
+https://api-mapper.clicksend.com/http/v2/send.php
+```
+```
+POST Variables: method=http&username=xxxx&key=xxxx&to=xxxx&message=xxxx
+```
+
+***HTTP GET:***   Ideal for less than 100 simultaneous recipients in each API call. The GET method uses a query string to send data using the URL. Maximum URL length is 2048 characters.
+
+**For example:**
+
+```
+https://api-mapper.clicksend.com/http/v2/send.php?method=http&username=xxxx&key=xxxx&to=xxxx&message=xxxx
+```
+
++ Parameters
+
+    + username: myusername (required, string) - Your API username
+    + key: 094F2_FA56B10A_0F8F6B_A35FD650D829 (required, string) - You can find this in your account area under 'API Credentials' at the top of the screen.
+    + to: +614XXXXXXXX`(Australia)` (required, string) - Recipient Mobile Number in international format (with leading + and country code). Separate multiple recipients with a comma (,) where applicable. Maximum 1000 recipients.
+
+    + message: This is a test (required, string) - The message to be sent. Maximum 960 characters.
+    + senderid: MyCompany (optional, string) - custom sender ID (from name/number):
+    + customstring: my_ref (optional, string) - A custom string that will be passed back with replies and delivery reports. Maximum 50 characters.
+    + schedule: 1435100575 (optional, string) - Allows you to schedule message delivery. Must be in unix format.
+    + country: US (optional, string) - Automatically transforms your supplied local number to add the country code.
++ Request (application/x-www-form-urlencoded)
+
+        username=myusername&key=1234-I3U2RN34IU-43UNG&to=61411111111&message=testing
+
++ Response 200 (application/json)
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <xml>
+            <messages recipientcount="1">
+                <message>
+                    <to>+61411111111</to>
+                    <messageid>32794C10-F9CA-4E17-ABEC-F2F764EEC922</messageid>
+                    <result>0000</result>
+                    <errortext>Success</errortext>
+                    <price>0.0282</price>
+                    <currency_symbol>$</currency_symbol>
+                    <currency_type>USD</currency_type>
+                </message>
+            </messages>
+        </xml>
+
+### Get all Inbound SMS - Pull [POST /reply.php]
+
+**Pull Inbound SMS**
+
+Receive SMS by polling your Inbox.
+You can poll our server and retrieve new Messages at a time that suits you.
+
+1. Log into your account.
+2. Click on 'SMS' then 'Settings' tab.
+3. Click on the 'Reply/Incoming SMS Settings' menu.
+4. Select 'Poll our server' and click 'Save'.
+
+**Push Inbound SMS**
+
+If you prefer, we can push message replies to your server as they arrive with us.
+
+1. Log into your account.
+2. Click on 'SMS' then 'Settings' tab.
+3. Click on the 'Reply/Incoming SMS Settings' menu.
+4. Select 'Forward to URL'.
+5. Enter the URL and click 'Save'.
+
++ Parameters
+
+    + username: myusername(required,string) - Your api username.
+    + key: 094F2_FA56B10A_0F8F6B_A35FD650D829(required,string) - You can find this in your account area under 'API Credentials' at the top of the screen.
+    + messageid: DAA581CB_D739_4675_A506_993679713FF8 (optional, string) - The message ID of the sms. If not provided, all unread results will be returned.
+
++ Request (application/x-www-form-urlencoded)
+
+        username=myusername&key=094F2_FA56B10A_0F8F6B_A35FD650D829&messageid=DAA581CB_D739_4675_A506_993679713FF8
+
++ Response 200 (application/json)
+
+        <?xml version='1.0' encoding='UTF-8' ?>
+        <xml>
+            <replies replycount='2'>
+                <reply>
+                    <from>+61411111111</from>
+                    <message>This is a reply</message>
+                    <originalmessage>Hello. Please reply</originalmessage>
+                    <originalmessageid>D9F15F83-34EC-6A31-A57E-7E8FB0966D78</originalmessageid>
+                    <originalsenderid>+61400000000</originalsenderid>
+                    <customstring></customstring>
+                    <username>testuser101</username>
+                </reply>
+                <reply>
+                    <from>+61422222222</from>
+                    <message>This is another reply</message>
+                    <originalmessage>Hello. Please reply</originalmessage>
+                    <originalmessageid>F15F83H8-15AC-3R31-777E-7E8FB09SSDP2</originalmessageid>
+                    <originalsenderid>+61400000000</originalsenderid>
+                    <customstring></customstring>
+                    <username>testuser101</username>
+                </reply>
+            </replies>
+            <result>0000</result>
+            <errortext>Success</errortext>
+        </xml>
+
+### Get all Delivery Receipts - Pull [GET /delivery.php]
+
+**Pull Delivery Receipts**
+
+Receive delivery reports by polling.
+You can poll our server and retrieve delivery reports at a time that suits you.
+
+1. Log into your account.
+2. Click on 'SMS' then 'Settings' tab.
+3. Click on the 'SMS Delivery Report Settings' menu.
+4. Select 'Poll our server' and click 'Save'.
+
+**Push Delivery Receipts**
+
+If you prefer, we can push message replies to your server as they arrive with us.
+
+1. Log into your account.
+2. Click on 'SMS' then 'Settings' tab.
+3. Click on the 'SMS Delivery Report Settings' menu.
+4. Select 'Forward to URL'.
+5. Enter the URL and click 'Save'.
+
+
++ Parameters
+
+    + username: myusername(required,string) - Your api username.
+    + key: 094F2_FA56B10A_0F8F6B_A35FD650D829(required,string) - You can find this in your account area under 'API Credentials' at the top of the screen.
+    + messageid: DAA581CB_D739_4675_A506_993679713FF8 (optional, string) - The message ID of the sms. If not provided, all unread results will be returned.
+
++ Request (application/x-www-form-urlencoded)
+
+        username=myusername&key=094F2_FA56B10A_0F8F6B_A35FD650D829&messageid=DAA581CB-D739-4675-A506-993679713FF8
+
++ Response 200 (application/json)
+
+        <?xml version='1.0' encoding='UTF-8' ?>
+        <xml>
+            <dlrs dlrcount='2'>
+                <dlr>
+                    <messageid>D9F15F83-34EC-6A31-A57E-7E8FB0966D78</messageid>
+                    <status>Delivered</status>
+                    <status_code>201</status_code>
+                    <customstring></customstring>
+                    <username>testuser101</username>
+                </dlr>
+                <dlr>
+                    <messageid>F15F83H8-15AC-3R31-777E-7E8FB09SSDP2</messageid>
+                    <status>Undelivered</status>
+                    <status_code>301</status_code>
+                    <customstring></customstring>
+                    <username>testuser101</username>
+                </dlr>
+            </dlrs>
+            <result>0000</result>
+            <errortext>Success</errortext>
+        </xml>
+
+### Get SMS History [GET /history.php]
+
++ Parameters
+
+    + username: myusername(required,string) - Your api username.
+    + key: 094F2_FA56B10A_0F8F6B_A35FD650D829(required,string) - You can find this in your account area under 'API Credentials' at the top of the screen.
+    + from_email: myemail@email.com(optional,string) - The email address used to send the message if email-to-SMS was used. Only history results for this email address will be returned.
+
++ Request (application/x-www-form-urlencoded)
+
+        username=myusername&key=094F2_FA56B10A_0F8F6B_A35FD650D829
+
++ Response 200 (application/json)
+
+        <?xml version='1.0' encoding='UTF-8' ?>
+        <xml>
+            <history historycount='2'>
+                <item>
+                    <messageid>D9F15F83-34EC-6A31-A57E-7E8FB0966D78</messageid>
+                    <direction>out</direction>
+                    <date>1414291144</date>
+                    <to>+61411111111</to>
+                    <message>This is a test message</message>
+                    <status>Sent</status>
+                    <senderid>MyCompany</senderid>
+                    <schedule>1414291144</schedule>
+                    <customstring>our-ref-1234</customstring>
+                    <from_email>test@email.com</from_email>
+                    <username>test</username>
+                </item>
+                <item>
+                    <messageid>F15F83H8-15AC-3R31-777E-7E8FB09SSDP2</messageid>
+                    <direction>in</direction>
+                    <date>1414291155</date>
+                    <to>+61422222222</to>
+                    <message>This is a test message reply</message>
+                    <status>Received</status>
+                    <senderid>+61411111111</senderid>
+                    <schedule></schedule>
+                    <customstring>our-ref-1234</customstring>
+                    <from_email>test@email.com</from_email>
+                    <username>test</username>
+                </item>
+                <result>0000</result>
+                <errortext>Success</errortext>
+            </history>
+        </xml>
+
+## Group Account Balance
+
+### Get Account Balance [GET /balance.php]
+
++ Parameters
+
+    + username: myusername(required,string) - Your api username.
+    + key: 094F2_FA56B10A_0F8F6B_A35FD650D829(required,string) - You can find this in your account area under 'API Credentials' at the top of the screen.
+
++ Request (application/x-www-form-urlencoded)
+
+        username=myusername&key=094F2_FA56B10A_0F8F6B_A35FD650D829
+
++ Response 200 (application/json)
+
+        <?xml version='1.0' encoding='UTF-8' ?>
+        <xml>
+            <result>0000</result>
+            <errortext>Success</errortext>
+            <balance>125.00</balance>
+            <type>Prepay</type>
+            <currency_symbol>$</currency_symbol>
+        </xml>

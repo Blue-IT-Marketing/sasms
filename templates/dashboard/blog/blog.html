@@ -1,0 +1,56 @@
+
+<script src="/static/dist/js/ckeditor.js"></script>
+
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Blog</h3>
+    </div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="strHeading" class="col-sm-3 control-label pull-left" > Heading</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-book"> </i>
+                    </div>
+                        <input type="text" class="form-control" id="strHeading">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strIntroduction" class="col-sm-3 control-label pull-left" > Introduction</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-book"> </i>
+                    </div>
+                        <textarea id="strIntroduction" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strBody" class="col-sm-3 control-label pull-left" > Body</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-book"> </i>
+                    </div>
+                        <textarea id="strBody" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary btn-block" id="UpdateBlogButt"><strong><i class="glyphicon glyphicon-file"> </i> Update Blog </strong></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+                <div id="UpdateBlogINFDIV"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/static/dist/js/pages/dashboard/blog.js"></script>

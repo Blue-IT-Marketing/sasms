@@ -1,0 +1,50 @@
+
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Verify Deposit</h3>
+    </div>
+    <table id="TopUpCreditVerificationTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Account Name</td>
+                <td>Reference</td>
+                <td>SMS Credits</td>
+                <td>Credit Amount</td>
+                <td>Verified</td>
+                <td>Date</td>
+                <td>Time</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for thisVerification in thisTopUpVerificationList %}
+            <tr>
+                <td><a href="/dashboard/topup/{{ thisVerification.strTopUpReference }}">{{ thisVerification.strAccountName }}</a></td>
+                <td>{{ thisVerification.strTopUpReference }}</td>
+                <td>{{ thisVerification.strSMSCredits }}</td>
+                <td>{{ thisVerification.strCreditAmount }}</td>
+                <td>{{ thisVerification.strVerified }}</td>
+                <td>{{ thisVerification.strDateVerified }}</td>
+                <td>{{ thisVerification.strTimeVerified }}</td>
+                <td>{{ thisVerification.strVerifiedByUserID }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Account Name</td>
+                <td>Reference</td>
+                <td>SMS Credits</td>
+                <td>Credit Amount</td>
+                <td>Verified</td>
+                <td>Date</td>
+                <td>Time</td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#TopUpCreditVerificationTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

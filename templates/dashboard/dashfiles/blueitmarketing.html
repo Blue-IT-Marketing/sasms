@@ -1,0 +1,564 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Blue IT Marketing</h3>
+    </div>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#BlueITMarketing" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Blue IT Marketing</button></a></li>
+        <li><a href="#BlueITStaff" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> Employees </button> </a> </li>
+        <li><a href="#MarketingConsultants" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> Consultants </button> </a> </li>
+        <li><a href="#AccountDetails" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> Account Details </button> </a> </li>
+        <li><a href="#SMSAccount" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> SMS Account </button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="BlueITMarketing">
+            <form class="form-horizontal">
+                <div class="box box-primary">
+                <div class="form-group">
+                    <label for="strCompanyName" class="col-sm-3 control-label pull-left">Company Name</label>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-trademark"> </i>
+                            </div>
+                                <input type="text" class="form-control" id="strCompanyName" value="{{ thisBlueITMarketing.strCompanyName }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="strCompanyRegistration" class="col-sm-3 control-label pull-left">Company Reg</label>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-registered"> </i>
+                            </div>
+                        <input type="text" class="form-control" id="strCompanyRegistration" value="{{ thisBlueITMarketing.strCompanyRegistration }}">
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="form-group">
+                        <label for="strCell" class="col-sm-3 control-label pull-left">Cell</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-phone"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strCell" value="{{  thisBlueITMarketing.strCell }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strTel" class="col-sm-3 control-label pull-left">Tel</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-phone-alt"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strTel" value="{{  thisBlueITMarketing.strTel }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-envelope"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strEmail" value="{{  thisBlueITMarketing.strEmail }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strWebsite" class="col-sm-3 control-label pull-left">Website</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-link"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strWebsite" value="{{  thisBlueITMarketing.strWebsite }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="form-group">
+                        <label for="strAddress" class="col-sm-3 control-label pull-left">Address</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-street-view"> </i>
+                                </div>
+                                <textarea class="form-control" id="strAddress">{{  thisBlueITMarketing.strAddress }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane" id="BlueITStaff">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> Blue IT Marketing Employees</h3>
+                </div>
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#EmployeeList" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Employees</button></a></li>
+                        <li><a href="#ManageEmployees" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> Manage Employees </button> </a> </li>
+                    </ul>
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="EmployeeList">
+                            <div class="box box-body with-border">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Employees</h3>
+                                </div>
+                                <table id="EmployeeListTable" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <td>Names</td>
+                                            <td>Surname</td>
+                                            <td>Cell</td>
+                                            <td>Email</td>
+                                            <td>Position</td>
+                                            <td>Send Notices</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for thisEmployee in  thisAdminStaffList   %}
+                                        <tr>
+                                            <td>{{ thisEmployee.strNames }}</td>
+                                            <td>{{  thisEmployee.strSurname }}</td>
+                                            <td>{{  thisEmployee.strCell }}</td>
+                                            <td>{{  thisEmployee.strEmail }}</td>
+                                            <td>{{  thisEmployee.strPosition }}</td>
+                                            <td>{{  thisEmployee.strSendNotices }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Names</td>
+                                            <td>Surname</td>
+                                            <td>Cell</td>
+                                            <td>Email</td>
+                                            <td>Position</td>
+                                            <td>Send Notices</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            </div>
+                            <div class="tab-pane" id="ManageEmployees">
+                                <div class="box box-body with-border">
+                                    <div class="box box-header with-border">
+                                        <h3 class="box-title"> Manage Employees</h3>
+                                    </div>
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="strNames" class="col-sm-3 control-label pull-left">Names</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-user"> </i>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="strNames">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strSurname" class="col-sm-3 control-label pull-left">Surname</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-user"> </i>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="strSurname">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strCell" class="col-sm-3 control-label pull-left">Cell</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-phone"> </i>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="strCell">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strTel" class="col-sm-3 control-label pull-left">Tel</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-phone"> </i>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="strTel">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-envelope"> </i>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="strEmail">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strPosition" class="col-sm-3 control-label pull-left">Position</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-institution"> </i>
+                                                    </div>
+                                                    <select id="strPosition" class="form-control">
+                                                        <option value="Admin">Admin</option>
+                                                        <option value="IT">IT</option>
+                                                        <option value="Marketing">Marketing</option>
+                                                        <option value="Marketing COnsultant">Marketing Consultant</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strSendNotices" class="col-sm-3 control-label pull-left">Send Notice</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-file-word-o"> </i>
+                                                    </div>
+                                                    <select id="strSendNotices" class="form-control">
+                                                        <option value="YES">Yes</option>
+                                                        <option value="NO">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left"></label>
+                                            <div class="col-sm-6">
+                                                <button type="button"  class="btn btn-primary btn-block" id="UpdateEmployeeButt"><strong><i class="fa fa-cloud"> </i> Update Employee </strong></button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left"></label>
+                                            <div class="col-sm-6">
+                                                <div id="UpdateEmployeeINFDIV"></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="MarketingConsultants">
+            <div class="box box-body with-border">
+                            <div class="box box-header with-border">
+                                <h3 class="box-title"> Blue IT Marketing Consultants</h3>
+                            </div>
+                            <div class="nav-tabs-custom">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#ConsultantList" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Consultant</button></a></li>
+                                    <li><a href="#ManageConsultant" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> Manage Consultant </button> </a> </li>
+                                </ul>
+                                    <div class="tab-content">
+                                        <div class="active tab-pane" id="ConsultantList">
+                                        <div class="box box-body with-border">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Consultant</h3>
+                                            </div>
+                                            <table id="ConsultantListTable" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Names</td>
+                                                        <td>Surname</td>
+                                                        <td>Cell</td>
+                                                        <td>Email</td>
+                                                        <td>Position</td>
+                                                        <td>Send Notices</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for thisEmployee in  thisConsultantList %}
+                                                    <tr>
+                                                        <td>{{ thisEmployee.strNames }}</td>
+                                                        <td>{{  thisEmployee.strSurname }}</td>
+                                                        <td>{{  thisEmployee.strCell }}</td>
+                                                        <td>{{  thisEmployee.strEmail }}</td>
+                                                        <td>{{  thisEmployee.strPosition }}</td>
+                                                        <td>{{  thisEmployee.strSendNotices }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td>Names</td>
+                                                        <td>Surname</td>
+                                                        <td>Cell</td>
+                                                        <td>Email</td>
+                                                        <td>Position</td>
+                                                        <td>Send Notices</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        </div>
+                                        <div class="tab-pane" id="ManageConsultant">
+                                            <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title"> Manage Consultant</h3>
+                                                </div>
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label for="strNames" class="col-sm-3 control-label pull-left">Names</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="glyphicon glyphicon-user"> </i>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="strConsNames">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="strSurname" class="col-sm-3 control-label pull-left">Surname</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="glyphicon glyphicon-user"> </i>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="strConsSurname">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="strCell" class="col-sm-3 control-label pull-left">Cell</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="glyphicon glyphicon-phone"> </i>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="strConsCell">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="strTel" class="col-sm-3 control-label pull-left">Tel</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="glyphicon glyphicon-phone"> </i>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="strConsTel">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="glyphicon glyphicon-envelope"> </i>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="strConsEmail">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="strPosition" class="col-sm-3 control-label pull-left">Position</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="fa fa-institution"> </i>
+                                                                </div>
+                                                                <select id="strConsPosition" class="form-control">
+                                                                    <option value="Admin">Admin</option>
+                                                                    <option value="IT">IT</option>
+                                                                    <option value="Marketing">Marketing</option>
+                                                                    <option value="Marketing COnsultant">Marketing Consultant</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="strConsSendNotices" class="col-sm-3 control-label pull-left">Send Notice</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="fa fa-file-word-o"> </i>
+                                                                </div>
+                                                                <select id="strConsSendNotices" class="form-control">
+                                                                    <option value="YES">Yes</option>
+                                                                    <option value="NO">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label pull-left"></label>
+                                                        <div class="col-sm-6">
+                                                            <button type="button"  class="btn btn-primary btn-block" id="UpdateConsultantButt"><strong><i class="fa fa-cloud"> </i> Update Consultant </strong></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label pull-left"></label>
+                                                        <div class="col-sm-6">
+                                                            <div id="UpdateConsultantINFDIV"></div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+        </div>
+        <div class="tab-pane" id="AccountDetails">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Account Details</h3>
+                </div>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="strAccountHolder" class="col-sm-3 control-label pull-left">Account Holder</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-user"> </i>
+                                </div>
+                                    <input type="text" class="form-control" id="strAccountHolder">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strAccountNumber" class="col-sm-3 control-label pull-left">Account Number</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-user"> </i>
+                                </div>
+                                    <input type="text" class="form-control" id="strAccountNumber">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strBankName" class="col-sm-3 control-label pull-left">Bank Name</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-bank"> </i>
+                                </div>
+                                    <input type="text" class="form-control" id="strBankName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strBranchName" class="col-sm-3 control-label pull-left">Branch Name</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-bank"> </i>
+                                </div>
+                                    <input type="text" class="form-control" id="strBranchName">
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strBranchCode" class="col-sm-3 control-label pull-left">Branch Code</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-bank"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strBranchCode">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="UpdateBankDetailsButt"><strong><i class="fa fa-cloud"> </i> Update Bank Details </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                                <div id="UpdateBankDetailINFDIV"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane" id="SMSAccount">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">SMS Account</h3>
+                </div>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="strTotalSMS" class="col-sm-3 control-label pull-left">Total SMS</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="strTotalSMS" value="{{ thisSMSAccount.strTotalSMS }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strPortal" class="col-sm-3 control-label pull-left">Portal</label>
+                        <div class="col-sm-6">
+                            <select id="strPortal" class="form-control">
+                                {% if thisSMSAccount.strUsePortal == "Budget" %}
+                                    <option value="Budget" selected="selected">Budget</option>
+                                {% else %}
+                                    <option value="Budget">Budget</option>
+                                {%  endif %}
+                                {% if thisSMSAccount.strUsePortal == "Vodacom" %}
+                                    <option value="Vodacom" selected="selected">Vodacom</option>
+                                {% else %}
+                                    <option value="Vodacom">Vodacom</option>
+                                {%  endif %}
+
+                                {% if thisSMSAccount.strUsePortal == "Click Send" %}
+                                    <option value="Click Send" selected="selected">Click Send</option>
+                                {%  else %}
+                                    <option value="Click Send">Click Send</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-primary btn-block" id="UpdateSMSAccountButt"><strong><i class="glyphicon glyphicon-send"> </i> Update SMS Account </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <div id="UpdateSMSAccountINFDIV"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script> $(function () {$('#EmployeeListTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script> $(function () {$('#ConsultantListTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<!-- Blue IT Marketing Event Handling -->
+<script src="/static/dist/js/pages/dashboard/blueitmarketing.js"></script>

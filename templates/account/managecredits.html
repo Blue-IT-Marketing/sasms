@@ -1,0 +1,230 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Manage Credits</h3>
+        <br><small>Note that you can transfer your credit from one sub account into another by using this Credit Manager</small>
+    </div>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#Credits" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Credits</button></a></li>
+            <li><a href="#BulkSMS" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Bulk SMS</button></a></li>
+            <li><a href="#Adverts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Adverts </button> </a> </li>
+            <li><a href="#Surveys" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Surveys </button> </a> </li>
+            <li><a href="#Affiliates" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Affiliate </button> </a> </li>
+        </ul>
+        <div class="tab-content">
+            <div class="active tab-pane" id="Credits">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> Credits</h3>
+                        <br><small>Your Actual Credits on each of the accounts</small>
+                        </div>
+                    <div class="box box-footer with-border">
+                        <div class="col-md-6">
+                        <ul class="list-group-unbordered">
+                            <li class="list-group-item"> Bulk SMS Credits (SMS): <strong><a class="pull-right"> {{ thisSMSAccount.strTotalSMS }}   <i class="glyphicon glyphicon-send"> </i> </a> </strong></li>
+                            <li class="list-group-item">Advertising Credits ( SMS ) : <strong><a class="pull-right"> {{ thisAddAccount.strTotalCredits }}  <i class="glyphicon glyphicon-send"> </i> </a> </strong></li>
+                            <li class="list-group-item">Survey Credits (SMS) : <strong><a class="pull-right"> {{ thisSurveyAccount.strTotalCredits }}  <i class="glyphicon glyphicon-send"> </i> </a> </strong></li>
+                            <li class="list-group-item">Affiliate Credits (SMS) : <strong><a class="pull-right"> {{ thisAffilite.strAvailableCredit }} <i class="glyphicon glyphicon-send"> </i> </a></strong></li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="BulkSMS">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title">Bulk SMS</h3>
+                        <br><small>Transfer Credits From Bulk SMS Account</small>
+                    </div>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="strBulkCredits" class="col-sm-3 control-label pull-left">Credits</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-send"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strBulkCredits" value="{{ thisSMSAccount.strTotalSMS }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="strBulkTransferCredits" class="col-sm-3 control-label pull-left">Transfer Credit</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-transfer"> </i>
+                                    </div>
+                                    <select id="strBulkTransferCredits" class="form-control">
+                                        <option value="Adverts">Adverts</option>
+                                        <option value="Surveys">Surveys</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="TransferBulkButt"><strong><i class="glyphicon glyphicon-transfer"> </i> Transfer Credit </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <div id="TransferBulkINFDIV"></div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="tab-pane" id="Adverts">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> Adverts</h3>
+                        <br><small>Transfer Credits from Adverts Account</small>
+                    </div>
+                      <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="strAdvertsCredits" class="col-sm-3 control-label pull-left">Credits</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-send"> </i>
+                                        </div>
+                                        <input type="text" class="form-control" id="strAdvertsCredits" value="{{ thisAddAccount.strTotalCredits }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strAdvertsTransferCredits" class="col-sm-3 control-label pull-left">Transfer Credit</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-transfer"> </i>
+                                        </div>
+                                        <select id="strAdvertsTransferCredits" class="form-control">
+                                            <option value="BulkSMS">Bulk SMS</option>
+                                            <option value="Surveys">Surveys</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left"></label>
+                                <div class="col-sm-6">
+                                    <button type="button" class="btn btn-primary btn-block" id="TransferAdvertsButt"><strong><i class="glyphicon glyphicon-transfer"> </i> Transfer Credit </strong></button>
+                                </div>
+                            </div>
+                          <div class="form-group">
+                              <div class="col-sm-6">
+                                  <div id="TransferAdvertsINFDIV"></div>
+                              </div>
+                          </div>
+                        </form>
+                </div>
+            </div>
+            <div class="tab-pane" id="Surveys">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title">Surveys</h3>
+                        <br><small>Transfer Credits from Survey Account</small>
+                    </div>
+                      <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="strSurveyCredits" class="col-sm-3 control-label pull-left">Credits</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-send"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strSurveyCredits" value="{{ thisSurveyAccount.strTotalCredits }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strSurveyTransferCredits" class="col-sm-3 control-label pull-left">Transfer Credit</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-transfer"> </i>
+                                    </div>
+                                    <select id="strSurveyTransferCredits" class="form-control">
+                                        <option value="Adverts">Adverts</option>
+                                        <option value="BulkSMS">Bulk SMS</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="TransferSurveyButt"><strong><i class="glyphicon glyphicon-transfer"> </i> Transfer Credit </strong></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <div id="TransferSurveyINFDIV"></div>
+                            </div>
+                        </div>
+
+                      </form>
+                </div>
+            </div>
+            <div class="tab-pane" id="Affiliates">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> Affiliates</h3>
+                        <br><small>Transfer Credits from Affiliate Account</small>
+                    </div>
+                </div>
+                      <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="strAffiliateCredits" class="col-sm-3 control-label pull-left">Credits</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-send"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strAffiliateCredits" value="{{ thisAffilite.strAvailableCredit }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strAffiliateTransferCredits" class="col-sm-3 control-label pull-left">Transfer Credit</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-transfer"> </i>
+                                    </div>
+                                    <select id="strAffiliateTransferCredits" class="form-control">
+                                        <option value="Adverts">Adverts</option>
+                                        <option value="BulkSMS">Bulk SMS</option>
+                                        <option value="Survey">Survey</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="TransferAffiliateButt"><strong><i class="glyphicon glyphicon-transfer"> </i> Transfer Credit </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <div id="TransferAffiliateINFDIV"></div>
+                            </div>
+                        </div>
+
+                      </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../static/dist/js/pages/account/managecredits.js"></script>

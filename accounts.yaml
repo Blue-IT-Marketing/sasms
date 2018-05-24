@@ -1,0 +1,57 @@
+
+handlers:
+
+- url: /accounts
+  script: accounts.app
+  secure: always
+
+- url: /accounts/update
+  script: accounts.app
+  secure: always
+
+- url: /accounts/request/.*
+  script: accounts.app
+  secure: always
+
+- url: /accounts/products
+  script: accounts.app
+  secure: always
+
+- url: /accounts/proinfo
+  script: accounts.app
+  secure: always
+
+- url: /admin/org
+  script: accounts.app
+  secure: always
+
+- url: /admin/users
+  script: accounts.app
+  secure: always
+
+- url: /admin/users/invites
+  script: accounts.app
+  secure: always
+
+- url: /org/reg/.*
+  script: accounts.app
+  secure: always
+
+- url: /thisorg/.*
+  login: admin
+  script: accounts.app
+  secure: always
+
+- url: /org/advaccounts/.*
+  login: admin
+  script: accounts.app
+  secure: always
+
+- url: /accounts/api
+  script: accounts.app
+  secure: always
+
+- url: /accounts/credits
+  script: accounts.app
+  secure: always
+

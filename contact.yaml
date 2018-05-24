@@ -1,0 +1,13 @@
+
+handlers:
+- url: /contact/tickets/.*
+  secure: always
+  script: contact.app
+
+- url: /contact/read/.*
+  secure: always
+  script: contact.app
+
+- url: /contact
+  secure: always
+  script: contact.app

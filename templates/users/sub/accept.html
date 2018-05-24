@@ -1,0 +1,75 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Accept Invitation</h3>
+    </div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="strNames" class="col-sm-3 control-label pull-left">Names</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-user"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strNames">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strSurname" class="col-sm-3 control-label pull-left">Surname</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-user"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strSurname">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strCell" class="col-sm-3 control-label pull-left">Cell</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-phone"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strCell">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-envelope"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strEmail">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strSecurityCode" class="col-sm-3 control-label pull-left">Security Code</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <a href="#"  onclick="ResendActivation()" title="Resend Activation Code"><i class="glyphicon glyphicon-lock"> </i></a>
+                    </div>
+                    <input type="text" class="form-control" id="strSecurityCode" title="Your Security Code was Sent to your phone by SMS">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary btn-block" id="AcceptInviteButt"><strong><i class="fa fa-cloud"> </i> Accept Invite </strong></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+                <div id="AcceptInviteINFDIV"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/static/dist/js/pages/users/accept.js"></script>

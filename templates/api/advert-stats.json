@@ -1,0 +1,22 @@
+[
+{% for thisStats in thisStatsList %}
+    {% if loop.index0 < strLimit %}
+        {
+            "ref":"{{ thisStats.strAdvertID }}",
+            "sent":"{{ thisStats.strTotalSent }}",
+            "balance":"{{ thisStats.strTotalRemaining }}",
+            "responses":"{{ thisStats.strTotalResponses }}"
+        },
+    {% else %}
+        {
+            "ref":"{{ thisStats.strAdvertID }}",
+            "sent":"{{ thisStats.strTotalSent }}",
+            "balance":"{{ thisStats.strTotalRemaining }}",
+            "responses":"{{ thisStats.strTotalResponses }}"
+        }
+    {% endif %}
+{% endfor %}
+]
+
+
+

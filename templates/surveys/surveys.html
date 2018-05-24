@@ -1,0 +1,120 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Surveys</h3>
+    </div>
+
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#MySurveys" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-user"> </i> My Surveys</button></a></li>
+            <li><a href="#ManageSurveys" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-adjust"> </i> Manage Surveys</button> </a> </li>
+        </ul>
+        <div class="tab-content">
+            <div class="active tab-pane" id="MySurveys">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> My Surveys</h3>
+                    </div>
+                    <table id="MySurveysTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Survey Type</td>
+                                <td>Date</td>
+                                <td>Time</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {%  for thisSurvey in thisSurveysList %}
+                            <tr>
+                                <td><a href="/surveys/manage/{{ thisSurvey.strSurveyID }}">{{ thisSurvey.strName }}</a></td>
+                                <td>{{ thisSurvey.strDescription }}</td>
+                                <td>{{ thisSurvey.strSurveyType }}</td>
+                                <td>{{ thisSurvey.strDateCreated }}</td>
+                                <td>{{ thisSurvey.strTimeCreated }}</td>
+                            </tr>
+                        {%  endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Survey Type</td>
+                                <td>Date</td>
+                                <td>Time</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="ManageSurveys">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title">Manage Surveys</h3>
+                        <br><small>Required fields are marked with an Asterisk</small>
+                    </div>
+                      <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="strSurveyName" class="col-sm-3 control-label pull-left">Name *</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strSurveyName" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strDescription" class="col-sm-3 control-label pull-left">Description *</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                                    </div>
+                                    <textarea  class="form-control" id="strDescription" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="strSurveyType" class="col-sm-3 control-label pull-left">Survey Type *</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                                    </div>
+                                    <select id="strSurveyType" class="form-control" required>
+                                        <option value="multichoice"> Multi Choice</option>
+                                        <option value="general"> General</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="UploadSurveyButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Upload Survey </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <div id="UploadSurveyINFDIV"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#MySurveysTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script src="/static/dist/js/pages/surveys/survey.js"></script>

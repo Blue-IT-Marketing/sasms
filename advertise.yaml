@@ -1,0 +1,31 @@
+
+
+handlers:
+
+- url: /advertise
+  script: advertise.app
+  secure: always
+
+- url: /adverts/manage/.*
+  script: advertise.app
+  secure: always
+
+- url: /adverts/invoice/.*
+  script: advertise.app
+  secure: always
+
+- url: /adverts/topup/invoice/.*
+  script: advertise.app
+  secure: always
+
+- url: /adverts/topup/uploaddeposit
+  secure: always
+  script: advertise.app
+
+
+
+
+
+
+
+

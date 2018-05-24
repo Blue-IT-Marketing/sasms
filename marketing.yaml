@@ -1,0 +1,6 @@
+
+handlers:
+
+- url: /marketing-cron/.*
+  secure: always
+  script: marketing.app

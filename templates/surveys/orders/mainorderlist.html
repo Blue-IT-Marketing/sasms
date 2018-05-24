@@ -1,0 +1,42 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Orders</h3>
+    </div>
+      <table id="MyNewOrdersTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Reference</td>
+                <td>Total (SMS)</td>
+                <td>Price</td>
+                <td>Paid</td>
+                <td>Start Date</td>
+                <td>Start Time</td>
+                <td>Run Order</td>
+            </tr>
+        </thead>
+        <tbody>
+        {%  for thisOrder in  thisOrdersList %}
+            <tr>
+                <td><a href="/surveys/payments/{{ thisOrder.strOrderID }}" title="Make Payment">{{ thisOrder.strDepositReference }}</a></td>
+                <td>{{ thisOrder.strTotalSMS }}</td>
+                <td>{{ thisOrder.strQoutedAmount }}</td>
+                <td>{{ thisOrder.strTotalPaid }}</td>
+                <td>{{ thisOrder.strOrderStartDate }}</td>
+                <td>{{ thisOrder.strOrderStartTime }}</td>
+                <td>{{ thisOrder.strRunOrder }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Reference</td>
+                <td>Total (SMS)</td>
+                <td>Price</td>
+                <td>Paid</td>
+                <td>Start Date</td>
+                <td>Start Time</td>
+                <td>Run Order</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

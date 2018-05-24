@@ -1,0 +1,10 @@
+
+handlers:
+
+- url: /admin/contacts
+  script: contacts.app
+  secure: always
+
+- url: /admin/contacts/.*
+  script: contacts.app
+  secure: always

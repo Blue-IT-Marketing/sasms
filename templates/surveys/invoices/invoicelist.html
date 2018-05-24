@@ -1,0 +1,40 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Invoice Lists</h3>
+    </div>
+
+    <table id="PaymentListTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Reference</td>
+                <td>Amount</td>
+                <td>Method</td>
+                <td title="Payment verified">Verified</td>
+                <td title="Payment verified">Date Verified</td>
+                <td title="Payment verified">Time Verified</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for thisPayment in thisPaymentList %}
+            <tr>
+                <td><a href="/surveys/invoices/{{ thisPayment.strPaymentID  }}">{{ thisPayment.strDepositReference }}</a></td>
+                <td>{{ thisPayment.strAmountPaid }}</td>
+                <td>{{ thisPayment.strPaymentMethod }}</td>
+                <td>{{ thisPayment.strPaymentVerified }}</td>
+                <td>{{ thisPayment.strDateVerified }}</td>
+                <td>{{ thisPayment.strTimeVerified }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Reference</td>
+                <td>Amount</td>
+                <td>Method</td>
+                <td title="Payment verified">Verified</td>
+                <td title="Payment verified">Date Verified</td>
+                <td title="Payment verified">Time Verified</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

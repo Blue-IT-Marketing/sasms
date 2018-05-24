@@ -1,0 +1,191 @@
+
+<link rel="stylesheet" href="/../static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Twitter</h3>
+    </div>
+
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#MessagesListTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-user"> </i> Messages</button></a></li>
+                <li><a href="#CreateMessageTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-credit-card"> </i> Create Message </button> </a> </li>
+                <li><a href="#SettingsTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-cog"> </i> Settings </button> </a> </li>
+                <li><a href="#CreateSettingsTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="fa fa-twitter"> </i> Add Twitter Settings </button> </a> </li>
+            </ul>
+            <div class="tab-content">
+                <div class="active tab-pane" id="MessagesListTAB">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Messages</h3>
+                        </div>
+                            <table id="TwitterMessagesTable" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>Message</td>
+                                        <td>Status</td>
+                                        <td>Date Sent</td>
+                                        <td>Time Sent</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for thisMessage in thisTwitterMessagesList %}
+                                    <tr>
+                                        <td><a href="" id="{{ thisMessage.strMessageID }}" onclick="ShowTwitterMessage(this.id)">{{ thisMessage.strMessage }}</a></td>
+                                        <td>{{ thisMessage.strMessageStatus }}</td>
+                                        <td>{{ thisMessage.strDateSent }}</td>
+                                        <td>{{ thisMessage.strTimeSent }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Message</td>
+                                        <td>Status</td>
+                                        <td>Date Sent</td>
+                                        <td>Time Sent</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="CreateMessageTAB">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Create Message</h3>
+                        </div>
+
+                            <form class="form-horizontal">
+                                    <div class="form-group">
+                                    <label for="strMessage" class="col-sm-3 control-label pull-left">Message</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-info-sign"> </i>
+                                                </div>
+                                                <textarea id="strMessage" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3"></label>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-primary btn-block" id="AddTwitterMessageButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Upload Twitter Message </strong></button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label pull-left"></label>
+                                        <div class="col-sm-6 ">
+                                            <div id="AddTwitterMessageINFDIV"></div>
+                                        </div>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                <div class="tab-pane" id="SettingsTAB">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Settings</h3>
+                        </div>
+                        <table id="TwitterSettingsTable" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>Consumer API</td>
+                                        <td>Consumer Secret</td>
+                                        <td>Access Token Key</td>
+                                        <td>Access Token Secret</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for thisSettings in thisTwitterSettingsList %}
+                                    <tr>
+                                        <td><a href="" id="{{ thisSettings.strSettingsID }}" onclick="ShowSettings(this.id)">{{ thisSettings.strConsumerAPI }}</a></td>
+                                        <td>{{ thisSettings.strConsumerSecret }}</td>
+                                        <td>{{ thisSettings.strAccessTokenKey }}</td>
+                                        <td>{{ thisSettings.strAccessTokenSecret }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Consumer API</td>
+                                        <td>Consumer Secret</td>
+                                        <td>Access Token Key</td>
+                                        <td>Access Token Secret</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="CreateSettingsTAB">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Create Settings</h3>
+                        </div>
+                            <form class="form-horizontal">
+                                    <div class="form-group">
+                                    <label for="strConsumerAPI" class="col-sm-3 control-label pull-left">Consumer API</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-lock"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strConsumerAPI">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label for="strConsumerSecret" class="col-sm-3 control-label pull-left">Consumer Secret</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-key"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strConsumerSecret">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label for="strAccessTokenKey" class="col-sm-3 control-label pull-left">Access Token Key</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-lock"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strAccessTokenKey">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label for="strAccessTokenSecret" class="col-sm-3 control-label pull-left">Access Token Secret</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-key"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strAccessTokenSecret">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3"></label>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-primary btn-block" id="AddTwitterSettingsButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Add Twitter Account</strong></button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label pull-left"></label>
+                                        <div class="col-sm-6 ">
+                                            <div id="AddTwitterSettingsINFDIV"></div>
+                                        </div>
+                                    </div>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<script src="/../static/dist/js/pages/dashboard/twitter.js"></script>
+<script src="/../static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/../static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#TwitterMessagesTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script>$(function () {$('#TwitterSettingsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

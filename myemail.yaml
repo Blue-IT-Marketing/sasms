@@ -1,0 +1,17 @@
+
+handlers:
+
+
+- url: /admin/myemail
+  script: myemail.app
+  secure: always
+
+- url: /dashboard/emails
+  login: admin
+  script: myemail.app
+  secure: always
+
+- url: /dashboard/emails/.*
+  login: admin
+  script: myemail.app
+  secure: always

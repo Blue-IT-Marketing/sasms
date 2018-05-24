@@ -1,0 +1,91 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Orders</h3>
+    </div>
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#NewOrders" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-user"> </i> New Orders</button></a></li>
+                <li><a href="#PaidOrders" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-adjust"> </i> Paid Orders</button> </a> </li>
+            </ul>
+            <div class="tab-content">
+                <div class="active tab-pane" id="NewOrders">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> New Orders</h3>
+                        </div>
+                        <table id="NewOrdersTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td><strong>Advert</strong></td>
+                                    <td><strong>Quoted Amount</strong></td>
+                                    <td><strong>Total Paid</strong></td>
+                                    <td><strong>Fully Paid</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for thisOrder in  thisNewOrdersList %}
+                                <tr>
+                                    <td><a href="/adverts/manage/{{ thisOrder.strAdvertID }}" title="Open Advert Manager">Open Advert</a></td>
+                                    <td><a href="/adverts/payments/{{ thisOrder.strOrderID }}" title="Make Payment">R {{ thisOrder.strQoutedAmount }}.00</a></td>
+                                    <td>{{ thisOrder.strTotalPaid }}</td>
+                                    <td>{{ thisOrder.strFullyPaid }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td><strong>Advert</strong></td>
+                                    <td><strong>Quoted Amount</strong></td>
+                                    <td><strong>Total Paid</strong></td>
+                                    <td><strong>Fully Paid</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="PaidOrders">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Paid Orders</h3>
+                        </div>
+                        <table id="ThisPaidTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td><strong>Advert</strong></td>
+                                    <td><strong>Quoted Amount</strong></td>
+                                    <td><strong>Total Paid</strong></td>
+                                    <td><strong>Fully Paid</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for thisOrder in  thisPaidList %}
+                                <tr>
+                                    <td><a href="/adverts/manage/{{ thisOrder.strAdvertID }}" title="Open Advert Manager">Open Advert</a></td>
+                                    <td><a href="/adverts/payments/{{ thisOrder.strOrderID }}" title="Make Payment">R {{ thisOrder.strQoutedAmount }}.00</a></td>
+                                    <td>{{ thisOrder.strTotalPaid }}</td>
+                                    <td>{{ thisOrder.strFullyPaid }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td><strong>Advert</strong></td>
+                                    <td><strong>Quoted Amount</strong></td>
+                                    <td><strong>Total Paid</strong></td>
+                                    <td><strong>Fully Paid</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#NewOrdersTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script>$(function () {$('#ThisPaidTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

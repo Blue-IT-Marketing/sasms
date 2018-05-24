@@ -1,0 +1,42 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="../../../static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Invoices</h3>
+    </div>
+    <table id="MyInvoicesTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Amount</td>
+                <td>Payment Method</td>
+                <td>Date</td>
+                <td>Time</td>
+                <td>Verified</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for thisPayment in thisPaymentsList %}
+            <tr>
+                <td><a href="/adverts/invoice/{{ thisPayment.strPaymentID }}">{{ thisPayment.strAmountPaid }}</a></td>
+                <td>{{ thisPayment.strPaymentMethod }}</td>
+                <td>{{ thisPayment.strDatePaid }}</td>
+                <td>{{ thisPayment.strTimePaid }}</td>
+                <td>{{ thisPayment.strPaymentVerified }}</td>
+            </tr>
+        {%  endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Amount</td>
+                <td>Payment Method</td>
+                <td>Date</td>
+                <td>Time</td>
+                <td>Verified</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<!-- DataTables -->
+<script src="../../../static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../../static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#MyInvoicesTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

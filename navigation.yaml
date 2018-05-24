@@ -1,0 +1,6 @@
+handlers:
+- url: /navigation/.*
+  script: navigation.app
+  secure: always
+
+

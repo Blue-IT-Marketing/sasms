@@ -1,0 +1,29 @@
+
+handlers:
+
+- url: /admin/mysms
+  script: mysms.app
+  secure: always
+
+- url: /admin/sms/groups
+  script: mysms.app
+  secure: always
+
+- url: /sms/groupman/.*
+  script: mysms.app
+  secure: always
+
+- url: /sms/manage/.*
+  script: mysms.app
+  secure: always
+
+- url: /sms/credits
+  script: mysms.app
+  secure: always
+
+- url: /twilio/callback/status
+  script: mysms.app
+
+- url: /twilio/responses
+  script: mysms.app
+

@@ -1,0 +1,28 @@
+Metadata-Version: 2.0
+Name: mailjet-rest
+Version: 1.3.0
+Summary: Mailjet V3 API wrapper
+Home-page: https://github.com/mailjet/mailjet-apiv3-python
+Author: Mailjet
+Author-email: api@mailjet.com
+License: MIT
+Download-URL: https://github.com/mailjet/mailjet-apiv3-python/releases/tag/v1.3.0
+Keywords: Mailjet API v3 / v3.1 Python Wrapper
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Utilities
+Requires-Dist: requests (>=2.4.3)
+
+UNKNOWN
+
+

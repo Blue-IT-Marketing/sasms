@@ -1,0 +1,12 @@
+[
+  {
+    "survey-id": "{{ thisSurveyQuestions.strSurveyID }}",
+    "question-id": "{{ thisSurveyQuestions.strQuestionID }}",
+    "question": "{{ thisSurveyQuestions.strQuestion }}",
+    "option-1": "{{ thisSurveyQuestions.strChoiceOne }}",
+    "option-2": "{{ thisSurveyQuestions.strChoiceTwo }}",
+    "option-3": "{{ thisSurveyQuestions.strChoiceThree }}",
+    "option-4": "{{ thisSurveyQuestions.strChoiceFour }}",
+    "date-created": "{{ thisSurveyQuestions.strDateCreated }}"
+  }
+]

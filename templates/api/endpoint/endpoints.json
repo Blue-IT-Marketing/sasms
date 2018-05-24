@@ -1,0 +1,116 @@
+[
+{
+  "description": "Obtain contact lists for marketing and promotional purposes",
+  "url":"/endpoints/contacts-get",
+  "arguments": "api,secret",
+  "results": "json"
+},
+{
+  "description": "Add a single contact to the cloud database",
+  "url":"/endpoints/contact-add",
+  "arguments": "api,secret,names,surname,email,cell",
+  "results": "status message"
+},
+  {
+  "description": "Check if contact details exist if yes return complete details as a json file",
+  "url":"/endpoints/contact-exist",
+  "arguments": "api,secret,cell",
+  "results": "json"
+  },
+  {
+  "description": "Send a single message to a single cell number",
+  "url":"/endpoints/message-send",
+  "arguments": "api,secret,cell,message",
+  "results": "json"
+  },
+  {
+  "description": "Check if there is a response associated with a specific message, message identified by a reference returned when the message was sent",
+  "url":"/endpoints/message-response",
+  "arguments": "api,secret,cell,ref",
+  "results": "json"
+  },
+  {
+  "description": "Check the status of a sent message",
+  "url":"/endpoints/message-status",
+  "arguments": "api,secret,cell,ref",
+  "results": "json"
+  },
+  {
+  "description": "Check overall credits this will return credits for all your accounts",
+  "url":"/endpoints/credits",
+  "arguments": "api,secret",
+  "results": "json"
+  },
+  {
+  "description": "Set an Advert to run from a specified date and time and use credits as specified in the limit provided there is enough credit on your advert account",
+  "url":"/endpoints/advert-set",
+  "arguments": "api,secret,advert,credit-limit,start-date,start-time",
+  "results": "json"
+  },
+  {
+  "description": "Check the statistics associated with a specific advert",
+  "url":"/endpoints/advert-stats",
+  "arguments": "api,secret,ref",
+  "results": "json"
+  },
+  {
+  "description": "Return all responses so far associated with a specific advert",
+  "url":"/endpoints/advert-responses",
+  "arguments": "api,secret,ref",
+  "results": "json"
+  },
+  {
+  "description": "Check the credits on your advertising account",
+  "url":"/endpoints/advert-credit",
+  "arguments": "api,secret",
+  "results": "json"
+  },
+  {
+  "description": "Set your survey to run at a specific date and time using credits limit as specified, your survey should be formatted using json see example on our web application",
+  "url":"/endpoints/survey-set",
+  "arguments": "api,secret,survey,credit-limit,start-date,start-time",
+  "results": "json"
+  },
+  {
+  "description": "Check Survey Status of a survey associated with a specified reference number",
+  "url":"/endpoints/survey-status",
+  "arguments": "api,secret,ref",
+  "results": "json"
+  },
+  {
+  "description": "Check Survey Responses of a survey associated with a specified reference number",
+  "url":"/endpoints/survey-responses",
+  "arguments": "api,secret,ref",
+  "results": "json"
+  },
+  {
+  "description": "Check Survey Credits associated with my survey account",
+  "url":"/endpoints/survey-credit",
+  "arguments": "api,secret,ref",
+  "results": "json"
+  },
+  {
+  "description": "Send your fax with documents located at a specified media url",
+  "url":"/endpoints/fax-send",
+  "arguments": "api,secret,media-url,fax-number",
+  "results": "json"
+  },
+  {
+  "description": "Check the status of your fax through the fax reference number",
+  "url":"/endpoints/fax-status",
+  "arguments": "api,secret,ref",
+  "results": "json"
+  },
+  {
+  "description": "Receive a fax associated with a specified fax-to-email address",
+  "url":"/endpoints/fax-receive",
+  "arguments": "api,secret,fax-email",
+  "results": "json"
+  },
+  {
+  "description": "Check credits associated with a specific fax account",
+  "url":"/endpoints/fax-credit",
+  "arguments": "api,secret,ref",
+  "results": "json"
+  }
+]
