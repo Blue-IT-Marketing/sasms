@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="google-site-verification" content="rkt7iLTBYZuRLjY_Sxg4uDDNusOJnuhHCDIGPwAahtk" />
+  <title>SA-SMS-By Blue IT Marketing Pty LTD</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/dist/favicons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/dist/favicons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/dist/favicons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/dist/favicons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/dist/favicons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/dist/favicons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/dist/favicons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/dist/favicons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/dist/favicons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/static/dist/favicons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/dist/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/dist/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/dist/favicons/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/static/dist/favicons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#fff">
+  <!-- Manifest file for Installation on Android and Chrome -->
+  <link rel="manifest" href="/static/dist/manifest/manifest.json">
+
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/dist/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/dist/css/ionicons.min.css">
+  <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.min.css">
+  <!--[if lt IE 9]><script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script><script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini" id="MyBody">
+<div class="wrapper">
+  <!-- Main Header -->
+   <div id="MainHeaderDiv"></div>
+  <!-- Left side column. contains the logo and sidebar -->
+  <div id="SideBarDiv"></div>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+         Blue IT Marketing Messaging
+        <small>Contact and Messaging Management</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">organization manager</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3">
+                 <div class="box-body box-profile">
+                              <img class="profile-user-img img-responsive img-circle" src="/static/dist/img/sms.jpeg" alt="User profile picture">
+                              <h3 class="profile-username text-center"> Advertising Order Management</h3>
+                              <p class="text-muted text-center">Advertising Account Order Management &amp; Activation</p>
+                              <div class="box box-footer with-border">
+                              <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item" title="">
+                                  <b> Reference : </b>  <a title="Deposit Reference">  {{ thisOrder.strDepositReference }}<i class="glyphicon glyphicon-folder-close pull-right"> </i></a>
+                                </li>
+                                <li class="list-group-item" title="">
+                                  <b> Date (Start) : </b>  <a title="Date to Start Advertising"> {{ thisOrder.strOrderStartDate }}  <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                                </li>
+                                <li class="list-group-item" title="">
+                                  <b> Time (Start) : </b>  <a title="Time to Start Advertising"> {{ thisOrder.strOrderStartTime }}  <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                                </li>
+                                <li class="list-group-item margin-bottom" title="">
+                                  <b> Run (State) : </b>  <a title="State of the Order ()"> {{ thisOrder.strRunOrder }}  <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                                </li>
+                                <li class="list-group-item" title="">
+                                  <b> Total SMS (Credit) : </b>  <a title="SMS Credits to use for the Order"> {{ thisOrder.strTotalSMS }}  <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                                </li>
+                                <li class="list-group-item" title="">
+                                  <b> Quoted Amount (Credit) : </b>  <a title="Client Credit in Money"> R {{ thisOrder.strQoutedAmount }}.00  <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                                </li>
+                                <li class="list-group-item" title="">
+                                  <b> Total Paid : </b>  <a title="Amount in Cash already Paid for this Order"> {{ thisOrder.strTotalPaid }}  <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                                </li>
+                                <li class="list-group-item" title="">
+                                  <b> Payment Status (Marked as Fully Paid) : </b>  <a title="Payment Status True means marked as fully paid"> {{ thisOrder.strTotalPaid }}  <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                                </li>
+
+                              </ul>
+                              </div>
+                 <div class="box box-body with-border">
+                     <div class="box box-header with-border">
+                         <h3 class="box-title"> Organization</h3>
+                         <input type="hidden" class="hidden" id="strDepositReference" value="{{  thisOrder.strDepositReference }}">
+                     </div>
+                     <a href="#OrgDetailsTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-copyright-mark"> </i> <strong> Organization</strong></a>
+                     <a href="#AccountDetailsTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-send"> </i> <strong>Client Account </strong></a>
+                 </div>
+                 <div class="box box-body with-border">
+                     <div class="box box-header with-border">
+                         <h3 class="box-title"> Orders &amp; Adverts</h3>
+                     </div>
+                     <a href="#PaymentsTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-credit-card"> </i> <strong> Payments</strong></a>
+                     <a href="#OrderStateTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-send"> </i> <strong>Order State </strong></a>
+                     <a href="#AdvertTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-send"> </i> <strong>Advert </strong></a>
+                 </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                    </ul>
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="OrgDetailsTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title">Organization</h3>
+                                </div>
+
+                                <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="strOrganizationName" class="col-sm-3 control-label pull-left" > Org Name</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strOrganizationName" value="{{ thisOrg.strOrganizationName }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strDescription" class="col-sm-3 control-label pull-left" > Description</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                    </div>
+                                                        <textarea id="strDescription" class="form-control">{{ thisOrg.strDescription }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strRegistration" class="col-sm-3 control-label pull-left" > Reg</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strRegistration" value="{{ thisOrg.strRegistration }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strCell" class="col-sm-3 control-label pull-left" > Cell</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-phone"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strCell" value="{{ thisOrg.strCell }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strTel" class="col-sm-3 control-label pull-left" > Tel</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-phone"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strTel" value="{{ thisOrg.strTel }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strEmail" class="col-sm-3 control-label pull-left" > Email</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-envelope"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strEmail" value="{{ thisOrg.strEmail }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strWebsite" class="col-sm-3 control-label pull-left" > Website</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-link"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strWebsite" value="{{ thisOrg.strWebsite }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strRegisteringLink" class="col-sm-3 control-label pull-left" > Reg Link</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-link"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strWebsite" value="{{ thisOrg.strRegisteringLink }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strVerificationCode" class="col-sm-3 control-label pull-left" > Ver Code</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-lock"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strVerificationCode" value="{{ thisOrg.strVerificationCode }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strVerified" class="col-sm-3 control-label pull-left" > Verified</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-lock"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strVerified" value="{{ thisOrg.strVerified }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strSuspended" class="col-sm-3 control-label pull-left" > Suspended</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-user"> </i>
+                                                    </div>
+                                                        <input type="text" class="form-control" id="strSuspended" value="{{ thisOrg.strSuspended }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left"> </label>
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-primary btn-block" id="UpdateOrgAccountButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Update Organization </strong></button>
+                                            </div>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="AccountDetailsTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title">Account Details</h3>
+                                </div>
+                                <form class="form-horizontal">
+                                   <div class="form-group">
+                                        <label for="strNames" class="col-sm-3 control-label pull-left" > Names</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-user"> </i>
+                                                </div>
+                                                    <input type="text" class="form-control" id="strNames" value="{{ thisAccount.strNames }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="form-group">
+                                        <label for="strSurname" class="col-sm-3 control-label pull-left" > Surname</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-user"> </i>
+                                                </div>
+                                                    <input type="text" class="form-control" id="strSurname" value="{{ thisAccount.strSurname }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="form-group">
+                                        <label for="strCell" class="col-sm-3 control-label pull-left" > Cell</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-phone"> </i>
+                                                </div>
+                                                    <input type="text" class="form-control" id="strCell" value="{{ thisAccount.strCell }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="form-group">
+                                        <label for="strTel" class="col-sm-3 control-label pull-left" > Tel</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-phone-alt"> </i>
+                                                </div>
+                                                    <input type="text" class="form-control" id="strTel" value="{{ thisAccount.strTel }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="form-group">
+                                        <label for="strEmail" class="col-sm-3 control-label pull-left" > Email</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-envelope"> </i>
+                                                </div>
+                                                    <input type="text" class="form-control" id="strEmail" value="{{ thisAccount.strEmail }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="form-group">
+                                        <label for="strWebsite" class="col-sm-3 control-label pull-left" > Website</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-link"> </i>
+                                                </div>
+                                                    <input type="text" class="form-control" id="strWebsite" value="{{ thisAccount.strWebsite }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="form-group">
+                                        <label for="strVerified" class="col-sm-3 control-label pull-left" > Verified</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-link"> </i>
+                                                </div>
+
+                                                    {% if thisAccount.strVerified == true  %}
+                                                       <select class="form-control" id="strVerified">
+                                                        <option value="YES" selected="selected"> True</option>
+                                                        <option value="No"> False</option>
+                                                       </select>
+                                                    {% endif %}
+
+                                                    {% if thisAccount.strVerified == false  %}
+                                                        <select class="form-control" id="strVerified">
+                                                        <option value="YES"> True</option>
+                                                        <option value="No" selected="selected"> False</option>
+                                                        </select>
+                                                    {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="form-group">
+                                        <label for="strVerificationCode" class="col-sm-3 control-label pull-left" > Verification Code</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-lock"> </i>
+                                                </div>
+                                                    <input type="text" class="form-control" id="strVerificationCode" value="{{ thisAccount.strVerificationCode }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="form-group">
+                                        <label for="strSuspended" class="col-sm-3 control-label pull-left" > Suspended</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-lock"> </i>
+                                                </div>
+                                                    <input type="text" class="form-control" id="strSuspended" value="{{ thisAccount.strSuspended }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="PaymentsTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title">Payments</h3>
+                                </div>
+                            <div class="nav-tabs-custom">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#RelatedPaymentsTab" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-credit-card"> </i>  <strong>Related Payments </strong> </button></a></li>
+                                    <li><a href="#AllOrganizationPayments" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-credit-card"> </i> <strong>Organization Payments </strong></button> </a> </li>
+                                    <li><a href="#VerifyNewPayment" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-credit-card"> </i> <strong> Verify Payment </strong> </button> </a> </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="active tab-pane" id="RelatedPaymentsTab">
+                                        <div class="box box-body with-border">
+                                            <div class="box box-header with-border">
+                                                <h3 class="box-title"> Related Payments</h3>
+                                            </div>
+                                            <table id="PaymentsTable" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Amount Paid</td>
+                                                        <td>Payment Method</td>
+                                                        <td>Date</td>
+                                                        <td>Time</td>
+                                                        <td>Payment Verified</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for thisPayment in thisRelatedPaymentList %}
+                                                    <tr>
+                                                        <td></td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td>Amount Paid</td>
+                                                        <td>Payment Method</td>
+                                                        <td>Date</td>
+                                                        <td>Time</td>
+                                                        <td>Payment Verified</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="AllOrganizationPayments">
+                                        <div class="box box-body with-border">
+                                            <div class="box box-header with-border">
+                                                <h3 class="box-title">Organization Payment Details</h3>
+                                            </div>
+                                            <table id="OrganizationPaymentTab" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Deposit Reference</td>
+                                                        <td>Amount Paid</td>
+                                                        <td>Payment Method</td>
+                                                        <td>Date</td>
+                                                        <td>Time</td>
+                                                        <td>Verified</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for thisOrg in  thisOrganizationPaymentsList %}
+                                                    <tr>
+                                                        <td>{{ thisOrg.strDepositReference }}</td>
+                                                        <td>{{ thisOrg.strAmountPaid }}</td>
+                                                        <td>{{ thisOrg.strPaymentMethod }}</td>
+                                                        <td>{{ thisOrg.strDatePaid }}</td>
+                                                        <td>{{ thisOrg.strTimePaid }}</td>
+                                                        <td>{{ thisOrg.strPaymentVerified }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td>Deposit Reference</td>
+                                                        <td>Amount Paid</td>
+                                                        <td>Payment Method</td>
+                                                        <td>Date</td>
+                                                        <td>Time</td>
+                                                        <td>Verified</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="VerifyNewPayment">
+                                        <div class="box box-body with-border">
+                                            <div class="box box-header with-border">
+                                                <h3 class="box-title"> Verify New Payment</h3>
+                                            </div>
+                                            <form class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label for="strPaymentMethod" class="col-sm-3 control-label pull-left">Payment Method</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <i class="glyphicon glyphicon-th-list"> </i>
+                                                            </div>
+                                                            <select class="form-control" id="strPaymentMethod">
+                                                                <option value="Cash">Cash</option>
+                                                                <option value="Direct Deposit">Direct Deposit</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="strAmount" class="col-sm-3 control-label pull-left">Amount</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <i class="glyphicon glyphicon-th-large"> </i>
+                                                            </div>
+                                                            <input type="text" id="strAmount" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label pull-left"></label>
+                                                    <div class="col-sm-6">
+                                                        <button type="button" class="btn btn-primary btn-block" id="UploadPaymentButt"><strong> <i class="glyphicon glyphicon-cloud-upload"> </i> Upload Payment  </strong></button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label pull-left"></label>
+                                                    <div class="col-sm-6">
+                                                        <div id="UploadPaymentINFDIV"></div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="OrderStateTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title"> Order State</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="AdvertTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title"> Advert</h3>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- Main Footer -->
+ <div id="FooterDiv"></div>
+  <div class="control-sidebar-bg"></div>
+</div>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="/static/plugins/fastclick/fastclick.min.js"></script>
+<script src="/static/dist/js/app.min.js"></script>
+<script src="/static/dist/js/pages/advertorders.js"></script>
+<script async defer src="/static/dist/js/pages/loaders.js"></script>
+</body>
+</html>

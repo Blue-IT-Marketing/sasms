@@ -1,0 +1,7 @@
+[
+  {
+    "response": "{{ strResponse }}",
+    "ref": "{{ strRef }}",
+    "cell": "{{ strCell }}"
+  }
+]

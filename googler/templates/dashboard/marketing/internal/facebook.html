@@ -1,0 +1,77 @@
+
+<link rel="stylesheet" href="/../static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Facebook </h3>
+    </div>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#MessagesListTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-user"> </i> Messages</button></a></li>
+        <li><a href="#CreateMessageTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-credit-card"> </i> Create Message </button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="MessagesListTAB">
+            <table id="FacebookMessagesTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <td>Message</td>
+                        <td>Status</td>
+                        <td>Date Sent</td>
+                        <td>Time Sent</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for thisMessage in thisMessagesList %}
+                    <tr>
+                        <td><a href="" id="{{ thisMessage.strMessageID }}" onclick="ShowMessage(this.id)">{{ thisMessage.strMessage }}</a></td>
+                        <td>{{ thisMessage.strMessageStatus }}</td>
+                        <td>{{ thisMessage.strDateSent }}</td>
+                        <td>{{ thisMessage.strTimeSent }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Message</td>
+                        <td>Status</td>
+                        <td>Date Sent</td>
+                        <td>Time Sent</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="tab-pane" id="CreateMessageTAB">
+            <form class="form-horizontal">
+        <div class="form-group">
+        <label for="strMessage" class="col-sm-3 control-label pull-left">Message</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-info-sign"> </i>
+                    </div>
+                    <textarea id="strMessage" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3"></label>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary btn-block" id="AddFacebookMessageButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Upload Facebook Message </strong></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6 ">
+                <div id="AddFacebookMessageINFDIV"></div>
+            </div>
+        </div>
+    </form>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/../static/dist/js/pages/dashboard/facebook.js"></script>
+<script src="/../static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/../static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#FacebookMessagesTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

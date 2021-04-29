@@ -1,0 +1,47 @@
+"""
+    short term to do lists
+"""
+#TODO- Important Separate Account Details from messaging
+#TODO- Separate Surveys from adverts
+#TODO- Advertising Account mus inherit from main account and only open once the main account is opened and activated
+
+
+#TODO- Create an AI based client targeting and Big Data Module for an Update
+#TODO- Beside email include other targeted channels like traditional adverts
+#TODO- Create an AI based Data Mining and collaboration module that feeds into our Big Data Model
+
+
+#TODO- SEO Tasks must be completed therefore intergrate this system with web analytics plus web master tools at Google and Bing
+#TODO- INline with SEO create some articles about the service and create and intergrate the whole service with its own Google and Twitter Account
+#TODO- Make sure the logins for its own Social Media accounts are included in the system
+
+#TODO- Version 2 Plans
+
+#TODO- Enabling app to run through shortcodes where clients can launch an Advert...
+#TODO- Clients will key in the shortcode, then response with a message telling then to respod with a 150 character advert
+#TODO- Clients will then be sent a message enabling them to select a demographic
+#TODO- Clients will also be able to select by location
+#TODO- Clients should then select their budget
+#TODO- App shall send a quote as a response
+#TODO- Quote shall include the actual amount payable, bank account details, reference number,
+#TODO- and also where to send the deposit slip after depositing the money
+#TODO- Channels to send deposit slip include, MMS, Email, and also whatsapp
+#TODO- After activation the app must respond with an Advert Reference (Same as deposit reference) / Also indicating the advert is active
+#TODO- link to check the status of the advert and also through shortcode
+#TODO- Link to download advert responses, through app and also enabling the client to send in an email address where the resposes shall be sent
+#TODO- Notifications on major milestones on advert
+#TODO- Also send statistics Message
+
+
+#TODO - Use Open Source MIT License to sell this software....
+
+#TODO- Consider using third party report generating templates
+
+
+#TODO-- cloud.google.com/free Activate 12 months free trials for most Google products and services
+
+
+
+#TODO- revise the scheduler in sms group message its bulky and un-economicall
+
+

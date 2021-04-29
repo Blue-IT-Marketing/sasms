@@ -1,0 +1,10 @@
+
+handlers:
+
+- url: /admin
+  script: admin.app
+  secure: always
+
+- url: /account
+  script: admin.app
+  secure: always

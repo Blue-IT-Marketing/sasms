@@ -1,0 +1,27 @@
+[
+{% for thisAnswer in thisSurveyAnswersList %}
+    {% if loop.index0 < strLimit %}
+        {
+            "cell": "{{ thisAnswer.strCell }}",
+            "names":"{{ thisAnswer.strNames }}",
+            "surname":"{{ thisAnswer.strSurname }}",
+            "survey-id":"{{ thisAnswer.strSurveyID }}",
+            "question-id": "{{ thisAnswer.strQuestionID }}",
+            "question": "{{ thisAnswer.strQuestion }}",
+            "answer": "{{ thisAnswer.strOptionNumber }}",
+            "date-time-answered": "{{ thisAnswer.strDateTime }}"
+        },
+    {% else %}
+        {
+            "cell": "{{ thisAnswer.strCell }}",
+            "names":"{{ thisAnswer.strNames }}",
+            "surname":"{{ thisAnswer.strSurname }}",
+            "survey-id":"{{ thisAnswer.strSurveyID }}",
+            "question-id": "{{ thisAnswer.strQuestionID }}",
+            "question": "{{ thisAnswer.strQuestion }}",
+            "answer": "{{ thisAnswer.strOptionNumber }}",
+            "date-time-answered": "{{ thisAnswer.strDateTime }}"
+        }
+    {% endif %}
+{% endfor %}
+]

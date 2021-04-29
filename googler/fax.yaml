@@ -1,0 +1,22 @@
+
+
+handlers:
+
+- url: /fax
+
+  script: myfax.app
+  secure: always
+- url: /fax/settings
+
+  script: myfax.app
+  secure: always
+
+- url: /fax/topup/invoice/.*
+
+  script: myfax.app
+  secure: always
+
+
+
+- url: /fax/testfax
+  script: myfax.app

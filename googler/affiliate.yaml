@@ -1,0 +1,10 @@
+
+
+handlers:
+
+- url: /affiliates
+  script: affiliates.app
+  secure: always
+- url: /affiliates/public/.*
+  script: affiliates.app
+  secure: always

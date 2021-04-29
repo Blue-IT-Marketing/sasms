@@ -1,0 +1,84 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> API</h3>
+        <br><small>Application Protocol Interface</small>
+    </div>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#API" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block">  <strong><i class="fa fa-server"> </i>API </strong></button></a></li>
+        <li><a href="#UsingAPI" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <strong><i class="fa fa-server"> </i> Using Our API </strong></button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="API">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">API Keys</h3>
+                </div>
+                <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="strAPIKey" class="col-sm-3 control-label" >API KEY</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-key"> </i>
+                                    </div>
+                                    <textarea id="strAPIKey" class="form-control" readonly="readonly">{{ thisEndPoint.strAPIKey }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strAPISecret" class="col-sm-3 control-label" >API Secret</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-key"> </i>
+                                    </div>
+                                    <textarea id="strAPISecret" class="form-control" readonly="readonly">{{ thisEndPoint.strAPISecret }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strPointURL" class="col-sm-3 control-label"> Website </label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-link"> </i>
+                                    </div>
+                                    <input id="strPointURL" class="form-control" value="{{ thisEndPoint.strPointURL }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="UpdateAPIButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Update API </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-6">
+                                <div id="UpdateAPIINFDIV"></div>
+                            </div>
+                        </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane" id="UsingAPI">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> Using Our API</h3>
+                </div>
+                <h3><a href="https://sa-sms.appspot.com/endpoints/help" target="_blank">API Description</a></h3>
+                <div class="box box-body with-border">
+                   <code><iframe src="https://sa-sms.appspot.com/endpoints/help" width="100%" height="900"></iframe></code>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script src="../../static/dist/js/pages/endpoints/userendpoints.js"></script>

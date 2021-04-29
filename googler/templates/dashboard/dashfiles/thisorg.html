@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="google-site-verification" content="rkt7iLTBYZuRLjY_Sxg4uDDNusOJnuhHCDIGPwAahtk" />
+  <title>SA-SMS-By Blue IT Marketing Pty LTD</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/dist/favicons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/dist/favicons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/dist/favicons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/dist/favicons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/dist/favicons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/dist/favicons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/dist/favicons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/dist/favicons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/dist/favicons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/static/dist/favicons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/dist/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/dist/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/dist/favicons/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/static/dist/favicons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#fff">
+  <!-- Manifest file for Installation on Android and Chrome -->
+  <link rel="manifest" href="/static/dist/manifest/manifest.json">
+
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.min.css">
+  <!--[if lt IE 9]><script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script><script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+<!-- jQuery 2.2.3 -->
+<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini" id="MyBody">
+<div class="wrapper">
+  <!-- Main Header -->
+   <div id="MainHeaderDiv"></div>
+  <!-- Left side column. contains the logo and sidebar -->
+  <div id="SideBarDiv"></div>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+         Blue IT Marketing Messaging
+        <small>Contact and Messaging Management</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">organization manager</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3">
+                 <div class="box-body box-profile">
+                              <img class="profile-user-img img-responsive img-circle" src="/static/dist/img/sms.jpeg" alt="User profile picture">
+                              <h3 class="profile-username text-center"></h3>
+                              <p class="text-muted text-center"></p>
+                              <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item" title="">
+                                  <b>Organization Name : </b>  <a title="Organization Name">  {{ thisOrg.strOrganizationName }}<i class="glyphicon glyphicon-folder-close pull-right"> </i></a>
+                                </li>
+                                <li class="list-group-item">
+                                    {%  if thisOrg.strVerified == true %}
+                                        <b>Account Verified : </b> <a title="Account succesfully verified please buy more credits"> {{ thisOrg.strVerified }} <i class="fa fa-key pull-right"></i> </a>
+                                    {%  else %}
+                                        <b>Account Verified : </b> <a href="/org/reg/{{ thisOrg.strRegisteringLink }}" title="Please verify you account"> {{ thisOrg.strVerified }} <i class="fa fa-key pull-right"></i> </a>
+                                    {%  endif %}
+                                </li>
+                                <li class="list-group-item" title="">
+                                  <b>Available SMS Messages : </b>  <a title="SMS Messages">  {{ thisSMSAccount.strTotalSMS }} <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                                </li>
+                              </ul>
+                 <div class="box box-body with-border">
+                     <div class="box box-header with-border">
+                         <h3 class="box-title"> Dashboard</h3>
+                     </div>
+                     <a href="#AccountDetailsTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-copyright-mark"> </i> <strong>Organization Account Details</strong></a>
+                     <a href="#SMSAccountTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-send"> </i> <strong>SMS Account </strong></a>
+                     <a href="#UsersAccountsTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-user"> </i> <strong>Users Accounts </strong></a>
+                     <a href="#OrdersAdvertisingTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-credit-card"> </i> <strong>Orders (Advertising) </strong></a>
+                     <a href="#OrdersSurveysTab" class="btn btn-primary btn-block pull-right" data-toggle="tab"><i class="glyphicon glyphicon-credit-card"> </i> <strong>Orders (Surveys) </strong></a>
+                 </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                    </ul>
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="AccountDetailsTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title">Account Details</h3>
+                                    <input type="hidden" class="hidden" id="strOrganizationID" value="{{ thisOrg.strOrganizationID }}">
+                                </div>
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label for="strOrganizationName" class="col-sm-3 control-label pull-left">Organization Name</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strOrganizationName" name="vstrOrganizationName" value="{{ thisOrg.strOrganizationName }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strDescription" class="col-sm-3 control-label pull-left">Description</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strDescription" name="vstrDescription" value="{{ thisOrg.strDescription }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strRegistration" class="col-sm-3 control-label pull-left">Registration</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strRegistration" name="vstrRegistration" value="{{ thisOrg.strRegistration }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strCell" class="col-sm-3 control-label pull-left">Cell</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-phone"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strCell" name="vstrCell" value="{{ thisOrg.strCell }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strTel" class="col-sm-3 control-label pull-left">Tel</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-phone-alt"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strTel" name="vstrTel" value="{{ thisOrg.strTel }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-envelope"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strEmail" name="vstrEmail" value="{{ thisOrg.strEmail }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strWebsite" class="col-sm-3 control-label pull-left">Website</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                   <a href="{{ thisOrg.strWebsite }}" target="_blank"> <i class="glyphicon glyphicon-link"> </i> </a>
+                                                </div>
+                                                <input type="text" class="form-control" id="strWebsite" name="vstrWebsite" value="{{ thisOrg.strWebsite }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strRegisteringLink" class="col-sm-3 control-label pull-left">Registration Link</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <a href="/org/reg/{{ thisOrg.strRegisteringLink }}"> <i class="glyphicon glyphicon-link"> </i></a>
+                                                </div>
+                                                <input type="text" class="form-control" id="strRegisteringLink" name="vstrRegisteringLink" value="{{ thisOrg.strRegisteringLink }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strVerificationCode" class="col-sm-3 control-label pull-left">Verification Code</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-key"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strVerificationCode" name="vstrVerificationCode" value="{{ thisOrg.strVerificationCode }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strVerified" class="col-sm-3 control-label pull-left">Verified</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-lock"> </i>
+                                                </div>
+                                                <select id="strVerified" class="form-control">
+                                                    {% if thisOrg.strVerified == true %}
+                                                        <option value="YES" selected="selected">True</option>
+                                                    {% else %}
+                                                        <option value="YES">True</option>
+                                                    {%  endif %}
+
+                                                    {% if thisOrg.strVerified == false %}
+                                                        <option value="NO" selected="selected">False</option>
+                                                    {% else %}
+                                                        <option value="NO">False</option>
+                                                    {%  endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strSuspended" class="col-sm-3 control-label pull-left">Suspended</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-lock"> </i>
+                                                </div>
+                                                <select id="strSuspended" class="form-control">
+                                                    {% if thisOrg.strSuspended == true %}
+                                                        <option value="YES" selected="selected">True</option>
+                                                    {% else %}
+                                                        <option value="YES">True</option>
+                                                    {%  endif %}
+
+                                                    {% if thisOrg.strSuspended == false %}
+                                                        <option value="NO" selected="selected">False</option>
+                                                    {% else %}
+                                                        <option value="NO">False</option>
+                                                    {%  endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label pull-left"></label>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-primary btn-block" id="UpdateAccountButt"><strong><i class="fa fa-cloud"> </i> Update Account </strong></button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label pull-left"></label>
+                                        <div class="col-sm-6">
+                                            <div id="UpdateAccountINFDIV"></div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="SMSAccountTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title">SMS Accounts</h3>
+                                </div>
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label for="strCreditAmount" class="col-sm-3 control-label pull-left">Credit Amount</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strCreditAmount" name="vstrCreditAmount" value="{{ thisSMSAccount.strCreditAmount }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strCostPerSMS" class="col-sm-3 control-label pull-left">SMS Cost</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strCostPerSMS" name="vstrCostPerSMS" value="{{ thisSMSAccount.strCostPerSMS }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strTotalSMS" class="col-sm-3 control-label pull-left">Total SMS</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strTotalSMS" name="vstrTotalSMS" value="{{ thisSMSAccount.strTotalSMS }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strDateCredited" class="col-sm-3 control-label pull-left">Date Credited</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                    <input type="text" class="form-control" id="strDateCredited" name="vstrDateCredited" value="{{ thisSMSAccount.strDateCredited }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strTimeCredited" class="col-sm-3 control-label pull-left">Time Credited</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strTimeCredited" name="vstrTimeCredited" value="{{ thisSMSAccount.strTimeCredited }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strUsePortal" class="col-sm-3 control-label pull-left">Use Portal</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                <select id="strUsePortal" class="form-control">
+                                                    {% if thisSMSAccount.strUsePortal == "Vodacom"  %}
+                                                        <option value="Vodacom" selected="selected">Vodacom</option>
+                                                        <option value="Budget">Budget</option>
+                                                        <option value="Click Send">Click Send</option>
+                                                    {% endif %}
+                                                    {% if thisSMSAccount.strUsePortal == "Budget"  %}
+                                                        <option value="Vodacom">Vodacom</option>
+                                                        <option value="Budget" selected="selected">Budget</option>
+                                                        <option value="Click Send">Click Send</option>
+                                                    {% endif %}
+                                                    {% if thisSMSAccount.strUsePortal == "Click Send"  %}
+                                                        <option value="Vodacom">Vodacom</option>
+                                                        <option value="Budget">Budget</option>
+                                                        <option value="Click Send" selected="selected">Click Send</option>
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="strDepositReference" class="col-sm-3 control-label pull-left">Deposit Reference</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                                </div>
+                                                <input type="text" class="form-control" id="strDepositReference" value="{{ thisSMSAccount.strDepositReference }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label pull-left"></label>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-primary btn-block" id="UpdateSMSAccountButt"><strong><i class="fa fa-cloud"> </i> Update SMS Account </strong></button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label pull-left"></label>
+                                        <div class="col-sm-6">
+                                            <div id="SMSAccountINFDIV"></div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="UsersAccountsTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title">Users Accounts</h3>
+                                </div>
+
+
+                                <div class="nav-tabs-custom">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#ActiveUserAccounts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="fa fa-server"> </i> Active User Accounts</button></a></li>
+                                        <li><a href="#NewUserAccounts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="fa fa-server"> </i> New User Accounts</button> </a> </li>
+                                        <li><a href="#SuspendedUserAccounts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="fa fa-server"> </i> Suspended User Accounts</button> </a> </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="active tab-pane" id="ActiveUserAccounts">
+                                            <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title">Active User Accounts</h3>
+                                                </div>
+                                                <table id="ActiveUserAccountsTable" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Names</td>
+                                                            <td>Surname</td>
+                                                            <td>Cell</td>
+                                                            <td>Tel</td>
+                                                            <td>Email</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {%  for thisUser in thisActiveUserAccountsList %}
+                                                        <tr>
+                                                            <td>{{ thisUser.strNames }}</td>
+                                                            <td>{{ thisUser.strSurname }}</td>
+                                                            <td>{{ thisUser.strCell }}</td>
+                                                            <td>{{ thisUser.strTel }}</td>
+                                                            <td>{{ thisUser.strEmail }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td>Names</td>
+                                                            <td>Surname</td>
+                                                            <td>Cell</td>
+                                                            <td>Tel</td>
+                                                            <td>Email</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="NewUserAccounts">
+                                            <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title">New User Accounts</h3>
+                                                </div>
+                                                <table id="NewUserAccountsTable" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Names</td>
+                                                            <td>Surname</td>
+                                                            <td>Cell</td>
+                                                            <td>Tel</td>
+                                                            <td>Email</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {%  for thisUser in thisNewUserAccountsList %}
+                                                        <tr>
+                                                            <td>{{ thisUser.strNames }}</td>
+                                                            <td>{{ thisUser.strSurname }}</td>
+                                                            <td>{{ thisUser.strCell }}</td>
+                                                            <td>{{ thisUser.strTel }}</td>
+                                                            <td>{{ thisUser.strEmail }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td>Names</td>
+                                                            <td>Surname</td>
+                                                            <td>Cell</td>
+                                                            <td>Tel</td>
+                                                            <td>Email</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="SuspendedUserAccounts">
+                                            <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title"> Suspended User Accounts</h3>
+                                                </div>
+                                                <table id="SuspendedUserAccountsTable" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Names</td>
+                                                            <td>Surname</td>
+                                                            <td>Cell</td>
+                                                            <td>Tel</td>
+                                                            <td>Email</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {%  for thisUser in thisSuspendedUserAccountsList %}
+                                                        <tr>
+                                                            <td>{{ thisUser.strNames }}</td>
+                                                            <td>{{ thisUser.strSurname }}</td>
+                                                            <td>{{ thisUser.strCell }}</td>
+                                                            <td>{{ thisUser.strTel }}</td>
+                                                            <td>{{ thisUser.strEmail }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td>Names</td>
+                                                            <td>Surname</td>
+                                                            <td>Cell</td>
+                                                            <td>Tel</td>
+                                                            <td>Email</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="OrdersAdvertisingTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title">Advertising Orders Payment Verification &amp; Activation</h3>
+                                </div>
+                                <div class="nav-tabs-custom">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#ProofOfPaymentsTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-phone"> </i> <strong>Proof Of Payments </strong></button></a></li>
+                                        <li><a href="#OutStandingOrdersTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-phone"> </i> <strong>Outstanding Orders</strong></button> </a> </li>
+                                        <li><a href="#ActiveOrdersTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-phone"> </i> <strong>Active Orders</strong></button> </a> </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="active tab-pane" id="ProofOfPaymentsTAB">
+                                            <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title"> Proof Of Payments</h3><br>
+                                                    <small> An Implementation of a system where new proof of payments are downloaded to this form through email</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="OutStandingOrdersTAB">
+                                            <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title">Out Standing Orders</h3><br>
+                                                    <small>For Advertising</small>
+                                                </div>
+                                                <table id="OutStandingOrdersTAB" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Reference</td>
+                                                            <td>Quantity</td>
+                                                            <td>Quote Amount</td>
+                                                            <td>Paid</td>
+                                                            <td>Start Date</td>
+                                                            <td>Start Time</td>
+                                                            <td>Run Order</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {%  for thisOrder in thisOutStandingAdvertisingOrderList %}
+                                                        <tr>
+                                                            <td><a href="/org/advaccounts/{{ thisOrder.strDepositReference }}"><strong>{{ thisOrder.strDepositReference }}</strong></a></td>
+                                                            <td>{{ thisOrder.strTotalSMS }}</td>
+                                                            <td>{{ thisOrder.strQoutedAmount }}</td>
+                                                            <td>{{ thisOrder.strTotalPaid }}</td>
+                                                            <td>{{ thisOrder.strOrderStartDate }}</td>
+                                                            <td>{{ thisOrder.strOrderStartTime }}</td>
+                                                            <td>{{ thisOrder.strRunOrder }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td>Reference</td>
+                                                            <td>Quantity</td>
+                                                            <td>Quote Amount</td>
+                                                            <td>Paid</td>
+                                                            <td>Start Date</td>
+                                                            <td>Start Time</td>
+                                                            <td>Run Order</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="ActiveOrdersTAB">
+                                          <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title">Active Orders</h3><br>
+                                                    <small>For Advertising</small>
+                                                </div>
+                                                <table id="OutStandingOrdersTAB" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Reference</td>
+                                                            <td>Quantity</td>
+                                                            <td>Quote Amount</td>
+                                                            <td>Paid</td>
+                                                            <td>Start Date</td>
+                                                            <td>Start Time</td>
+                                                            <td>Run Order</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for thisOrder in thisOutStandingAdvertisingOrderList  %}
+                                                        <tr>
+                                                            <td><a href="/org/advaccounts/{{ thisOrder.strDepositReference }}"><strong>{{ thisOrder.strDepositReference }}</strong></a></td>
+                                                            <td>{{ thisOrder.strTotalSMS }}</td>
+                                                            <td>{{ thisOrder.strQoutedAmount }}</td>
+                                                            <td>{{ thisOrder.strTotalPaid }}</td>
+                                                            <td>{{ thisOrder.strOrderStartDate }}</td>
+                                                            <td>{{ thisOrder.strOrderStartTime }}</td>
+                                                            <td>{{ thisOrder.strRunOrder }}</td>
+                                                        </tr>
+                                                    {%  endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td>Reference</td>
+                                                            <td>Quantity</td>
+                                                            <td>Quote Amount</td>
+                                                            <td>Paid</td>
+                                                            <td>Start Date</td>
+                                                            <td>Start Time</td>
+                                                            <td>Run Order</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        <div class="tab-pane" id="OrdersSurveysTab">
+                            <div class="box box-body with-border">
+                                <div class="box box-header with-border">
+                                    <h3 class="box-title">Surveys Orders Payment Verification &amp; Activation</h3>
+                                </div>
+
+                                <div class="nav-tabs-custom">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#SurvProofOfPaymentsTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-phone"> </i> <strong>Proof Of Payments</strong></button></a></li>
+                                        <li><a href="#SurvOutStandingOrdersTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-phone"> </i> <strong>Outstanding Orders</strong></button> </a> </li>
+                                        <li><a href="#SurvActiveOrdersTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-phone"> </i> <strong>Active Orders</strong></button> </a> </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="active tab-pane" id="SurvProofOfPaymentsTAB">
+                                            <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title"> Proof Of Payments</h3><br>
+                                                    <small> An Implementation of a system where new proof of payments are downloaded to this form through email</small>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="SurvOutStandingOrdersTAB">
+                                            <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title">Out Standing Orders</h3><br>
+                                                    <small>For Surveys</small>
+                                                </div>
+                                                <table id="SurvOutStandingOrdersTable" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Reference</td>
+                                                            <td>Quantity</td>
+                                                            <td>Quote Amount</td>
+                                                            <td>Paid</td>
+                                                            <td>Start Date</td>
+                                                            <td>Start Time</td>
+                                                            <td>Run Order</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td>Reference</td>
+                                                            <td>Quantity</td>
+                                                            <td>Quote Amount</td>
+                                                            <td>Paid</td>
+                                                            <td>Start Date</td>
+                                                            <td>Start Time</td>
+                                                            <td>Run Order</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="SurvActiveOrdersTAB">
+                                          <div class="box box-body with-border">
+                                                <div class="box box-header with-border">
+                                                    <h3 class="box-title">Active Orders</h3><br>
+                                                    <small>For Surveys</small>
+                                                </div>
+                                                <table id="SurvOutStandingOrdersTable" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Reference</td>
+                                                            <td>Quantity</td>
+                                                            <td>Quote Amount</td>
+                                                            <td>Paid</td>
+                                                            <td>Start Date</td>
+                                                            <td>Start Time</td>
+                                                            <td>Run Order</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td>Reference</td>
+                                                            <td>Quantity</td>
+                                                            <td>Quote Amount</td>
+                                                            <td>Paid</td>
+                                                            <td>Start Date</td>
+                                                            <td>Start Time</td>
+                                                            <td>Run Order</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+ <div id="FooterDiv"></div>
+  <div class="control-sidebar-bg"></div>
+</div>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="/static/plugins/fastclick/fastclick.min.js"></script>
+<script src="/static/dist/js/app.min.js"></script>
+<script src="/static/dist/js/pages/thisorg.js"></script>
+<script async defer src="/static/dist/js/pages/loaders.js"></script>
+</body>
+</html>

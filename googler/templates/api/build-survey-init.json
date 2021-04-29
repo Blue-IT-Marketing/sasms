@@ -1,0 +1,15 @@
+[
+  {
+    "id": "{{ thisSurvey.strSurveyID }}",
+    "name": "{{ thisSurvey.strName }}",
+    "description": "{{ thisSurvey.strDescription }}",
+    "type": "{{ thisSurvey.strSurveyType }}",
+    "date-create": "{{ thisSurvey.strDateCreated }}",
+    "time-created": "{{ thisSurvey.strTimeCreated }}",
+    "start-date": "{{ thisSurvey.strStartDate }}",
+    "start-time": "{{ thisSurvey.strStartTime }}",
+    "status": "{{ thisSurvey.strSurveyStatus }}",
+    "assigned-credit": "{{ thisSurvey.strAssignedCredit }}",
+    "run-state": "{{ thisSurvey.strRunFromCredit }}"
+  }
+]

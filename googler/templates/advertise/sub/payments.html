@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="google-site-verification" content="rkt7iLTBYZuRLjY_Sxg4uDDNusOJnuhHCDIGPwAahtk" />
+  <title>SA-SMS - Blue IT Marketing Pty LTD</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- FAV ICONS -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/dist/favicons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/dist/favicons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/dist/favicons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/dist/favicons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/dist/favicons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/dist/favicons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/dist/favicons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/dist/favicons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/dist/favicons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/static/dist/favicons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/dist/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/dist/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/dist/favicons/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="../../../static/dist/favicons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#fff">
+  <!-- Manifest file for Installation on Android and Chrome -->
+  <link rel="manifest" href="/static/dist/manifest/manifest.json">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/dist/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/dist/css/ionicons.min.css">
+  <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.min.css">
+  <!--[if lt IE 9]><script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script><script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+<!-- jQuery 2.2.3 -->
+<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="/static/dist/js/social/jquery.floating-social-share.min.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini" id="MyBody">
+<div class="wrapper">
+  <!-- Main Header -->
+   <div id="MainHeaderDiv"></div>
+  <!-- Left side column. contains the logo and sidebar -->
+  <div id="SideBarDiv"></div>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Blue IT Marketing
+        <small>Blue IT Marketing Bulk Messaging </small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Advertise</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <img class="profile-user-img img-responsive img-circle" src="../../../static/dist/img/sms.jpeg" alt="User profile picture">
+              <h3 class="profile-username text-center">Advert</h3>
+              <p class="text-muted text-center">Manager</p>
+              <ul class="list-group list-group-unbordered">
+                <li class="list-group-item" title="">
+                  <b>Organization Name : </b>  <a title="Organization Name">  <i class="glyphicon glyphicon-folder-close pull-right"> </i></a>
+                </li>
+                <li class="list-group-item">
+                        <b>Account Verified : </b> <a href="" title="Please verify you account"> <i class="fa fa-key pull-right"></i> </a>
+                </li>
+                <li class="list-group-item" title="">
+                  <b>Available SMS Messages : </b>  <a title="SMS Messages">  <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                </li>
+                <li class="list-group-item" title="">
+                  <a href="/advertise" class="btn btn-warning btn-block margin-bottom"><i class="glyphicon glyphicon-link"> </i> Adverts </a>
+                  <button class="btn btn-primary btn-block pull-right" id="AdvertButt"><i class="glyphicon glyphicon-send"> </i> My Advert </button>
+                </li>
+              </ul>
+            </div>
+            <div class="box box-profile">
+              <div class="box box-header with-border">
+                 <h3 class="box-title">Advert Status</h3>
+              </div>
+              <button class="btn btn-primary btn-block" data-toggle="tab" id="MyStatsButt"><i class="glyphicon glyphicon-stats"> </i> My Statistics</button>
+              <button class="btn btn-primary btn-block" data-toggle="tab" id="ResponsesButt"><i class="glyphicon glyphicon-transfer"> </i> My Responses</button>
+              <input type="hidden" class="hidden" id="strAdvertID" value="{{ thisAdvert.strAdvertID }}">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div id="AdvertiseINFDIV"></div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+ <div id="FooterDiv"></div>
+  <div class="control-sidebar-bg"></div>
+</div>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="/static/plugins/fastclick/fastclick.min.js"></script>
+<!--Event Handlers -->
+<script src="/static/dist/js/pages/advertise/payments.js"></script>
+<script src="/static/dist/js/app.min.js"></script>
+<script src="/static/dist/js/pages/loaders.js"></script>
+</body>
+</html>

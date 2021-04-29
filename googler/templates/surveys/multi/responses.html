@@ -1,0 +1,45 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Survey Responses</h3>
+    </div>
+
+    <table id="MyResponsesTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Cell</td>
+                <td>Names</td>
+                <td>Surname</td>
+                <td>Question</td>
+                <td>Response</td>
+                <td>Message</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for thisAnswer in  thisSurveyAnswersList %}
+            <tr>
+                <td>{{ thisAnswer.strCell }}</td>
+                <td>{{ thisAnswer.strNames }}</td>
+                <td>{{ thisAnswer.strSurname }}</td>
+                <td>{{ thisAnswer.strQuestion }}</td>
+                <td>{{ thisAnswer.strOptionNumber }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Cell</td>
+                <td>Names</td>
+                <td>Surname</td>
+                <td>Question</td>
+                <td>Response</td>
+                <td>Message</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#MyResponsesTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

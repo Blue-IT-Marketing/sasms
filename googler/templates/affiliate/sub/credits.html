@@ -1,0 +1,201 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Credits</h3>
+    </div>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#Credits" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Credits</button></a></li>
+        <li><a href="#BuySMS" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> Buy SMS </button> </a> </li>
+        <li><a href="#WithDraw" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> Withdraw </button> </a> </li>
+        <li><a href="#TransactionHistory" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> Transaction History </button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="Credits">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> Credits</h3>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                      <i class="fa fa-bar-chart-o"></i>
+                     {%  if CreditList is defined and CreditList|length > 0 %}
+                        <h3 class="box-title">Monthly Credit &amp; Withdrawals Chart</h3>
+                     {% else %}
+                         <h3 class="box-title">Monthly Credit &amp; Withdrawals Chart</h3><br>
+                         <small class="label-default">Note This is an Example Earnings and Withdrawals Graph and not related to your actual earnings and will dissapear once you start making earnings of your own</small>
+                     {%  endif %}
+                      <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body">
+                      <canvas id="myChart" width="800" height="600"></canvas>
+                    </div>
+                    <!-- /.box-body-->
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="BuySMS">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Buy SMS</h3>
+                </div>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="strSpendCredit" class="col-sm-3 control-label pull-left" >Spend Credit</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-money"> </i>
+                                </div>
+                                    <input type="text" class="form-control" id="strSpendCredit" value="{{ thisAffiliate.strAvailableCredit }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-9">
+                            <button type="button" class="btn btn-primary btn-block" id="SpendCreditButt"><strong><i class="fa fa-money"> </i> Spend Credit </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-9">
+                            <div id="SpendCreditINFDIV"></div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane" id="WithDraw">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> Withdraw</h3>
+                </div>
+                <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item"><strong>Available Credit : <a href="#" title="Credit in SMS Messages">  {{ thisAffiliate.strAvailableCredit }} SMS</a> </strong></li>
+                    <li class="list-group-item"><strong>Offer Price : <a href="#" title="The Price at which Blue IT Marketing will buy back your Credits"> {{ thisSMSMarket.strOfferPrice }} Cents</a> </strong></li>
+                    <input type="hidden" class="hidden" id="strOfferPrice" value="{{ thisSMSMarket.strOfferPrice }}">
+                    <input type="hidden" class="hidden" id="strAvailableCredit" value="{{ thisAffiliate.strAvailableCredit }}">
+                </ul>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="strWithDrawCredit" class="col-sm-3 control-label pull-left" >Withdraw Credit</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-money"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strWithDrawCredit" value="{{ thisAffiliate.strAvailableCredit }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-9">
+                            <button type="button" class="btn btn-primary btn-block" id="CalculateWithdrawAmountButt"><strong><i class="fa fa-calculator"> </i> Calculate Amount </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strWithdrawalAmount" class="col-sm-3 control-label pull-left" >Withdraw Amount</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    R
+                                </div>
+                                <input type="text" class="form-control" id="strWithdrawalAmount" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strSelectMethod" class="col-sm-3 control-label pull-left" >Select Method</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-piggy-bank"> </i>
+                                </div>
+                                <select id="strSelectMethod" class="form-control">
+                                    <option value="Bank Deposit">Bank Deposit</option>
+                                    <option value="E-Wallet">E-Wallet</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-9">
+                            <button type="button" class="btn btn-primary btn-block" id="ProcessWithdrawalButt"><strong><i class="glyphicon glyphicon-piggy-bank"> </i> Process Withdrawal </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-9">
+                            <div id="ProcessWithdrawalINFDIV"></div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane" id="TransactionHistory">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> Transaction History</h3>
+                </div>
+            <table id="TransactionHistoryList" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <td><strong>Transaction Type</strong></td>
+                        <td><strong>Date</strong></td>
+                        <td><strong>Time</strong></td>
+                        <td><strong>Status</strong></td>
+                    </tr>
+                </thead>
+                <tbody>
+                {%  for thisTransaction in  thisTransactionList %}
+                    <tr>
+                        <td><a href="/affiliate/transaction/{{ thisTransaction.strTransactionID }}"> {{ thisTransaction.strTransactionType }}</a></td>
+                        <td>{{ thisTransaction.strDate }}</td>
+                        <td>{{ thisTransaction.strTime }}</td>
+                        <td>{{ thisTransaction.strStatus }}</td>
+                    </tr>
+                {%  endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Transaction Type</strong></td>
+                        <td><strong>Date</strong></td>
+                        <td><strong>Time</strong></td>
+                        <td><strong>Status</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- jQuery 2.2.3 -->
+<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<!-- ChartJS 1.0.1 -->
+<script src="/static/plugins/chartjs/Chart.min.js"></script>
+<!-- FastClick -->
+<script src="/static/plugins/fastclick/fastclick.js"></script>
+<!-- TODO Consider updating this script not all java scripts are required here Note Fixed -->
+
+<!-- Event Handlers -->
+<script src="/static/dist/js/pages/affiliate/credits.js"></script>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script> $(function () {$('#TransactionHistoryList').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

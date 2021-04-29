@@ -1,0 +1,124 @@
+<script async defer type="text/javascript">
+$(document).ready(function(){
+    $('#UpdateOrganizationButt').click(function(){
+        var vstrChoice = 0;
+        var vstrOrganization = document.getElementById('strOrganization').value;
+        var vstrDescription = document.getElementById('strDescription').value;
+        var vstrRegistration = document.getElementById('strRegistration').value;
+        var vstrCell = document.getElementById('strCell').value;
+        var vstrTel = document.getElementById('strTel').value;
+        var vstrEmail = document.getElementById('strEmail').value;
+        var vstrWebsite = document.getElementById('strWebsite').value;
+        var dataString = '&vstrChoice='+ vstrChoice + '&vstrOrganization=' + vstrOrganization + '&vstrDescription=' + vstrDescription +
+            '&vstrRegistration=' + vstrRegistration + '&vstrCell=' + vstrCell + '&vstrTel=' + vstrTel + '&vstrEmail=' + vstrEmail +
+            '&vstrWebsite=' + vstrWebsite;
+          $.ajax({
+                type: "post",
+                url: "/admin/org",
+                data: dataString,
+                cache: false,
+              success: function(html){
+                $('#UpdateOrganizationINFDIV').html(html)
+              }
+          });
+      });
+  });
+</script>
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Organization</h3>
+    </div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="strOrganization" class="col-sm-3 control-label pull-left">Organization</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-bookmark"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strOrganization" value="{{ thisOrg.strOrganizationName }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strDescription" class="col-sm-3 control-label pull-left">Description</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-bookmark"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strDescription" value="{{ thisOrg.strDescription }}">
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strRegistration" class="col-sm-3 control-label pull-left">Registration</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-key"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strRegistration" value="{{ thisOrg.strRegistration }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strCell" class="col-sm-3 control-label pull-left">Cell</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-phone"> </i>
+                    </div>
+                        <input type="text" class="form-control" id="strCell" value="{{ thisOrg.strCell }}">
+                    </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strTel" class="col-sm-3 control-label pull-left">Tel</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-phone-alt"> </i>
+                    </div>
+                        <input type="text" class="form-control" id="strTel" value="{{ thisOrg.strTel }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-envelope"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strEmail" value="{{ thisOrg.strEmail }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strWebsite" class="col-sm-3 control-label pull-left">Website</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-link"> </i>
+                    </div>
+                        <input type="text" class="form-control" id="strWebsite" value="{{ thisOrg.strWebsite }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+                <div id="UpdateOrganizationINFDIV"></div>
+            </div>
+        </div>
+
+    </form>
+</div>

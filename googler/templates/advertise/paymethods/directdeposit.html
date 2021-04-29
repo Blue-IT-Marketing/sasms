@@ -1,0 +1,45 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Direct Deposit</h3>
+        <input type="hidden" class="hidden" id="strAdvertID"  value="{{ thisAdvert.strAdvertID }}">
+        <input type="hidden" class="hidden" id="strOrderID" value="{{ thisOrder.strOrderID }}">
+    </div>
+    <div class="box box-footer with-border">
+        <ul class="list-group">
+            <li class="list-group-item">Deposit Amount : <a href="" class="pull-right">  R {{ thisOrder.strQoutedAmount }}.00</a></li>
+            <li class="list-group-item">SMS Package : <a href="" class="pull-right">  {{  thisOrder.strTotalSMS }}  <i class="glyphicon glyphicon-send"> </i> </a> </li>
+        </ul>
+        <ul class="list-group">
+            <li class="list-group-item">Bank Name : {{ thisDepositAccount.strBankName }}</li>
+            <li class="list-group-item">Branch Code : {{  thisDepositAccount.strBranchCode }} </li>
+            <li class="list-group-item">Account Number : {{  thisDepositAccount.strAccountNumber }}, {{ thisDepositAccount.strAccountHolder }}</li>
+            <li class="list-group-item">Reference Number : {{ thisOrder.strDepositReference }} </li>
+        </ul>
+    </div>
+    <div class="box box-footer">
+        <blockquote><em>Note once you have deposited the amount as specified above please send the deposit slip to
+        <strong>mobiusndou@gmail.com</strong></em></blockquote>
+
+        <blockquote><em><strong>Or use the Green Chat window below to send in your deposit slip during office hours, Drag and drop your deposit slip
+        into your chat window or simply use the attach icon to open the file window and then attach your deposit slip</strong></em></blockquote>
+
+        <p>Important note never deposit your money using an old reference number however if this happens
+        please send your deposit slip together with the email address attached to your account as admin</p>
+    </div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left" ></label>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary btn-block" id="SendAccountDetailsSMSButt" title="This will send the above account details to you via SMS Message, note the sms will be sent to your registered number only"><strong><i class="glyphicon glyphicon-send"> </i> Send Account Details By SMS</strong></button>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left" ></label>
+            <div class="col-sm-6">
+                <div id="AccountDetailsSendINFDIV"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../../static/dist/js/pages/advertise/directdeposit.js"></script>

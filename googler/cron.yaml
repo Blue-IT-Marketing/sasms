@@ -1,0 +1,92 @@
+
+cron:
+- description: sending scheduled bulk sms
+  url: /tasks/bulk-sms
+  schedule: every 15 minutes
+
+- description: sending scheduled bulk emails
+  url: /tasks/bulk-email
+  schedule: every 16 minutes
+
+- description: send management system notifications
+  url: /tasks/system-notifications
+  schedule: every 6 hours
+
+- description: build advertising contacts database
+  url: /tasks/advert-contacts
+  schedule: every 12 hours
+
+- description: send scheduled advertising - deprecated
+  url: /tasks/send-adverts
+  schedule: every 18 minutes
+
+- description: send adverts using the new credit allocation system
+  url: /tasks/send-credit-adverts
+  schedule: every 14 minutes
+
+- description: reschedule adverts based on run status
+  url: /tasks/reschedule-adverts
+  schedule: every 24 hours
+
+- description: running scheduled surveys runs every 10 minutes
+  url: /tasks/schedule-surveys-send
+  schedule: every 10 minutes
+
+- description: check surveys responses
+  url: /tasks/multi-choice-survey-responses
+  schedule: every 13 minutes
+
+- description: check bulk messages sms
+  url: /tasks/check-status
+  schedule: every 17 minutes
+
+- description: check adverts responses
+  url: /tasks/check-adverts-responses
+  schedule: every 18 minutes
+
+- description: interate over all partner sites and obtain new contact information
+  url: /tasks/get-partner-contacts
+  schedule: every 48 hours
+
+- description: check bulk sms responses every 5 minutes
+  url: /tasks/check-bulk-sms-responses
+  schedule: every 15 minutes
+
+- description: bulk sms message status runs every 15 minutes
+  url: /tasks/check-bulk-sms-status
+  schedule: every 19 minutes
+
+- description: manage and allocate fax to email resources runs every 60 minutes
+  url: /tasks/organize-fax-to-email
+  schedule: every 60 minutes
+
+- description: send scheduled surveys from payment allocator every 15 minutes
+  url: /tasks/send-credit-surveys
+  schedule: every 20 minutes
+
+- description: Auto Poster Facebook Group Posts, Marketing Department
+  url: /marketing-cron/facebook-groups
+  schedule: every 75 minutes
+
+- description: Auto Poster Twitter Feeds Posts, Marketing Department
+  url: /marketing-cron/twitter-feeds
+  schedule: every 75 minutes
+
+- description: Auto LinkedIN Crawler (Crawls for Names, Email Addresses, and Cell Numbers and ID Numbers)
+  url: /marketing-cron/linkedin-crawler
+  schedule: every 36 hours
+
+- description: Submit sitemap to google webmasters console automatically runs every 24  hours Consider also submitting to other engines
+  url: /marketing-cron/submit-sitemap
+  schedule: every 24 hours
+
+- description: Submit newsletters to potential clients as a part of a Marketing Campaign
+  url: /marketing-cron/send-newsletters
+  schedule: every 24 hours
+
+
+
+
+
+
+

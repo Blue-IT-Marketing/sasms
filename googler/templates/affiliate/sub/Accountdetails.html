@@ -1,0 +1,154 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Account Details</h3>
+    </div>
+    <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#AccountDetails" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Account Details</button></a></li>
+        <li><a href="#MyAffiliates" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> My Affiliates </button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="AccountDetails">
+        <div class="box box-body with-border">
+            <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#thisAccountDetails" data-toggle="tab"><button type="button" class="btn btn-warning btn-flat"> <i class="glyphicon glyphicon-th-list"> </i> Account</button></a></li>
+                <li><a href="#LinkEditor" data-toggle="tab"><button type="button" class="btn btn-warning btn-flat"> <i class="glyphicon glyphicon-pencil"> </i> Link Editor </button> </a> </li>
+            </ul>
+            <div class="tab-content">
+                <div class="active tab-pane" id="thisAccountDetails">
+                <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> Account Details</h3>
+                </div>
+
+                <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item"><strong>Affiliate Link : <a href="/affiliates/public/{{ thisAffiliate.strAffiliateLink }}" class="pull-right"> Affiliate Link </a></strong></li>
+                    <li class="list-group-item"><strong>Hit Counter : <a href="#" class="pull-right"> {{ thisAffiliate.strHitCounter }}</a></strong></li>
+                    <li class="list-group-item"><strong>Subscriptions : <a href="#" class="pull-right">{{ thisAffiliate.strTotalSubscriptions }}</a></strong></li>
+                    <li class="list-group-item"><strong>Discount : <a href="#" class="pull-right">{{ thisAffiliate.strDiscount }}</a> </strong></li>
+                    <li class="list-group-item"><strong>Payment Method : <a href="#" class="pull-right"> {{ thisAffiliate.strPaymentMethod }}</a></strong></li>
+                </ul>
+                </div>
+
+                </div>
+                <div class="tab-pane" id="LinkEditor">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Link Editor</h3>
+                        </div>
+                        <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label for="strAffiliateLink" class="col-sm-3 control-label pull-left" >Affiliate Link</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <a href="/affiliates/public/{{ thisAffiliate.strAffiliateLink }}"><i class="glyphicon glyphicon-link"> </i></a>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="strAffiliateLink" value="{{ thisAffiliate.strAffiliateLink }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label pull-left" ></label>
+                                                        <div class="col-sm-9">
+                                                            <button type="button" class="btn btn-default btn-block" id="CheckLinkButt"><strong><i class="fa fa-check"> </i> Check Link Availability </strong></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="strPaymentMethod" class="col-sm-3 control-label pull-left" >Payment Method</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group" title="This Payment methods means that your available Credits will be automatically assigned to you using any of the methods specified here, Bank Deposit means your credits will be converted into cash and assigned to you through a bank account...">
+                                                                <div class="input-group-addon">
+                                                                    <i class="glyphicon glyphicon-piggy-bank"> </i>
+                                                                </div>
+                                                                <select id="strPaymentMethod" class="form-control">
+                                                                    {% if thisAffiliate.strPaymentMethod == "Bank Deposit" %}
+                                                                        <option value="Bank Deposit" selected="selected">Bank Deposit</option>
+                                                                        <option value="E-Wallet">E-Wallet</option>
+                                                                        <option value="Buy SMS">Buy SMS</option>
+                                                                    {% endif %}
+                                                                    {% if thisAffiliate.strPaymentMethod == "E-Wallet" %}
+                                                                        <option value="Bank Deposit">Bank Deposit</option>
+                                                                        <option value="E-Wallet" selected="selected">E-Wallet</option>
+                                                                        <option value="Buy SMS">Buy SMS</option>
+                                                                    {% endif %}
+                                                                    {% if thisAffiliate.strPaymentMethod == "Buy SMS" %}
+                                                                        <option value="Bank Deposit">Bank Deposit</option>
+                                                                        <option value="E-Wallet">E-Wallet</option>
+                                                                        <option value="Buy SMS" selected="selected">Buy SMS</option>
+                                                                    {% endif %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label pull-left" ></label>
+                                                        <div class="col-sm-9">
+                                                            <button type="button" class="btn btn-primary btn-block" id="UpdateAffiliateAccountButt"><strong><i class="fa fa-cloud"> </i> Update Affiliate Account </strong></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label pull-left" ></label>
+                                                        <div class="col-sm-9">
+                                                            <div id="UpdateAffiliateINFDIV"></div>
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        </div>
+
+
+        </div>
+        <div class="tab-pane" id="MyAffiliates">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> My Affiliates</h3>
+                </div>
+                <table id="MyAffiliatesListTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td><strong title="Affiliate ID">Affiliate ID</strong></td>
+                            <td><strong title="Date Affiliate was recruited">Date</strong></td>
+                            <td><strong title="Time Affiliate was recruited">Time</strong></td>
+                            <td><strong title="Credits Earned so far from this Affiliate">Credits Earned</strong></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for thisAffiliate in  thisMyAffiliatesList %}
+                        <tr>
+                            <td>{{ thisAffiliate.strAffiliatedID }}</td>
+                            <td>{{ thisAffiliate.strDate }}</td>
+                            <td>{{ thisAffiliate.strTime }}</td>
+                            <td>{{ thisAffiliate.strCredits }}</td>
+                        </tr>
+                    {%  endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><strong title="Affiliate ID">Affiliate ID</strong></td>
+                            <td><strong title="Date Affiliate was recruited">Date</strong></td>
+                            <td><strong title="Time Affiliate was recruited">Time</strong></td>
+                            <td><strong title="Credits Earned so far from this Affiliate">Credits Earned</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script> $(function () {$('#MyAffiliatesListTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<!-- Event Handlers -->
+<script src="/static/dist/js/pages/affiliate/accountdetails.js"></script>

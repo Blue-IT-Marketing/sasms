@@ -1,0 +1,208 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Support Tickets</h3>
+    </div>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#MyTickets" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> My Tickets</button></a></li>
+            <li><a href="#CreateTickets" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-export"> </i> Create Tickets </button> </a> </li>
+        </ul>
+        <div class="tab-content">
+            <div class="active tab-pane" id="MyTickets">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title">My Tickets</h3>
+                    </div>
+
+                    <table id="MyTicketsTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <td>Subject</td>
+                                <td>Preference</td>
+                                <td>Status</td>
+                                <td>Department</td>
+                                <td>Date Created</td>
+                                <td>Time Created</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {%  for thisTicket in thisTicketsList %}
+                            <tr>
+                                <td><a href="/contact/tickets/{{ thisTicket.strTicketID  }}" title="Open Ticket"><strong><i class="glyphicon glyphicon-link"> </i> {{ thisTicket.strSubject }}</strong></a></td>
+                                <td>{{ thisTicket.strTicketPreference }}</td>
+                                <td>{{ thisTicket.strTicketOpen }}</td>
+                                <td>{{ thisTicket.strDepartment }}</td>
+                                <td>{{ thisTicket.strDateCreated }}</td>
+                                <td>{{ thisTicket.strTimeCreated }}</td>
+                            </tr>
+                        {%  endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Subject</td>
+                                <td>Preference</td>
+                                <td>Status</td>
+                                <td>Department</td>
+                                <td>Date Created</td>
+                                <td>Time Created</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+            <div class="tab-pane" id="CreateTickets">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> Create Tickets</h3>
+                    </div>
+                    <form class="form-horizontal">
+                        <div class="box box-body with-border">
+                            <div class="box box-header with-border">
+                                <h3 class="box-title"> Personal Information</h3>
+                            </div>
+                            <div class="form-group">
+                                <label for="strNames" class="col-sm-3 control-label pull-left">Names</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-user"> </i>
+                                        </div>
+                                        {% if thisTicketUser.strNames is not none  %}
+                                            <input type="text" class="form-control" id="strNames" value="{{ thisTicketUser.strNames }}" readonly="readonly">
+                                        {% else %}
+                                            <input type="text" class="form-control" id="strNames">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strSurname" class="col-sm-3 control-label pull-left">Surname</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-user"> </i>
+                                        </div>
+                                        {% if thisTicketUser.strSurname is not none  %}
+                                        <input type="text" class="form-control" id="strSurname" value="{{ thisTicketUser.strSurname }}" readonly="readonly">
+                                        {% else %}
+                                        <input type="text" class="form-control" id="strSurname">
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strCell" class="col-sm-3 control-label pull-left">Cell</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-phone"> </i>
+                                        </div>
+                                        {% if thisTicketUser.strCell is not none %}
+                                            <input type="text" class="form-control" id="strCell" value="{{ thisTicketUser.strCell }}" readonly="readonly">
+                                        {% else %}
+                                            <input type="text" class="form-control" id="strCell">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-envelope"> </i>
+                                        </div>
+                                        {% if thisTicketUser.strEmail is not none %}
+                                            <input type="text" class="form-control" id="strEmail" value="{{ thisTicketUser.strEmail }}" readonly="readonly">
+                                        {% else %}
+                                            <input type="text" class="form-control" id="strEmail">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-body with-border">
+                            <div class="box box-header with-border">
+                                <h3 class="box-title"> Support Ticket</h3>
+                            </div>
+                            <div class="form-group">
+                                <label for="strSubject" class="col-sm-3 control-label pull-left">Subject</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-file"> </i>
+                                        </div>
+                                        <input type="text" class="form-control" id="strSubject">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strBody" class="col-sm-3 control-label pull-left">Body</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-file"> </i>
+                                        </div>
+                                        <textarea id="strBody" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strTicketPreference" class="col-sm-3 control-label pull-left">Ticket Preference</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-list-alt"> </i>
+                                        </div>
+                                        <select id="strTicketPreference" class="form-control">
+                                            <option value="Normal">Normal</option>
+                                            <option value="Urgent">Urgent</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strDepartment" class="col-sm-3 control-label pull-left">Department</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-list-alt"> </i>
+                                        </div>
+                                        <select id="strDepartment" class="form-control">
+                                            <option value="Sales">Sales</option>
+                                            <option value="Programming">Programming</option>
+                                            <option value="Bulk SMS">Bulk SMS</option>
+                                            <option value="Advertising">Advertising</option>
+                                            <option value="Surveys">Surveys</option>
+                                            <option value="Affiliate">Affiliate</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="CreateTicketButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Create Ticket </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <div id="CreateTicketINFDIV"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="/static/dist/js/pages/contact/tickets.js"></script>
+<script> $(function () {$('#MyTicketsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

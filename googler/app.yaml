@@ -1,0 +1,114 @@
+application: sa-sms
+version: 2
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+includes:
+- navigation.yaml
+- admin.yaml
+- dashboard.yaml
+- accounts.yaml
+- contact.yaml
+- about.yaml
+- mysms.yaml
+- myemail.yaml
+- contacts.yaml
+- tasks.yaml
+- affiliate.yaml
+- advertise.yaml
+- surveys.yaml
+- myendpoints.yaml
+- fax.yaml
+- blog.yaml
+- marketing.yaml
+- clicksend.yaml
+handlers:
+
+- url: /favicon.ico
+  static_files: static/dist/img/favicon.ico
+  upload: static/dist/img/favicon.ico
+  secure: always
+
+- url: /.well-known/acme-challenge/f0xiW-0M53SARoe4Qpe4CLcONwp1nuy6VJ-M-_YZY7s
+  static_files: static/f0xiW-0M53SARoe4Qpe4CLcONwp1nuy6VJ-M-_YZY7s
+  upload: static/f0xiW-0M53SARoe4Qpe4CLcONwp1nuy6VJ-M-_YZY7s
+  expiration: 0m
+
+- url: /.well-known/acme-challenge/Q6eC0CZduZ3A8Y-jBfgJC8x4T-6FL_98y3cFA9Z2EhU
+  static_files: static/Q6eC0CZduZ3A8Y-jBfgJC8x4T-6FL_98y3cFA9Z2EhU
+  upload: static/Q6eC0CZduZ3A8Y-jBfgJC8x4T-6FL_98y3cFA9Z2EhU
+  expiration: 0m
+
+- url: /static
+  static_dir: static
+  secure: always
+
+- url: /static/bootstrap
+  static_dir: static/boostrap
+  secure: always
+
+- url: /service.js
+  static_files: static/service.js
+  upload: static/service.js
+  expiration: 0m
+
+
+- url: /static/sw/sw-toolbox.js
+  static_files: static/sw/sw-toolbox.js
+  upload: static/sw/sw-toolbox.js
+  expiration: 0m
+
+- url: /_ah/mail/.+
+  login: admin
+  script: myemail.app
+
+- url: .*
+  script: main.app
+  secure: always
+
+libraries:
+
+- name: webapp2
+  version: "2.5.2"
+
+- name: jinja2
+  version: "latest"
+
+- name: ssl
+  version: "latest"
+
+inbound_services:
+- mail
+- warmup
+- channel_presence
+
+env_variables:
+    MJ_APIKEY_PUBLIC: 3d47934b2ba92d36d813b6923610508d
+    MJ_APIKEY_PRIVATE: 0a0b2ca2b9f3a6e491827a7a80d69539
+    MAILJET_SENDER: mailjetsend@sa-sms.appspotmail.com
+    SENDGRID_API_KEY: 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
+    NEWS_LETTERS_SENDER: newsletters@sa-sms.appspotmail.com
+    TWILIO_ACCOUNT_SID: ACb10f84fd6a3b46afb0123544dd927fa1
+    TWILIO_AUTH_TOKEN: e0cac99ea3bcff7e3d4ed3648feca5bd
+    FACEBOOK_GRAPH_API_KEY : EAACEdEose0cBAGRmFJq3DudZBlUJVdAts95veFhdEfdOr9bxoFEaApb69BTNiEgp12gG094RRJa1UqADMlxJz0mMfk7KyA5djxqIjZAL4jS7UsjmrAh1lOrv7TD6ZAVIYihAVZCMPBGXdqwnh3dakFPZAnTF3d1PkpYvw1rM0IWjVZBbEcgdhT09ZB5JovxvpgZD
+    TWITTER_CONSUMER_API : 53xdZG3MupYrh6h6W1OxRueMH
+    TWITTER_CONSUMER_SECRET : glN2brGAXBtmOnorumxptwh9vNCikoWuOvOH9M7gFVaWKDZC14
+    TWITTER_ACCESS_TOKEN_KEY : 1585367040-WqnGg04WLHzAxBhlIVq3vzlG5LOqxj13eFRcrTY
+    TWITTER_ACCESS_TOKEN_SECRET : bBaBmmP8VWBNSncJtR7wKNCjBXKeBPoraSGBPi7Ev6zKv
+    CLICK_SEND_API_KEY : DBC95D5A-FB8F-4C12-8857-956557D14A68
+    CLICK_SEND_AUTH : auth~mobiusndou@gmail.com~DBC95D5A-FB8F-4C12-8857-956557D14A68~Blue IT Marketing
+    CLICK_SEND_LOGIN : mobiusndou@gmail.com
+    CLICK_SEND_FROM_EMAIL : clicksend@sa-sms.appspotmail.com
+    BIM_INTERNAL_API : 7GPB2KWL66DLYTELGBO5Q6D265L5RMGS6EJWSK7BB6KCQV1IZNSIA6AMT1YK2JAIVVXN1NGZLRCWXOU70USISDZ18E5SLBU8BP2F99FR90M62JPKJUBXHCXML05UE034LTMSNEFC8M4B2HK3JVUPPXSZFXL2P7CSOZP9FZUI27EPE92WWXZ7HI1I4XLX5Q2GJRSRO4R2W9BFZFC4LBHFY52B44ISCSAPAKJSCAVMZ81C7AYLMFXQKR4B934LHPHX
+    BIM_INTERNAL_SECRET : R3ZN4S42MYPGMT3R0K5VA6K5V4HEH7KWIGYL5WXP3JURWE8LMG29NFC4A78374QKCJW69AZAVDUEN8D55CPOAIT7BIP755FZ84ZQ43BWJYRB0ZY9OEJEGVHR8XHIH0IYCH09M2ISVM2PJOFE4SDYBY798NXIIMVSYI54JAJM46EYMMGR3XKG0ABYTDYYFT96CEU50P9W4V6LM9B94QGRVKDOMIYZ14YKSPXB0C6Z9Z9SFUR025E5XM5CC3BM0X81
+    PORTAL_VODACOM_LOGIN : mobjustice
+    PORTAL_VODACOM_PASSWORD : 74s14u
+    PORTAL_VODACOM_CSV_EMAIL : mobjustice@smsgw1.gsm.co.za
+    PORTAL_VODACOM_EMAIL : mobjustice_sms@smsgw1.gsm.co.za
+    PORTAL_VODACOM_SENDER_EMAIL : sendsms@church-admins.appspotmail.com
+    PORTAL_BUDGET_LOGIN : mobjustice
+    PORTAL_BUDGET_PASSWORD : 5627084
+
+
+

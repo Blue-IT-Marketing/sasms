@@ -1,0 +1,36 @@
+
+handlers:
+
+- url: /surveys
+  script: surveys.app
+  secure: always
+
+- url: /surveys/manage/.*
+  script: surveys.app
+  secure: always
+
+- url: /surveys/contacts/.*
+  script: surveys.app
+  secure: always
+
+- url: /surveys/schedules
+  script: surveys.app
+  secure: always
+
+- url: /surveys/schedules/.*
+  script: surveys.app
+  secure: always
+
+- url: /surveys/payments/.*
+  script: surveys.app
+  secure: always
+
+- url: /surveys/invoices/.*
+  script: surveys.app
+  secure: always
+
+- url: /surveys/topup/invoice/.*
+  script: surveys.app
+  secure: always
+
+

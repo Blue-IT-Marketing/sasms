@@ -1,0 +1,19 @@
+
+
+handlers:
+
+- url: /admin/newsletters
+  secure: always
+  script: newsletter.app
+
+- url: /admin/newsletters/.*
+  secure: always
+  script: newsletter.app
+
+- url: /newsletters/hosted/.*
+  secure: always
+  script: newsletter.app
+
+- url: /newsletters/editor/.*
+  secure: always
+  script: newsletter.app

@@ -1,0 +1,169 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="https://apis.google.com/js/client.js"></script>
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box box-title">My Faxes</h3>
+    </div>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#SendFaxTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-transfer"> </i> Send Fax</button></a></li>
+            <li><a href="#SentFaxesTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-credit-card"> </i> Sent Faxes </button> </a> </li>
+            <li><a href="#IncomingFaxesTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-piggy-bank"> </i> Incoming Faxes</button> </a> </li>
+        </ul>
+        <div class="tab-content">
+            <div class="active tab-pane" id="SendFaxTAB">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="strToFaxNumber" class="col-sm-3 control-label pull-left">Fax Number</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-transfer"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strToFaxNumber">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strSubject" class="col-sm-3 control-label pull-left">Subject</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-bullhorn"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strSubject">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strCoverPage" class="col-sm-3 control-label pull-left">Cover Page</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                </div>
+                                <textarea id="strCoverPage" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strAttachFaxes" class="col-sm-3 control-label pull-left">Attach Fax</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-open-file"> </i>
+                                </div>
+                                <input type="file" class="btn btn-info btn-block" id="strAttachFaxes">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-primary btn-block" id="SendFaxButt"><strong><i class="glyphicon glyphicon-phone-alt"> </i> Send Fax </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <div id="SendFaxINFDIV"></div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="tab-pane" id="SentFaxesTAB">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> Sent Faxes</h3>
+                    </div>
+                <table id="SentFaxesTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td>Fax Number</td>
+                            <td>Subject</td>
+                            <td>Cover</td>
+                            <td>Date</td>
+                            <td>Time</td>
+                            <td>Status</td>
+                            <td>Pages</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for thisSent in thisSentFaxesList %}
+                        <tr>
+                            <td>{{ thisSent.strFaxNumber }}</td>
+                            <td>{{ thisSent.strSubject }}</td>
+                            <td>{{ thisSent.strCoverPage }}</td>
+                            <td>{{ thisSent.strDateSent }}</td>
+                            <td>{{ thisSent.strTimeSent }}</td>
+                            <td>{{ thisSent.strStatus }}</td>
+                            <td>{{ thisSent.strNumberPages }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Fax Number</td>
+                            <td>Subject</td>
+                            <td>Cover</td>
+                            <td>Date</td>
+                            <td>Time</td>
+                            <td>Status</td>
+                            <td>Pages</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="IncomingFaxesTAB">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> Incoming Faxes</h3>
+                    </div>
+                    <table id="IncomingFaxesTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <td>Fax Number</td>
+                                <td>Subject</td>
+                                <td>Cover Page</td>
+                                <td>Pages</td>
+                                <td>Date</td>
+                                <td>Time</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {%  for thisReceived in thisReceivedFaxesList %}
+                            <tr>
+                                <td>{{ thisReceived.strFaxNumber }}</td>
+                                <td>{{ thisReceived.strSubject }}</td>
+                                <td>{{ thisReceived.strCoverPage }}</td>
+                                <td>{{ thisReceived.strNumberPages }}</td>
+                                <td>{{ thisReceived.strDateReceived }}</td>
+                                <td>{{ thisReceived.strTimeReceived }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Fax Number</td>
+                                <td>Subject</td>
+                                <td>Cover Page</td>
+                                <td>Pages</td>
+                                <td>Date</td>
+                                <td>Time</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#SentFaxesTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script>$(function () {$('#IncomingFaxesTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script src="/static/dist/js/pages/fax/myfaxes.js"></script>

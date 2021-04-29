@@ -1,0 +1,201 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Social Media</h3><br>
+        <small>Share your links to your social media accounts</small>
+    </div>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#ShareLinks" data-toggle="tab"><button type="button" class="btn btn-block btn-primary"> <i class="glyphicon glyphicon-share-alt"> </i> Share Links</button></a></li>
+        <li><a href="#Facebook" data-toggle="tab"><button type="button" class="btn btn-block btn-social btn-facebook"> <i class="fa fa-facebook"> </i> Facebook Settings</button> </a> </li>
+        <li><a href="#Twitter" data-toggle="tab"><button type="button" class="btn  btn-block btn-social btn-twitter"> <i class="fa fa-twitter"> </i> Twitter Settings</button> </a> </li>
+        <li><a href="#GooglePlus" data-toggle="tab"><button type="button" class="btn btn-block btn-social btn-google"><i class="fa fa-google"> </i> Google Settings</button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="ShareLinks">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Share Links</h3><br>
+                    <small class="label-default"> Import before you Share your Affiliate link to your social accounts please make sure that you Shortened your link or Personalized on your Account Details Tab</small>
+                </div>
+                <div class="col-md-6">
+                    <div class="box box-primary with-border">
+                          <a href="https://www.facebook.com/sharer/sharer.php?u=https://sa-sms.appspot.com/affiliates/public/{{ thisSocial.strAffiliateLink }}" target="_blank" class="btn btn-block btn-social btn-facebook"><i class="fa fa-facebook"></i> Share on Facebook</a>
+                          <a href="https://plus.google.com/share?url=https://sa-sms.appspot.com/affiliates/public/{{ thisSocial.strAffiliateLink }}" target="_blank" class="btn btn-block btn-social btn-google"><i class="fa fa-google-plus"></i>Share on Google Plus </a>
+                          <a href="http://www.twitter.com/share?url=https://sa-sms.appspot.com/affiliates/public/{{ thisSocial.strAffiliateLink }}" target="_blank" class="btn btn-block btn-social btn-twitter"><i class="fa fa-twitter"></i> Share on Twitter</a>
+                    </div>
+               </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="Facebook">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Facebook Group Auto Posts</h3><br>
+                    <small class="label-default">Facebook Group Auto Poster allows you to setup your app in such a way that it allows auto sharing of your affiliate link to your Facebook Groups</small>
+                </div>
+                <div class="col-md-6">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="strFacebook" class="col-sm-3 control-label pull-left" >Facebook API Key</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-facebook"> </i>
+                                    </div>
+                                        <input type="text" class="form-control" id="strFacebook">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strFacebookCodeSecret" class="col-sm-3 control-label pull-left" >Facebook Secret Code</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-facebook"> </i>
+                                    </div>
+                                        <input type="text" class="form-control" id="strFacebookCodeSecret">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strGroupIDs" class="col-sm-3 control-label pull-left" >Facebook Group IDs</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-facebook"> </i>
+                                    </div>
+                                        <textarea id="strGroupIDs" class="form-control"></textarea>
+                                    <small class="label-default"> Separate each group ID with a semicolon example  100000000000,100000230230,</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-9">
+                                <button type="button" class="btn btn-primary btn-block" id="UpdateFacebookGroupsButt"><strong><i class="fa fa-cloud"> </i> Update Facebook Settings </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-9">
+                                <div id="UpdateFacebookGroupINFDIV"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <div class="tab-pane" id="Twitter">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Twitter</h3>
+                </div>
+
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="strConsumerAPI" class="col-sm-3 control-label pull-left" >Consumer API</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-twitter"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strConsumerAPI">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strConsumerSecret" class="col-sm-3 control-label pull-left" >Consumer Secret</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-twitter"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strConsumerSecret">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strCallBackURL" class="col-sm-3 control-label pull-left" >Call Back URL</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-twitter"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strCallBackURL">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strAPPOnlyAuthentication" class="col-sm-3 control-label pull-left" >App Authentication</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-twitter"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strAPPOnlyAuthentication">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strRequestTokenURL" class="col-sm-3 control-label pull-left" >Request Token URL</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-twitter"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strRequestTokenURL">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strAuthorizeURL" class="col-sm-3 control-label pull-left" >Authorize URL</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-twitter"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strAuthorizeURL">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strAccessTokenURL" class="col-sm-3 control-label pull-left" >Access Token URL</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-twitter"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strAccessTokenURL">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-9">
+                            <button type="button" class="btn btn-primary btn-block" id="UpdateTwitterSettingsButt"><strong><i class="fa fa-twitter"> </i> Update Twitter Settings </strong></button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-9">
+                            <div id="UpdateTwitterSettingsINFDIV"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="GooglePlus">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Google Plus</h3>
+                </div>
+                <small>Coming Soon...</small>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="../../../static/dist/js/pages/affiliate/social.js"></script>

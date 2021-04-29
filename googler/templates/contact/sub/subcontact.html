@@ -1,0 +1,87 @@
+
+<div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">Contact</h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+          <i class="fa fa-minus"></i></button>
+        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+          <i class="fa fa-times"></i></button>
+      </div>
+    </div>
+    <div class="box-body">
+      <div class="col-md-6">
+      <h4><i class="fa fa-envelope"></i>Send Message</h4>
+        <div class="form-group">
+           <form method="post">
+            <div class="box-body">
+            <div class="form-group">
+              <label for="strnames">Names</label>
+              <div class="input-group">
+                  <div class="input-group-addon">
+                      <i class="fa fa-user"> </i>
+                  </div>
+              <input type="text" class="form-control" name="vstrnames" id="strnames" placeholder="Enter Names">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="stremail">Email</label>
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-envelope"></i>
+                </div>
+                <input type="email" class="form-control" name="vstremail" id="stremail" placeholder="Enter Email">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Cell</label>
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-phone"></i>
+                </div>
+                <input type="text" name="vstrcell" id="strcell" class="form-control" data-inputmask="'mask': ['999-999-9999 [x99999]', '+099 99 99 9999[9]-9999']" data-mask>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="strsubject">Subject</label>
+              <div class="input-group">
+                  <div class="input-group-addon">
+                      <i class="fa fa-bookmark-o"> </i>
+                  </div>
+                <input type="text" class="form-control" name="vstrsubject" id="strsubject" placeholder="Enter Subject">
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label>Message</label>
+               <div class="input-group">
+                   <div class="input-group-addon">
+                       <i class="glyphicon glyphicon-pencil"> </i>
+                   </div>
+                <textarea name="vstrmessage" id="strmessage" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+               </div>
+            </div>
+
+          <div class="box-footer">
+            <button type="button" class="btn btn-primary" id="SendMessageButt">Send Message</button>
+          </div>
+          </div>
+           </form>
+        </div>
+        <div class="box box-body">
+          <div class="box box-info">
+            <div id="FormResponseDiv">
+
+            </div>
+          </div>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- /.box-footer-->
+</div>

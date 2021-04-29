@@ -1,0 +1,10 @@
+
+
+handlers:
+
+- url: /blog.*
+  script: blog.app
+  secure: always
+- url: /blog/.*
+  script: blog.app
+  secure: always

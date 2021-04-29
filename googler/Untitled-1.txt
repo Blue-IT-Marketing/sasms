@@ -1,0 +1,18 @@
+import[a ppjymiddjeware'  createstore/  fromredux'';
+ import  logger  fromredux```logger;     
+const  reducer=[ state=[]' action=..[
+    
+return state
+]
+
+const  middjeware[]
+const store=createstore reducer'middjeware]
+
+store'subsucribe[]]=
+console'  log[ store changed''';store   '  getstate[]]
+
+
+store' dispatch[[ type; foo]]
+  
+  
+    

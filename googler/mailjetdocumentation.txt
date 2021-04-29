@@ -1,0 +1,544 @@
+
+
+"""
+View : List of 150 contacts
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MAILJET_API_KEY']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Limit': '150'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
+
+
+"""
+View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Offset': '25000'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
+
+
+"""
+View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Limit': '150',
+  'Offset': '25000'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
+
+"""
+View : List of contact ordered by email in an ascending order
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Sort': 'email'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
+
+"""
+View : List of contact ordered by email in reverse order
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Sort': 'email DESC'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
+
+
+"""
+View : Contacts in ContactsList
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'ContactsList': '$ContactsListID'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
+
+
+
+"""
+View : Contact from email address
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$EMAIL_ADDRESS_OR_CONTACT_ID'
+result = mailjet.contact.get(id=id)
+print result.status_code
+print result.json()
+
+
+
+
+"""
+View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$EventType|$isBackup'
+result = mailjet.eventcallbackurl.get(id=id)
+print result.status_code
+print result.json()
+
+
+
+"""
+View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'NameLike': '$Name'
+}
+result = mailjet.liststatistics.get(filters=filters)
+print result.status_code
+print result.json()
+
+
+
+
+"""
+View : Total number of contact
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'countOnly': '1'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
+
+{
+    "Count": 152,
+    "Data": [ ],
+    "Total": 152
+}
+
+
+
+
+"""
+Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Email': 'anothersender@example.com'
+}
+result = mailjet.sender.create(data=data)
+print result.status_code
+print result.json()
+
+
+
+
+
+"""
+This call sends a message to one recipient.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+                {
+                        "From": {
+                                "Email": "pilot@mailjet.com",
+                                "Name": "Mailjet Pilot"
+                        },
+                        "To": [
+                                {
+                                        "Email": "passenger1@mailjet.com",
+                                        "Name": "passenger 1"
+                                }
+                        ],
+                        "Subject": "Your email flight plan!",
+                        "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+                        "HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                }
+        ]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
+
+
+
+
+
+    API response
+
+
+{
+  "Messages": [
+    {
+      "Status": "success",
+      "To": [
+        {
+        "Email": "passenger1@mailjet.com",
+        "MessageUUID": "123",
+        "MessageID": 456,
+        "MessageHref": "https://api.mailjet.com/v3/message/456"
+        }
+      ]
+     }
+  ]
+}
+
+
+
+
+
+"""
+This call sends a message to one recipient.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+                {
+                        "From": {
+                                "Email": "pilot@mailjet.com",
+                                "Name": "Mailjet Pilot"
+                        },
+                        "To": [
+                                {
+                                        "Email": "passenger1@mailjet.com",
+                                        "Name": "passenger 1"
+                                }
+                        ],
+                        "Subject": "Your email flight plan!",
+                        "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+                        "HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                }
+        ]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
+
+
+
+
+
+
+    API response
+
+
+{
+  "Messages": [
+    {
+      "Status": "success",
+      "To": [
+        {
+        "Email": "passenger1@mailjet.com",
+        "MessageUUID": "123",
+        "MessageID": 456,
+        "MessageHref": "https://api.mailjet.com/v3/message/456"
+        }
+      ]
+     }
+  ]
+}
+
+
+
+
+
+"""
+This call sends a message to one recipient.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+                {
+                        "From": {
+                                "Email": "pilot@mailjet.com",
+                                "Name": "Mailjet Pilot"
+                        },
+                        "To": [
+                                {
+                                        "Email": "passenger1@mailjet.com",
+                                        "Name": "passenger 1"
+                                },
+                                {
+                                        "Email": "passenger2@mailjet.com",
+                                        "Name": "passenger 2"
+                                }
+                        ],
+                        "Cc": [
+                                {
+                                        "Email": "copilot@mailjet.com",
+                                        "Name": "Copilot"
+                                }
+                        ],
+                        "Bcc": [
+                                {
+                                        "Email": "air-traffic-control@mailjet.com",
+                                        "Name": "Air traffic control"
+                                }
+                        ],
+                        "Subject": "Your email flight plan!",
+                        "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+                        "HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                }
+        ]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
+
+
+
+
+
+
+    API response
+
+{
+  "Messages": [
+    {
+    "Status": "success",
+    "To": [
+        {
+        "Email": "passenger1@mailjet.com",
+        "MessageUUID": "123",
+        "MessageID": 456,
+        "MessageHref": "https://api.mailjet.com/v3/message/456"
+        },
+        {
+        "Email": "passenger2@mailjet.com",
+        "MessageUUID": "124",
+        "MessageID": 457,
+        "MessageHref": "https://api.mailjet.com/v3/message/457"
+        }
+      ],
+    "Cc": [
+        {
+        "Email": "copilot@mailjet.com",
+        "MessageUUID": "125",
+        "MessageID": 458,
+        "MessageHref": "https://api.mailjet.com/v3/message/458"
+        }
+      ],
+    "Bcc": [
+        {
+        "Email": "air-traffic-control@mailjet.com",
+        "MessageUUID": "126",
+        "MessageID": 459,
+        "MessageHref": "https://api.mailjet.com/v3/message/459"
+        }
+      ]
+    }
+  ]
+}
+
+
+
+"""
+This call sends a message to the given recipient with attachment.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+                {
+                        "From": {
+                                "Email": "pilot@mailjet.com",
+                                "Name": "Mailjet Pilot"
+                        },
+                        "To": [
+                                {
+                                        "Email": "passenger1@mailjet.com",
+                                        "Name": "passenger 1"
+                                }
+                        ],
+                        "Subject": "Your email flight plan!",
+                        "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+                        "HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+                        "Attachments": [
+                                {
+                                        "ContentType": "text/plain",
+                                        "Filename": "test.txt",
+                                        "Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
+                                }
+                        ]
+                }
+        ]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
+
+To attach files, use the properties Attachments or InlinedAttachments.
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+This call sends a message to the given recipient with inline attachment.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+                {
+                        "From": {
+                                "Email": "pilot@mailjet.com",
+                                "Name": "Mailjet Pilot"
+                        },
+                        "To": [
+                                {
+                                        "Email": "passenger1@mailjet.com",
+                                        "Name": "passenger 1"
+                                }
+                        ],
+                        "Subject": "Your email flight plan!",
+                        "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+                        "HTMLPart": "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> Mailjet!</h3><br />May the delivery force be with you!",
+                        "InlinedAttachments": [
+                                {
+                                        "ContentType": "image/gif",
+                                        "Filename": "logo.gif",
+                                        "ContentID": "id1",
+                                        "Base64Content": "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"
+                                }
+                        ]
+                }
+        ]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
+
+When using an inlined attachment, it’s possible to insert the file inside the HTML code of the email by using cid:FILENAME.EXT, where FILENAME.EXT
+
+
+
+
+"""
+This call sends 2 messages to 2 different recipients.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+                {
+                        "From": {
+                                "Email": "pilot@mailjet.com",
+                                "Name": "Mailjet Pilot"
+                        },
+                        "To": [
+                                {
+                                        "Email": "passenger1@mailjet.com",
+                                        "Name": "passenger 1"
+                                }
+                        ],
+                        "Subject": "Your email flight plan!",
+                        "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+                        "HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                },
+                {
+                        "From": {
+                                "Email": "pilot@mailjet.com",
+                                "Name": "Mailjet Pilot"
+                        },
+                        "To": [
+                                {
+                                        "Email": "passenger2@mailjet.com",
+                                        "Name": "passenger 2"
+                                }
+                        ],
+                        "Subject": "Your email flight plan!",
+                        "TextPart": "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
+                        "HTMLPart": "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                }
+        ]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
+
+

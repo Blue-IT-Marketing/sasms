@@ -1,0 +1,123 @@
+  <!-- Ion Slider -->
+  <link rel="stylesheet" href="/static/plugins/ionslider/ion.rangeSlider.css">
+  <!-- ion slider Nice -->
+  <link rel="stylesheet" href="/static/plugins/ionslider/ion.rangeSlider.skinNice.css">
+
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box box-title"> Survey</h3>
+        <input type="hidden" class="hidden" id="strSurveyID" value="{{ thisSurvey.strSurveyID }}">
+    </div>
+
+  <form class="form-horizontal">
+        <div class="form-group">
+            <label for="strSurveyName" class="col-sm-3 control-label pull-left">Name *</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strSurveyName" value="{{ thisSurvey.strName }}" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strDescription" class="col-sm-3 control-label pull-left">Description *</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                    </div>
+                    <textarea class="form-control" id="strDescription" required>{{ thisSurvey.strDescription }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="strSurveyType" class="col-sm-3 control-label pull-left">Survey Type *</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-bullhorn"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strSurveyType" value="{{ thisSurvey.strSurveyType }}" readonly="readonly">
+                </div>
+            </div>
+        </div>
+            <div class="form-group">
+                <label for="strAvailableCredit" class="col-sm-3 control-label pull-left">Available Credit</label>
+                <div class="col-sm-6">
+                    <div class="input-group clockpicker">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-credit-card"> </i>
+                        </div>
+                        <input type="text" id="strAvailableCredit" class="form-control" value="{{ thisSurveyAccount.strTotalCredits }}" readonly="readonly">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="strAssignedCredit" class="col-sm-3 control-label pull-left">Assigned Credit</label>
+                <div class="col-sm-6">
+                    <div class="input-group clockpicker">
+                        <div class="input-group-addon">
+                            <a><i class="glyphicon glyphicon-credit-card"> </i></a>
+                        </div>
+                        <input type="text" id="strAssignedCredit" class="form-control" value="{{  thisSurvey.strAssignedCredit }}" readonly="readonly">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label pull-left"></label>
+                <div class="col-sm-6">
+                    <input type="text" id="strCreditToAssign">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label pull-left"></label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <a><i class="glyphicon glyphicon-ok"> </i></a>
+                        </div>
+                        <button type="button" class="btn btn-warning btn-block" id="AssignCreditButt"><strong><i class="glyphicon glyphicon-transfer"> </i> Assign Credit</strong></button>
+                    </div>
+                </div>
+            </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary btn-block" id="UpdateSurveyButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Update Survey </strong></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+                <div id="UpdateSurveyINFDIV"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/static/dist/js/pages/surveys/multi/survey.js"></script>
+<!-- Ion Slider -->
+<script src="/static/plugins/ionslider/ion.rangeSlider.min.js"></script>
+<!-- Bootstrap slider -->
+<script src="/static/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+<script>
+  $(function () {
+      /* ION SLIDER */
+      Mymax = parseInt(document.getElementById("strAvailableCredit").value);
+      $("#strCreditToAssign").ionRangeSlider({
+          min: 1,
+          max: Mymax,
+          from: 1,
+          to: Mymax,
+          type: 'single',
+          step: 1,
+          prefix: "Assigned SMS",
+          prettify: true,
+          hasGrid: true
+      });
+  });
+</script>

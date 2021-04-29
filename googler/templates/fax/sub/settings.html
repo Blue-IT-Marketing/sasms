@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="/static/dist/css/slider.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Settings</h3>
+    </div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="strFaxNumber" class="col-sm-3 control-label pull-left">Fax Number</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-phone-alt"> </i>
+                    </div>
+                    <input type="text" class="form-control" id="strFaxNumber" placeholder="Click to get a FAX Number" value="{{ thisFaxSettings.strFaxNumber }}">
+                    <div class="box-tool">
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" id="GetFaxNumberButt"><i class="fa fa-tty"> </i> Get Fax Number</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+               <div class="form-group">
+                <label for="strSMSNotifyOnSend" class="col-sm-3 control-label pull-left" > Notify on Send</label>
+                <div class="col-sm-6">
+                    <label class="switch">
+                      {% if thisFaxSettings.strSMSNotifyOnSend == true %}
+                      <input type="checkbox" id="strSMSNotifyOnSend" checked>
+                      {% else %}
+                          <input type="checkbox" id="strSMSNotifyOnSend">
+                      {% endif %}
+                      <div class="slider round"></div>
+                    </label>
+                </div>
+               </div>
+       <div class="form-group">
+        <label for="strSMSCreditNotify" class="col-sm-3 control-label pull-left" > Credit Notifications</label>
+        <div class="col-sm-6">
+            <label class="switch">
+           {% if thisFaxSettings.strSMSCreditNotify == true %}
+                <input type="checkbox" id="strSMSCreditNotify" checked>
+           {% else %}
+                <input type="checkbox" id="strSMSCreditNotify">
+           {% endif %}
+              <div class="slider round"></div>
+            </label>
+        </div>
+       </div>
+       <div class="form-group">
+        <label for="strSMSNotifyOnReceive" class="col-sm-3 control-label pull-left" > Notify on Receive</label>
+        <div class="col-sm-6">
+            <label class="switch">
+            {% if thisFaxSettings.strSMSNotifyOnReceive == true %}
+              <input type="checkbox" id="strSMSNotifyOnReceive" checked>
+            {% else %}
+              <input type="checkbox" id="strSMSNotifyOnReceive">
+            {% endif %}
+              <div class="slider round"></div>
+            </label>
+        </div>
+       </div>
+        <div class="form-group">
+            <label for="strEmailToFax" class="col-sm-3 control-label pull-left">Email to Fax</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="glyphicon glyphicon-envelope"> </i>
+                    </div>
+                    {% if thisFaxSettings.strEmailToFax == none %}
+                        <input type="text" class="form-control" id="strEmailToFax" placeholder="Click to obtain an Email to Fax">
+                    {% else %}
+                        <input type="text" class="form-control" id="strEmailToFax" placeholder="Click to obtain an Email to Fax"  value="{{ thisFaxSettings.strEmailToFax }}">
+                    {% endif %}
+                    <div class="box-tool">
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" id="CreateEmailToFaxButt"><i class="fa fa-tty"> </i> Create Email Address</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strAPIKey" class="col-sm-3 control-label pull-left">API Key</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-key"> </i>
+                    </div>
+                    {% if thisFaxSettings.strAPIKey == none %}
+                        <input type="text" class="form-control" id="strAPIKey">
+                    {% else %}
+                        <input type="text" class="form-control" id="strAPIKey" value="{{ thisFaxSettings.strAPIKey }}">
+                    {% endif %}
+                    <div class="box-tool">
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" id="CreateAPIKeyButt"><i class="fa fa-tty"> </i> Create API Key</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="strSecretCode" class="col-sm-3 control-label pull-left">Secret Code</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-lock"> </i>
+                    </div>
+                    {% if thisFaxSettings.strSecretCode == none %}
+                        <input type="text" class="form-control" id="strSecretCode">
+                    {% else %}
+                        <input type="text" class="form-control" id="strSecretCode" value="{{ thisFaxSettings.strSecretCode }}">
+                    {% endif %}
+                    <div class="box-tool">
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" id="CreateSecretCodeButt"><i class="fa fa-tty"> </i> Create Secret Code</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary btn-block" id="UpdateSettingsButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Update Settings </strong></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left"></label>
+            <div class="col-sm-6">
+                <div id="UpdateSettingsINFDIV"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/static/dist/js/pages/fax/settings.js"></script>

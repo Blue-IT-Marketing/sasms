@@ -1,0 +1,331 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Leads List</h3>
+    </div>
+    <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#Available" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-user"> </i> Available</button></a></li>
+        <li><a href="#Manager" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-adjust"> </i> Lead Manager</button> </a> </li>
+        <li><a href="#Settings" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-stats"> </i> Settings API &amp; EndPoints</button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="Available">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> Available</h3>
+                </div>
+            <table id="AvailableTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <td>Surname</td>
+                        <td>Names</td>
+                        <td>Cell</td>
+                        <td>Email</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for thisContact in thisContactList %}
+                        <tr>
+                            <td><a href="/dashboard/leads/{{ thisContact.strContactID }}">{{ thisContact.strSurname }}</a> </td>
+                            <td>{{ thisContact.strNames }}</td>
+                            <td>{{ thisContact.strCell }}</td>
+                            <td>{{ thisContact.strEmail }}</td>
+                        </tr>
+                    {%  endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Surname</td>
+                        <td>Names</td>
+                        <td>Cell</td>
+                        <td>Email</td>
+                    </tr>
+                </tfoot>
+            </table>
+            </div>
+        </div>
+        <div class="tab-pane" id="Manager">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Manager</h3>
+                </div>
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#BulkUploads" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Bulk Uploads</button></a></li>
+                            <li><a href="#SingleUploads" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Single Uploads </button> </a> </li>
+                            <li><a href="#RemoveContacts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Remove Contacts </button> </a> </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="BulkUploads">
+                                <div class="box box-body with-border">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="strContacts" class="col-sm-3 control-label pull-left" >Contacts</label>
+                                            <div class="col-sm-6">
+                                                <textarea style="width: 100%;" class="form-control" id="strContacts">
+
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left" ></label>
+                                            <div class="col-sm-6">
+                                                format : number,email,names,surname
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left" ></label>
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-primary btn-block" id="BulkUploadContactsButt"><strong><i class="fa fa-cloud"> </i> Upload Bulk Contacts </strong></button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left" ></label>
+                                            <div class="col-sm-6">
+                                                <div id="BulkUploadContactsINFDIV"></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="SingleUploads">
+                                <div class="box box-body with-border">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="strNames" class="col-sm-3 control-label pull-left">Names</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="strNames" name="vstrNames">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strSurname" class="col-sm-3 control-label pull-left">Surname</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="strSurname" name="vstrSurname">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strCellNumber" class="col-sm-3 control-label pull-left">Cell Number</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="strCellNumber" name="vstrCellNumber">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="strEmail" name="vstrEmail">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left"></label>
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-primary btn-block" id="UploadContactButt"><strong><i class="fa fa-cloud"> </i> Upload Contact </strong></button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left"></label>
+                                            <div class="col-sm-6">
+                                                <div id="UploadContactINFDIV"></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="RemoveContacts">
+                                <div class="box box-body with-border">
+                                    <div class="box box-header with-border">
+                                        <h3 class="box-title">Remove Contacts</h3><br>
+                                    </div>
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="strRemoveCell" class="col-sm-3 control-label pull-left">Cell </label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="strRemoveCell">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left"></label>
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-primary btn-block" id="RemoveButt"><strong> <i class="fa fa-cut"> </i> Remove Contact </strong></button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label pull-left"></label>
+                                            <div class="col-sm-6">
+                                                <div id="RemoveContactINFDIV"></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+        </div>
+        <div class="tab-pane" id="Settings">
+            <div class="box box-body with-border">
+                <h3 class="box-title">Settings</h3>
+            </div>
+            <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#PartnerSites" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-user"> </i> Partner Sites</button></a></li>
+                <li><a href="#ManagePartner" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-adjust"> </i> Manage Partner</button> </a> </li>
+                <li><a href="#Endpoints" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-adjust"> </i> End Points</button> </a> </li>
+                <li><a href="#ManageEndPoints" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"><i class="glyphicon glyphicon-link"> </i>  Manage End Points</button>  </a> </li>
+            </ul>
+            <div class="tab-content">
+                <div class="active tab-pane" id="PartnerSites">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Partner Sites</h3>
+                        </div>
+
+                <table id="PartnerSitesTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <td>URL</td>
+                            <td>API Key</td>
+                            <td>API Secret</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {%  for thisPartner in thisPartnerSitesList %}
+                        <tr>
+                            <td><a href="/dashboard/partners/{{ thisPartner.strSiteID }}">{{ thisPartner.strURL }}</a></td>
+                            <td><input type="text" class="form-control" value="{{ thisPartner.strAPIKey }}"> </td>
+                            <td><input type="text" class="form-control" value="{{ thisPartner.strAPISecret }}"> </td>
+                        </tr>
+                    {%  endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>URL</td>
+                            <td>API Key</td>
+                            <td>API Secret</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="ManagePartner">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title">Manage Partners</h3>
+                        </div>
+
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="strPartnerURL" class="col-sm-3 control-label pull-left">Partner URL</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-link"> </i>
+                                        </div>
+                                        <input type="text" class="form-control" id="strPartnerURL">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left"></label>
+                                <div class="col-sm-6">
+                                    <button type="button" class="btn btn-primary btn-block" id="UploadPartnerButt"><strong><i class="fa fa-cloud"> </i> Upload Partner </strong></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left"></label>
+                                <div class="col-sm-6">
+                                    <div id="UploadPartnerINFDIV"></div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="Endpoints">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title">End Points</h3>
+                        </div>
+
+                        <table id="EndPointsTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td>URL</td>
+                                    <td>API Key</td>
+                                    <td>API Secret</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for thisEndPoint in thisEndPointsList %}
+                                <tr>
+                                    <td><a href="/dashboard/endpoints/{{ thisEndPoint.strPointID }}"> {{ thisEndPoint.strPointURL }}</a></td>
+                                    <td><input type="text" class="form-control" value="{{ thisEndPoint.strAPIKey }}"> </td>
+                                    <td><input type="text" class="form-control" value="{{ thisEndPoint.strAPISecret }}"> </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>URL</td>
+                                    <td>API Key</td>
+                                    <td>API Secret</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="ManageEndPoints">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Application Protocol Interface</h3>
+                        </div>
+
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="strEndpoint" class="col-sm-3 control-label pull-left">End Point</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-link"> </i>
+                                        </div>
+                                        <input type="text" class="form-control" id="strEndpoint">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left"></label>
+                                <div class="col-sm-6">
+                                    <button type="button" class="btn btn-primary btn-block" id="UploadEndPointButt"><strong><i class="fa fa-cloud"> </i> Upload End Point</strong></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left"></label>
+                                <div class="col-sm-6">
+                                    <div id="UploadEndPointINFDIV"></div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="/static/dist/js/pages/dashboard/leadslist.js"></script>
+<script> $(function () {$('#AvailableTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script> $(function () {$('#PartnerSitesTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script> $(function () {$('#EndPointsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

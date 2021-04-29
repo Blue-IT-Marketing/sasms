@@ -1,0 +1,21 @@
+ <ul class="list-group list-group-unbordered">
+                <li class="list-group-item" title="">
+                  <b>Organization Name : </b>  <a title="Organization Name">  {{ thisOrg.strOrganizationName }}<i class="glyphicon glyphicon-folder-close pull-right"> </i></a>
+                </li>
+                <li class="list-group-item">
+                    {%  if thisOrg.strVerified == true %}
+                        <b>Account Verified : </b> <a title="Account succesfully verified please buy more credits"> {{ thisOrg.strVerified }} <i class="fa fa-key pull-right"></i> </a>
+                    {%  else %}
+                        <b>Verify Your Account : </b> <a href="/org/reg/{{ thisOrg.strRegisteringLink }}" title="Please verify you account"> {{ thisOrg.strVerified }} <i class="fa fa-key pull-right"></i> </a>
+                    {%  endif %}
+                </li>
+                <li class="list-group-item" title="">
+                  <b>Messaging Credits (Bulk SMS) : </b>  <a title="SMS Messages">  {{ thisSMSAccount.strTotalSMS }} <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                </li>
+                <li class="list-group-item" title="">
+                  <b>Advertising Credits (SMS) : </b>  <a title="SMS Messages">  {{ thisSMSAccount.strTotalSMS }} <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                </li>
+                <li class="list-group-item" title="">
+                  <b>Surveys Credits (SMS) : </b>  <a title="SMS Messages">  {{ thisSMSAccount.strTotalSMS }} <i class="glyphicon glyphicon-send pull-right"> </i> </a>
+                </li>
+              </ul>

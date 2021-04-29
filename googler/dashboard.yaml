@@ -1,0 +1,56 @@
+
+handlers:
+
+- url: /dashboard
+  login: admin
+  script: dashboard.app
+  secure: always
+
+- url: /dashboard/contacts
+  login: admin
+  script: dashboard.app
+  secure: always
+
+- url: /dashboard/bulksms
+  login: admin
+  script: dashboard.app
+  secure: always
+
+- url: /dashboard/blueitmarketing
+  login: admin
+  script: dashboard.app
+  secure: always
+
+- url: /dashboard/advertise
+  login: admin
+  script: dashboard.app
+  secure: always
+
+- url: /dashboard/tickets
+  login: admin
+  script: dashboard.app
+  secure: always
+
+- url: /dashboard/globalreports
+  login: admin
+  script: dashboard.app
+  secure: always
+
+- url: /dashboard/topupverification
+  login: admin
+  script: dashboard.app
+  secure: always
+
+- url: /dashboard/topup/.*
+  login: admin
+  script: dashboard.app
+  secure: always
+
+- url: /dashboard/marketing
+  login: admin
+  script: dashboard.app
+  secure: always
+
+
+
+

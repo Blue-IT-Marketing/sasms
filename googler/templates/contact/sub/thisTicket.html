@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="google-site-verification" content="rkt7iLTBYZuRLjY_Sxg4uDDNusOJnuhHCDIGPwAahtk" />
+  <title>SA-SMS-By Blue IT Marketing Pty LTD</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/dist/favicons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/dist/favicons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/dist/favicons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/dist/favicons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/dist/favicons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/dist/favicons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/dist/favicons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/dist/favicons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/dist/favicons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/static/dist/favicons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/dist/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/dist/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/dist/favicons/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/static/dist/favicons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#fff">
+  <!-- Manifest file for Installation on Android and Chrome -->
+  <link rel="manifest" href="/static/dist/manifest/manifest.json">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/dist/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/dist/css/ionicons.min.css">
+  <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.min.css">
+<!--[if lt IE 9]><script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script><script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+<!-- jQuery 2.2.3 -->
+<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="/static/dist/js/social/jquery.floating-social-share.min.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini" id="MyBody">
+<div class="wrapper">
+   <div id="MainHeaderDiv"></div>
+  <div id="SideBarDiv"></div>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+         Blue IT Marketing Messaging
+        <small>Contact and Messaging Management</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active"> Tickets</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> My Ticket</h3>
+                    </div>
+                    <ul class="list-group-unbordered">
+                        <li class="list-group-item"> Names : {{ thisTicketUser.strNames }}</li>
+                        <li class="list-group-item"> Surname : {{ thisTicketUser.strSurname }}</li>
+                        <li class="list-group-item"> Cell : {{ thisTicketUser.strCell }}</li>
+                        <li class="list-group-item"> Email : {{ thisTicketUser.strEmail }}</li>
+                    </ul>
+                </div>
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> Helpdesk Professional</h3>
+                    </div>
+                    <ul class="list-group-unbordered">
+                        <li class="list-group-item"> Names   : </li>
+                        <li class="list-group-item"> Surname : </li>
+                        <li class="list-group-item"> Online :  </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title"> {{ thisTicket.strSubject }}</h3>
+                        <br><small>Date : {{  thisTicket.strDateCreated }}, {{ thisTicket.strTimeCreated }}</small>
+                    </div>
+                    <blockquote>
+                        {{ thisTicket.strBody }}
+                    </blockquote>
+
+                <div class="box box-info direct-chat direct-chat-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Ticket System</h3>
+
+                  <div class="box-tools pull-right">
+                    <span data-toggle="tooltip" title="3 New Messages" class="badge bg-yellow"></span>
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle">
+                      <i class="fa fa-comments"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <!-- Conversations are loaded here -->
+                <div id="TicketSystemINFDIV">
+                  <div class="direct-chat-messages">
+                    <!-- Message. Default to the left -->
+                    {%  for thisComment in thisCommentList %}
+                      {% if thisComment.isClientComment == true  %}
+                        <!-- Message to the right -->
+                        <div class="direct-chat-msg">
+                          <div class="direct-chat-info clearfix">
+                            <span class="direct-chat-timestamp pull-left">{{ thisComment.strCommentDate }} {{ thisComment.strCommentTime }}</span>
+                          </div>
+                          <div class="direct-chat-text">
+                            {{ thisComment.strComment }}
+                          </div>
+                          <!-- /.direct-chat-text -->
+                        </div>
+                      {%  else %}
+                        <!-- Message to the right -->
+                        <div class="direct-chat-msg right">
+                          <div class="direct-chat-info clearfix">
+                            <span class="direct-chat-timestamp pull-left">{{ thisComment.strCommentDate }} {{ thisComment.strCommentTime }}</span>
+                          </div>
+                          <div class="direct-chat-text">
+                            {{ thisComment.strComment }}
+                          </div>
+                          <!-- /.direct-chat-text -->
+                        </div>
+                      {%  endif %}
+                  {%  endfor %}
+                  </div>
+                </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                  <form class="form-horizontal">
+                    <input type="hidden" class="hidden" id="strTicketID" value="{{ thisTicket.strTicketID }}">
+                    <input type="hidden" class="hidden" id="strThreadID" value="{{ thisThread.strThreadID }}">
+                    <input type="hidden" class="hidden" id="strUserID" value="{{ thisTicketUser.strUserID }}">
+
+
+                    <div class="input-group">
+                      <input type="text" name="message" placeholder="Type Message ..." class="form-control" id="strComment">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-warning btn-flat" id="SendMessageButt">Send</button>
+                          </span>
+                    </div>
+
+                  </form>
+                </div>
+                <!-- /.box-footer-->
+              </div>
+             </div>
+                </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+ <div id="FooterDiv"></div>
+  <div class="control-sidebar-bg"></div>
+</div>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="/static/plugins/fastclick/fastclick.min.js"></script>
+<script src="/static/dist/js/pages/contact/ticketChat.js"></script>
+<script src="/static/dist/js/app.min.js"></script>
+<script async defer src="/static/dist/js/pages/loaders.js"></script>
+</body>
+</html>

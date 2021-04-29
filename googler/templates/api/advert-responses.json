@@ -1,0 +1,22 @@
+[
+  {% for thisResponse in thisResponsesList %}
+    {% if loop.index0 < strLimit %}
+            {
+              "response":"{{ thisResponse.strResponse }}",
+              "advert-ref" : "{{ thisResponse.strAdvertID }}",
+              "response-ref":"{{ thisResponse.strRef }}",
+              "date":"{{ thisResponse.strDateReceived }}",
+              "time":"{{ thisResponse.strTimeReceived }}"
+            },
+  {% else %}
+            {
+              "response":"{{ thisResponse.strResponse }}",
+              "advert-ref" : "{{ thisResponse.strAdvertID }}",
+              "response-ref":"{{ thisResponse.strRef }}",
+              "date":"{{ thisResponse.strDateReceived }}",
+              "time":"{{ thisResponse.strTimeReceived }}"
+            }
+  {% endif %}
+  {% endfor %}
+
+]

@@ -1,0 +1,21 @@
+<div class="box box-body with-border">
+  <ul class="list-group list-group-unbordered">
+        <li class="list-group-item" title="">
+          {%  if thisFaxSettings.strFaxNumber is none %}
+            <b>Fax Number : </b>  <a title="Fax Number"> (___)(_______) <i class="glyphicon glyphicon-phone-alt pull-right"> </i> </a>
+          {% else %}
+            <b>Fax Number : </b>  <a title="Fax Number"> {{ thisFaxSettings.strFaxNumber }} <i class="glyphicon glyphicon-phone-alt pull-right"> </i> </a>
+          {% endif %}
+        </li>
+        <li class="list-group-item" title="">
+          <b>Cost (Cents/Page): </b>  <a title="Cost Per Page"> {{ thisFaxAccount.strCostPerPage }} <i class="fa fa-money pull-right"> </i> </a>
+        </li>
+
+        <li class="list-group-item" title="">
+          <b>Fax Credits (Pages) : </b>  <a title="Fax Credits in Number of Pages"> {{ thisFaxAccount.strCreditInPages }} <i class="glyphicon glyphicon-credit-card pull-right"> </i> </a>
+        </li>
+        <li class="list-group-item" title="">
+          <b>Unverified Credits (Pages) : </b>  <a title="Credits Not yet Verified">  {{ thisFaxAccount.strTopUpCredit }} <i class="glyphicon glyphicon-credit-card pull-right"> </i> </a>
+        </li>
+  </ul>
+</div>

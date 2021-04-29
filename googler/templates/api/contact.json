@@ -1,0 +1,8 @@
+[
+  {
+      "cell":"{{ thisContact.strCell }}",
+      "email":"{{ thisContact.strEmail }}",
+      "names":"{{ thisContact.strNames }}",
+      "surname":"{{ thisContact.strSurname }}"
+  }
+]

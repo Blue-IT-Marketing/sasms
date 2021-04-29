@@ -1,0 +1,40 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Direct Deposit</h3>
+        <input type="hidden" class="hidden" id="strOrganizationID"  value="{{ thisSMSAccount.strOrganizationID }}">
+    </div>
+    <div class="box box-footer with-border">
+        <ul class="list-group">
+            <li class="list-group-item">Deposit Amount : <a href="" class="pull-right">  R {{ vstrDepositAmount }}.00</a></li>
+            <li class="list-group-item">SMS Package : <a href="" class="pull-right">  {{  vstrSMSPackages }}  <i class="glyphicon glyphicon-send"> </i> </a> </li>
+        </ul>
+        <ul class="list-group">
+            <li class="list-group-item">Bank Name : {{ thisDepositAccount.strBankName }}</li>
+            <li class="list-group-item">Branch Code : {{  thisDepositAccount.strBranchCode }} </li>
+            <li class="list-group-item">Account Number : {{  thisDepositAccount.strAccountNumber }}, {{ thisDepositAccount.strAccountHolder }}</li>
+            <li class="list-group-item">Reference Number : {{ thisSMSAccount.strDepositReference }} </li>
+        </ul>
+    </div>
+    <div class="box box-footer">
+        <blockquote><em>Note once you have deposited the amount as specified above please send the deposit slip to
+        <strong>mobiusndou@gmail.com</strong></em></blockquote>
+        <p>Important note never deposit your money using an old reference number however if this happens
+        please send your deposit slip together with the email address attached to your account as admin</p>
+    </div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left" ></label>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary btn-block" id="SendAccountDetailsSMSButt"><strong><i class="glyphicon glyphicon-send"> </i> Send Account Details (SMS) </strong></button>
+                <button type="button" class="btn btn-primary btn-block" id="SendAccountDetailsEmailButt"><strong><i class="glyphicon glyphicon-envelope"> </i> Send Account Details (Email) </strong></button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label pull-left" ></label>
+            <div class="col-sm-6">
+                <div id="AccountDetailsSendINFDIV"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/dist/js/pages/sms/deposit/direct.js"></script>

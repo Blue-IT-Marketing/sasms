@@ -1,0 +1,116 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Create Orders</h3>
+    </div>
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#PreviousOrdersTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> <strong> Orders</strong></button> </a> </li>
+                <li><a href="#CreateOrdersTAB" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-pencil"> </i> <strong>Create Orders</strong></button></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="active tab-pane" id="PreviousOrdersTAB">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title">Previous Orders</h3>
+                        </div>
+                        <table id="MyNewOrdersTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td>Reference</td>
+                                    <td>Total (SMS)</td>
+                                    <td>Price</td>
+                                    <td>Paid</td>
+                                    <td>Start Date</td>
+                                    <td>Start Time</td>
+                                    <td>Run Order</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {%  for thisOrder in  thisOrdersList %}
+                                <tr>
+                                    <td><a href="/surveys/payments/{{ thisOrder.strOrderID }}" title="Make Payment">{{ thisOrder.strDepositReference }}</a></td>
+                                    <td>{{ thisOrder.strTotalSMS }}</td>
+                                    <td>{{ thisOrder.strQoutedAmount }}</td>
+                                    <td>{{ thisOrder.strTotalPaid }}</td>
+                                    <td>{{ thisOrder.strOrderStartDate }}</td>
+                                    <td>{{ thisOrder.strOrderStartTime }}</td>
+                                    <td>{{ thisOrder.strRunOrder }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>Reference</td>
+                                    <td>Total (SMS)</td>
+                                    <td>Price</td>
+                                    <td>Paid</td>
+                                    <td>Start Date</td>
+                                    <td>Start Time</td>
+                                    <td>Run Order</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="CreateOrdersTAB">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title">Create Orders</h3>
+                        </div>
+                        <form class="form-horizontal">
+                            <input type="hidden" id="strSurveyID" value="{{ vstrSurveyID }}">
+                            <div class="form-group">
+                                <label for="strSelectSchedule" class="col-sm-3 control-label pull-left" > Select Schedule </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-copyright-mark"> </i>
+                                        </div>
+                                            <select id="strSelectSchedule" class="form-control">
+                                                {% for thisSchedule in thisSurveyScheduleList %}
+                                                    <option value="{{ thisSchedule.strScheduleID }}">{{ thisSchedule.strName }} , {{ thisSchedule.strStartDate }} </option>
+                                                {% endfor %}
+                                            </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strDepositMethod" class="col-sm-3 control-label pull-left" >Payment Method</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-check"> </i>
+                                        </div>
+                                        <select id="strDepositMethod" class="form-control">
+                                            <option value="EFT" disabled="disabled">EFT</option>
+                                            <option selected="true" value="Direct Deposit">Direct Deposit</option>
+                                            <option value="PAYPAL" disabled="disabled">PAYPAL</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left" ></label>
+                                <div class="col-sm-6">
+                                    <button type="button" class="btn btn-primary btn-block" id="CreateOrderButt"><strong><i class="glyphicon glyphicon-credit-card"> </i> Create Order </strong></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left" ></label>
+                                <div class="col-sm-6">
+                                    <div id="CreateOrderINFDIV"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#MyNewOrdersTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script src="/static/dist/js/pages/surveys/orders/neworder.js"></script>

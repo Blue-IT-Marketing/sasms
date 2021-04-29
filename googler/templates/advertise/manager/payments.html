@@ -1,0 +1,258 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="../../../static/plugins/datatables/dataTables.bootstrap.css">
+<!-- Advert Primary Payment enabling Payments for the specific advert directly -->
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Advert Paymentsdfsdfs</h3><br>
+        <small><i class="glyphicon glyphicon-info-sign">  </i> Pay directly for your advert</small>
+        <input type="hidden" class="hidden" id="strAdvertID" value="{{ thisAdvert.strAdvertID }}">
+    </div>
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#PresentOrdersTab" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-tasks"> </i> Advert Orders</button></a></li>
+                <li><a href="#PlaceOrderTab" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-open-file"> </i> Create Orders </button> </a> </li>
+                <li><a href="#InvoicesTab" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-paste"> </i> Invoices </button> </a> </li>
+                <li><a href="#MakePaymentTab" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-copy"> </i> Create Payments </button> </a> </li>
+            </ul>
+            <div class="tab-content">
+                <div class="active tab-pane" id="PresentOrdersTab">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title">Present Orders</h3>
+                        </div>
+                        <table id="PresentOrdersTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td>Items</td>
+                                    <td>Total Amount</td>
+                                    <td>Paid Amount</td>
+                                    <td>Fully Paid</td>
+                                    <td>Start Date</td>
+                                    <td>Start Time</td>
+                                    <td>Completed</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {%  for thisOrder in  thisOrdersList %}
+                                <tr>
+                                    <td>{{ thisOrder.strItemCount }}</td>
+                                    <td>R {{ thisOrder.strQoutedAmount }}.00</td>
+                                    <td>R {{ thisOrder.strTotalPaid }}.00</td>
+                                    <td>{{ thisOrder.strFullyPaid }}</td>
+                                    <td>{{ thisOrder.strOrderStartDate }}</td>
+                                    <td>{{ thisOrder.strOrderStartTime }}</td>
+                                    <td>{{ thisOrder.strOrderCompleted }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>Items</td>
+                                    <td>Total Amount</td>
+                                    <td>Paid Amount</td>
+                                    <td>Fully Paid</td>
+                                    <td>Start Date</td>
+                                    <td>Start Time</td>
+                                    <td>Completed</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="PlaceOrderTab">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Create Orders</h3>
+                        </div>
+                          <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="strAdvert" class="col-sm-3 control-label pull-left">Advert</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-bullhorn"> </i>
+                                        </div>
+                                        <textarea id="strAdvert" class="form-control" readonly="readonly">{{ thisAdvert.strAdvert }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strPackage" class="col-sm-3 control-label pull-left">Package (SMS)</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-send"> </i>
+                                        </div>
+                                        <select id="strPackage" class="form-control">
+                                            <option value="1000"> 1,000</option>
+                                            <option value="1500"> 1,500</option>
+                                            <option value="2000"> 2,000</option>
+                                            <option value="3000"> 3,000</option>
+                                            <option value="4000"> 4,000</option>
+                                            <option value="5000"> 5,000</option>
+                                            <option value="10000">10,000</option>
+                                            <option value="25000">25,000</option>
+                                            <option value="50000">50,000</option>
+                                            <option value="75000">75,000</option>
+                                            <option value="100000">100,000</option>
+                                            <option value="250000">250,000</option>
+                                            <option value="500000">500,000</option>
+                                            <option value="1000000">1,000,000</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strStartDate" class="col-sm-3 control-label pull-left">Start Date</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"> </i>
+                                        </div>
+                                        <input type="text" id="strStartDate" class="form-control" value="{{ thisAdvert.strDateCreated }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strStartTime" class="col-sm-3 control-label pull-left">Start Time</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group clockpicker">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-time"> </i>
+                                        </div>
+                                        <input type="text" id="strStartTime" class="form-control" value="{{ thisAdvert.strTimeCreated }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left"></label>
+                                <div class="col-sm-6">
+                                    <button type="button" class="btn btn-primary btn-block" id="CreateNewOrderButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Create New Order </strong></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left"></label>
+                                <div class="col-sm-6">
+                                    <div id="CreateNewOrderINFDIV"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane" id="InvoicesTab">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title"> Invoices</h3>
+                        </div>
+
+                        <table id="InvoicesTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td><strong>Amount</strong></td>
+                                    <td><strong>Payment Method</strong></td>
+                                    <td><strong>Date</strong></td>
+                                    <td><strong>Time</strong></td>
+                                    <td><strong>Verified</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for thisPayment in ThisPaymentsList %}
+                                <tr>
+                                    <td><a href="/adverts/invoice/{{ thisPayment.strPaymentID }}">{{ thisPayment.strAmountPaid }}</a></td>
+                                    <td>{{ thisPayment.strPaymentMethod }}</td>
+                                    <td>{{ thisPayment.strDatePaid }}</td>
+                                    <td>{{ thisPayment.strTimePaid }}</td>
+                                    <td>{{ thisPayment.strPaymentVerified }}</td>
+                                </tr>
+                            {%  endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td><strong>Amount</strong></td>
+                                    <td><strong>Payment Method</strong></td>
+                                    <td><strong>Date</strong></td>
+                                    <td><strong>Time</strong></td>
+                                    <td><strong>Verified</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="MakePaymentTab">
+                <div id="PaymentINFDIV">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title">Create Payment</h3>
+                            <br><small>Note you can pay for your Order by making use of your Available Credit by Selecting Available Credit Payment Method</small>
+                        </div>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="strAvailableCredit" class="col-sm-3 control-label pull-left">Available Credit</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-credit-card"> </i>
+                                        </div>
+                                        <input type="text" class="form-control" id="strTotalCredits" value="{{ thisAdvertAccount.strTotalCredits }}" readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strSelectOrder" class="col-sm-3 control-label pull-left">Select Order</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-th-list"> </i>
+                                        </div>
+                                        <select class="form-control" id="strSelectOrder">
+                                            {%  for thisOrder in  thisUpaidOrderList %}
+                                               <option value="{{ thisOrder.strOrderID }}">{{ thisOrder.strTotalSMS }} (SMS) , R {{ thisOrder.strQoutedAmount }}.00 , Schedule  {{ thisOrder.strOrderStartDate }}</option>
+                                            {%  endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="strPaymentMethod" class="col-sm-3 control-label pull-left">Payment Method</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-th-list"> </i>
+                                        </div>
+                                        <select class="form-control" id="strPaymentMethod">
+                                            <option value="Available Credit">Available Credit</option>
+                                            <option value="Direct Deposit" selected="true">Direct Deposit</option>
+                                            <option value="EFT" disabled="disabled">EFT</option>
+                                            <option value="PayPal" disabled="disabled">Pay Pal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="CreatePaymentRequestButt"><strong><i class="glyphicon glyphicon-credit-card"> </i> Create Payment </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <div id="CreatePaymentINFDIV"></div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+</div>
+<!-- DataTables -->
+<script src="../../../static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../../static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#PresentOrdersTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script>$(function () {$('#InvoicesTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<!-- Event Handlers -->
+<script src="../../../static/dist/js/pages/advertise/payments.js"></script>

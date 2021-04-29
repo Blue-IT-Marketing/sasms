@@ -1,0 +1,156 @@
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3>Global Sent Reports</h3>
+    </div>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#BulkSMS" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Bulk SMS</button></a></li>
+            <li><a href="#Adverts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Adverts </button> </a> </li>
+            <li><a href="#Surveys" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Surveys </button> </a> </li>
+        </ul>
+        <div class="tab-content">
+            <div class="active tab-pane" id="BulkSMS">
+                <div class="box box-body with-border">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Bulk SMS Reports</h3>
+                    </div>
+                    <table id="MyBulkReportsTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <td>Cell</td>
+                                <td>Status</td>
+                                <td>Ref</td>
+                                <td>Message</td>
+                                <td>Response</td>
+                                <td>Organization</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {%  for thisDelivery in thisDeliveryList %}
+                            <tr>
+                                <td>{{ thisDelivery.strCell }}</td>
+                                <td>{{ thisDelivery.strSendingStatus }}</td>
+                                <td>{{ thisDelivery.strRef }}</td>
+                                <td><input type="text" value="{{ thisDelivery.strMessageID }}"></td>
+                                <td>{{ thisDelivery.strResponse }}</td>
+                                <td><input type="text" value="{{ thisDelivery.strOrganizationID }}"></td>
+                            </tr>
+                        {%  endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Cell</td>
+                                <td>Status</td>
+                                <td>Ref</td>
+                                <td>Message</td>
+                                <td>Response</td>
+                                <td>Organization</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="Adverts">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title">Adverts Reports</h3>
+                    </div>
+                    <table id="MyAdvertsReportsTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <td>Cell</td>
+                                <td>Ref</td>
+                                <td>Order</td>
+                                <td>Date</td>
+                                <td>Time</td>
+                                <td>Report Done</td>
+                                <td>Resp-Checked</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {%  for thisReport in thisAdvertReportList %}
+                            <tr>
+                                <td>{{ thisReport.strCell }}</td>
+                                <td>{{ thisReport.strRef }}</td>
+                                <td>{{ thisReport.strOrderID }}</td>
+                                <td>{{ thisReport.strDateSent }}</td>
+                                <td>{{ thisReport.strTimeSent }}</td>
+                                <td>{{ thisReport.strReportDone }}</td>
+                                <td>{{ thisReport.strResponseChecked }}</td>
+                            </tr>
+                        {%  endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Cell</td>
+                                <td>Ref</td>
+                                <td>Order</td>
+                                <td>Date</td>
+                                <td>Time</td>
+                                <td>Report Done</td>
+                                <td>Resp-Checked</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+            <div class="tab-pane" id="Surveys">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title">Surveys Reports</h3>
+                    </div>
+                    <table id="MySurveysReportsTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <td>Cell</td>
+                                <td>Names</td>
+                                <td>Surname</td>
+                                <td>Survey ID</td>
+                                <td>Ref</td>
+                                <td>Question</td>
+                                <td>Answer</td>
+                                <td>Date Time</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {%  for thisSurveyReport in  thisSurveyReportsList %}
+                            <tr>
+                                <td>{{ thisSurveyReport.strCell }}</td>
+                                <td>{{ thisSurveyReport.strNames }}</td>
+                                <td>{{ thisSurveyReport.strSurname }}</td>
+                                <td><input type="text" value="{{ thisSurveyReport.strSurveyID }}"></td>
+                                <td>{{ thisSurveyReport.strRef }}</td>
+                                <td>{{ thisSurveyReport.strQuestion }}</td>
+                                <td>{{ thisSurveyReport.strOptionNumber }}</td>
+                                <td>{{ thisSurveyReport.strDateTime }}</td>
+                            </tr>
+                        {%  endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Cell</td>
+                                <td>Names</td>
+                                <td>Surname</td>
+                                <td>Survey ID</td>
+                                <td>Ref</td>
+                                <td>Question</td>
+                                <td>Answer</td>
+                                <td>Date Time</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script> $(function () {$('#MyBulkReportsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script> $(function () {$('#MyAdvertsReportsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script> $(function () {$('#MySurveysReportsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>

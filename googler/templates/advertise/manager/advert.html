@@ -1,0 +1,117 @@
+  <!-- Ion Slider -->
+  <link rel="stylesheet" href="../../../static/plugins/ionslider/ion.rangeSlider.css">
+  <!-- ion slider Nice -->
+  <link rel="stylesheet" href="../../../static/plugins/ionslider/ion.rangeSlider.skinNice.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Advert</h3>
+        <input type="hidden" class="hidden" id="strAdvertID" value="{{ thisAdvert.strAdvertID }}">
+    </div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="strAdvert" class="col-sm-3 control-label pull-left">Advert</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-bullhorn"> </i>
+                        </div>
+                        <textarea id="strAdvert" onkeyup="countChar(this)" class="form-control">{{ thisAdvert.strAdvert }}</textarea>
+                        <label class="label label-info" id="charNum"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="strStartDate" class="col-sm-3 control-label pull-left">Start Date</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"> </i>
+                        </div>
+                        <input type="text" id="strStartDate" class="form-control" value="{{ thisAdvert.strStartDate }}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="strStartTime" class="col-sm-3 control-label pull-left">Start Time</label>
+                <div class="col-sm-6">
+                    <div class="input-group clockpicker">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-time"> </i>
+                        </div>
+                        <input type="text" id="strStartTime" class="form-control" value="{{ thisAdvert.strStartTime }}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="strPaymentStatus" class="col-sm-3 control-label pull-left">Payment Status</label>
+                <div class="col-sm-6">
+                    <div class="input-group clockpicker">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-magnet"> </i>
+                        </div>
+                        <input type="text" id="strPaymentStatus" class="form-control" value="{{ thisAdvert.strAdvertIsPaid }}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="strAvailableCredit" class="col-sm-3 control-label pull-left">Available Credit</label>
+                <div class="col-sm-6">
+                    <div class="input-group clockpicker">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-credit-card"> </i>
+                        </div>
+                        <input type="text" id="strAvailableCredit" class="form-control" value="{{ thisAdvertAccount.strTotalCredits }}" readonly="readonly">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="strAssignedCredit" class="col-sm-3 control-label pull-left">Assigned Credit</label>
+                <div class="col-sm-6">
+                    <div class="input-group clockpicker">
+                        <div class="input-group-addon">
+                            <a><i class="glyphicon glyphicon-credit-card"> </i></a>
+                        </div>
+                        <input type="text" id="strAssignedCredit" class="form-control" value="{{ thisAdvert.strAssignedCredit }}" readonly="readonly">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label pull-left"></label>
+                <div class="col-sm-6">
+                    <input type="text" id="strCreditToAssign">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label pull-left"></label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <a><i class="glyphicon glyphicon-ok"> </i></a>
+                        </div>
+                        <button type="button" class="btn btn-warning btn-block" id="AssignCreditButt"><strong><i class="glyphicon glyphicon-transfer"> </i> Assign Credit</strong></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label pull-left"></label>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-primary btn-block" id="UploadAdvertButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Save Changes </strong></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label pull-left"></label>
+                <div class="col-sm-6">
+                    <div id="UploadAdvertINFDIV"></div>
+                </div>
+            </div>
+        </form>
+</div>
+<script src="../../../static/dist/js/pages/advertise/advert.js"></script>
+<!-- Ion Slider -->
+<script src="../../../static/plugins/ionslider/ion.rangeSlider.min.js"></script>
+<!-- Bootstrap slider -->
+<script src="../../../static/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+<script>$(function () {Mymax = parseInt(document.getElementById("strAvailableCredit").value);$("#strCreditToAssign").ionRangeSlider({min: 1, max: Mymax, from: 1, to: Mymax, type: 'single', step: 1, prefix: "Assigned SMS", prettify: true, hasGrid: true});});</script>

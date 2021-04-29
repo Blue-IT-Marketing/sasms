@@ -1,0 +1,226 @@
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Organization</h3><br>
+        <small>Your Organization or Company Details </small>
+    </div>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#Details" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> Details</button></a></li>
+        <li><a href="#PaymentDetails" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-credit-card"> </i> Payment Details </button> </a> </li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="Details">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title"> Organization Details</h3>
+                </div>
+                 <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="strOrganization" class="col-sm-3 control-label pull-left">Organization</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bookmark"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strOrganization" value="{{ thisOrg.strOrganizationName }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strDescription" class="col-sm-3 control-label pull-left">Description</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-bookmark"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strDescription" value="{{ thisOrg.strDescription }}">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strRegistration" class="col-sm-3 control-label pull-left">Registration</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-key"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strRegistration" value="{{ thisOrg.strRegistration }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strCell" class="col-sm-3 control-label pull-left">Cell</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-phone"> </i>
+                                    </div>
+                                        <input type="text" class="form-control" id="strCell" value="{{ thisOrg.strCell }}">
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strTel" class="col-sm-3 control-label pull-left">Tel</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-phone-alt"> </i>
+                                    </div>
+                                        <input type="text" class="form-control" id="strTel" value="{{ thisOrg.strTel }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strEmail" class="col-sm-3 control-label pull-left">Email</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-envelope"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strEmail" value="{{ thisOrg.strEmail }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strWebsite" class="col-sm-3 control-label pull-left">Website</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-link"> </i>
+                                    </div>
+                                        <input type="text" class="form-control" id="strWebsite" value="{{ thisOrg.strWebsite }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="UpdateOrganizationButt"><strong><i class="fa fa-cloud"> </i> Update Organization </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <div id="UpdateOrganizationINFDIV"></div>
+                            </div>
+                        </div>
+
+                    </form>
+             </div>
+        </div>
+        <div class="tab-pane" id="PaymentDetails">
+            <div class="box box-body with-border">
+                <div class="box box-header with-border">
+                    <h3 class="box-title">Payment Details</h3><br>
+                    <small class="label-default"> <i class="glyphicon glyphicon-star-empty"> </i> Your payment details will be used to pay your organization earnings from our Affiliate Market</small>
+                </div>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="strAccountHolder" class="col-sm-3 control-label pull-left">Account Holder</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-user"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strAccountHolder" value="{{ thisBankAccount.strAccountHolder }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strAccountNumber" class="col-sm-3 control-label pull-left">Account Number</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-credit-card"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strAccountNumber" value="{{ thisBankAccount.strAccountNumber }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strAccountType" class="col-sm-3 control-label pull-left">Account Type</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-credit-card"> </i>
+                                </div>
+                                <select id="strAccountType" class="form-control">
+                                    {% if  thisBankAccount.strAccountType is not none %}
+                                    {% if thisBankAccount.strAccountType == "Savings" %}
+                                    <option value="Savings" selected="selected">Savings</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Transmission">Transmission</option>
+                                    {%  endif %}
+                                    {% if thisBankAccount.strAccountType == "Cheque" %}
+                                    <option value="Savings">Savings</option>
+                                    <option value="Cheque" selected="selected">Cheque</option>
+                                    <option value="Transmission">Transmission</option>
+                                    {%  endif %}
+                                    {% if thisBankAccount.strAccountType == "Transmission" %}
+                                    <option value="Savings">Savings</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Transmission" selected="selected">Transmission</option>
+                                    {%  endif %}
+                                    {% else %}
+                                    <option value="Savings">Savings</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Transmission">Transmission</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strBankName" class="col-sm-3 control-label pull-left">Bank Name</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-bank"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strBankName" value="{{ thisBankAccount.strBankName }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strBranchName" class="col-sm-3 control-label pull-left">Branch Name</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-bank"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strBranchName" value="{{ thisBankAccount.strBranchName }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="strBranchCode" class="col-sm-3 control-label pull-left">Branch Code</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-code"> </i>
+                                </div>
+                                <input type="text" class="form-control" id="strBranchCode" value="{{ thisBankAccount.strBranchCode }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-primary btn-block" id="UpdatePaymentDetailsButt"><strong><i class="fa fa-cloud"> </i> Update Payment Details </strong></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pull-left"></label>
+                        <div class="col-sm-6">
+                            <div id="PaymentDetailsINFDIV"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="../../static/dist/js/firebase.js"></script>
+<script src="../../static/dist/js/pages/organization/org.js"></script>

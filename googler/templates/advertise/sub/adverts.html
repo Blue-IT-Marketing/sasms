@@ -1,0 +1,157 @@
+<!-- bootstrap datepicker -->
+<link rel="stylesheet" href="/static/plugins/datepicker/datepicker3.css">
+<!-- Bootstrap time Picker -->
+<link rel="stylesheet" href="/static/plugins/timepicker/bootstrap-timepicker.min.css">
+<!-- DataTables -->
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title"> Adverts</h3>
+    </div>
+            <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#MyAdverts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-user"> </i> My Adverts</button></a></li>
+                <li><a href="#ManageAdverts" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-adjust"> </i> Manage Adverts</button> </a> </li>
+            </ul>
+            <div class="tab-content">
+                <div class="active tab-pane" id="MyAdverts">
+                    <div class="box box-body with-border">
+                        <div class="box box-border with-border">
+                            <h3 class="box-title">My Adverts</h3>
+                        </div>
+
+                        <table id="MyAdvertsTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td>Advert</td>
+                                    <td>Date Created</td>
+                                    <td>Time Created</td>
+                                    <td>Start Date</td>
+                                    <td>Start Time</td>
+                                    <td>Advert Status</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {%  for thisAdvert in thisAdvertList %}
+                                <tr>
+                                    <td><a href="/adverts/manage/{{ thisAdvert.strAdvertID }}">{{ thisAdvert.strAdvert }}</a></td>
+                                    <td>{{ thisAdvert.strDateCreated }}</td>
+                                    <td>{{ thisAdvert.strTimeCreated }}</td>
+                                    <td>{{ thisAdvert.strStartDate }}</td>
+                                    <td>{{ thisAdvert.strStartTime }}</td>
+                                    <td>{{ thisAdvert.strAdvertStatus }}</td>
+                                </tr>
+                            {%  endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>Advert</td>
+                                    <td>Date Created</td>
+                                    <td>Time Created</td>
+                                    <td>Start Date</td>
+                                    <td>Start Time</td>
+                                    <td>Advert Status</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="ManageAdverts">
+                    <div class="box box-body with-border">
+                        <div class="box box-header with-border">
+                            <h3 class="box-title">Manage Adverts</h3>
+                        </div>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="strAdvert" class="col-sm-3 control-label pull-left">Advert</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-bullhorn"> </i>
+                                        </div>
+                                        <textarea id="strAdvert" class="form-control" onkeyup="countChar(this)"></textarea>
+                                        <label class="label label-info" id="charNum"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strPackage" class="col-sm-3 control-label pull-left">Package (SMS)</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-send"> </i>
+                                        </div>
+                                        <select id="strPackage" class="form-control">
+                                            <option value="1000"> 1,000</option>
+                                            <option value="1500"> 1,500</option>
+                                            <option value="2000"> 2,000</option>
+                                            <option value="3000"> 3,000</option>
+                                            <option value="4000"> 4,000</option>
+                                            <option value="5000"> 5,000</option>
+                                            <option value="10000">10,000</option>
+                                            <option value="25000">25,000</option>
+                                            <option value="50000">50,000</option>
+                                            <option value="75000">75,000</option>
+                                            <option value="100000">100,000</option>
+                                            <option value="250000">250,000</option>
+                                            <option value="500000">500,000</option>
+                                            <option value="1000000">1,000,000</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strStartDate" class="col-sm-3 control-label pull-left">Start Date</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"> </i>
+                                        </div>
+                                        <input type="text" id="strStartDate" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="strStartTime" class="col-sm-3 control-label pull-left">Start Time</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group clockpicker">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-time"> </i>
+                                        </div>
+                                        <input type="text" id="strStartTime" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left"></label>
+                                <div class="col-sm-6">
+                                    <button type="button" class="btn btn-primary btn-block" id="UploadAdvertButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Upload Advert </strong></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label pull-left"></label>
+                                <div class="col-sm-6">
+                                    <div id="UploadAdvertINFDIV"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+</div>
+<!-- bootstrap datepicker -->
+<script src="/static/plugins/datepicker/bootstrap-datepicker.js"></script>
+<!-- bootstrap time picker -->
+<script src="/static/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<!-- FastClick -->
+<script src="/static/plugins/fastclick/fastclick.js"></script>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="/static/dist/js/pages/advertise/newadvert.js"></script>
+<script>$(function () {$('#MyAdvertsTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<!-- Page script -->
+<script>$(function () {$('#strStartDate').datepicker({autoclose: true});$("#strStartTime").timepicker({showInputs: true});});</script>
+<!--Event Handlers -->

@@ -1,0 +1,188 @@
+<link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="/static/plugins/datepicker/datepicker3.css">
+<link rel="stylesheet" href="/static/plugins/timepicker/bootstrap-timepicker.min.css">
+<link rel="stylesheet" href="/static/plugins/select2/select2.min.css">
+<div class="box box-body with-border">
+    <div class="box box-header with-border">
+        <h3 class="box-title">Schedules</h3>
+    </div>
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#ScheduleListTab" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-th-list"> </i> <strong>Schedule List</strong></button></a></li>
+            <li><a href="#SchedulesManagerTab" data-toggle="tab"><button type="button" class="btn btn-bitbucket btn-block"> <i class="glyphicon glyphicon-calendar"> </i> <strong>Schedules Manager</strong></button> </a> </li>
+        </ul>
+        <div class="tab-content">
+            <div class="active tab-pane" id="ScheduleListTab">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title">Schedule List</h3>
+                    </div>
+                    <table id="ScheduleListTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Start Date</td>
+                                <td>Start Time</td>
+                                <td>Notify / Start</td>
+                                <td>Notify / Stop</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {%  for thisSchedule in thisSurveySchedulesList %}
+                            <tr>
+                                <td><a href="/surveys/schedules/{{ thisSchedule.strScheduleID }}">{{  thisSchedule.strName }}</a></td>
+                                <td>{{ thisSchedule.strDescription }}</td>
+                                <td>{{ thisSchedule.strStartDate }}</td>
+                                <td>{{ thisSchedule.strStartTime }}</td>
+                                <td>{{ thisSchedule.strNotifyOnStart }}</td>
+                                <td>{{ thisSchedule.strNotifyOnEnd }}</td>
+                            </tr>
+                        {%  endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Start Date</td>
+                                <td>Start Time</td>
+                                <td>Notify / Start</td>
+                                <td>Notify / Stop</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+            <div class="tab-pane" id="SchedulesManagerTab">
+                <div class="box box-body with-border">
+                    <div class="box box-header with-border">
+                        <h3 class="box-title">Schedule Manager</h3>
+                        <input type="hidden" class="hidden" id="strSurveyID" value="{{ vstrSurveyID }}">
+                    </div>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="strContactList" class="col-sm-3 control-label pull-left" title="Select the contact list to run your Schedule Against">Select Contact List</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-user"> </i>
+                                    </div>
+                                    <select id="strContactList" class="form-control">
+                                        {% for thisContact in thisContactLists %}
+                                        <option value="{{ thisContact.strListID }}">{{ thisContact.strName }}, {{ thisContact.strTotal }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="strName" class="col-sm-3 control-label pull-left" >Name</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-user"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strDescription" class="col-sm-3 control-label pull-left" >Description</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-pencil"> </i>
+                                    </div>
+                                    <textarea id="strDescription" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strStartDate" class="col-sm-3 control-label pull-left" >Start Date</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"> </i>
+                                    </div>
+                                    <input type="text" class="form-control" id="strStartDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strStartTime" class="col-sm-3 control-label pull-left" >Start Time</label>
+                            <div class="col-sm-6">
+                                  <div class="input-group">
+                                    <div class="input-group-addon">
+                                      <i class="glyphicon glyphicon-time"></i>
+                                    </div>
+                                    <input type="text" class="form-control timepicker" id="strStartTime">
+                                  </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="strNotifyOnStart" class="col-sm-3 control-label pull-left" >Notify on Start</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-star"> </i>
+                                    </div>
+                                    <select id="strNotifyOnStart" class="form-control">
+                                        <option value="YES">Yes</option>
+                                        <option value="NO">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="strNotifyOnEnd" class="col-sm-3 control-label pull-left" >Notify on End</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-star-empty"> </i>
+                                    </div>
+                                    <select id="strNotifyOnEnd" class="form-control">
+                                        <option value="YES">Yes</option>
+                                        <option value="NO">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-primary btn-block" id="UploadSchedulesButt"><strong><i class="glyphicon glyphicon-cloud-upload"> </i> Upload Schedule </strong></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label pull-left"></label>
+                            <div class="col-sm-6">
+                                <div id="UploadScheduleINFDIV"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery 2.2.3 -->
+<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<!-- Select2 -->
+<script src="/static/plugins/select2/select2.full.min.js"></script>
+<!-- date-range-picker -->
+<script src="/static/dist/js/moment.min.js"></script>
+<script src="/static/plugins/datepicker/bootstrap-datepicker.js"></script>
+<!-- bootstrap time picker -->
+<script src="/static/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>$(function () {$('#ScheduleListTable').DataTable({"paging": true,"lengthChange": true,"searching": true,"ordering": true,"info": true,"autoWidth": true});});</script>
+<script>$(function () {$('#strStartDate').datepicker({autoclose: true});$('.timepicker').timepicker({showInputs: false})})</script>
+<script src="/static/dist/js/pages/surveys/schedules/schedules.js"></script>
