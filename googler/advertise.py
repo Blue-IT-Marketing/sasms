@@ -809,18 +809,18 @@ class SentReport(ndb.Expando):
             return False
 
 class AdvertPackages(ndb.Expando):
-    strPackageID = ndb.StringProperty()
-    strName = ndb.StringProperty()
-    strDescription = ndb.StringProperty()
-    strTotalCredits = ndb.IntegerProperty(default=1000)
-    strPrice = ndb.IntegerProperty(default=350)
+    package_id = ndb.StringProperty()
+    name = ndb.StringProperty()
+    description = ndb.StringProperty()
+    total_credits = ndb.IntegerProperty(default=1000)
+    price = ndb.IntegerProperty(default=350)
 
 
     def writePackageID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPackageID = strinput
+                self.package_id = strinput
                 return True
             else:
                 return False
@@ -840,7 +840,7 @@ class AdvertPackages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strName = strinput
+                self.name = strinput
                 return True
             else:
                 return False
@@ -850,7 +850,7 @@ class AdvertPackages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDescription = strinput
+                self.description = strinput
                 return True
             else:
                 return False
@@ -860,7 +860,7 @@ class AdvertPackages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTotalCredits = strinput
+                self.total_credits = strinput
                 return True
             else:
                 return False
@@ -871,7 +871,7 @@ class AdvertPackages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strPrice = int(strinput)
+                self.price = int(strinput)
                 return True
             else:
                 return False

@@ -284,7 +284,7 @@ def AdvertContactsHandler():
             pass
         else:
             thisOurContact = OurContacts()
-            thisOurContact.writeNames(strinput=thisContact.strName)
+            thisOurContact.writeNames(strinput=thisContact.name)
             thisOurContact.writeSurname(strinput=thisContact.surname)
             thisOurContact.writeCell(strinput=thisContact.cell)
             thisOurContact.writeEmail(strinput="example@example.com")
@@ -898,7 +898,7 @@ def ScheduledSendSurveys():
                                                                 strCell=thisContact.cell)
                             thisAnswers = MultiChoiceSurveyAnswers()
                             thisAnswers.writeCell(strinput=thisContact.cell)
-                            thisAnswers.writeNames(strinput=thisContact.strName)
+                            thisAnswers.writeNames(strinput=thisContact.name)
                             thisAnswers.writeSurname(strinput=thisContact.surname)
                             thisAnswers.writeRef(strinput=strRef)
                             thisAnswers.writeSurveyID(strinput=thisSurvey.strSurveyID)
@@ -956,7 +956,7 @@ def SurveysResponses():
             if len(thisContactList) > 0:
                 thisContact = thisContactList[0]
 
-                thisSurveyAnswer.writeNames(strinput=thisContact.strName)
+                thisSurveyAnswer.writeNames(strinput=thisContact.name)
                 thisSurveyAnswer.writeSurname(strinput=thisContact.surname)
 
             findRequest = MultiChoiceSurveys.query(
