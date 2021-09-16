@@ -184,24 +184,24 @@ class SMSContacts(ndb.Expando):
 
 class Messages(ndb.Expando):
 
-    strGroupID = ndb.StringProperty()
-    strMessageID = ndb.StringProperty() # Also as reference number for the message
+    group_id = ndb.StringProperty()
+    message_id = ndb.StringProperty() # Also as reference number for the message
 
 
 
-    strMessage = ndb.StringProperty()
-    strResponse = ndb.StringProperty() #Message Response
-    strResponseReceived = ndb.BooleanProperty(default=False)
-    strDateResponse = ndb.DateProperty()
-    strTimeResponse = ndb.TimeProperty()
+    message = ndb.StringProperty()
+    response = ndb.StringProperty() #Message Response
+    response_received = ndb.BooleanProperty(default=False)
+    date_response = ndb.DateProperty()
+    time_response = ndb.TimeProperty()
 
-    strSubmitted = ndb.BooleanProperty(default=False)
-    strDateSubmitted = ndb.DateProperty()
-    strTimeSubmitted = ndb.TimeProperty()
-    strDateCreated = ndb.DateProperty(auto_now_add=True)
-    strTimeCreated = ndb.TimeProperty(auto_now_add=True)
+    submitted = ndb.BooleanProperty(default=False)
+    date_submitted = ndb.DateProperty()
+    time_submitted = ndb.TimeProperty()
+    date_created = ndb.DateProperty(auto_now_add=True)
+    time_created = ndb.TimeProperty(auto_now_add=True)
 
-    strSentWithPortal = ndb.StringProperty(default="Budget") # Vodacom/ Twilio / ClickSend
+    sent_with_portal = ndb.StringProperty(default="Budget") # Vodacom/ Twilio / ClickSend
     #TODO- make sure every outgoing message indicates which portal it was sent with
 
 
@@ -210,7 +210,7 @@ class Messages(ndb.Expando):
             strinput = str(strinput)
             strinput = strinput.capitalize()
             if strinput in ["Budget", "Vodacom", "Twilio", "ClickSend"]:
-                self.strSentWithPortal = strinput
+                self.sent_with_portal = strinput
                 return True
             else:
                 return False
@@ -221,7 +221,7 @@ class Messages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strGroupID = strinput
+                self.group_id = strinput
                 return True
             else:
                 return False
@@ -231,7 +231,7 @@ class Messages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessageID = strinput
+                self.message_id = strinput
                 return True
             else:
                 return False
@@ -251,7 +251,7 @@ class Messages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessage = strinput
+                self.message = strinput
                 return True
             else:
                 return False
@@ -262,7 +262,7 @@ class Messages(ndb.Expando):
     def writeSubmitted(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strSubmitted = strinput
+                self.submitted = strinput
                 return True
             else:
                 return False
@@ -271,7 +271,7 @@ class Messages(ndb.Expando):
     def writeDateSubmitted(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateSubmitted = strinput
+                self.date_submitted = strinput
                 return True
             else:
                 return False
@@ -280,7 +280,7 @@ class Messages(ndb.Expando):
     def writeTimeSubmitted(self,strinput):
         try:
             if strinput != None:
-                self.strTimeSubmitted = strinput
+                self.time_submitted = strinput
                 return True
             else:
                 return False
@@ -289,7 +289,7 @@ class Messages(ndb.Expando):
     def writeTimeCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeCreated = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -298,7 +298,7 @@ class Messages(ndb.Expando):
     def writeDateCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateCreated = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -1606,7 +1606,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = Messages.query(Messages.strGroupID == vstrGroupID)
+                findRequest = Messages.query(Messages.group_id == vstrGroupID)
                 thisMessagesList = findRequest.fetch()
 
                 template = template_env.get_template('templates/sms/groups/createmessage.html')
@@ -1895,7 +1895,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
         URLlist = URL.split("/")
         vstrMessageID = URLlist[len(URLlist) - 1]
 
-        findRequest = Messages.query(Messages.strMessageID == vstrMessageID)
+        findRequest = Messages.query(Messages.message_id == vstrMessageID)
         thisMessageList = findRequest.fetch()
 
         if len(thisMessageList) > 0:
@@ -1904,7 +1904,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
             thisMessage = Messages()
 
 
-        findRequest = Groups.query(Groups.group_id == thisMessage.strGroupID)
+        findRequest = Groups.query(Groups.group_id == thisMessage.group_id)
         thisGroupList = findRequest.fetch()
 
         if len(thisGroupList) > 0:
@@ -1936,7 +1936,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 vstrMessageID = self.request.get('vstrMessageID')
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = Messages.query(Messages.strMessageID == vstrMessageID,Messages.strGroupID == vstrGroupID)
+                findRequest = Messages.query(Messages.message_id == vstrMessageID, Messages.group_id == vstrGroupID)
                 thisMessageList = findRequest.fetch()
 
                 if len(thisMessageList) > 0:
@@ -1954,7 +1954,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
             vstrMessageID = self.request.get('vstrMessageID')
             vstrMessage = self.request.get('vstrMessage')
 
-            findRequest = Messages.query(Messages.strMessageID == vstrMessageID,Messages.strGroupID == vstrGroupID)
+            findRequest = Messages.query(Messages.message_id == vstrMessageID, Messages.group_id == vstrGroupID)
             thisMessageList = findRequest.fetch()
 
             if len(thisMessageList) > 0:
@@ -2099,7 +2099,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrMessageID = self.request.get('vstrMessageID')
 
-                findRequest = Messages.query(Messages.strMessageID == vstrMessageID,Messages.strGroupID == vstrGroupID)
+                findRequest = Messages.query(Messages.message_id == vstrMessageID, Messages.group_id == vstrGroupID)
                 thisMessagesList = findRequest.fetch()
                 if len(thisMessagesList) > 0:
                     thisMessage = thisMessagesList[0]
@@ -2143,7 +2143,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 vstrMessageID = self.request.get('vstrMessageID')
 
 
-                findRequest = Messages.query(Messages.strMessageID == vstrMessageID,Messages.strGroupID == vstrGroupID)
+                findRequest = Messages.query(Messages.message_id == vstrMessageID, Messages.group_id == vstrGroupID)
                 thisMessagesList = findRequest.fetch()
                 if len(thisMessagesList) > 0:
                     thisMessage = thisMessagesList[0]
@@ -2199,7 +2199,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                         while (thisSMSAccount.strTotalSMS > 0) and (i < len(thisSMSContactsList)):
                             thisContact = thisSMSContactsList[i]
 
-                            thisMessage = SendEmail(strFrom=thisPortal.strSenderAddress, strTo=thisPortal.strEmailAddress, strSubject=thisContact.cell_number, strBody=thisMessage.strMessage, strTextType="text/plain")
+                            thisMessage = SendEmail(strFrom=thisPortal.strSenderAddress, strTo=thisPortal.strEmailAddress, strSubject=thisContact.cell_number, strBody=thisMessage.message, strTextType="text/plain")
                             if thisMessage == True:
                                 self.response.write(""" <tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
                                 i = i + 1
@@ -2273,7 +2273,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 thisDate = datetime.datetime.now()
                                 thisDate = thisDate.date()
 
-                                result = thisBudgetPortal.SendCronMessage(strMessage=thisMessage.strMessage, strCell=thisContact.cell_number)
+                                result = thisBudgetPortal.SendCronMessage(strMessage=thisMessage.message, strCell=thisContact.cell_number)
                                 if result == None:
                                     isSent = False
                                     self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
@@ -2297,7 +2297,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                                                 second=strThisTime.second)
                                     thisDeliveryReport.writeDate(strinput=strThisDate)
                                     thisDeliveryReport.writeTime(strinput=strThisTime)
-                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
+                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                     thisDeliveryReport.writeReference(strinput=result)
                                     thisDeliveryReport.put()
                                 else:
@@ -2315,7 +2315,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                                                 second=strThisTime.second)
                                     thisDeliveryReport.writeDate(strinput=strThisDate)
                                     thisDeliveryReport.writeTime(strinput=strThisTime)
-                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
+                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                     thisDeliveryReport.put()
                                 thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
                             except:
@@ -2375,7 +2375,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 thisDate = datetime.datetime.now()
                                 thisDate = thisDate.date()
 
-                                result = thisClickSendSMS.SendSMS(strCell=thisContact.cell_number, strMessage=thisMessage.strMessage)
+                                result = thisClickSendSMS.SendSMS(strCell=thisContact.cell_number, strMessage=thisMessage.message)
 
                                 if result == None:
                                     isSent = False
@@ -2401,7 +2401,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                                                 second=strThisTime.second)
                                     thisDeliveryReport.writeDate(strinput=strThisDate)
                                     thisDeliveryReport.writeTime(strinput=strThisTime)
-                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
+                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                     thisDeliveryReport.writeReference(strinput=result)
                                     thisDeliveryReport.put()
                                 else:
@@ -2419,7 +2419,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                                                 second=strThisTime.second)
                                     thisDeliveryReport.writeDate(strinput=strThisDate)
                                     thisDeliveryReport.writeTime(strinput=strThisTime)
-                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
+                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                     thisDeliveryReport.put()
                                 thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
                             except:
@@ -2479,7 +2479,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 thisDate = datetime.datetime.now()
                                 thisDate = thisDate.date()
 
-                                result = thisTwilioPortal.sendSMS(strTo=thisContact.cell_number, strFrom=thisTwilioPortal.strMySMSNumber, strMessage=thisMessage.strMessage)
+                                result = thisTwilioPortal.sendSMS(strTo=thisContact.cell_number, strFrom=thisTwilioPortal.strMySMSNumber, strMessage=thisMessage.message)
 
                                 if result == None:
                                     isSent = False
@@ -2506,7 +2506,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                                                 second=strThisTime.second)
                                     thisDeliveryReport.writeDate(strinput=strThisDate)
                                     thisDeliveryReport.writeTime(strinput=strThisTime)
-                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
+                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                     thisDeliveryReport.writeReference(strinput=result)
                                     thisDeliveryReport.put()
                                 else:
@@ -2524,7 +2524,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                                                 second=strThisTime.second)
                                     thisDeliveryReport.writeDate(strinput=strThisDate)
                                     thisDeliveryReport.writeTime(strinput=strThisTime)
-                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
+                                    thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                     thisDeliveryReport.put()
                                 thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
                             except:

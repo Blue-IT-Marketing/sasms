@@ -49,8 +49,8 @@ def BulkSMSHandler():
         logging.info("There are messages scheduled")
 
     for thisSchedule in thisMessageScheduleList:
-        findRequest = Messages.query(Messages.strMessageID == thisSchedule.message_id,
-                                     Messages.strSubmitted == False)
+        findRequest = Messages.query(Messages.message_id == thisSchedule.message_id,
+                                     Messages.submitted == False)
         thisMessageList = findRequest.fetch()
 
         if len(thisMessageList) > 0:
@@ -58,7 +58,7 @@ def BulkSMSHandler():
         else:
             thisMessage = Messages()
 
-        findRequest = Groups.query(Groups.group_id == thisMessage.strGroupID)
+        findRequest = Groups.query(Groups.group_id == thisMessage.group_id)
         thisGroupList = findRequest.fetch()
 
         if len(thisGroupList) > 0:
@@ -77,7 +77,7 @@ def BulkSMSHandler():
             thisSMSAccount.writeOrganizationID(strinput=thisGroup.organization_id)
             thisSMSAccount.put()
 
-        findRequest = SMSContacts.query(SMSContacts.group_id == thisMessage.strGroupID)
+        findRequest = SMSContacts.query(SMSContacts.group_id == thisMessage.group_id)
         thisContactsList = findRequest.fetch()
 
         ReceipientList = []
@@ -108,7 +108,7 @@ def BulkSMSHandler():
                     thisVoda.put()
 
                 if thisVoda.CronSendMessages(strCellNumberList=ReceipientList,
-                                             strMessage=thisMessage.strMessage,
+                                             strMessage=thisMessage.message,
                                              strAccountID=thisSMSAccount.strOrganizationID):
                     thisSchedule.writeStatus(strinput="Completed")
                     thisSchedule.put()
@@ -118,8 +118,8 @@ def BulkSMSHandler():
                     thisMessage.put()
                     for StrCell in ReceipientList:
                         thisDeliveryReport = DeliveryReport()
-                        thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
-                        thisDeliveryReport.writeGroupID(strinput=thisMessage.strGroupID)
+                        thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
+                        thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
                         thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
                         thisDeliveryReport.writeReference(strinput="voda")
                         thisDeliveryReport.writeCell(strinput=StrCell)
@@ -139,13 +139,13 @@ def BulkSMSHandler():
                     strTotalDelivered = 0
 
                     for thisContact in ReceipientList:
-                        ref = thisPortal.SendMessage(strMessage=thisMessage.strMessage,
-                                                     strMessageID=thisMessage.strMessageID, strCell=thisContact)
+                        ref = thisPortal.SendMessage(strMessage=thisMessage.message,
+                                                     strMessageID=thisMessage.message_id, strCell=thisContact)
                         ref = ref.strip()
                         if (ref != None) and (ref != ""):
                             thisDeliveryReport = DeliveryReport()
-                            thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
-                            thisDeliveryReport.writeGroupID(strinput=thisMessage.strGroupID)
+                            thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
+                            thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
                             thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
                             thisDeliveryReport.writeReference(strinput=ref)
                             thisDeliveryReport.writeCell(strinput=thisContact)
@@ -175,12 +175,12 @@ def BulkSMSHandler():
                 strTotalDelivered = 0
 
                 for thisContact in ReceipientList:
-                    ref = thisClickSend.SendSMS(strCell=thisContact, strMessage=thisMessage.strMessage)
+                    ref = thisClickSend.SendSMS(strCell=thisContact, strMessage=thisMessage.message)
 
                     if (ref != None):
                         thisDeliveryReport = DeliveryReport()
-                        thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
-                        thisDeliveryReport.writeGroupID(strinput=thisMessage.strGroupID)
+                        thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
+                        thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
                         thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
                         thisDeliveryReport.writeReference(strinput=ref)
                         thisDeliveryReport.writeCell(strinput=thisContact)
@@ -212,12 +212,12 @@ def BulkSMSHandler():
 
                 for thisContact in ReceipientList:
                     ref = thisTwilio.sendSMS(strTo=thisContact, strFrom=thisTwilio.strMySMSNumber,
-                                             strMessage=thisMessage.strMessage)
+                                             strMessage=thisMessage.message)
 
                     if (ref != None):
                         thisDeliveryReport = DeliveryReport()
-                        thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
-                        thisDeliveryReport.writeGroupID(strinput=thisMessage.strGroupID)
+                        thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
+                        thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
                         thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
                         thisDeliveryReport.writeReference(strinput=ref)
                         thisDeliveryReport.writeCell(strinput=thisContact)

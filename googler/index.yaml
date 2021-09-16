@@ -48,12 +48,12 @@ indexes:
 - kind: DeliveryReport
   properties:
   - name: strLimitReached
-  - name: strResponseReceived
+  - name: response_received
   - name: date
 
 - kind: DeliveryReport
   properties:
-  - name: strResponseReceived
+  - name: response_received
   - name: date
 
 - kind: MessageSchedule
@@ -127,5 +127,5 @@ indexes:
 - kind: SurveyTracker
   properties:
   - name: strClientParticipation
-  - name: strResponseReceived
+  - name: response_received
   - name: strRunTimes

@@ -385,7 +385,7 @@ class RoutesHandler(webapp2.RequestHandler):
                         thisMessage.put()
 
                         ThisDeliveryReport = DeliveryReport()
-                        ThisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
+                        ThisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                         ThisDeliveryReport.writeOrganizationID(strinput=thisEndPoint.organization_id)
                         ThisDeliveryReport.writeDelivered(strinput=True)
                         ThisDeliveryReport.writeCell(strinput=strCell)
