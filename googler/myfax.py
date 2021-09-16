@@ -14,16 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import webapp2
+
 import jinja2
 import datetime
-from google.appengine.ext import ndb
-from google.appengine.api import users
-from google.appengine.api import mail
-from google.appengine.api import urlfetch
-from google.appengine.api import app_identity
-import cloudstorage
-import urllib, urllib2
+from google.cloud import ndb
+import requests
 
 from userRights import UserRights
 from accounts import Accounts
@@ -1032,19 +1027,19 @@ Country_Codes = [
     }]
 
 
-class AvailableFaxNumbers(ndb.Expando):
-    strFaxNumberRef = ndb.StringProperty()
-    strFaxNumber = ndb.StringProperty()
-    strCountryCode = ndb.StringProperty(default="ZA")
-    strCountryName = ndb.StringProperty(default="South Africa")
-    strAssigned = ndb.BooleanProperty(default=False)
-    strOrganizationID = ndb.StringProperty()
+class AvailableFaxNumbers(ndb.Model):
+    fax_number_reference = ndb.StringProperty()
+    fax_number = ndb.StringProperty()
+    country_code = ndb.StringProperty(default="ZA")
+    country_name = ndb.StringProperty(default="South Africa")
+    assigned = ndb.BooleanProperty(default=False)
+    organization_id = ndb.StringProperty()
 
     def writeFaxNumberReference(self, strinput):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strFaxNumber = strinput
+                self.fax_number = strinput
                 return True
             else:
                 return False
@@ -1066,7 +1061,7 @@ class AvailableFaxNumbers(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strFaxNumber = strinput
+                self.fax_number = strinput
                 return True
             else:
                 return False
@@ -1092,7 +1087,7 @@ class AvailableFaxNumbers(ndb.Expando):
             strinput = str(strinput)
             strinput = strinput.strip()
             if strinput in Country_Codes:
-                self.strCountryName = strinput
+                self.country_name = strinput
                 return True
             else:
                 return False
@@ -1102,7 +1097,7 @@ class AvailableFaxNumbers(ndb.Expando):
     def writeAssigned(self, strinput):
         try:
             if strinput in [True, False]:
-                self.strAssigned = strinput
+                self.assigned = strinput
                 return True
             else:
                 return False
@@ -1113,7 +1108,7 @@ class AvailableFaxNumbers(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -1122,16 +1117,16 @@ class AvailableFaxNumbers(ndb.Expando):
 
 
 class AvailableEmailEndPoints(ndb.Expando):
-    strEmailReference = ndb.StringProperty()
-    strEmailAddress = ndb.StringProperty()
-    strAssigned = ndb.BooleanProperty(default=False)
-    strOrganizationID = ndb.StringProperty()
+    email_reference = ndb.StringProperty()
+    email_address = ndb.StringProperty()
+    assigned = ndb.BooleanProperty(default=False)
+    organization_id = ndb.StringProperty()
 
     def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -1142,7 +1137,7 @@ class AvailableEmailEndPoints(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strEmailReference = strinput
+                self.email_reference = strinput
                 return True
             else:
                 return False
@@ -1162,7 +1157,7 @@ class AvailableEmailEndPoints(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strEmailAddress = strinput
+                self.email_address = strinput
                 return True
             else:
                 return False
@@ -1183,7 +1178,7 @@ class AvailableEmailEndPoints(ndb.Expando):
     def writeAssigned(self, strinput):
         try:
             if strinput in [True, False]:
-                self.strAssigned = strinput
+                self.assigned = strinput
                 return True
             else:
                 return False
@@ -1192,20 +1187,20 @@ class AvailableEmailEndPoints(ndb.Expando):
 
 
 class FaxSettings(ndb.Expando):
-    strOrganizationID = ndb.StringProperty()
-    strFaxNumber = ndb.StringProperty()
-    strSMSNotifyOnSend = ndb.BooleanProperty(default=False)
-    strSMSCreditNotify = ndb.BooleanProperty(default=False)
-    strSMSNotifyOnReceive = ndb.BooleanProperty(default=False)
-    strEmailToFax = ndb.StringProperty()
-    strAPIKey = ndb.StringProperty()
-    strSecretCode = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    fax_number = ndb.StringProperty()
+    sms_notify_on_send = ndb.BooleanProperty(default=False)
+    sms_credit_notify = ndb.BooleanProperty(default=False)
+    sms_notify_on_receive = ndb.BooleanProperty(default=False)
+    email_to_fax = ndb.StringProperty()
+    api_key = ndb.StringProperty()
+    secret_code = ndb.StringProperty()
 
     def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -1216,7 +1211,7 @@ class FaxSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strFaxNumber = strinput
+                self.fax_number = strinput
                 return True
             else:
                 return False
@@ -1226,7 +1221,7 @@ class FaxSettings(ndb.Expando):
     def writeSMSNotifyOnSend(self, strinput):
         try:
             if strinput in [True, False]:
-                self.strSMSNotifyOnSend = strinput
+                self.sms_notify_on_send = strinput
                 return True
             else:
                 return False
@@ -1236,7 +1231,7 @@ class FaxSettings(ndb.Expando):
     def writeSMSCreditNotify(self, strinput):
         try:
             if strinput in [True, False]:
-                self.strSMSCreditNotify = strinput
+                self.sms_credit_notify = strinput
                 return True
             else:
                 return False
@@ -1246,7 +1241,7 @@ class FaxSettings(ndb.Expando):
     def writeSMSNotifyOnReceive(self, strinput):
         try:
             if strinput in [True, False]:
-                self.strSMSNotifyOnReceive = strinput
+                self.sms_notify_on_receive = strinput
                 return True
             else:
                 return False
@@ -1257,7 +1252,7 @@ class FaxSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strEmailToFax = strinput
+                self.email_to_fax = strinput
                 return True
             else:
                 return False
@@ -1268,7 +1263,7 @@ class FaxSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strAPIKey = strinput
+                self.api_key = strinput
                 return True
             else:
                 return False
@@ -1279,7 +1274,7 @@ class FaxSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSecretCode = strinput
+                self.secret_code = strinput
                 return True
             else:
                 return False
@@ -1308,36 +1303,36 @@ class FaxSettings(ndb.Expando):
 
 
 class FaxAccount(ndb.Expando):
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strTel = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
-    strWebsite = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    tel = ndb.StringProperty()
+    email = ndb.StringProperty()
+    website = ndb.StringProperty()
 
-    strOrganizationID = ndb.StringProperty()
-    strCreditInPages = ndb.IntegerProperty(default=0)
-    strCostPerPage = ndb.IntegerProperty(default=60)
-    strDateLastCredit = ndb.DateProperty()
-    strTimeLastCredit = ndb.TimeProperty()
-    strUsePortal = ndb.StringProperty(default="ClickSend")
-    strDepositReference = ndb.StringProperty()
-    strSuspended = ndb.BooleanProperty(default=False)
+    organization_id = ndb.StringProperty()
+    credit_in_pages = ndb.IntegerProperty(default=0)
+    cost_per_page = ndb.IntegerProperty(default=60)
+    date_last_credit = ndb.DateProperty()
+    time_last_credit = ndb.TimeProperty()
+    use_portal = ndb.StringProperty(default="ClickSend")
+    deposit_reference = ndb.StringProperty()
+    suspended = ndb.BooleanProperty(default=False)
 
-    strTotalTopUpCost = ndb.IntegerProperty(default=0)
-    strTopUpCredit = ndb.IntegerProperty(default=0)
-    strTopUpReference = ndb.StringProperty()
-    strTopUpInvoiceLink = ndb.StringProperty()
-    strPayByDate = ndb.DateProperty()
-    strDateInvoiceCreated = ndb.DateProperty()
-    strDepositSlipFileName = ndb.StringProperty()
+    total_top_up_cost = ndb.IntegerProperty(default=0)
+    top_credit = ndb.IntegerProperty(default=0)
+    top_up_reference = ndb.StringProperty()
+    top_up_invoice_link = ndb.StringProperty()
+    pay_by_date = ndb.DateProperty()
+    date_invoice_created = ndb.DateProperty()
+    deposit_slip_filename = ndb.StringProperty()
 
 
     def writeTotalTopUpCost(self,strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) > 0):
-                self.strTotalTopUpCost = int(strinput)
+                self.total_top_up_cost = int(strinput)
                 return True
             else:
                 return False
@@ -1347,7 +1342,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTopUpCredit = int(strinput)
+                self.top_credit = int(strinput)
                 return True
             else:
                 return False
@@ -1357,7 +1352,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTopUpReference = strinput
+                self.top_up_reference = strinput
                 return True
             else:
                 return False
@@ -1372,7 +1367,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTopUpInvoiceLink = "/fax/topup/invoice/" + strinput
+                self.top_up_invoice_link = "/fax/topup/invoice/" + strinput
                 return True
             else:
                 return False
@@ -1381,7 +1376,7 @@ class FaxAccount(ndb.Expando):
     def writePayByDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strPayByDate = strinput
+                self.pay_by_date = strinput
                 return True
             else:
                 return False
@@ -1390,7 +1385,7 @@ class FaxAccount(ndb.Expando):
     def writeDateInvoiceCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateInvoiceCreated = strinput
+                self.date_invoice_created = strinput
                 return True
             else:
                 return False
@@ -1400,7 +1395,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDepositSlipFileName = strinput
+                self.deposit_slip_filename = strinput
                 return True
             else:
                 return False
@@ -1410,7 +1405,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
@@ -1431,7 +1426,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
@@ -1442,7 +1437,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -1453,7 +1448,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strTel = strinput
+                self.tel = strinput
                 return True
             else:
                 return False
@@ -1465,7 +1460,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -1476,7 +1471,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strWebsite = strinput
+                self.website = strinput
                 return True
             else:
                 return False
@@ -1498,7 +1493,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if (strinput.isdigit() and (int(strinput) >= 0)):
-                self.strCreditInPages = int(strinput)
+                self.credit_in_pages = int(strinput)
                 return True
             else:
                 return False
@@ -1509,7 +1504,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if (strinput.isdigit() and (int(strinput) >= 0)):
-                self.strCostPerPage = strinput
+                self.cost_per_page = strinput
                 return True
             else:
                 return False
@@ -1520,7 +1515,7 @@ class FaxAccount(ndb.Expando):
     def writeDateLastCredit(self, strinput):
         try:
             if isinstance(strinput, datetime.date):
-                self.strDateLastCredit = strinput
+                self.date_last_credit = strinput
                 return True
             else:
                 return False
@@ -1530,7 +1525,7 @@ class FaxAccount(ndb.Expando):
     def writeTimeLastCredit(self, strinput):
         try:
             if isinstance(strinput, datetime.time):
-                self.strTimeLastCredit = strinput
+                self.time_last_credit = strinput
                 return True
             else:
                 return False
@@ -1542,7 +1537,7 @@ class FaxAccount(ndb.Expando):
 
             strinput = str(strinput)
             if not (strinput == None):
-                self.strUsePortal = strinput
+                self.use_portal = strinput
                 return True
             else:
                 return False
@@ -1553,7 +1548,7 @@ class FaxAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strDepositReference = strinput
+                self.deposit_reference = strinput
                 return True
             else:
                 return False
@@ -1563,7 +1558,7 @@ class FaxAccount(ndb.Expando):
     def writeSuspended(self, strinput):
         try:
             if strinput in [True, False]:
-                self.strSuspended = strinput
+                self.suspended = strinput
                 return True
             else:
                 return False
@@ -1572,20 +1567,20 @@ class FaxAccount(ndb.Expando):
 
 
 class SentFax(ndb.Expando):
-    strUserID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strFaxReference = ndb.StringProperty()
-    strFaxNumber = ndb.StringProperty()
-    strSubject = ndb.StringProperty()
-    strCoverPage = ndb.StringProperty()
-    strFaxFilename = ndb.StringProperty()
-    strDateCreated = ndb.DateProperty()
-    strTimeCreated = ndb.TimeProperty()
-    strFaxSent = ndb.BooleanProperty(default=False)
-    strDateSent = ndb.DateProperty()
-    strTimeSent = ndb.TimeProperty()
-    strStatus = ndb.StringProperty(default="Received"),  # Engaged,
-    strNumberPages = ndb.IntegerProperty(default=1)
+    uid = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    fax_reference = ndb.StringProperty()
+    fax_number = ndb.StringProperty()
+    subject = ndb.StringProperty()
+    cover_page = ndb.StringProperty()
+    fax_filename = ndb.StringProperty()
+    date_created = ndb.DateProperty()
+    time_created = ndb.TimeProperty()
+    fax_sent = ndb.BooleanProperty(default=False)
+    date_sent = ndb.DateProperty()
+    time_sent = ndb.TimeProperty()
+    status = ndb.StringProperty(default="Received"),  # Engaged,
+    number_pages = ndb.IntegerProperty(default=1)
 
     strResponseFilename = ndb.StringProperty()
     strDateResponse = ndb.DateProperty()
@@ -1595,7 +1590,7 @@ class SentFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strSubject = strinput
+                self.subject = strinput
                 return True
             else:
                 return False
@@ -1606,7 +1601,7 @@ class SentFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strCoverPage = strinput
+                self.cover_page = strinput
                 return True
             else:
                 return False
@@ -1617,7 +1612,7 @@ class SentFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -1628,7 +1623,7 @@ class SentFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -1639,7 +1634,7 @@ class SentFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strFaxReference = strinput
+                self.fax_reference = strinput
                 return True
             else:
                 return False
@@ -1650,7 +1645,7 @@ class SentFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strFaxNumber = strinput
+                self.fax_number = strinput
                 return True
             else:
                 return False
@@ -1661,7 +1656,7 @@ class SentFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strFaxFilename = strinput
+                self.fax_filename = strinput
                 return True
             else:
                 return False
@@ -1671,7 +1666,7 @@ class SentFax(ndb.Expando):
     def writeDateCreated(self, strinput):
         try:
             if isinstance(strinput, datetime.date):
-                self.strDateCreated = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -1681,7 +1676,7 @@ class SentFax(ndb.Expando):
     def writeTimeCreated(self, strinput):
         try:
             if isinstance(strinput, datetime.time):
-                self.strTimeCreated = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -1691,7 +1686,7 @@ class SentFax(ndb.Expando):
     def writeFaxSent(self, strinput):
         try:
             if strinput in [True, False]:
-                self.strFaxSent = strinput
+                self.fax_sent = strinput
                 return True
             else:
                 return False
@@ -1701,7 +1696,7 @@ class SentFax(ndb.Expando):
     def writeDateSent(self, strinput):
         try:
             if isinstance(strinput, datetime.date):
-                self.strDateSent = strinput
+                self.date_sent = strinput
                 return True
             else:
                 return False
@@ -1711,7 +1706,7 @@ class SentFax(ndb.Expando):
     def writeTimeSent(self, strinput):
         try:
             if isinstance(strinput, datetime.time):
-                self.strTimeSent = strinput
+                self.time_sent = strinput
                 return True
             else:
                 return False
@@ -1722,7 +1717,7 @@ class SentFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ["Sent", "Received", "Engaged", "Not Sent", "Not Received"]:
-                self.strStatus = strinput
+                self.status = strinput
                 return True
             else:
                 return False
@@ -1733,7 +1728,7 @@ class SentFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if (strinput.isdigit() and (int(strinput) > 0)):
-                self.strNumberPages = int(strinput)
+                self.number_pages = int(strinput)
                 return True
             else:
                 return False
@@ -1783,23 +1778,23 @@ class SentFax(ndb.Expando):
 
 
 class ReceivedFax(ndb.Expando):
-    strUserID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strFaxReference = ndb.StringProperty()
-    strFaxNumber = ndb.StringProperty()
-    strSubject = ndb.StringProperty()
-    strCoverPage = ndb.StringProperty()
-    strFaxFilename = ndb.StringProperty()
-    strDateReceived = ndb.DateProperty()
-    strTimeReceived = ndb.TimeProperty()
-    strFaxReceived = ndb.BooleanProperty(default=False)
-    strNumberPages = ndb.IntegerProperty(default=0)
+    uid = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    fax_reference = ndb.StringProperty()
+    fax_number = ndb.StringProperty()
+    subject = ndb.StringProperty()
+    cover_page = ndb.StringProperty()
+    fax_filename = ndb.StringProperty()
+    date_received = ndb.DateProperty()
+    time_received = ndb.TimeProperty()
+    fax_received = ndb.BooleanProperty(default=False)
+    number_pages = ndb.IntegerProperty(default=0)
 
     def writeUserID(self, strinput):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -1810,7 +1805,7 @@ class ReceivedFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -1821,7 +1816,7 @@ class ReceivedFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strFaxReference = strinput
+                self.fax_reference = strinput
                 return True
             else:
                 return False
@@ -1832,7 +1827,7 @@ class ReceivedFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strFaxNumber = strinput
+                self.fax_number = strinput
                 return True
             else:
                 return False
@@ -1843,7 +1838,7 @@ class ReceivedFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strFaxFilename = strinput
+                self.fax_filename = strinput
                 return True
             else:
                 return False
@@ -1854,7 +1849,7 @@ class ReceivedFax(ndb.Expando):
     def writeDateReceived(self, strinput):
         try:
             if isinstance(strinput, datetime.date):
-                self.strDateReceived = strinput
+                self.date_received = strinput
                 return True
             else:
                 return False
@@ -1865,7 +1860,7 @@ class ReceivedFax(ndb.Expando):
     def writeTimeReceived(self, strinput):
         try:
             if isinstance(strinput, datetime.time):
-                self.strTimeReceived = strinput
+                self.time_received = strinput
                 return True
             else:
                 return False
@@ -1875,7 +1870,7 @@ class ReceivedFax(ndb.Expando):
     def writeFaxReceived(self, strinput):
         try:
             if strinput in [True, False]:
-                self.strFaxReceived = strinput
+                self.fax_received = strinput
                 return True
             else:
                 return False
@@ -1886,7 +1881,7 @@ class ReceivedFax(ndb.Expando):
         try:
             strinput = str(strinput)
             if (strinput.isdigit() and (int(strinput) > 0)):
-                self.strNumberPages = int(strinput)
+                self.number_pages = int(strinput)
                 return True
             else:
                 return False
@@ -1896,7 +1891,7 @@ class ReceivedFax(ndb.Expando):
 
 from firebaseadmin import VerifyAndReturnAccount
 
-class MyFaxHandler(webapp2.RequestHandler):
+class MyFaxHandler():
     def get(self):
         try:
             template = template_env.get_template('templates/fax/fax.html')
@@ -1986,10 +1981,10 @@ class MyFaxHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = SentFax.query(SentFax.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = SentFax.query(SentFax.organization_id == thisMainAccount.organization_id)
                 thisSentFaxesList = findRequest.fetch()
 
-                findRequest = ReceivedFax.query(ReceivedFax.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = ReceivedFax.query(ReceivedFax.organization_id == thisMainAccount.organization_id)
                 thisReceivedFaxesList = findRequest.fetch()
 
                 template = template_env.get_template('templates/fax/sub/myfaxes.html')
@@ -2022,7 +2017,7 @@ class MyFaxHandler(webapp2.RequestHandler):
                 else:
                     thisFaxAccount = FaxAccount()
 
-                if thisFaxAccount.strCreditInPages > 0:
+                if thisFaxAccount.credit_in_pages > 0:
                     findRequest = ClickSendSMSPortal.query()
                     thisClickSendPortalList = findRequest.fetch()
                     if len(thisClickSendPortalList) > 0:
@@ -2047,7 +2042,7 @@ class MyFaxHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = FaxSettings.query(FaxSettings.organization_id == thisMainAccount.organization_id)
                 thisFaxSettingsList = findRequest.fetch()
 
                 if len(thisFaxSettingsList) > 0:
@@ -2122,7 +2117,7 @@ class MyFaxHandler(webapp2.RequestHandler):
                 else:
                     thisFaxAccount = FaxAccount()
 
-                findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = FaxSettings.query(FaxSettings.organization_id == thisMainAccount.organization_id)
                 thisFaxSettingsList = findRequest.fetch()
                 if len(thisFaxSettingsList) > 0:
                     thisFaxSettings = thisFaxSettingsList[0]
@@ -2135,7 +2130,7 @@ class MyFaxHandler(webapp2.RequestHandler):
 
 
 
-class SettingsHandler(webapp2.RequestHandler):
+class SettingsHandler():
     def get(self):
         pass
 
@@ -2153,14 +2148,14 @@ class SettingsHandler(webapp2.RequestHandler):
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
-                findRequest = AvailableFaxNumbers.query(AvailableFaxNumbers.strAssigned == False)
+                findRequest = AvailableFaxNumbers.query(AvailableFaxNumbers.assigned == False)
                 thisAvailableFaxNumbersList = findRequest.fetch()
                 if len(thisAvailableFaxNumbersList) > 0:
                     thisAvailFax = thisAvailableFaxNumbersList[0]
 
                     thisAvailFax.writeAssigned(strinput=True)
                     thisAvailFax.writeOrganizationID(strinput=thisMainAccount.organization_id)
-                    self.response.write(thisAvailFax.strFaxNumber)
+                    self.response.write(thisAvailFax.fax_number)
                     thisAvailFax.put()
                 else:
                     self.response.write("No Fax Numbers Available")
@@ -2175,13 +2170,13 @@ class SettingsHandler(webapp2.RequestHandler):
 
 
 
-                findRequest = AvailableEmailEndPoints.query(AvailableEmailEndPoints.strAssigned == False)
+                findRequest = AvailableEmailEndPoints.query(AvailableEmailEndPoints.assigned == False)
                 thisAvailableEmailsList = findRequest.fetch()
                 if len(thisAvailableEmailsList) > 0:
                     thisEmailEndPoint = thisAvailableEmailsList[0]
                     thisEmailEndPoint.writeAssigned(strinput=True)
                     thisEmailEndPoint.writeOrganizationID(strinput=thisMainAccount.organization_id)
-                    self.response.write(thisEmailEndPoint.strEmailAddress)
+                    self.response.write(thisEmailEndPoint.email)
                     thisEmailEndPoint.put()
                 else:
                     self.response.write("No Available Email Address at this time")
@@ -2227,7 +2222,7 @@ class SettingsHandler(webapp2.RequestHandler):
                 vstrAPIKey = self.request.get('vstrAPIKey')
                 vstrSecretCode = self.request.get('vstrSecretCode')
 
-                findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = FaxSettings.query(FaxSettings.organization_id == thisMainAccount.organization_id)
                 thisFaxSettingsList = findRequest.fetch()
 
                 if len(thisFaxSettingsList) > 0:
@@ -2258,7 +2253,7 @@ class SettingsHandler(webapp2.RequestHandler):
                 self.response.write("Fax Settings successfully saved")
 
 
-class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
+class ThisTopUpInvoiceHandler():
     def get(self):
 
         from accounts import Organization
@@ -2268,7 +2263,7 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
         strURLlist = URL.split("/")
         strTopUpReference = strURLlist[len(strURLlist) - 1]
 
-        findRequest = FaxAccount.query(FaxAccount.strTopUpReference == strTopUpReference)
+        findRequest = FaxAccount.query(FaxAccount.top_up_reference == strTopUpReference)
         thisFaxAccountList = findRequest.fetch()
 
         if len(thisFaxAccountList) > 0:
