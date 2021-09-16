@@ -323,12 +323,12 @@ class PresentCredits(ndb.Model):
 class PaymentBankAccount(ndb.Model):
     uid = ndb.StringProperty()
 
-    strAccountHolder = ndb.StringProperty()
-    strAccountNumber = ndb.StringProperty()
+    account_holder = ndb.StringProperty()
+    account_number = ndb.StringProperty()
 
-    strBankName = ndb.StringProperty()
-    strBranchName = ndb.StringProperty()
-    strBranchCode = ndb.StringProperty()
+    bank_name = ndb.StringProperty()
+    branch_name = ndb.StringProperty()
+    branch_code = ndb.StringProperty()
 
     def writeUserID(self,strinput):
         try:
@@ -345,7 +345,7 @@ class PaymentBankAccount(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccountHolder = strinput
+                self.account_holder = strinput
                 return True
             else:
                 return False
@@ -356,7 +356,7 @@ class PaymentBankAccount(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccountNumber = strinput
+                self.account_number = strinput
                 return True
             else:
                 return False
@@ -367,7 +367,7 @@ class PaymentBankAccount(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBankName = strinput
+                self.bank_name = strinput
                 return True
             else:
                 return False
@@ -378,7 +378,7 @@ class PaymentBankAccount(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBranchName = strinput
+                self.branch_name = strinput
                 return True
             else:
                 return False
@@ -389,7 +389,7 @@ class PaymentBankAccount(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBranchCode = strinput
+                self.branch_code = strinput
                 return True
             else:
                 return False
