@@ -1283,18 +1283,18 @@ class ClickSendSMSPortal(ndb.Model):
     rest_reports_api = ndb.StringProperty(default="https://sa-sms.appspot.com/clicksend/sms/reports")
     rest_fax_reports_api = ndb.StringProperty(default="https://sa-sms.appspotmail.com/clicksend/fax/reports")
     email_incoming_fax = ndb.StringProperty(default="incomingfaxes@sa-sms.appspotmail.com")
-    strSendFaxEmail = ndb.StringProperty(default="@fax.clicksend.com")
-    strAutho = ndb.StringProperty(default=os.environ.get('CLICK_SEND_AUTH'))
-    strUserName = ndb.StringProperty(default=os.environ.get('CLICK_SEND_LOGIN'))
-    strAPIKey = ndb.StringProperty(default=os.environ.get('CLICK_SEND_API_KEY'))
-    strSendFromEmail = ndb.StringProperty(default=os.environ.get('CLICK_SEND_FROM_EMAIL'))
+    send_fax_email = ndb.StringProperty(default="@fax.clicksend.com")
+    auth = ndb.StringProperty(default=os.environ.get('CLICK_SEND_AUTH'))
+    username = ndb.StringProperty(default=os.environ.get('CLICK_SEND_LOGIN'))
+    api_key = ndb.StringProperty(default=os.environ.get('CLICK_SEND_API_KEY'))
+    send_from_email = ndb.StringProperty(default=os.environ.get('CLICK_SEND_FROM_EMAIL'))
 
 
     def SendSMS(self,strCell,strMessage):
         try:
             strMessage = strMessage + " Optout : Reply STOP"
 
-            form_data = "method=http&username=" + self.strUserName + "&key=" + self.strAPIKey + "&to="+strCell+"&message=" + strMessage
+            form_data = "method=http&username=" + self.username + "&key=" + self.api_key + "&to=" + strCell + "&message=" + strMessage
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
             result = urlfetch.fetch(url=self.rest_send_api, payload=form_data, method=urlfetch.POST, headers=headers, validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400):
@@ -1322,9 +1322,9 @@ class ClickSendSMSPortal(ndb.Model):
         """
         from myemail import SendEmail
         try:
-            strFaxToEmail = strFaxNumber + self.strSendFaxEmail
-            strFaxFromEmail = self.strSendFromEmail
-            strSubject = self.strAutho
+            strFaxToEmail = strFaxNumber + self.send_fax_email
+            strFaxFromEmail = self.send_from_email
+            strSubject = self.auth
             strUserCoverMessage = strSubject + """ <br> """ + strCoverPage
             strBody = """ 
             <h2>Business Communication and Contact Management</h2>
@@ -1359,7 +1359,7 @@ class ClickSendSMSPortal(ndb.Model):
 from firebaseadmin import VerifyAndReturnAccount
 
 
-class mySMSHandler(webapp2.RequestHandler):
+class mySMSHandler():
     def get(self):
         #+ '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
         vstrUserID = self.request.get('vstrUserID')
@@ -1373,7 +1373,7 @@ class mySMSHandler(webapp2.RequestHandler):
             context = {}
             self.response.write(template.render(context))
 
-class SMSGroupHandler(webapp2.RequestHandler):
+class SMSGroupHandler():
     def get(self):
         from accounts import Organization
 
@@ -1503,7 +1503,7 @@ class SMSGroupHandler(webapp2.RequestHandler):
                 context = {}
                 self.response.write(template.render(context))
 
-class GroupManagerHandler(webapp2.RequestHandler):
+class GroupManagerHandler():
     def get(self):
         URL = self.request.url
         URLlist = URL.split("/")
@@ -1887,7 +1887,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
                     thisContact.key.delete()
                 self.response.write("Successfully delete contact")
 
-class thisSMSManagerHandler(webapp2.RequestHandler):
+class thisSMSManagerHandler():
     def get(self):
 
 
@@ -2581,7 +2581,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
 
 
 
-class BuyCreditsHandler(webapp2.RequestHandler):
+class BuyCreditsHandler():
     def get(self):
         pass
 
@@ -2740,31 +2740,31 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                         self.response.write("Please create you organization account before purchasing any credit")
 
 
-def HandleSMSPushReply(strFromCell,strReply,strOriginalMessage,strOriginalMessageID,strOriginalSenderID):
+def handle_sms_push_reply(from_cell,reply,original_message,original_message_id,original_sender_id):
     """
     Handle this Reply here
-    :param strFromCell:
-    :param strReply:
-    :param strOriginalMessage:
-    :param strOriginalMessageID:
-    :param strOriginalSenderID:
+    :param from_cell:
+    :param reply:
+    :param original_message:
+    :param original_message_id:
+    :param original_sender_id:
     :return:
     """
-    logging.info("SMS PUSH REPLIES WORKS here is the reply message : " + strReply)
+    logging.info("SMS PUSH REPLIES WORKS here is the reply message : " + reply)
 
-def HandleDeliveryReports(strMessageID,strStatus,strStatusCode,strCustomString):
+def handle_delivery_reports(message_id,status,status_code,custom_string):
     """
 
-    :param strMessageID: the id of the original message sent
-    :param strStatus:  the status of the message either DELIVERED UNDELIVERED
-    :param strStatusCode: i dont know what this is
-    :param strCustomString:  still dont know what this is
+    :param message_id: the id of the original message sent
+    :param status:  the status of the message either DELIVERED UNDELIVERED
+    :param status_code: i dont know what this is
+    :param custom_string:  still dont know what this is
     :return:
     """
     pass
 
 
-class ClickSendRoutersHandler(webapp2.RequestHandler):
+class ClickSendRoutersHandler():
     def post(self):
         """
             4. Push - POST the reply to your website or application.
@@ -2880,7 +2880,8 @@ class ClickSendRoutersHandler(webapp2.RequestHandler):
             strOriginalMessageID = self.request.get('originalmessageid')
             strOriginalSenderID = self.request.get('originalsenderid')
             strUserName = self.request.get('username')
-            HandleSMSPushReply(strFromCell=strFromCell,strReply=strReply,strOriginalMessage=strOriginalMessage,strOriginalMessageID=strOriginalMessageID,strOriginalSenderID=strOriginalSenderID)
+            handle_sms_push_reply(from_cell=strFromCell, reply=strReply, original_message=strOriginalMessage,
+                                  original_message_id=strOriginalMessageID, original_sender_id=strOriginalSenderID)
 
         elif strFunction == "push-sms-delivery":
             #TODO- SMS Delivery report https://sa-sms.appspot.com/sms/clicksend/push-sms-delivery
@@ -2889,10 +2890,11 @@ class ClickSendRoutersHandler(webapp2.RequestHandler):
             strStatusCode = self.request.get("status_code")
             strCustomString = self.request.get("customstring")
 
-            HandleDeliveryReports(strMessageID=vstrMessageID,strStatus=strStatus,strStatusCode=strStatusCode,strCustomString=strCustomString)
+            handle_delivery_reports(message_id=vstrMessageID, status=strStatus, status_code=strStatusCode,
+                                    custom_string=strCustomString)
 
 
-class TwilioCallbacksRoutersHandler(webapp2.RequestHandler):
+class TwilioCallbacksRoutersHandler():
 
     def ProcessCallBack(self):
             pass
@@ -2963,7 +2965,7 @@ class TwilioCallbacksRoutersHandler(webapp2.RequestHandler):
             logging.info(message_sid + " " + message_status)
 
 
-class TwilioResponsesHandler(webapp2.RequestHandler):
+class TwilioResponsesHandler():
     def get(self):
         """
             used to obtain responses from twilio
