@@ -19,14 +19,14 @@ indexes:
 
 - kind: Advert
   properties:
-  - name: strRunFromCredit
-  - name: strStartDate
+  - name: run_from_credit
+  - name: start_date
 
 - kind: Advert
   properties:
-  - name: strRunFromCredit
-  - name: strStartDate
-  - name: strAssignedCredit
+  - name: run_from_credit
+  - name: start_date
+  - name: assigned_credit
 
 - kind: CommentThread
   properties:
@@ -41,31 +41,31 @@ indexes:
 
 - kind: DeliveryReport
   properties:
-  - name: strDate
+  - name: date
   - name: strSendingStatus
-  - name: strTime
+  - name: time
 
 - kind: DeliveryReport
   properties:
   - name: strLimitReached
   - name: strResponseReceived
-  - name: strDate
+  - name: date
 
 - kind: DeliveryReport
   properties:
   - name: strResponseReceived
-  - name: strDate
+  - name: date
 
 - kind: MessageSchedule
   properties:
-  - name: strStartDate
+  - name: start_date
   - name: strStatus
-  - name: strStartTime
+  - name: start_time
 
 - kind: MultiChoiceSurveys
   properties:
   - name: strSurveyID
-  - name: strDateCreated
+  - name: date_created
 
 - kind: Orders
   properties:
@@ -77,39 +77,39 @@ indexes:
 - kind: Post
   properties:
   - name: strPublished
-  - name: strDate
+  - name: date
 
 - kind: Responses
   properties:
   - name: strTicketID
   - name: strThreadID
-  - name: strDateCreated
-  - name: strTimeCreated
+  - name: date_created
+  - name: time_created
 
 - kind: SentReport
   properties:
   - name: date_sent
-  - name: strReportDone
-  - name: strResponseChecked
+  - name: report_done
+  - name: response_checked
   - name: date_sent
 
 - kind: SentReport
   properties:
   - name: date_sent
-  - name: strReportDone
-  - name: strResponseChecked
+  - name: report_done
+  - name: response_checked
   - name: time_sent
 
 - kind: SentReport
   properties:
   - name: date_sent
-  - name: strReportDone
+  - name: report_done
   - name: time_sent
 
 - kind: SentReport
   properties:
-  - name: strReportDone
-  - name: strResponseChecked
+  - name: report_done
+  - name: response_checked
   - name: date_sent
 
 - kind: SurveyOrders
@@ -121,8 +121,8 @@ indexes:
 - kind: SurveySchedules
   properties:
   - name: strActivateSchedule
-  - name: strStartDate
-  - name: strStartTime
+  - name: start_date
+  - name: start_time
 
 - kind: SurveyTracker
   properties:

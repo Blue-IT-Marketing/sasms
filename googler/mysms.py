@@ -2681,7 +2681,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
 
                         if thisOrganization.verified:
 
-                            if thisSMSAccount.strUsePortal == "Vodacom":
+                            if thisSMSAccount.use_portal == "Vodacom":
                                 findRequest = SMSPortalVodacom.query()
                                 thisVodaPortalList = findRequest.fetch()
                                 if len(thisVodaPortalList) > 0:
@@ -2695,7 +2695,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                                 else:
                                     self.response.write("Error sending banking details to mobile please try again later")
 
-                            elif thisSMSAccount.strUsePortal == "Budget":
+                            elif thisSMSAccount.use_portal == "Budget":
                                 findRequest = SMSPortalBudget.query()
                                 thisBudgetPortalList = findRequest.fetch()
                                 if len(thisBudgetPortalList) > 0:
@@ -2708,7 +2708,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                                 else:
                                     self.response.write("Error sending banking details to mobile please try again later")
 
-                            elif thisSMSAccount.strUsePortal == "ClickSend":
+                            elif thisSMSAccount.use_portal == "ClickSend":
                                 findRequest = ClickSendSMSPortal.query()
                                 thisClickSendList = findRequest.fetch()
 
@@ -2725,7 +2725,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                                         self.response.write("Error sending Banking Details to mobile please try again later")
 
 
-                            elif thisSMSAccount.strUsePortal == "Twilio":
+                            elif thisSMSAccount.use_portal == "Twilio":
                                 findRequest = MyTwilioPortal.query()
                                 thisTwilioList = findRequest.fetch()
 
@@ -2925,7 +2925,7 @@ class TwilioCallbacksRoutersHandler(webapp2.RequestHandler):
         else:
             pass
 
-        findRequest = SentReport.query(SentReport.strRef == message_sid)
+        findRequest = SentReport.query(SentReport.ref == message_sid)
         thisSentReportList = findRequest.fetch()
 
         if len(thisSentReportList) > 0:
@@ -2958,7 +2958,7 @@ class TwilioCallbacksRoutersHandler(webapp2.RequestHandler):
         else:
             pass
 
-        findRequest = SentReport.query(SentReport.strRef == message_sid)
+        findRequest = SentReport.query(SentReport.ref == message_sid)
         thisSentReportList = findRequest.fetch()
 
         if len(thisSentReportList) > 0:

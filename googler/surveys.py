@@ -1773,7 +1773,7 @@ class SurveyHandler(webapp2.RequestHandler):
 
                         thisSurveyAccount.writeTopUpCredit(strinput=vstrAddCredits)
                         thisSurveyAccount.writeTopUpReference(strinput=thisSurveyAccount.CreateTopUpReference())
-                        thisSurveyAccount.CreateTopUpInvoiceLink(strinput=thisSurveyAccount.strTopUpReference)
+                        thisSurveyAccount.CreateTopUpInvoiceLink(strinput=thisSurveyAccount.top_up_reference)
                         thisSurveyAccount.writePayByDate(strinput=strPayByDate)
                         thisSurveyAccount.writeDateInvoiceCreated(strinput=strThisDate)
                         thisSurveyAccount.put()
@@ -1783,7 +1783,7 @@ class SurveyHandler(webapp2.RequestHandler):
                             thisSurveyAccount = thisSurveyAccountList[0]
 
                             self.response.write("""
-                            Top up Credit successfully processed please click on this link to view your <strong><a href=" """ + thisSurveyAccount.strTopUpInvoiceLink + """ ">Proforma Invoice</a></strong>""")
+                            Top up Credit successfully processed please click on this link to view your <strong><a href=" """ + thisSurveyAccount.top_up_invoice_link + """ ">Proforma Invoice</a></strong>""")
 
 
         elif vstrChoice == "7":
@@ -2204,8 +2204,8 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                         thisSurveyOrder = SurveyOrders()
                         thisSurveyOrder.writeUserID(strinput=vstrUserID)
                         thisSurveyOrder.writeOrganizationID(strinput=thisMainAccount.organization_id)
-                        thisSurveyOrder.writeOrderStartDate(strinput=thisSchedule.strStartDate)
-                        thisSurveyOrder.writeOrderStartTime(strinput=thisSchedule.strStartTime)
+                        thisSurveyOrder.writeOrderStartDate(strinput=thisSchedule.start_date)
+                        thisSurveyOrder.writeOrderStartTime(strinput=thisSchedule.start_time)
                         thisSurveyOrder.writeSurveyID(strinput=thisSchedule.strSurveyID)
                         thisSurveyOrder.writeItemCount(strinput=1)
                         thisSurveyOrder.writeOrderID(strinput=thisSurveyOrder.CreateOrderID())
@@ -2624,7 +2624,7 @@ class ThisPaymentHandler(webapp2.RequestHandler):
                         thisPayment = SurveyPayments()
 
                         thisPayment.writeUserID(strinput=vstrUserID)
-                        thisPayment.writeOrderID(strinput=thisSurveyOrder.strOrderID)
+                        thisPayment.writeOrderID(strinput=thisSurveyOrder.order_id)
                         thisPayment.writeOrganizationID(strinput=thisSurveyOrder.organization_id)
                         thisPayment.writeDepositReference(strinput=thisSurveyOrder.strDepositReference)
                         thisPayment.writePaymentID(strinput=thisPayment.CreatePaymentID())
@@ -2660,7 +2660,7 @@ class ThisInvoicesHandler(webapp2.RequestHandler):
             else:
                 thisOrg = Organization()
 
-            findRequest = SurveyOrders.query(SurveyOrders.strOrderID == thisPayment.strOrderID)
+            findRequest = SurveyOrders.query(SurveyOrders.strOrderID == thisPayment.order_id)
             thisOrdersList = findRequest.fetch()
 
             if len(thisOrdersList) > 0:
@@ -2886,9 +2886,9 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                         thisVerifications = TopUpVerifications()
                         thisVerifications.writeOrganizationID(strinput=thisSurveyAccount.organization_id)
                         thisVerifications.writeAccountName(strinput="Surveys")
-                        thisVerifications.writeCreditAmount(strinput=thisSurveyAccount.strTotalTopUpCost)
+                        thisVerifications.writeCreditAmount(strinput=thisSurveyAccount.total_top_up_cost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)
-                        thisVerifications.writeSMSCredits(strinput=thisSurveyAccount.strTopUpCredit)
+                        thisVerifications.writeSMSCredits(strinput=thisSurveyAccount.top_up_credit)
                         thisVerifications.writeTopUpReference(strinput=vstrYourReferenceNumber)
                         thisVerifications.put()
 
@@ -2899,9 +2899,9 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                         thisVerifications = TopUpVerifications()
                         thisVerifications.writeOrganizationID(strinput=thisSurveyAccount.organization_id)
                         thisVerifications.writeAccountName(strinput="Surveys")
-                        thisVerifications.writeCreditAmount(strinput=thisSurveyAccount.strTotalTopUpCost)
+                        thisVerifications.writeCreditAmount(strinput=thisSurveyAccount.total_top_up_cost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)
-                        thisVerifications.writeSMSCredits(strinput=thisSurveyAccount.strTopUpCredit)
+                        thisVerifications.writeSMSCredits(strinput=thisSurveyAccount.top_up_credit)
                         thisVerifications.writeTopUpReference(strinput=vstrTopUpReference)
                         thisVerifications.put()
 

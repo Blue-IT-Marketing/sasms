@@ -327,7 +327,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
     def AddContactsHandler(self,strNames,strSurname,strCell,strEmail):
         from advertise import OurContacts
-        findRequest = OurContacts.query(OurContacts.strCell == strCell)
+        findRequest = OurContacts.query(OurContacts.cell == strCell)
         thisContactsList = findRequest.fetch()
 
         if len(thisContactsList) == 0:
@@ -347,7 +347,7 @@ class RoutesHandler(webapp2.RequestHandler):
             self.response.write("Error Contact Already Added")
     def ContactExistHandler(self,strCell):
         from advertise import OurContacts
-        findRequest = OurContacts.query(OurContacts.strCell == strCell)
+        findRequest = OurContacts.query(OurContacts.cell == strCell)
         thisContactList = findRequest.fetch()
 
         if len(thisContactList) > 0:
@@ -467,13 +467,13 @@ class RoutesHandler(webapp2.RequestHandler):
         if len(thisDeliveryReportList) > 0:
             thisReport = thisDeliveryReportList[0]
 
-            strResponse = thisReport.strResponse
-            strRef = thisReport.strRef
+            strResponse = thisReport.response
+            strRef = thisReport.reference
             strCell = thisReport.cell
             self.response.headers["Content-Type"] = "application/json"
             self.response.status_code = 200
             template = template_env.get_template('templates/api/message-response.json')
-            context = {'strResponse':strResponse,'strRef':strRef,'cell':strCell}
+            context = {'response':strResponse,'reference':strRef,'cell':strCell}
             self.response.write(template.render(context))
         else:
             self.response.headers["Content-Type"] = "text/plain"
@@ -486,13 +486,13 @@ class RoutesHandler(webapp2.RequestHandler):
         if len(thisDeliveryReportList) > 0:
             thisReport = thisDeliveryReportList[0]
             strStatus = thisReport.strSendingStatus
-            strRef = thisReport.strRef
+            strRef = thisReport.reference
             strCell = thisReport.cell
 
             self.response.headers["Content-Type"] = "application/json"
             self.response.status_code = 200
             template = template_env.get_template('templates/api/message-status.json')
-            context = {'strStatus':strStatus,'strRef':strRef,'cell':strCell}
+            context = {'strStatus':strStatus,'reference':strRef,'cell':strCell}
             self.response.write(template.render(context))
 
         else:
@@ -512,7 +512,7 @@ class RoutesHandler(webapp2.RequestHandler):
         else:
             thisSMSAccount = SMSAccount()
 
-        findRequest = AddAccount.query(AddAccount.strOrganizationID == strOrganizationID)
+        findRequest = AddAccount.query(AddAccount.organization_id == strOrganizationID)
         thisAdvertisingAccountList = findRequest.fetch()
         if len(thisAdvertisingAccountList) > 0:
             thisAdvertisingAccount = thisAdvertisingAccountList[0]
@@ -543,7 +543,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
         try:
             if thisAdvertisingAccount:
-                strAdvertisingCredit = thisAdvertisingAccount.strTotalCredits
+                strAdvertisingCredit = thisAdvertisingAccount.total_credits
             else:
                 strAdvertisingCredit = 0
         except:
@@ -573,22 +573,22 @@ class RoutesHandler(webapp2.RequestHandler):
         self.response.write(template.render(context))
     def SetAdvertHandler(self,strAdvert,strStartDate,strStartTime,strCreditLimit,thisEndPoint):
         """
-                            strAdvert = self.request.get('advert')
+                            advert = self.request.get('advert')
                             strLimit = self.request.get('limit')
                             strStart = self.request.get('startdate')
-                            strTime = self.request.get('starttime')
+                            time = self.request.get('starttime')
 
         :return:
         """
         from advertise import AddAccount,Advert
 
-        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisEndPoint.organization_id)
+        findRequest = AddAccount.query(AddAccount.organization_id == thisEndPoint.organization_id)
         thisAdvertAccountList = findRequest.fetch()
 
         if len(thisAdvertAccountList) > 0:
             thisAdvertAccount = thisAdvertAccountList[0]
 
-            if thisAdvertAccount.strTotalCredits <= int(strCreditLimit):
+            if thisAdvertAccount.total_credits <= int(strCreditLimit):
                 thisAdvert = Advert()
                 thisAdvert.writeUserID(strinput=thisEndPoint.strAPIKey)
                 thisAdvert.writeOrganizationID(strinput=thisEndPoint.organization_id)
@@ -596,9 +596,9 @@ class RoutesHandler(webapp2.RequestHandler):
                 thisAdvert.writeAdvertID(strinput=thisAdvert.CreateAdvertID())
                 thisAdvert.writeAdvertIsPaid(strinput=True)
                 thisAdvert.writeAssignedCredit(strinput=strCreditLimit)
-                #strAdvertSize = len(strAdvert)
-                #strAdvertSize = strAdvertSize/150 #TODO- find out how to round to the next value
-                #thisAdvert.writeAdvertSize(strinput=strAdvertSize)
+                #advert_size = len(advert)
+                #advert_size = advert_size/150 #TODO- find out how to round to the next value
+                #thisAdvert.writeAdvertSize(strinput=advert_size)
                 thisAdvert.writeRunFromCredit(strinput=True)
 
                 thisAdvert.writeStartTime(strinput=strStartTime)
@@ -614,7 +614,7 @@ class RoutesHandler(webapp2.RequestHandler):
                 self.response.headers['Content-Type'] = "application/json"
                 self.response.status_code = 200
                 template = template_env.get_template('templates/api/setadvert.json')
-                context = {'strRef':thisAdvert.strAdvertID,'strCredit':thisAdvert.strAssignedCredit}
+                context = {'reference':thisAdvert.advert_id, 'strCredit':thisAdvert.assigned_credit}
                 self.response.write(template.render(context))
             else:
                 self.response.headers["Content-Type"] = "text/plain"
@@ -631,7 +631,7 @@ class RoutesHandler(webapp2.RequestHandler):
         """
         from advertise import Stats
 
-        findRequest = Stats.query(Stats.strAdvertID == strRef)
+        findRequest = Stats.query(Stats.advert_id == strRef)
         thisStatsList = findRequest.fetch()
 
         #TODO- Statistics must be updated every time responses are received
@@ -657,7 +657,7 @@ class RoutesHandler(webapp2.RequestHandler):
         """
         from advertise import Responses
 
-        findRequest = Responses.query(Responses.strAdvertID == strRef)
+        findRequest = Responses.query(Responses.advert_id == strRef)
         thisResponsesList = findRequest.fetch()
 
         if len(thisResponsesList) > 0:
@@ -677,7 +677,7 @@ class RoutesHandler(webapp2.RequestHandler):
     def AdvertAccountCredit(self,strOrganizationID):
 
         from advertise import AddAccount
-        findRequest = AddAccount.query(AddAccount.strOrganizationID == strOrganizationID)
+        findRequest = AddAccount.query(AddAccount.organization_id == strOrganizationID)
         thisAdvertiseAccountList = findRequest.fetch()
 
         if len(thisAdvertiseAccountList) > 0:
@@ -687,7 +687,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
         self.response.headers['Content-Type'] = "application/json"
         template = template_env.get_template('templates/api/credit.json')
-        context = {'strTotalCredits': thisAdvertAccount.strTotalCredits}
+        context = {'total_credits': thisAdvertAccount.total_credits}
         self.response.write(template.render(context))
     def BuildSurveyHandler(self,strQuestion,strAnswers,strOrganizationID,strSurveyID=None,strName=None,strDescription=None):
         """
@@ -803,12 +803,12 @@ class RoutesHandler(webapp2.RequestHandler):
                 if len(thisSurveyAccountList) > 0:
                     thisSurveyAccount =  thisSurveyAccountList[0]
 
-                    if thisSurveyAccount.strTotalCredits > int(strCreditLimit):
-                        thisSurveyAccount.strTotalCredits = thisSurveyAccount.strTotalCredits - int(strCreditLimit)
+                    if thisSurveyAccount.total_credits > int(strCreditLimit):
+                        thisSurveyAccount.total_credits = thisSurveyAccount.total_credits - int(strCreditLimit)
                         thisSurveyAccount.put()
                         thisSurvey.writeRunFromCredit(strinput=True)
                         thisSurvey.writeSurveyIsPaid(strinput=True)
-                        thisSurvey.strAssignedCredit += int(strCreditLimit)
+                        thisSurvey.assigned_credit += int(strCreditLimit)
                         thisSurvey.writeSurveyStatus(strinput="Scheduled")
                         thisSurvey.put()
                         #Build survey init also works for returning survey status
@@ -837,7 +837,7 @@ class RoutesHandler(webapp2.RequestHandler):
     def SurveyStatus(self,strSurveyID):
         """
             using survey reference number return status
-        :param strRef:
+        :param reference:
         :return:
         """
         from surveys import Surveys
@@ -860,7 +860,7 @@ class RoutesHandler(webapp2.RequestHandler):
     def SurveyResponses(self,strSurveyID):
         """
             return survey responses
-        :param strRef:
+        :param reference:
         :return:
         """
         from surveys import MultiChoiceSurveyAnswers
@@ -886,7 +886,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
         self.response.headers['Content-Type'] = "application/json"
         template = template_env.get_template('templates/api/credit.json')
-        context = {'strTotalCredits': thisSurveyAccount.strTotalCredits}
+        context = {'total_credits': thisSurveyAccount.strTotalCredits}
         self.response.write(template.render(context))
     def SendFax(self,strFaxMediaURL,strFaxNumber,thisEndPoint):
         from myfax import FaxAccount,FaxSettings,SentFax
@@ -902,7 +902,7 @@ class RoutesHandler(webapp2.RequestHandler):
             if thisFaxAccount.strCreditInPages > 0:
                 #TODO- Check which portal to use if clicksend download the file and send if Twilio send as is
 
-                if thisFaxAccount.strUsePortal == "ClickSend":
+                if thisFaxAccount.use_portal == "ClickSend":
 
                     thisPortal = ClickSendSMSPortal()
                     strFaxFileName = "" #TODO find a way to download the file from the link  provided
@@ -910,7 +910,7 @@ class RoutesHandler(webapp2.RequestHandler):
                     #TODO- generate a reference number to go with the fax, this will allow status messages
                     #TODO- Save the fax reference number on the sent faxes class and then a response back to the client app
 
-                elif thisFaxAccount.strUsePortal == "Twilio":
+                elif thisFaxAccount.use_portal == "Twilio":
                     thisPortal = MyTwilioPortal()
                     findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisEndPoint.organization_id)
                     thisFaxSettingsList = findRequest.fetch()
@@ -940,7 +940,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
                         self.response.headers['Content-Type'] = "application/json"
                         template = template_env.get_template('templates/api/sendfax.json')
-                        context = {'strRef': strRef}
+                        context = {'reference': strRef}
                         self.response.write(template.render(context))
     def FaxStatus(self,strRef):
         pass
@@ -960,7 +960,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
         self.response.headers['Content-Type'] = "application/json"
         template = template_env.get_template('templates/api/credit.json')
-        context = {'strTotalCredits': thisFaxAccount.strCreditInPages}
+        context = {'total_credits': thisFaxAccount.strCreditInPages}
         self.response.write(template.render(context))
 
     def get(self):
@@ -1122,7 +1122,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             self.BuildSurveyHandler(strQuestion=strQuestion,strAnswers=strAnswers,strOrganizationID=strOrganizationID,strSurveyID=strSurveyID,strName=strName,strDescription=strDescription)
 
                         elif strFunction == "survey-set":
-                            #def SetSurveyHandler(self, strSurvey, strStartDate, strStartTime, strCreditLimit):
+                            #def SetSurveyHandler(self, strSurvey, start_date, start_time, strCreditLimit):
                             strOrganizationID = self.request.get('org-id')
                             strSurveyID = self.request.get('survey-id')
                             strStartDate = self.request.get('start-date')

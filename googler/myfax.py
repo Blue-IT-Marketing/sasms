@@ -2097,13 +2097,13 @@ class MyFaxHandler(webapp2.RequestHandler):
                         thisFaxAccount.writeTotalTopUpCost(strinput=strTotalCost)
                         thisFaxAccount.writeTopUpCredit(strinput=vstrAddCredits)
                         thisFaxAccount.writeTopUpReference(strinput=thisFaxAccount.CreateTopUpReference())
-                        thisFaxAccount.CreateTopUpInvoiceLink(strinput=thisFaxAccount.strTopUpReference)
+                        thisFaxAccount.CreateTopUpInvoiceLink(strinput=thisFaxAccount.top_up_reference)
                         thisFaxAccount.writePayByDate(strinput=strPayByDate)
                         thisFaxAccount.writeDateInvoiceCreated(strinput=strThisDate)
                         thisFaxAccount.put()
                         self.response.write("""
                         Top up Credit Successfully processed please click on this link to view your 
-                        <strong><a href=" """ + thisFaxAccount.strTopUpInvoiceLink + """ ">Proforma Invoice</a></strong>""")
+                        <strong><a href=" """ + thisFaxAccount.top_up_invoice_link + """ ">Proforma Invoice</a></strong>""")
 
         elif vstrChoice == "6":
 
@@ -2324,9 +2324,9 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                         thisVerifications.writeOrganizationID(strinput=thisFaxAccount.organization_id)
                         strFax = "FAX"
                         thisVerifications.writeAccountName(strinput=strFax)
-                        thisVerifications.writeCreditAmount(strinput=thisFaxAccount.strTotalTopUpCost)
+                        thisVerifications.writeCreditAmount(strinput=thisFaxAccount.total_top_up_cost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)
-                        thisVerifications.writeSMSCredits(strinput=thisFaxAccount.strTopUpCredit)
+                        thisVerifications.writeSMSCredits(strinput=thisFaxAccount.top_up_credit)
                         thisVerifications.writeTopUpReference(strinput=vstrYourReferenceNumber)
                         thisVerifications.writeVerified(strinput=False)
                         thisVerifications.put()
@@ -2340,9 +2340,9 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                         thisVerifications.writeOrganizationID(strinput=thisFaxAccount.organization_id)
                         strFax = "FAX"
                         thisVerifications.writeAccountName(strinput=strFax)
-                        thisVerifications.writeCreditAmount(strinput=thisFaxAccount.strTotalTopUpCost)
+                        thisVerifications.writeCreditAmount(strinput=thisFaxAccount.total_top_up_cost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)
-                        thisVerifications.writeSMSCredits(strinput=thisFaxAccount.strTopUpCredit)
+                        thisVerifications.writeSMSCredits(strinput=thisFaxAccount.top_up_credit)
                         thisVerifications.writeTopUpReference(strinput=vstrTopUpReference)
                         thisVerifications.writeVerified(strinput=False)
                         thisVerifications.put()

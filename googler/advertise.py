@@ -1,15 +1,10 @@
 import os
-from google.appengine.ext import blobstore
-from google.appengine.ext.webapp import blobstore_handlers
-import webapp2
 import jinja2
-from google.appengine.ext import ndb
-from google.appengine.api import users
+from google.cloud import ndb
 
 
 import logging
 import datetime
-from google.appengine.api import app_identity
 
 from accounts import Accounts
 from dashboard import AccountDetails
@@ -19,17 +14,17 @@ from mysms import SMSPortalBudget
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
 
-class OurContacts(ndb.Expando):
+class OurContacts(ndb.Model):
     """
         This are system contacts uploaded by Blue IT Marketing from the dashboard
         ref is the message reference
     """
-    strContactID = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strCell = ndb.StringProperty()
+    contact_id = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    cell = ndb.StringProperty()
 
-    strEmail = ndb.StringProperty()
+    email = ndb.StringProperty()
 
     def CreateContactID(self):
         import random,string
@@ -44,7 +39,7 @@ class OurContacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strContactID = strinput
+                self.contact_id = strinput
                 return True
             else:
                 return False
@@ -54,7 +49,7 @@ class OurContacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
@@ -64,7 +59,7 @@ class OurContacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
@@ -74,7 +69,7 @@ class OurContacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -84,7 +79,7 @@ class OurContacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -96,38 +91,38 @@ class OurContacts(ndb.Expando):
 ######################################################################
 ######################################################################
 
-class AddAccount(ndb.Expando):
+class AddAccount(ndb.Model):
     """
         Advertising Account
     """
-    strUserID = ndb.StringProperty()
-    strAccountID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strTel = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
-    strWebsite = ndb.StringProperty()
+    uid = ndb.StringProperty()
+    account_id = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    tel = ndb.StringProperty()
+    email = ndb.StringProperty()
+    website = ndb.StringProperty()
 
-    strDate = ndb.DateProperty(auto_now_add=True)
-    strTime = ndb.TimeProperty(auto_now_add=True)
-    strTotalCredits = ndb.IntegerProperty(default=0)
+    date = ndb.DateProperty(auto_now_add=True)
+    time = ndb.TimeProperty(auto_now_add=True)
+    total_credits = ndb.IntegerProperty(default=0)
 
-    strTotalTopUpCost = ndb.IntegerProperty(default=0)
-    strTopUpCredit = ndb.IntegerProperty(default=0)
-    strTopUpReference = ndb.StringProperty()
-    strTopUpInvoiceLink = ndb.StringProperty(default="/adverts/topup/invoice/")
-    strPayByDate = ndb.DateProperty()
-    strDateInvoiceCreated = ndb.DateProperty()
-    strDepositSlipFileName = ndb.StringProperty()
+    total_top_up_cost = ndb.IntegerProperty(default=0)
+    top_up_credit = ndb.IntegerProperty(default=0)
+    top_up_reference = ndb.StringProperty()
+    top_up_invoice_link = ndb.StringProperty(default="/adverts/topup/invoice/")
+    pay_by_date = ndb.DateProperty()
+    date_invoice_created = ndb.DateProperty()
+    deposit_slip_filename = ndb.StringProperty()
 
 
     def writeDepositSlipFilename(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDepositSlipFileName = strinput
+                self.deposit_slip_filename = strinput
                 return True
             else:
                 return False
@@ -136,7 +131,7 @@ class AddAccount(ndb.Expando):
     def writeDateInvoiceCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateInvoiceCreated = strinput
+                self.date_invoice_created = strinput
                 return True
             else:
                 return False
@@ -145,7 +140,7 @@ class AddAccount(ndb.Expando):
     def writePayByDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strPayByDate = strinput
+                self.pay_by_date = strinput
                 return True
             else:
                 return False
@@ -155,7 +150,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTotalTopUpCost = int(strinput)
+                self.total_top_up_cost = int(strinput)
                 return True
             else:
                 return False
@@ -170,7 +165,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTopUpInvoiceLink = "/adverts/topup/invoice/" +  strinput
+                self.top_up_invoice_link = "/adverts/topup/invoice/" + strinput
                 return True
             else:
                 return False
@@ -180,7 +175,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTopUpReference = strinput
+                self.top_up_reference = strinput
                 return True
             else:
                 return False
@@ -190,7 +185,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTopUpCredit = int(strinput)
+                self.top_up_credit = int(strinput)
                 return True
             else:
                 return False
@@ -210,7 +205,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTotalCredits = int(strinput)
+                self.total_credits = int(strinput)
                 return True
             else:
                 return False
@@ -220,7 +215,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -233,7 +228,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -243,7 +238,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
@@ -253,7 +248,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
@@ -263,7 +258,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -273,7 +268,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -283,7 +278,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strWebsite = strinput
+                self.website = strinput
                 return True
             else:
                 return False
@@ -293,7 +288,7 @@ class AddAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccountID = strinput
+                self.account_id = strinput
                 return True
             else:
                 return False
@@ -312,7 +307,7 @@ class AddAccount(ndb.Expando):
     def writeDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDate = strinput
+                self.date = strinput
                 return True
             else:
                 return False
@@ -321,36 +316,36 @@ class AddAccount(ndb.Expando):
     def writeTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTime = strinput
+                self.time = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class Advert(ndb.Expando):
-    strUserID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
+class Advert(ndb.Model):
+    uid = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
 
-    strAccountID = ndb.StringProperty()
-    strAdvertID = ndb.StringProperty()
+    account_id = ndb.StringProperty()
+    advert_id = ndb.StringProperty()
 
-    strAdvert = ndb.StringProperty()
-    strAdvertSize = ndb.IntegerProperty(default=1)
+    advert = ndb.StringProperty()
+    advert_size = ndb.IntegerProperty(default=1)
 
-    strDateCreated = ndb.DateProperty(auto_now_add=True)
-    strTimeCreated = ndb.TimeProperty(auto_now_add=True)
+    date_created = ndb.DateProperty(auto_now_add=True)
+    time_created = ndb.TimeProperty(auto_now_add=True)
 
-    strStartDate = ndb.DateProperty()
-    strStartTime = ndb.TimeProperty()
+    start_date = ndb.DateProperty()
+    start_time = ndb.TimeProperty()
 
-    strAdvertStatus = ndb.StringProperty(default="Scheduled") # Running, Completed, Scheduled
-    strAdvertIsPaid = ndb.BooleanProperty(default=False)
+    advert_status = ndb.StringProperty(default="Scheduled") # Running, Completed, Scheduled
+    advert_is_paid = ndb.BooleanProperty(default=False)
 
-    strAssignedCredit = ndb.IntegerProperty(default=0)
-    strRunFromCredit = ndb.BooleanProperty(default=False)
+    assigned_credit = ndb.IntegerProperty(default=0)
+    run_from_credit = ndb.BooleanProperty(default=False)
 
-    strUsePortal = ndb.StringProperty(default="Budget") # ClickSend Twilio Vodacom
+    use_portal = ndb.StringProperty(default="Budget") # ClickSend Twilio Vodacom
 
 
     def writeUsePortal(self,strinput):
@@ -358,7 +353,7 @@ class Advert(ndb.Expando):
             strinput = str(strinput)
 
             if strinput != None:
-                self.strUsePortal = strinput
+                self.use_portal = strinput
                 return True
             else:
                 return False
@@ -370,7 +365,7 @@ class Advert(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strAssignedCredit += int(strinput)
+                self.assigned_credit += int(strinput)
                 return True
             else:
                 return False
@@ -381,7 +376,7 @@ class Advert(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAdvertSize = int(strinput)
+                self.advert_size = int(strinput)
                 return True
             else:
                 return False
@@ -391,7 +386,7 @@ class Advert(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -401,7 +396,7 @@ class Advert(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -411,7 +406,7 @@ class Advert(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccountID = strinput
+                self.account_id = strinput
                 return True
             else:
                 return False
@@ -421,7 +416,7 @@ class Advert(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAdvertID = strinput
+                self.advert_id = strinput
                 return True
             else:
                 return False
@@ -440,7 +435,7 @@ class Advert(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAdvert = strinput
+                self.advert = strinput
                 return True
             else:
                 return False
@@ -450,7 +445,7 @@ class Advert(ndb.Expando):
     def writeDateCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateCreated = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -459,7 +454,7 @@ class Advert(ndb.Expando):
     def writeTimeCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeCreated = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -468,7 +463,7 @@ class Advert(ndb.Expando):
     def writeStartDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strStartDate = strinput
+                self.start_date = strinput
                 return True
             else:
                 return False
@@ -477,7 +472,7 @@ class Advert(ndb.Expando):
     def writeStartTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strStartTime = strinput
+                self.start_time = strinput
                 return True
             else:
                 return False
@@ -487,7 +482,7 @@ class Advert(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ["Scheduled","Running","Completed"]:
-                self.strAdvertStatus = strinput
+                self.advert_status = strinput
                 return True
             else:
                 return False
@@ -496,7 +491,7 @@ class Advert(ndb.Expando):
     def writeAdvertIsPaid(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strAdvertIsPaid = strinput
+                self.advert_is_paid = strinput
                 return True
             else:
                 return False
@@ -506,30 +501,30 @@ class Advert(ndb.Expando):
     def writeRunFromCredit(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strRunFromCredit = strinput
+                self.run_from_credit = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class Stats(ndb.Expando):
+class Stats(ndb.Model):
     """
         TODO- Order ID was not originally included make sure it is included in all places
     """
-    strAdvertID = ndb.StringProperty()
-    strOrderID = ndb.StringProperty()
-    strTotalSent = ndb.IntegerProperty(default=0)
-    strTotalRemaining = ndb.IntegerProperty(default=0)
-    strTotalResponses = ndb.IntegerProperty(default=0)
-    strNoResponse = ndb.IntegerProperty(default=0)
+    advert_id = ndb.StringProperty()
+    order_id = ndb.StringProperty()
+    total_sent = ndb.IntegerProperty(default=0)
+    total_remaining = ndb.IntegerProperty(default=0)
+    total_responses = ndb.IntegerProperty(default=0)
+    no_response = ndb.IntegerProperty(default=0)
 
 
     def writeAdvertID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAdvertID = strinput
+                self.advert_id = strinput
                 return True
             else:
                 return False
@@ -541,7 +536,7 @@ class Stats(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrderID = strinput
+                self.order_id = strinput
                 return True
             else:
                 return False
@@ -552,7 +547,7 @@ class Stats(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTotalSent = int(strinput)
+                self.total_sent = int(strinput)
                 return True
             else:
                 return False
@@ -563,7 +558,7 @@ class Stats(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTotalRemaining = int(strinput)
+                self.total_remaining = int(strinput)
                 return True
             else:
                 return False
@@ -574,7 +569,7 @@ class Stats(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strNoResponse = int(strinput)
+                self.no_response = int(strinput)
                 return True
             else:
                 return False
@@ -586,18 +581,18 @@ class Responses(ndb.Expando):
         Use the Sent Report Class to obtain references for sent messages
         and then populate this class with all messages that were actually sent
     """
-    strAdvertID = ndb.StringProperty()
-    strRef = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strResponse = ndb.StringProperty()
-    strDateReceived = ndb.DateProperty(auto_now_add=True)
-    strTimeReceived = ndb.TimeProperty(auto_now_add=True)
+    advert_id = ndb.StringProperty()
+    reference = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    response = ndb.StringProperty()
+    date_received = ndb.DateProperty(auto_now_add=True)
+    time_received = ndb.TimeProperty(auto_now_add=True)
 
     def writeAdvertID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAdvertID = strinput
+                self.advert_id = strinput
                 return True
             else:
                 return False
@@ -608,7 +603,7 @@ class Responses(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strRef = strinput
+                self.reference = strinput
                 return True
             else:
                 return False
@@ -628,7 +623,7 @@ class Responses(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -639,7 +634,7 @@ class Responses(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strResponse = strinput
+                self.response = strinput
                 return True
             else:
                 return False
@@ -649,7 +644,7 @@ class Responses(ndb.Expando):
     def writeDateReceived(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateReceived = strinput
+                self.date_received = strinput
                 return True
             else:
                 return False
@@ -659,7 +654,7 @@ class Responses(ndb.Expando):
     def writeTimeReceived(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeReceived = strinput
+                self.time_received = strinput
                 return True
             else:
                 return False
@@ -667,19 +662,19 @@ class Responses(ndb.Expando):
             return False
 
 class SentReport(ndb.Expando):
-    strReportID = ndb.StringProperty()
-    strAdvertID = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strRef = ndb.StringProperty() # Message Reference for getting back a response
-    strOrderID = ndb.StringProperty()
-    strDateSent = ndb.DateProperty(auto_now_add=True)
-    strTimeSent = ndb.TimeProperty(auto_now_add=True)
-    strAdvertSent = ndb.BooleanProperty(default=True)
-    strMessageStatus = ndb.StringProperty(default="Sent") # Delivered, Undelivered
-    strReportDone = ndb.BooleanProperty(default=False)
-    strResponseChecked = ndb.BooleanProperty(default=False)
+    report_id = ndb.StringProperty()
+    advert_id = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    ref = ndb.StringProperty() # Message Reference for getting back a response
+    order_id = ndb.StringProperty()
+    date_sent = ndb.DateProperty(auto_now_add=True)
+    time_sent = ndb.TimeProperty(auto_now_add=True)
+    advert_sent = ndb.BooleanProperty(default=True)
+    message_status = ndb.StringProperty(default="Sent") # Delivered, Undelivered
+    report_done = ndb.BooleanProperty(default=False)
+    response_checked = ndb.BooleanProperty(default=False)
 
-    strPortalUsed = ndb.StringProperty(default="Budget") # Twilio ClickSend Vodacom
+    portal_used = ndb.StringProperty(default="Budget") # Twilio ClickSend Vodacom
 
     def writePortalUsed(self,strinput):
         try:
@@ -687,7 +682,7 @@ class SentReport(ndb.Expando):
             strinput = strinput.strip()
             strinput = strinput.capitalize()
             if strinput in ["Budget","Twilio","ClickSend","Vodacom"]:
-                self.strPortalUsed = strinput
+                self.portal_used = strinput
                 return True
             else:
                 return False
@@ -699,7 +694,7 @@ class SentReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAdvertID = strinput
+                self.advert_id = strinput
                 return True
             else:
                 return False
@@ -709,7 +704,7 @@ class SentReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strReportID = strinput
+                self.report_id = strinput
                 return True
             else:
                 return False
@@ -719,7 +714,7 @@ class SentReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -730,7 +725,7 @@ class SentReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrderID = strinput
+                self.order_id = strinput
                 return True
             else:
                 return False
@@ -739,7 +734,7 @@ class SentReport(ndb.Expando):
     def writeDateSent(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateSent = strinput
+                self.date_sent = strinput
                 return True
             else:
                 return False
@@ -748,7 +743,7 @@ class SentReport(ndb.Expando):
     def writeTimeSent(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeSent = strinput
+                self.time_sent = strinput
                 return True
             else:
                 return False
@@ -757,7 +752,7 @@ class SentReport(ndb.Expando):
     def writeAdvertSent(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strAdvertSent = strinput
+                self.advert_sent = strinput
                 return True
             else:
                 return False
@@ -767,7 +762,7 @@ class SentReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessageStatus = strinput
+                self.message_status = strinput
                 return True
             else:
                 return False
@@ -777,7 +772,7 @@ class SentReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strRef = strinput
+                self.ref = strinput
                 return True
             else:
                 return False
@@ -796,7 +791,7 @@ class SentReport(ndb.Expando):
     def writeReportDone(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strReportDone = strinput
+                self.report_done = strinput
                 return True
             else:
                 return False
@@ -806,7 +801,7 @@ class SentReport(ndb.Expando):
     def writeResponseChecked(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strResponseChecked = strinput
+                self.response_checked = strinput
                 return True
             else:
                 return False
@@ -1213,7 +1208,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 if thisMainAccount.verified:
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
+                    findRequest = AddAccount.query(AddAccount.organization_id == thisMainAccount.organization_id)
                     thisAddAccountList = findRequest.fetch()
 
                     if len(thisAddAccountList) > 0:
@@ -1258,7 +1253,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = AddAccount.query(AddAccount.organization_id == thisMainAccount.organization_id)
                 thisAddAccountList = findRequest.fetch()
 
                 if len(thisAddAccountList) > 0:
@@ -1289,7 +1284,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
                 if thisMainAccount.verified:
 
-                    findRequest = Advert.query(Advert.strOrganizationID == thisMainAccount.organization_id)
+                    findRequest = Advert.query(Advert.organization_id == thisMainAccount.organization_id)
                     thisAdvertList = findRequest.fetch()
 
                     template = template_env.get_template('templates/advertise/sub/adverts.html')
@@ -1353,7 +1348,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = AddAccount.query(AddAccount.organization_id == thisMainAccount.organization_id)
                 thisAddAccountList = findRequest.fetch()
 
                 if len(thisAddAccountList) > 0:
@@ -1361,7 +1356,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
                     thisAdvert = Advert()
                     thisAdvert.writeUserID(strinput=vstrUserID)
-                    thisAdvert.writeAccountID(strinput=thisAddAccount.strAccountID)
+                    thisAdvert.writeAccountID(strinput=thisAddAccount.account_id)
                     thisAdvert.writeOrganizationID(strinput=thisAddAccount.organization_id)
                     thisAdvert.writeAdvertID(strinput=thisAdvert.CreateAdvertID())
                     thisAdvert.writeAdvert(strinput=vstrAdvert)
@@ -1372,7 +1367,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                     thisAdvert.put()
 
                     thisStats = Stats()
-                    thisStats.writeAdvertID(strinput=thisAdvert.strAdvertID)
+                    thisStats.writeAdvertID(strinput=thisAdvert.advert_id)
                     thisStats.writeTotalRemaining(strinput=str(vstrPackage))
                     thisStats.put()
 
@@ -1394,7 +1389,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
                     thisOrder.writeQuoteAmount(strinput=strQuoteAmount)
                     thisOrder.writeOrderID(strinput=thisOrder.CreateOrderID())
-                    thisOrder.writeAdvertID(strinput=thisAdvert.strAdvertID)
+                    thisOrder.writeAdvertID(strinput=thisAdvert.advert_id)
                     thisOrder.writeOrderStartDate(strinput=strThisStartDate)
                     thisOrder.writeOrderStartTime(strinput=strThisTime)
                     thisOrder.writeOrderCompleted(strinput=False)
@@ -1472,7 +1467,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = AddAccount.query(AddAccount.organization_id == thisMainAccount.organization_id)
                 thisAdvertAccountList = findRequest.fetch()
 
                 findRequest = SMSPortalBudget.query()
@@ -1496,18 +1491,18 @@ class AdvertiseHandler(webapp2.RequestHandler):
                         thisAdvertAccount.writeTotalTopUpCost(strinput=strTotalCost)
                         #thisAdvertAccount.writeTotalCredits(strinput=vstrAddCredits)
                         thisAdvertAccount.writeTopUpCredit(strinput=vstrAddCredits) #Will be added to Total Credits on verification of payment
-                        logging.info(thisAdvertAccount.strTotalTopUpCost)
+                        logging.info(thisAdvertAccount.total_top_up_cost)
                         thisAdvertAccount.writeTopUpReference(strinput=thisAdvertAccount.CreateTopUpReference())
-                        thisAdvertAccount.CreateTopUpInvoiceLink(strinput=thisAdvertAccount.strTopUpReference)
+                        thisAdvertAccount.CreateTopUpInvoiceLink(strinput=thisAdvertAccount.top_up_reference)
                         thisAdvertAccount.writePayByDate(strinput=strPayByDate)
                         thisAdvertAccount.writeDateInvoiceCreated(strinput=strThisDate)
                         thisAdvertAccount.put()
-                        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
+                        findRequest = AddAccount.query(AddAccount.organization_id == thisMainAccount.organization_id)
                         thisAdvertAccountList = findRequest.fetch()
                         if len(thisAdvertAccountList) > 0:
                             thisAdvertAccount = thisAdvertAccountList[0]
                             self.response.write("""
-                            Top Up Credit successfully processed please click on this link to view your <strong><a href=" """ + thisAdvertAccount.strTopUpInvoiceLink + """ ">Proforma Invoice</a></strong>
+                            Top Up Credit successfully processed please click on this link to view your <strong><a href=" """ + thisAdvertAccount.top_up_invoice_link + """ ">Proforma Invoice</a></strong>
                             """)
 
         elif vstrChoice == "7":
@@ -1520,11 +1515,11 @@ class AdvertiseHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Advert.query(Advert.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = Advert.query(Advert.organization_id == thisMainAccount.organization_id)
                 thisAdvertsList = findRequest.fetch()
                 strTotalAdverts = len(thisAdvertsList)
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = AddAccount.query(AddAccount.organization_id == thisMainAccount.organization_id)
                 thisAdvertiseAccountList = findRequest.fetch()
                 if len(thisAdvertiseAccountList) > 0:
                     thisAdvertAccount = thisAdvertiseAccountList[0]
@@ -1542,13 +1537,13 @@ class ThisAdvertHandler(webapp2.RequestHandler):
         strURLlist = URL.split('/')
         strAdvertID = strURLlist[len(strURLlist) - 1]
 
-        findRequest = Advert.query(Advert.strAdvertID == strAdvertID)
+        findRequest = Advert.query(Advert.advert_id == strAdvertID)
         thisAdvertList = findRequest.fetch()
 
         if len(thisAdvertList) > 0:
             thisAdvert = thisAdvertList[0]
 
-            findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.organization_id)
+            findRequest = AddAccount.query(AddAccount.organization_id == thisAdvert.organization_id)
             thisAdvertisingAccountList = findRequest.fetch()
 
             if len(thisAdvertisingAccountList) > 0:
@@ -1577,12 +1572,12 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Advert.query(Advert.strAdvertID == strAdvertID)
+                findRequest = Advert.query(Advert.advert_id == strAdvertID)
                 thisAdvertList = findRequest.fetch()
 
                 if len(thisAdvertList) > 0:
                     thisAdvert = thisAdvertList[0]
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.organization_id)
+                    findRequest = AddAccount.query(AddAccount.organization_id == thisAdvert.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
                     if len(thisAdvertAccountList) > 0:
                         thisAdvertAccount = thisAdvertAccountList[0]
@@ -1652,7 +1647,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                     strThisTime = datetime.datetime.now()
                     strThisTime = datetime.time(hour=strThisTime.hour,minute=strThisTime.minute,second=strThisTime.second)
 
-                findRequest = Advert.query(Advert.strAdvertID == vstrAdvertID)
+                findRequest = Advert.query(Advert.advert_id == vstrAdvertID)
                 thisAdvertList = findRequest.fetch()
 
                 if len(thisAdvertList) > 0:
@@ -1678,7 +1673,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
-                findRequest = Stats.query(Stats.strAdvertID == vstrAdvertID)
+                findRequest = Stats.query(Stats.advert_id == vstrAdvertID)
                 thisStatsList = findRequest.fetch()
 
                 if len(thisStatsList) > 0:
@@ -1703,7 +1698,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
 
                 vstrAdvertID = self.request.get('vstrAdvertID')
 
-                findRequest = Advert.query(Advert.strAdvertID == vstrAdvertID)
+                findRequest = Advert.query(Advert.advert_id == vstrAdvertID)
                 thisAdvertList = findRequest.fetch()
 
                 if len(thisAdvertList) > 0:
@@ -1712,15 +1707,15 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                     thisAdvert = Advert()
 
 
-                if thisAdvert.strAdvertStatus in ["Running","Completed"]:
-                    findRequest = Orders.query(Orders.strAdvertID == thisAdvert.strAdvertID)
+                if thisAdvert.advert_status in ["Running", "Completed"]:
+                    findRequest = Orders.query(Orders.strAdvertID == thisAdvert.advert_id)
                     thisOrderList = findRequest.fetch()
                     #TODO-Please finish up the contacts functions allow it to load as many contacts as
                     #TODO-Possible and then start running adverts, also consider adding the contacts list
                     #TODO-on adverts, to make it easier for users to load their own contacts
 
 
-                findRequest = Responses.query(Responses.strAdvertID == vstrAdvertID)
+                findRequest = Responses.query(Responses.advert_id == vstrAdvertID)
                 thisResponsesList = findRequest.fetch()
 
                 template = template_env.get_template('templates/advertise/responses/advert.html')
@@ -1744,7 +1739,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
 
                 ThisPaymentsList = []
                 for thisOrder in thisOrdersList:
-                    findRequest = Payments.query(Payments.strOrderID == thisOrder.strOrderID)
+                    findRequest = Payments.query(Payments.strOrderID == thisOrder.order_id)
                     thisPaymentList = findRequest.fetch()
 
                     for thisPayment in thisPaymentList:
@@ -1755,14 +1750,14 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                 thisUpaidOrderList = findRequest.fetch()
 
 
-                findRequest = Advert.query(Advert.strAdvertID == vstrAdvertID)
+                findRequest = Advert.query(Advert.advert_id == vstrAdvertID)
                 thisAdvertList = findRequest.fetch()
 
                 if len(thisAdvertList) > 0:
                     thisAdvert = thisAdvertList[0]
 
 
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.organization_id)
+                    findRequest = AddAccount.query(AddAccount.organization_id == thisAdvert.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
 
                     if len(thisAdvertAccountList) > 0:
@@ -1833,7 +1828,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                 else:
                     thisBudget = SMSPortalBudget()
 
-                findRequest = Stats.query(Stats.strAdvertID == vstrAdvertID)
+                findRequest = Stats.query(Stats.advert_id == vstrAdvertID)
                 thisStatList = findRequest.fetch()
 
                 if len(thisStatList) > 0:
@@ -1851,7 +1846,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                 thisOrder.writeOrderCompleted(strinput=False)
                 thisOrder.writeItemCount(strinput=str(1))
                 thisOrder.put()
-                thisStats.writeTotalRemaining(strinput=str(thisStats.strTotalRemaining + int(vstrPackage)))
+                thisStats.writeTotalRemaining(strinput=str(thisStats.total_remaining + int(vstrPackage)))
                 thisStats.put()
                 self.response.write("Successfully created new order for advert")
 
@@ -1881,7 +1876,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                     thisOrder.writeDepositReference(strinput=thisOrder.CreatedDepositReference())
                     thisOrder.put()
 
-                    findRequest = Advert.query(Advert.strAdvertID == vstrAdvertID)
+                    findRequest = Advert.query(Advert.advert_id == vstrAdvertID)
                     thisAdvertList = findRequest.fetch()
 
                     if len(thisAdvertList) > 0:
@@ -1897,7 +1892,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                     else:
                         thisBlueITAccount = AccountDetails()
 
-                    findRequest = Organization.query(Organization.strOrganizationID == thisAdvert.strOrganizationID)
+                    findRequest = Organization.query(Organization.strOrganizationID == thisAdvert.organization_id)
                     thisOrgList = findRequest.fetch()
 
                     if len(thisOrgList) > 0:
@@ -1905,7 +1900,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                     else:
                         thisOrg = Organization()
 
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.strOrganizationID)
+                    findRequest = AddAccount.query(AddAccount.organization_id == thisAdvert.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
 
                     if len(thisAdvertAccountList) > 0:
@@ -1944,7 +1939,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                 else:
                     thisOrder = Orders()
 
-                findRequest = Advert.query(Advert.strAdvertID == vstrAdvertID)
+                findRequest = Advert.query(Advert.advert_id == vstrAdvertID)
                 thisAdvertList = findRequest.fetch()
 
                 if len(thisAdvertList) > 0:
@@ -1998,7 +1993,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Advert.query(Advert.strAdvertID == vstrAdvertID)
+                findRequest = Advert.query(Advert.advert_id == vstrAdvertID)
                 thisAdvertList = findRequest.fetch()
 
 
@@ -2014,7 +2009,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                         thisAdvert.put()
 
                         vstrAvailableCredit = int(vstrAvailableCredit) - int(vstrCreditToAssign)
-                        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.organization_id)
+                        findRequest = AddAccount.query(AddAccount.organization_id == thisAdvert.organization_id)
                         thisAdvertAccountList = findRequest.fetch()
 
                         if len(thisAdvertAccountList) > 0:
@@ -2045,7 +2040,7 @@ class ThisPaymentAdvertHandler(webapp2.RequestHandler):
         if len(thisOrderList) > 0:
             thisOrder = thisOrderList[0]
 
-            findRequest = Advert.query(Advert.strAdvertID == thisOrder.strAdvertID)
+            findRequest = Advert.query(Advert.advert_id == thisOrder.advert_id)
             thisAdvertList = findRequest.fetch()
 
             if len(thisAdvertList) > 0:
@@ -2086,7 +2081,7 @@ class ThisInvoiceHandler(webapp2.RequestHandler):
             else:
                 thisOrder = Orders()
 
-            findRequest = Advert.query(Advert.strAdvertID == thisOrder.strAdvertID)
+            findRequest = Advert.query(Advert.advert_id == thisOrder.strAdvertID)
             thisAdvertList = findRequest.fetch()
 
             if len(thisAdvertList) > 0:
@@ -2106,7 +2101,7 @@ class TopUpInvoiceHandler(webapp2.RequestHandler):
         strURLlist = URL.split("/")
         strTopUpReference = strURLlist[len(strURLlist) - 1]
 
-        findRequest = AddAccount.query(AddAccount.strTopUpReference == strTopUpReference)
+        findRequest = AddAccount.query(AddAccount.top_up_reference == strTopUpReference)
         thisAdvertAccountList = findRequest.fetch()
 
         if len(thisAdvertAccountList) > 0:
@@ -2114,7 +2109,7 @@ class TopUpInvoiceHandler(webapp2.RequestHandler):
         else:
             thisAdvertAccount = AddAccount()
 
-        findRequest = Organization.query(Organization.strOrganizationID == thisAdvertAccount.strOrganizationID)
+        findRequest = Organization.query(Organization.strOrganizationID == thisAdvertAccount.organization_id)
         thisOrganizationList = findRequest.fetch()
 
         if len(thisOrganizationList) > 0:
@@ -2152,7 +2147,7 @@ class TopUpInvoiceHandler(webapp2.RequestHandler):
                 vstrYourReferenceNumber = self.request.get("vstrYourReferenceNumber")
                 vstrDepositSlipFile = self.request.get("vstrDepositSlipFile")
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = AddAccount.query(AddAccount.organization_id == thisMainAccount.organization_id)
                 thisAdvertAccountList = findRequest.fetch()
 
                 if len(thisAdvertAccountList) > 0:
@@ -2163,9 +2158,9 @@ class TopUpInvoiceHandler(webapp2.RequestHandler):
                         thisVerifications = TopUpVerifications()
                         thisVerifications.writeOrganizationID(strinput=thisAdvertAccount.organization_id)
                         thisVerifications.writeAccountName(strinput="Adverts")
-                        thisVerifications.writeCreditAmount(strinput=thisAdvertAccount.strTotalTopUpCost)
+                        thisVerifications.writeCreditAmount(strinput=thisAdvertAccount.total_top_up_cost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)
-                        thisVerifications.writeSMSCredits(strinput=thisAdvertAccount.strTopUpCredit)
+                        thisVerifications.writeSMSCredits(strinput=thisAdvertAccount.top_up_credit)
                         thisVerifications.writeTopUpReference(strinput=vstrYourReferenceNumber)
                         thisVerifications.put()
                         self.response.write("Successfully Uploaded Deposit slip file : " + vstrDepositSlipFile)
@@ -2176,9 +2171,9 @@ class TopUpInvoiceHandler(webapp2.RequestHandler):
                         thisVerifications = TopUpVerifications()
                         thisVerifications.writeOrganizationID(strinput=thisAdvertAccount.organization_id)
                         thisVerifications.writeAccountName(strinput="Adverts")
-                        thisVerifications.writeCreditAmount(strinput=thisAdvertAccount.strTotalTopUpCost)
+                        thisVerifications.writeCreditAmount(strinput=thisAdvertAccount.total_top_up_cost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)
-                        thisVerifications.writeSMSCredits(strinput=thisAdvertAccount.strTopUpCredit)
+                        thisVerifications.writeSMSCredits(strinput=thisAdvertAccount.top_up_credit)
                         thisVerifications.writeTopUpReference(strinput=vstrTopUpReference)
                         thisVerifications.put()
                         self.response.write("Reference Verification Error, deposit will take longer to verify please use our support tickets to enquire if it takes more than three days")

@@ -255,7 +255,7 @@ def AdvertContactsHandler():
     thisSMSContactsList = findRequest.fetch()
 
     for thisSMSContact in thisSMSContactsList:
-        findRequest = OurContacts.query(OurContacts.strCell == thisSMSContact.strCellNumber)
+        findRequest = OurContacts.query(OurContacts.cell == thisSMSContact.strCellNumber)
         thisOurContactsList = findRequest.fetch()
 
         if len(thisOurContactsList) > 0:
@@ -277,7 +277,7 @@ def AdvertContactsHandler():
 
     for thisContact in thiSurveyContactList:
 
-        findRequest = OurContacts.query(OurContacts.strCell == thisContact.cell)
+        findRequest = OurContacts.query(OurContacts.cell == thisContact.cell)
         thisOurContactsList = findRequest.fetch()
 
         if len(thisOurContactsList) > 0:
@@ -316,7 +316,7 @@ def SendAdvertsHandler():
     i = 0
     j = 0
     for thisOrder in thisOrdersList:
-        findRequest = Advert.query(Advert.strAdvertID == thisOrder.strAdvertID)
+        findRequest = Advert.query(Advert.advert_id == thisOrder.advert_id)
         thisAdvertList = findRequest.fetch()
         if len(thisAdvertList) > 0:
             thisAdvert = thisAdvertList[0]
@@ -324,12 +324,12 @@ def SendAdvertsHandler():
                 if i < len(thisOurContactList):
                     try:
                         thisContact = thisOurContactList[i]
-                        ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.strAdvert,
+                        ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.advert,
                                                                strCell=thisContact.cell)
                         thisSentReport = SentReport()
                         thisSentReport.writeCell(strinput=thisContact.cell)
-                        thisSentReport.writeOrderID(strinput=thisOrder.strOrderID)
-                        thisSentReport.writeAdvertID(strinput=thisOrder.strAdvertID)
+                        thisSentReport.writeOrderID(strinput=thisOrder.order_id)
+                        thisSentReport.writeAdvertID(strinput=thisOrder.advert_id)
                         # thisSentReport.writeMessageStatus(strinput=thisPortalBudget.CheckMessageStatusByCell(cell=thisContact.cell))
                         # Check The Message status of all sent messages through a separate function
                         thisSentReport.writeAdvertSent(strinput=True)
@@ -353,8 +353,8 @@ def SendAdvertsHandler():
             thisAdvert.writeAdvertStatus(strinput="Completed")
             thisAdvert.put()
             thisStats = Stats()
-            thisStats.writeAdvertID(strinput=thisAdvert.strAdvertID)
-            thisStats.writeOrderID(strinput=thisOrder.strOrderID)
+            thisStats.writeAdvertID(strinput=thisAdvert.advert_id)
+            thisStats.writeOrderID(strinput=thisOrder.order_id)
             thisStats.writeTotalSent(strinput=i - j)
             thisStats.writeTotalRemaining(strinput=j)
             thisStats.put()
@@ -422,34 +422,34 @@ def SendAdvertCreditHandler():
     # TODO- and there is still credits available then the advert might run again the next day
 
     # TODO- if ran from credit and assigned credit is greator than 1 and scheduled for a previous date then schedule for the next date
-    findRequest = Advert.query(Advert.strAssignedCredit > 0, Advert.strRunFromCredit == True, Advert.strStartDate == strThisDate)
+    findRequest = Advert.query(Advert.assigned_credit > 0, Advert.run_from_credit == True, Advert.start_date == strThisDate)
     thisAdvertList = findRequest.fetch()
 
     for thisAdvert in thisAdvertList:
         i = 0
-        strStartingCredit = thisAdvert.strAssignedCredit
+        strStartingCredit = thisAdvert.assigned_credit
         sentList = []
 
-        while ((thisAdvert.strAssignedCredit > 0) and (i < len(thisOurContactList))):
+        while ((thisAdvert.assigned_credit > 0) and (i < len(thisOurContactList))):
             try:
 
                 thisContact = random.choice(thisOurContactList)
                 if not(thisContact.cell in sentList):
                     try:
-                        if thisAdvert.strUsePortal == "Budget":
-                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.strAdvert, strCell=thisContact.cell)
+                        if thisAdvert.use_portal == "Budget":
+                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.advert, strCell=thisContact.cell)
                             sentList.append(thisContact.cell)
-                        elif thisAdvert.strUsePortal == "ClickSend":
-                            ref = thisClickSendPortal.SendSMS(strCell=thisContact.cell, strMessage=thisAdvert.strAdvert)
+                        elif thisAdvert.use_portal == "ClickSend":
+                            ref = thisClickSendPortal.SendSMS(strCell=thisContact.cell, strMessage=thisAdvert.advert)
                             sentList.append(thisContact.cell)
 
-                        elif thisAdvert.strUsePortal == "Twilio":
-                            ref = thisTwilioPortal.sendSMS(strTo=thisContact.cell, strFrom=thisTwilioPortal.strMySMSNumber, strMessage=thisAdvert.strAdvert)
+                        elif thisAdvert.use_portal == "Twilio":
+                            ref = thisTwilioPortal.sendSMS(strTo=thisContact.cell, strFrom=thisTwilioPortal.strMySMSNumber, strMessage=thisAdvert.advert)
                             sentList.append(thisContact.cell)
-                        elif  thisAdvert.strUsePortal == "Vodacom":
+                        elif  thisAdvert.use_portal == "Vodacom":
                             sentList.append(thisContact.cell)
                         else:
-                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.strAdvert, strCell=thisContact.cell)
+                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.advert, strCell=thisContact.cell)
                             sentList.append(thisContact.cell)
                     except:
                         ref = None
@@ -458,7 +458,7 @@ def SendAdvertCreditHandler():
                     if ref != None:
                         thisSentReport = SentReport()
                         thisSentReport.writeCell(strinput=thisContact.cell)
-                        thisSentReport.writeAdvertID(strinput=thisAdvert.strAdvertID)
+                        thisSentReport.writeAdvertID(strinput=thisAdvert.advert_id)
                         # thisSentReport.writeMessageStatus(strinput=thisPortalBudget.CheckMessageStatusByCell(cell=thisContact.cell))
                         # Check The Message status of all sent messages through a separate function
                         thisSentReport.writeAdvertSent(strinput=True)
@@ -471,25 +471,25 @@ def SendAdvertCreditHandler():
                         thisSentReport.writeTimeSent(strinput=strThisTime)
                         thisSentReport.put()
                         i += 1
-                        thisAdvert.strAssignedCredit = thisAdvert.strAssignedCredit - 1
+                        thisAdvert.assigned_credit = thisAdvert.assigned_credit - 1
                     else:
                         pass
                 else:
                     pass
             except:
                 i += 1
-                thisAdvert.strAssignedCredit = thisAdvert.strAssignedCredit - 1
+                thisAdvert.assigned_credit = thisAdvert.assigned_credit - 1
 
-        if thisAdvert.strUsePortal == "Vodacom":
-            thisPortalVodacom.SendAdvert(strCellNumberList=sentList,strMessage=thisAdvert.strAdvert)
+        if thisAdvert.use_portal == "Vodacom":
+            thisPortalVodacom.SendAdvert(strCellNumberList=sentList, strMessage=thisAdvert.advert)
 
 
-        if thisAdvert.strAssignedCredit <= 0:
-            thisAdvert.strRunFromCredit = False
+        if thisAdvert.assigned_credit <= 0:
+            thisAdvert.run_from_credit = False
         thisAdvert.put()
 
         thisStats = Stats()
-        thisStats.writeAdvertID(strinput=thisAdvert.strAdvertID)
+        thisStats.writeAdvertID(strinput=thisAdvert.advert_id)
         thisStats.writeTotalSent(strinput=i)
         thisStats.writeTotalRemaining(strinput=(strStartingCredit - i))
         thisStats.put()
@@ -501,7 +501,7 @@ def RescheduleAdverts():
     vstrThisDate = datetime.datetime.now()
     strThisDate = vstrThisDate.date()
 
-    findRequest = Advert.query(Advert.strRunFromCredit == True, Advert.strStartDate < strThisDate)
+    findRequest = Advert.query(Advert.run_from_credit == True, Advert.start_date < strThisDate)
     thisAdvertList = findRequest.fetch()
 
     vstrThisDate = datetime.datetime.now()
@@ -510,8 +510,8 @@ def RescheduleAdverts():
 
     for thisAdvert in thisAdvertList:
         thisAdvert.writeStartDate(strinput=strThisDate)
-        if thisAdvert.strAssignedCredit > 0:
-            thisAdvert.strRunFromCredit = True
+        if thisAdvert.assigned_credit > 0:
+            thisAdvert.run_from_credit = True
             thisAdvert.writeAdvertStatus(strinput="Running")
         thisAdvert.put()
 
@@ -534,8 +534,8 @@ def BulkMessageStatus():
     strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute, second=vstrThisDate.second)
 
     #SENT Report is for adverts Delivery Report is for Bulk SMS,
-    findRequest = SentReport.query(SentReport.strReportDone == False, SentReport.strDateSent == strThisDate,
-                                   SentReport.strTimeSent <= strThisTime)
+    findRequest = SentReport.query(SentReport.report_done == False, SentReport.date_sent == strThisDate,
+                                   SentReport.time_sent <= strThisTime)
     thisSentReportList = findRequest.fetch()
 
     thisBudgetPortal = SMSPortalBudget()
@@ -543,14 +543,14 @@ def BulkMessageStatus():
     thisClickSendPortal = ClickSendSMSPortal()
 
     for thisReport in thisSentReportList:
-        if thisReport.strPortalUsed == "Budget":
-            thisReport.writeMessageStatus(strinput=thisBudgetPortal.CheckMessageStatus(strRef=thisReport.strRef, strCell=thisReport.cell))
+        if thisReport.portal_used == "Budget":
+            thisReport.writeMessageStatus(strinput=thisBudgetPortal.CheckMessageStatus(strRef=thisReport.reference, strCell=thisReport.cell))
             thisReport.writeReportDone(strinput=True)
             thisReport.put()
-        elif thisReport.strPortalUsed == "Twilio":
+        elif thisReport.portal_used == "Twilio":
             logging.info("Twilio uses it own callback URL to send status messages")
             pass
-        elif thisReport.strPortalUsed == "ClickSend":
+        elif thisReport.portal_used == "ClickSend":
             logging.info("Click Send also has its own callback URL for status messages")
         else:
             logging.info("Vodacom does not have a call back and a way to get responses has to be investigated")
@@ -574,8 +574,8 @@ def CheckAdvertsResponses():
     strIgnoreDate = strIgnoreDate.date()
 
     # TODO- Consider using this method in all response handlers
-    findRequest = SentReport.query(SentReport.strReportDone == True, SentReport.strResponseChecked == False,
-                                   SentReport.strDateSent == strThisDate)
+    findRequest = SentReport.query(SentReport.report_done == True, SentReport.response_checked == False,
+                                   SentReport.date_sent == strThisDate)
     thisSentReportList = findRequest.fetch()
 
     thisPortal = SMSPortalBudget()
@@ -583,11 +583,11 @@ def CheckAdvertsResponses():
         #TODO- Check the portal used to send the message in order to correctly obtain the response for the message
 
         try:
-            strResponse = thisPortal.CheckSpecificReply(strRef=thisReport.strRef)
+            strResponse = thisPortal.CheckSpecificReply(strRef=thisReport.reference)
             if not (strResponse == None):
                 ThisResponse = Responses() #This is a response for adverts only
                 ThisResponse.writeResponse(strinput=strResponse)
-                ThisResponse.writeAdvertID(strinput=thisReport.strAdvertID)
+                ThisResponse.writeAdvertID(strinput=thisReport.advert_id)
                 ThisResponse.writeReference(strinput=ThisResponse.CreateReference())
                 ThisResponse.writeCell(strinput=thisReport.cell)
 
@@ -605,16 +605,16 @@ def CheckAdvertsResponses():
             pass
 
     # Fixing older responses
-    findRequest = SentReport.query(SentReport.strReportDone == True, SentReport.strResponseChecked == False,
-                                   SentReport.strDateSent >= strIgnoreDate)
+    findRequest = SentReport.query(SentReport.report_done == True, SentReport.response_checked == False,
+                                   SentReport.date_sent >= strIgnoreDate)
     thisSentReportList = findRequest.fetch()
     thisPortal = SMSPortalBudget()
     for thisReport in thisSentReportList:
-        strResponse = thisPortal.CheckSpecificReply(strRef=thisReport.strRef)
+        strResponse = thisPortal.CheckSpecificReply(strRef=thisReport.reference)
         if not (strResponse == None):
             ThisResponse = Responses()
             ThisResponse.writeResponse(strinput=strResponse)
-            ThisResponse.writeAdvertID(strinput=thisReport.strAdvertID)
+            ThisResponse.writeAdvertID(strinput=thisReport.advert_id)
             ThisResponse.writeReference(strinput=ThisResponse.CreateReference())
             ThisResponse.writeCell(strinput=thisReport.cell)
             vstrThisDate = datetime.datetime.now()
@@ -629,8 +629,8 @@ def CheckAdvertsResponses():
             ThisResponse.put()
 
     # Making sure response older than ignore date will never be cheked again
-    findRequest = SentReport.query(SentReport.strReportDone == True, SentReport.strResponseChecked == False,
-                                   SentReport.strDateSent < strIgnoreDate)
+    findRequest = SentReport.query(SentReport.report_done == True, SentReport.response_checked == False,
+                                   SentReport.date_sent < strIgnoreDate)
     thisSentReportList = findRequest.fetch()
     for thisReport in thisSentReportList:
         thisReport.writeResponseChecked(strinput=True)
@@ -708,8 +708,8 @@ def CheckBulkSMSResponses():
     # thisDeliveyReportsList = findRequest.fetch()
     #
     # for normalize in thisDeliveyReportsList:
-    #     if normalize.strRef == None:
-    #         normalize.strRef = "11111"
+    #     if normalize.reference == None:
+    #         normalize.reference = "11111"
     #     normalize.put()
     #
     # # TODO-Code Fix ended here
@@ -721,8 +721,8 @@ def CheckBulkSMSResponses():
 
     thisPortal = SMSPortalBudget()
     for thisDelivery in thisDeliveryList:
-        if not (thisDelivery.strRef == "11111"):
-            strResponse = thisPortal.CheckSpecificReply(strRef=thisDelivery.strRef)
+        if not (thisDelivery.reference == "11111"):
+            strResponse = thisPortal.CheckSpecificReply(strRef=thisDelivery.reference)
 
             if not (strResponse == None):
                 strResponse = strResponse.strip()
@@ -936,8 +936,8 @@ def SurveysResponses():
         thisPortal = SMSPortalBudget()
 
     for thisTracker in thisSurveyTrackerList:
-        if thisTracker.strRef != None:
-            reply = thisPortal.CheckSpecificReply(strRef=thisTracker.strRef)
+        if thisTracker.reference != None:
+            reply = thisPortal.CheckSpecificReply(strRef=thisTracker.reference)
         else:
             reply = None
         if not (reply == None) and not ("error" in reply):
@@ -949,7 +949,7 @@ def SurveysResponses():
             reply = reply.strip()
             # TODO- Other reply parameters not saved ...Lots of work still needs to be done to finish up surveys
             thisSurveyAnswer.writeOptionNumber(strinput=reply)
-            thisSurveyAnswer.writeRef(strinput=thisTracker.strRef)
+            thisSurveyAnswer.writeRef(strinput=thisTracker.reference)
 
             findRequest = SurveyContacts.query(SurveyContacts.strCell == thisTracker.cell)
             thisContactList = findRequest.fetch()
@@ -998,7 +998,7 @@ def BulkSMSStatus():
 
         # TODO - There could be a timing issue with this task so it should process reports that are at least three minutes old
         #TODO - Check which Portal was used to send the message and act appropriately
-        strStatus = thisPortal.CheckMessageStatus(strRef=thisReport.strRef, strCell=thisReport.cell)
+        strStatus = thisPortal.CheckMessageStatus(strRef=thisReport.reference, strCell=thisReport.cell)
 
         if not (strStatus == None):
             thisReport.writeSendingStatus(strinput=strStatus)

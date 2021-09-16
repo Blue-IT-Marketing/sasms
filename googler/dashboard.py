@@ -886,7 +886,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                 vstrSurname = vstrSurname.strip()
                 vstrEmail = vstrEmail.strip()
 
-                findRequest = OurContacts.query(OurContacts.strCell == vstrCellNumber)
+                findRequest = OurContacts.query(OurContacts.cell == vstrCellNumber)
                 thisContactList = findRequest.fetch()
 
                 if len(thisContactList) > 0:
@@ -934,7 +934,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                             strNames = strNames.strip()
                             strSurname = strSurname.strip()
 
-                            findRequest = OurContacts.query(OurContacts.strCell == strCell)
+                            findRequest = OurContacts.query(OurContacts.cell == strCell)
                             thisContactList = findRequest.fetch()
 
                             if len(thisContactList) > 0:
@@ -958,7 +958,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                 vstrRemoveCell = self.request.get('vstrRemoveCell')
                 vstrRemoveCell = vstrRemoveCell.strip()
 
-                findRequest = OurContacts.query(OurContacts.strCell == vstrRemoveCell)
+                findRequest = OurContacts.query(OurContacts.cell == vstrRemoveCell)
                 thisContactList = findRequest.fetch()
 
                 for thisContact in thisContactList:
@@ -1221,15 +1221,15 @@ class thisTopUpVerificationHandler(webapp2.RequestHandler):
                 vstrAccountName = self.request.get('vstrAccountName')
 
                 if vstrAccountName == "Adverts":
-                    findRequest = AddAccount.query(AddAccount.strTopUpReference == vstrTopUpReference)
+                    findRequest = AddAccount.query(AddAccount.top_up_reference == vstrTopUpReference)
                     thisAdvertisingAccountList = findRequest.fetch()
 
                     if len(thisAdvertisingAccountList) > 0:
                         thisAdvertAccount = thisAdvertisingAccountList[0]
-                        thisAdvertAccount.strTotalCredits += thisAdvertAccount.strTopUpCredit
-                        thisAdvertAccount.strTopUpCredit = 0
+                        thisAdvertAccount.total_credits += thisAdvertAccount.top_up_credit
+                        thisAdvertAccount.top_up_credit = 0
 
-                        thisAdvertAccount.strTotalTopUpCost  = 0
+                        thisAdvertAccount.total_top_up_cost  = 0
 
                         thisAdvertAccount.put()
 
@@ -1241,9 +1241,9 @@ class thisTopUpVerificationHandler(webapp2.RequestHandler):
 
                     if len(thisSurveyAccountList) > 0:
                         thisSurveyAccount = thisSurveyAccountList[0]
-                        thisSurveyAccount.strTotalCredits += thisSurveyAccount.strTopUpCredit
-                        thisSurveyAccount.strTopUpCredit = 0
-                        thisSurveyAccount.strTotalTopUpCost = 0
+                        thisSurveyAccount.total_credits += thisSurveyAccount.top_up_credit
+                        thisSurveyAccount.top_up_credit = 0
+                        thisSurveyAccount.total_top_up_cost = 0
 
                         thisSurveyAccount.put()
                         # TODO-Consider Creating an Invoice for the payment here
@@ -1258,9 +1258,9 @@ class thisTopUpVerificationHandler(webapp2.RequestHandler):
                     if len(thisFaxAccountList) > 0:
                         thisFaxAccount = thisFaxAccountList[0]
 
-                        thisFaxAccount.strCreditInPages += thisFaxAccount.strTopUpCredit
-                        thisFaxAccount.strTopUpCredit = 0
-                        thisFaxAccount.strTotalTopUpCost = 0
+                        thisFaxAccount.strCreditInPages += thisFaxAccount.top_up_credit
+                        thisFaxAccount.top_up_credit = 0
+                        thisFaxAccount.total_top_up_cost = 0
                         thisFaxAccount.put()
                         # TODO-Consider Creating an Invoice for the payment here
 

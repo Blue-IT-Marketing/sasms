@@ -967,7 +967,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                         if thisSMSAccount.strTotalSMS > 0:
 
-                            if thisSMSAccount.strUsePortal == "Vodacom":
+                            if thisSMSAccount.use_portal == "Vodacom":
                                 findRequest = SMSPortalVodacom.query()
                                 thisVodaPortalList = findRequest.fetch()
                                 if len(thisVodaPortalList) > 0:
@@ -987,7 +987,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
                                 else:
                                     self.response.write("Error sending SMS Invitation")
 
-                            elif thisSMSAccount.strUsePortal == "Budget":
+                            elif thisSMSAccount.use_portal == "Budget":
                                 findRequest = SMSPortalBudget.query()
                                 thisBudgetPortalList = findRequest.fetch()
                                 if len(thisBudgetPortalList) > 0:
@@ -1004,7 +1004,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
                                 else:
                                     self.response.write("Error sending SMS Invitation")
 
-                            elif thisSMSAccount.strUsePortal == "Twilio":
+                            elif thisSMSAccount.use_portal == "Twilio":
                                 findRequest = MyTwilioPortal.query()
                                 myTwilioPortalList = findRequest.fetch()
 
@@ -1020,7 +1020,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
                                     self.response.write("Successfully sent an invite message")
                                 else:
                                     self.response.write("Error sending SMS Invitation")
-                            elif thisSMSAccount.strUsePortal == "ClickSend":
+                            elif thisSMSAccount.use_portal == "ClickSend":
                                 findRequest = ClickSendSMSPortal.query()
                                 MyClickSendPortalList = findRequest.fetch()
 
@@ -1483,7 +1483,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]
 
-                    if thisSMSAccount.strUsePortal == "Budget":
+                    if thisSMSAccount.use_portal == "Budget":
 
                         findRequest = SMSPortalBudget.query()
                         thisBudgetPortaList = findRequest.fetch()
@@ -1496,7 +1496,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                                 thisSMSAccount.put()
                                 self.response.write("Security Code successfully sent please enter the code")
 
-                    elif thisSMSAccount.strUsePortal == "Twilio":
+                    elif thisSMSAccount.use_portal == "Twilio":
                         findRequest = MyTwilioPortal.query()
                         MyTwilioPortalList = findRequest.fetch()
 
@@ -1510,7 +1510,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                             thisSMSAccount.put()
                             self.response.write("Security Code successfully sent please enter the code")
 
-                    elif thisSMSAccount.strUsePortal == "ClickSend":
+                    elif thisSMSAccount.use_portal == "ClickSend":
                         findRequest = ClickSendSMSPortal.query()
                         MyClickSendPortaList = findRequest.fetch()
 
@@ -1568,7 +1568,7 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
             thisAccount = Accounts()
 
         # The Advert being paid for
-        findRequest = Advert.query(Advert.strAdvertID == thisOrder.strAdvertID)
+        findRequest = Advert.query(Advert.advert_id == thisOrder.strAdvertID)
         thisAdvertList = findRequest.fetch()
 
         if len(thisAdvertList) > 0:
@@ -1729,7 +1729,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
             else:
                 thisSMSAccount = SMSAccount()
 
-            findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
+            findRequest = AddAccount.query(AddAccount.organization_id == thisAccount.organization_id)
             thisAddAccountList = findRequest.fetch()
 
             if len(thisAddAccountList) > 0:
@@ -1781,7 +1781,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = AddAccount.query(AddAccount.organization_id == thisAccount.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
 
                     if len(thisAdvertAccountList) > 0:
@@ -1794,7 +1794,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                             thisSMSAccount = thisSMSAccountList[0]
                             if (thisSMSAccount.strTotalSMS >= int(vstrBulkCredits)) and (int(vstrBulkCredits) > 10):
                                 thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - int(vstrBulkCredits)
-                                thisAdvertAccount.strTotalCredits += int(vstrBulkCredits)
+                                thisAdvertAccount.total_credits += int(vstrBulkCredits)
                                 thisSMSAccount.put()
                                 thisAdvertAccount.put()
                                 self.response.write(
@@ -1828,7 +1828,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                             thisSMSAccount = thisSMSAccountList[0]
                             if (thisSMSAccount.strTotalSMS >= int(vstrBulkCredits)) and (int(vstrBulkCredits) > 10):
                                 thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - int(vstrBulkCredits)
-                                thisSurveyAccount.strTotalCredits += int(vstrBulkCredits)
+                                thisSurveyAccount.total_credits += int(vstrBulkCredits)
                                 thisSMSAccount.put()
                                 thisSurveyAccount.put()
                                 self.response.write(
@@ -1856,7 +1856,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = AddAccount.query(AddAccount.organization_id == thisAccount.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
 
                     if len(thisAdvertAccountList) > 0:
@@ -1866,9 +1866,9 @@ class ManageCreditHandler(webapp2.RequestHandler):
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
 
-                            if ((thisAdvertAccount.strTotalCredits >= int(vstrAdvertsCredits)) and (
+                            if ((thisAdvertAccount.total_credits >= int(vstrAdvertsCredits)) and (
                                     int(vstrAdvertsCredits) > 0)):
-                                thisAdvertAccount.strTotalCredits = thisAdvertAccount.strTotalCredits - int(
+                                thisAdvertAccount.total_credits = thisAdvertAccount.total_credits - int(
                                     vstrAdvertsCredits)
                                 thisSMSAccount.strTotalSMS += int(vstrAdvertsCredits)
                                 thisSMSAccount.put()
@@ -1892,7 +1892,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = AddAccount.query(AddAccount.organization_id == thisAccount.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
 
                     if len(thisAdvertAccountList) > 0:
@@ -1903,11 +1903,11 @@ class ManageCreditHandler(webapp2.RequestHandler):
                         if len(thisSurveyAccountList) > 0:
                             thisSurveyAccount = thisSurveyAccountList[0]
 
-                            if ((thisAdvertAccount.strTotalCredits >= int(vstrAdvertsCredits)) and (
+                            if ((thisAdvertAccount.total_credits >= int(vstrAdvertsCredits)) and (
                                     int(vstrAdvertsCredits) > 0)):
-                                thisAdvertAccount.strTotalCredits = thisAdvertAccount.strTotalCredits - int(
+                                thisAdvertAccount.total_credits = thisAdvertAccount.total_credits - int(
                                     vstrAdvertsCredits)
-                                thisSurveyAccount.strTotalCredits += int(vstrAdvertsCredits)
+                                thisSurveyAccount.total_credits += int(vstrAdvertsCredits)
                                 thisAdvertAccount.put()
                                 thisSurveyAccount.put()
                                 self.response.write(
@@ -1946,8 +1946,8 @@ class ManageCreditHandler(webapp2.RequestHandler):
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
 
-                            if (thisSurveyAccount.strTotalCredits >= int(vstrSurveyCredits)):
-                                thisSurveyAccount.strTotalCredits = thisSurveyAccount.strTotalCredits - int(
+                            if (thisSurveyAccount.total_credits >= int(vstrSurveyCredits)):
+                                thisSurveyAccount.total_credits = thisSurveyAccount.total_credits - int(
                                     vstrSurveyCredits)
                                 thisSMSAccount.strTotalSMS += int(vstrSurveyCredits)
                                 thisSMSAccount.put()
@@ -1977,16 +1977,16 @@ class ManageCreditHandler(webapp2.RequestHandler):
                     if len(thisSurveyAccountList) > 0:
                         thisSurveyAccount = thisSurveyAccountList[0]
 
-                        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
+                        findRequest = AddAccount.query(AddAccount.organization_id == thisAccount.organization_id)
                         thisAdvertAccountList = findRequest.fetch()
 
                         if len(thisAdvertAccountList) > 0:
                             thisAdvertAccount = thisAdvertAccountList[0]
 
-                            if (thisSurveyAccount.strTotalCredits >= int(vstrSurveyCredits)):
-                                thisSurveyAccount.strTotalCredits = thisSurveyAccount.strTotalCredits - int(
+                            if (thisSurveyAccount.total_credits >= int(vstrSurveyCredits)):
+                                thisSurveyAccount.total_credits = thisSurveyAccount.total_credits - int(
                                     vstrSurveyCredits)
-                                thisAdvertAccount.strTotalCredits += int(vstrSurveyCredits)
+                                thisAdvertAccount.total_credits += int(vstrSurveyCredits)
                                 thisSurveyAccount.put()
                                 thisAdvertAccount.put()
                                 self.response.write(
@@ -2054,7 +2054,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = AddAccount.query(AddAccount.organization_id == thisAccount.organization_id)
                     thisAdvertList = findRequest.fetch()
                     if len(thisAdvertList) > 0:
                         thisAdvert = thisAdvertList[0]
@@ -2067,7 +2067,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                             if thisAffiliate.strAvailableCredit >= int(vstrAffiliateCredits):
                                 thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(
                                     vstrAffiliateCredits)
-                                thisAdvert.strTotalCredits += int(vstrAffiliateCredits)
+                                thisAdvert.total_credits += int(vstrAffiliateCredits)
                                 thisAffiliate.put()
                                 thisAdvert.put()
                                 self.response.write(
@@ -2102,7 +2102,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                             if thisAffiliate.strAvailableCredit >= int(vstrAffiliateCredits):
                                 thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(
                                     vstrAffiliateCredits)
-                                thisSurvey.strTotalCredits += int(vstrAffiliateCredits)
+                                thisSurvey.total_credits += int(vstrAffiliateCredits)
                                 thisAffiliate.put()
                                 thisSurvey.put()
                                 self.response.write(
