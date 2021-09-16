@@ -1058,7 +1058,7 @@ class ThisContactHandler():
 
 
 
-                findRequest = DeliveryReport.query(DeliveryReport.strCell == vstrCell,DeliveryReport.strResponseReceived == True)
+                findRequest = DeliveryReport.query(DeliveryReport.cell == vstrCell, DeliveryReport.response_received == True)
                 thisResponsesList = findRequest.fetch()
 
                 template = template_env.get_template('templates/contacts/sub/sms.html')
@@ -1088,7 +1088,7 @@ class ThisContactHandler():
                     thisOrg = thisOrgList[0]
                     if thisOrg.verified:
 
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.organization_id)
+                        findRequest = SMSAccount.query(SMSAccount.organization_id == thisMainAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
@@ -1117,7 +1117,7 @@ class ThisContactHandler():
 
                             thisDeliveryReport = DeliveryReport()
                             thisDeliveryReport.writeGroupID(vstrContactID)
-                            thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                            thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                             thisDeliveryReport.writeCell(vstrCell)
                             thisDeliveryReport.writeDelivered(strinput=True)
                             thisDate = datetime.datetime.now()
@@ -1173,7 +1173,7 @@ class ThisContactHandler():
 
                                 thisDeliveryReport = DeliveryReport()
                                 thisDeliveryReport.writeGroupID(vstrContactID)
-                                thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                 thisDeliveryReport.writeCell(vstrCell)
                                 thisDeliveryReport.writeDelivered(strinput=True)
 
@@ -1222,7 +1222,7 @@ class ThisContactHandler():
 
                                 thisDeliveryReport = DeliveryReport()
                                 thisDeliveryReport.writeGroupID(vstrContactID)
-                                thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                 thisDeliveryReport.writeCell(vstrCell)
                                 thisDeliveryReport.writeDelivered(strinput=True)
 
@@ -1272,7 +1272,7 @@ class ThisContactHandler():
 
                                 thisDeliveryReport = DeliveryReport()
                                 thisDeliveryReport.writeGroupID(vstrContactID)
-                                thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                 thisDeliveryReport.writeCell(vstrCell)
                                 thisDeliveryReport.writeDelivered(strinput=True)
 

@@ -964,7 +964,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisMainAccount.organization_id)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:

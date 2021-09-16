@@ -348,7 +348,7 @@ class RoutesHandler(webapp2.RequestHandler):
     def SendMessageHandler(self,strMessage,strCell,strOrganizationID,thisEndPoint):
         from mysms import SMSAccount,SMSPortalBudget,Messages,DeliveryReport,SMSContacts,Groups
 
-        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == strOrganizationID)
+        findRequest = SMSAccount.query(SMSAccount.organization_id == strOrganizationID)
         thisSMSAccountList = findRequest.fetch()
         thisMessage = Messages()
 
@@ -446,7 +446,7 @@ class RoutesHandler(webapp2.RequestHandler):
     def MessageResponseHandler(self,strRef,strCell):
         from mysms import DeliveryReport
 
-        findRequest = DeliveryReport.query(DeliveryReport.strRef == strRef, DeliveryReport.strCell == strCell)
+        findRequest = DeliveryReport.query(DeliveryReport.reference == strRef, DeliveryReport.cell == strCell)
         thisDeliveryReportList = findRequest.fetch()
         if len(thisDeliveryReportList) > 0:
             thisReport = thisDeliveryReportList[0]
@@ -465,11 +465,11 @@ class RoutesHandler(webapp2.RequestHandler):
             self.response.write("Response not found")
     def MessageStatusHandler(self,strRef,strCell):
         from mysms import DeliveryReport
-        findRequest = DeliveryReport.query(DeliveryReport.strRef == strRef, DeliveryReport.strCell == strCell)
+        findRequest = DeliveryReport.query(DeliveryReport.reference == strRef, DeliveryReport.cell == strCell)
         thisDeliveryReportList = findRequest.fetch()
         if len(thisDeliveryReportList) > 0:
             thisReport = thisDeliveryReportList[0]
-            strStatus = thisReport.strSendingStatus
+            strStatus = thisReport.sending_status
             strRef = thisReport.reference
             strCell = thisReport.cell
 
@@ -489,7 +489,7 @@ class RoutesHandler(webapp2.RequestHandler):
         from surveys import SurveyAccount
         from affiliates import Affiliate
 
-        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == strOrganizationID)
+        findRequest = SMSAccount.query(SMSAccount.organization_id == strOrganizationID)
         thisSMSAccountList = findRequest.fetch()
         if len(thisSMSAccountList) > 0:
             thisSMSAccount = thisSMSAccountList[0]

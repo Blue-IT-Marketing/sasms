@@ -747,7 +747,7 @@ class OrganizaHandler(webapp2.RequestHandler):
                 thisUserRight.setGeneralUser(strinput=False)
                 thisUserRight.put()
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOrg.strOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisOrg.strOrganizationID)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
@@ -948,7 +948,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
                 thisUserRight = thisUserRightList[0]
 
                 if thisUserRight.strAdminUser:
-                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = SMSAccount.query(SMSAccount.organization_id == thisAccount.organization_id)
                     thisSMSAccountList = findRequest.fetch()
                     logging.info("User rights ok and inside SMS Account aso the account is ok")
 
@@ -1091,7 +1091,7 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
             thisOrg = thisOrgList[0]
 
             thisAdminStaff = Employees()
-            findRequests = SMSAccount.query(SMSAccount.strOrganizationID == thisAdminStaff.staff_id)
+            findRequests = SMSAccount.query(SMSAccount.organization_id == thisAdminStaff.staff_id)
             thisSMSAccountList = findRequests.fetch()
 
             if len(thisSMSAccountList) > 0:
@@ -1176,7 +1176,7 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                     else:
                         logging.info("Error Sending Verification Message")
 
-            findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOrg.organization_id)
+            findRequest = SMSAccount.query(SMSAccount.organization_id == thisOrg.organization_id)
             thisSMSAccountList = findRequest.fetch()
 
             if len(thisSMSAccountList) > 0:
@@ -1241,7 +1241,7 @@ class ThisOrgHandler(webapp2.RequestHandler):
         else:
             thisOrg = Organization()
 
-        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOrg.strOrganizationID)
+        findRequest = SMSAccount.query(SMSAccount.organization_id == thisOrg.strOrganizationID)
         thisSMSAccountList = findRequest.fetch()
 
         if len(thisSMSAccountList) > 0:
@@ -1343,7 +1343,7 @@ class ThisOrgHandler(webapp2.RequestHandler):
                 vstrUsePortal = self.request.get('vstrUsePortal')
                 vstrDepositReference = self.request.get('vstrDepositReference')
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == vstrOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == vstrOrganizationID)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
@@ -1393,7 +1393,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                 if len(thisOrganizationList) > 0:
                     thisOrg = thisOrganizationList[0]
 
-                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOrg.organization_id)
+                    findRequest = SMSAccount.query(SMSAccount.organization_id == thisOrg.organization_id)
                     thisSMSAccountList = findRequest.fetch()
 
                     if len(thisSMSAccountList) > 0:
@@ -1477,7 +1477,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
             if len(thisOpenInviteList) > 0:
                 thisOpenInvite = thisOpenInviteList[0]
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOpenInvite.organization_id)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisOpenInvite.organization_id)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
@@ -1722,7 +1722,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
         if len(thisAccountList) > 0:
             thisAccount = thisAccountList[0]
 
-            findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
+            findRequest = SMSAccount.query(SMSAccount.organization_id == thisAccount.organization_id)
             thisSMSAccountList = findRequest.fetch()
             if len(thisSMSAccountList) > 0:
                 thisSMSAccount = thisSMSAccountList[0]
@@ -1787,7 +1787,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                     if len(thisAdvertAccountList) > 0:
                         thisAdvertAccount = thisAdvertAccountList[0]
 
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
+                        findRequest = SMSAccount.query(SMSAccount.organization_id == thisAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
 
                         if len(thisSMSAccountList) > 0:
@@ -1821,7 +1821,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
                     if len(thisSurveyAccountList) > 0:
                         thisSurveyAccount = thisSurveyAccountList[0]
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
+                        findRequest = SMSAccount.query(SMSAccount.organization_id == thisAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
 
                         if len(thisSMSAccountList) > 0:
@@ -1861,7 +1861,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
                     if len(thisAdvertAccountList) > 0:
                         thisAdvertAccount = thisAdvertAccountList[0]
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
+                        findRequest = SMSAccount.query(SMSAccount.organization_id == thisAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
@@ -1941,7 +1941,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
                     if len(thisSurveyAccountList) > 0:
                         thisSurveyAccount = thisSurveyAccountList[0]
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
+                        findRequest = SMSAccount.query(SMSAccount.organization_id == thisAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
@@ -2016,7 +2016,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = SMSAccount.query(SMSAccount.organization_id == thisAccount.organization_id)
                     thisSMSAccountList = findRequest.fetch()
 
                     if len(thisSMSAccountList) > 0:

@@ -625,7 +625,7 @@ class BulkSMSHandler(webapp2.RequestHandler):
                 vstrOrganizationID = self.request.get('vstrOrganizationID')
                 vstrAdditionalCredit = self.request.get('vstrAdditionalCredit')
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == vstrOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == vstrOrganizationID)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0 and (int(vstrAdditionalCredit) > 0):
@@ -641,7 +641,7 @@ class BulkSMSHandler(webapp2.RequestHandler):
             elif vstrChoice == "2":
                 thisBlueITMarketing = BlueITMarketing()
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisBlueITMarketing.strStaffID)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisBlueITMarketing.strStaffID)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
@@ -649,7 +649,7 @@ class BulkSMSHandler(webapp2.RequestHandler):
                 else:
                     thisSMSAccount = SMSAccount()
 
-                findRequest = Groups.query(Groups.organization_id == thisSMSAccount.strOrganizationID)
+                findRequest = Groups.query(Groups.organization_id == thisSMSAccount.organization_id)
                 thisGroupsList = findRequest.fetch()
 
                 template = template_env.get_template('templates/sms/creategroups.html')
@@ -699,7 +699,7 @@ class BlueITMarketingHandler(webapp2.RequestHandler):
 
             thisAdmin = Employees()
 
-            findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAdmin.staff_id)
+            findRequest = SMSAccount.query(SMSAccount.organization_id == thisAdmin.staff_id)
             thisSMSAccountList = findRequest.fetch()
 
             if len(thisSMSAccountList) > 0:
@@ -710,7 +710,7 @@ class BlueITMarketingHandler(webapp2.RequestHandler):
                 thisSMSAccount.writeOrganizationID(strinput=thisAdmin.staff_id)
                 thisSMSAccount.writeUsePortal(strinput="Budget")
                 thisSMSAccount.put()
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAdmin.staff_id)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisAdmin.staff_id)
                 thisSMSAccountList = findRequest.fetch()
                 thisSMSAccount = thisSMSAccountList[0]
 
@@ -823,7 +823,7 @@ class BlueITMarketingHandler(webapp2.RequestHandler):
                 vstrPortal = self.request.get('vstrPortal')
 
                 thisBlueITMarketing = BlueITMarketing()
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisBlueITMarketing.strStaffID)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisBlueITMarketing.strStaffID)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:

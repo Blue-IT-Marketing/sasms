@@ -307,24 +307,24 @@ class Messages(ndb.Expando):
 
 class MessageSchedule(ndb.Expando):
 
-    strUserID = ndb.StringProperty()
-    strMessageID = ndb.StringProperty()
+    uid = ndb.StringProperty()
+    message_id = ndb.StringProperty()
 
-    strStartDate = ndb.DateProperty()
-    strStartTime = ndb.TimeProperty()
-    strEndDate = ndb.DateProperty()
-    strEndTime = ndb.TimeProperty()
+    start_date = ndb.DateProperty()
+    start_time = ndb.TimeProperty()
+    end_date = ndb.DateProperty()
+    end_time = ndb.TimeProperty()
 
-    strStatus = ndb.StringProperty(default="Scheduled") # Running , Completed
+    status = ndb.StringProperty(default="Scheduled") # Running , Completed
 
-    strNotifyOnStart = ndb.BooleanProperty(default=True)
-    strNotifyonEnd = ndb.BooleanProperty(default=True)
+    notify_on_start = ndb.BooleanProperty(default=True)
+    notify_on_end = ndb.BooleanProperty(default=True)
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -334,7 +334,7 @@ class MessageSchedule(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessageID = strinput
+                self.message_id = strinput
                 return True
             else:
                 return False
@@ -343,7 +343,7 @@ class MessageSchedule(ndb.Expando):
     def writeStartDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strStartDate = strinput
+                self.start_date = strinput
                 return True
             else:
                 return False
@@ -352,7 +352,7 @@ class MessageSchedule(ndb.Expando):
     def writeStartTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strStartTime = strinput
+                self.start_time = strinput
                 return True
             else:
                 return False
@@ -363,7 +363,7 @@ class MessageSchedule(ndb.Expando):
     def writeEndTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strEndTime = strinput
+                self.end_time = strinput
                 return True
             else:
                 return False
@@ -372,7 +372,7 @@ class MessageSchedule(ndb.Expando):
     def writeEndDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strEndDate = strinput
+                self.end_date = strinput
                 return True
             else:
                 return False
@@ -383,7 +383,7 @@ class MessageSchedule(ndb.Expando):
             strinput = str(strinput)
 
             if strinput in ['Scheduled','Running','Completed']:
-                self.strStatus = strinput
+                self.status = strinput
                 return True
             else:
                 return False
@@ -392,7 +392,7 @@ class MessageSchedule(ndb.Expando):
     def writeNotifyOnStart(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strNotifyOnStart = strinput
+                self.notify_on_start = strinput
                 return True
             else:
                 return False
@@ -401,7 +401,7 @@ class MessageSchedule(ndb.Expando):
     def writeNotifyonEnd(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strNotifyonEnd = strinput
+                self.notify_on_end = strinput
                 return True
             else:
                 return False
@@ -410,39 +410,39 @@ class MessageSchedule(ndb.Expando):
 
 class DeliveryReport(ndb.Expando):
 
-    strMessageID = ndb.StringProperty()
+    message_id = ndb.StringProperty()
 
-    strRef = ndb.StringProperty(default="11111") #TODO- Make sure that you never ever ever use messageid as a reference code
+    reference = ndb.StringProperty(default="11111") #TODO- Make sure that you never ever ever use messageid as a reference code
 
-    strSendingStatus = ndb.StringProperty(default="NoStatus") # Delivered, Not Delivered
+    sending_status = ndb.StringProperty(default="NoStatus") # Delivered, Not Delivered
 
     #TODO-Enable all message kinds to fetch the delivery status for each message sent,
     #TODO- resolve the response message conflict its both in message and also in delivery message this must be resolved
 
-    strGroupID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strCell = ndb.StringProperty()
+    group_id = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    cell = ndb.StringProperty()
 
-    strResponse = ndb.StringProperty()
-    strDateResponse = ndb.DateProperty()
-    strTimeResponse = ndb.TimeProperty()
-    strResponseReceived = ndb.BooleanProperty(default=False)
-    strResponseCounter = ndb.IntegerProperty(default=0)
-    strResponseCheckLimit = ndb.IntegerProperty(default=10)
+    response = ndb.StringProperty()
+    date_response = ndb.DateProperty()
+    time_response = ndb.TimeProperty()
+    response_received = ndb.BooleanProperty(default=False)
+    response_counter = ndb.IntegerProperty(default=0)
+    response_check_limit = ndb.IntegerProperty(default=10)
 
-    strLimitReached = ndb.BooleanProperty(default=False)
+    limit_reached = ndb.BooleanProperty(default=False)
 
-    strDelivered = ndb.BooleanProperty(default=False)
+    delivered = ndb.BooleanProperty(default=False)
 
-    strDate = ndb.DateProperty()
-    strTime = ndb.TimeProperty()
+    date_created = ndb.DateProperty()
+    time_created = ndb.TimeProperty()
 
 
     def WriteResponseCounter(self,strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strResponseCounter = int(strinput)
+                self.response_counter = int(strinput)
                 return True
             else:
                 return False
@@ -453,7 +453,7 @@ class DeliveryReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strResponseCheckLimit = int(strinput)
+                self.response_check_limit = int(strinput)
                 return True
             else:
                 return False
@@ -467,7 +467,7 @@ class DeliveryReport(ndb.Expando):
 
             strinput = str(strinput)
             if strinput != None:
-                self.strSendingStatus = strinput
+                self.sending_status = strinput
                 return True
             else:
                 return False
@@ -478,7 +478,7 @@ class DeliveryReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strResponse = strinput
+                self.response = strinput
                 return True
             else:
                 return False
@@ -487,7 +487,7 @@ class DeliveryReport(ndb.Expando):
     def writeDateResponse(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateResponse = strinput
+                self.date_response = strinput
                 return True
             else:
                 return False
@@ -496,7 +496,7 @@ class DeliveryReport(ndb.Expando):
     def writeTimeResponse(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeResponse = strinput
+                self.time_response = strinput
                 return True
             else:
                 return False
@@ -505,7 +505,7 @@ class DeliveryReport(ndb.Expando):
     def writeResponseReceived(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strResponseReceived = strinput
+                self.response_received = strinput
                 return True
             else:
                 return False
@@ -515,7 +515,7 @@ class DeliveryReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessageID = strinput
+                self.message_id = strinput
                 return True
             else:
                 return False
@@ -526,7 +526,7 @@ class DeliveryReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -536,7 +536,7 @@ class DeliveryReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strGroupID = strinput
+                self.group_id = strinput
                 return True
             else:
                 return False
@@ -546,7 +546,7 @@ class DeliveryReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -555,7 +555,7 @@ class DeliveryReport(ndb.Expando):
     def writeDelivered(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strDelivered = strinput
+                self.delivered = strinput
                 return True
             else:
                 return False
@@ -564,7 +564,7 @@ class DeliveryReport(ndb.Expando):
     def writeDate(self,strinput):
         try:
             if strinput != None:
-                self.strDate = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -573,7 +573,7 @@ class DeliveryReport(ndb.Expando):
     def writeTime(self,strinput):
         try:
             if strinput != None:
-                self.strTime = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -583,7 +583,7 @@ class DeliveryReport(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strRef = strinput
+                self.reference = strinput
                 return True
             else:
                 return False
@@ -592,7 +592,7 @@ class DeliveryReport(ndb.Expando):
 
 class SMSAccount(ndb.Expando):
 
-    strOrganizationID = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
     strCreditAmount = ndb.FloatProperty(default=0)
     strCostPerSMS = ndb.FloatProperty(default=35)
     strTotalSMS = ndb.IntegerProperty(default=10)
@@ -612,7 +612,7 @@ class SMSAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -911,7 +911,7 @@ class SMSPortalVodacom(ndb.Expando):
 
             if not(strInvalid):
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == strAccountID)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == strAccountID)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
@@ -1460,7 +1460,7 @@ class SMSGroupHandler(webapp2.RequestHandler):
                     thisUserRight = UserRights()
 
                 if thisUserRight.strAdminUser:
-                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.organization_id)
+                    findRequest = SMSAccount.query(SMSAccount.organization_id == thisMainAccount.organization_id)
                     thisSMSAccountList = findRequest.fetch()
 
                     if len(thisSMSAccountList) > 0:
@@ -1862,7 +1862,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = DeliveryReport.query(DeliveryReport.strGroupID == vstrGroupID)
+                findRequest = DeliveryReport.query(DeliveryReport.group_id == vstrGroupID)
                 thisDeliveryReportList = findRequest.fetch()
 
                 template  =template_env.get_template('templates/sms/groups/groupreports.html')
@@ -1977,7 +1977,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrMessageID = self.request.get('vstrMessageID')
 
-                findRequest = MessageSchedule.query(MessageSchedule.strMessageID == vstrMessageID)
+                findRequest = MessageSchedule.query(MessageSchedule.message_id == vstrMessageID)
                 thisMessageScheduleList = findRequest.fetch()
 
                 if len(thisMessageScheduleList) > 0:
@@ -2006,7 +2006,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 vstrNotifyOnEnd = self.request.get('vstrNotifyOnEnd')
 
 
-                findRequest = MessageSchedule.query(MessageSchedule.strMessageID == vstrMessageID)
+                findRequest = MessageSchedule.query(MessageSchedule.message_id == vstrMessageID)
                 thisMessageScheduleList = findRequest.fetch()
 
                 if len(thisMessageScheduleList) > 0:
@@ -2117,7 +2117,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 findRequest = SMSContacts.query(SMSContacts.group_id == vstrGroupID)
                 thisSMSContactsList = findRequest.fetch()
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.organization_id)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisGroup.organization_id)
                 thisSMSAccountList = findRequest.fetch()
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]
@@ -2162,7 +2162,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 findRequest = SMSContacts.query(SMSContacts.group_id == vstrGroupID)
                 thisSMSContactsList = findRequest.fetch()
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.organization_id)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisGroup.organization_id)
                 thisSMSAccountList = findRequest.fetch()
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]
@@ -2170,7 +2170,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                     thisSMSAccount = SMSAccount()
 
 
-                findRequest = Organization.query(Organization.strVerified == True,Organization.strOrganizationID == thisSMSAccount.strOrganizationID)
+                findRequest = Organization.query(Organization.strVerified == True, Organization.strOrganizationID == thisSMSAccount.organization_id)
                 thisOrgList = findRequest.fetch()
 
                 if len(thisOrgList) > 0:
@@ -2207,7 +2207,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 thisPortal.strAvailableCredit = thisPortal.strAvailableCredit - 1
                                 thisDeliveryReport = DeliveryReport()
                                 thisDeliveryReport.writeGroupID(thisGroup.group_id)
-                                thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                 thisDeliveryReport.writeCell(thisContact.cell_number)
                                 thisDeliveryReport.writeDelivered(strinput=True)
                                 thisDate = datetime.datetime.now()
@@ -2287,7 +2287,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     thisBudgetPortal.strAvailableCredit = thisBudgetPortal.strAvailableCredit - 1
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.group_id)
-                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                     thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=True)
                                     thisDate = datetime.datetime.now()
@@ -2305,7 +2305,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     #thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.group_id)
-                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                     thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=False)
                                     thisDate = datetime.datetime.now()
@@ -2391,7 +2391,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
 
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.group_id)
-                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                     thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=True)
                                     thisDate = datetime.datetime.now()
@@ -2409,7 +2409,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     #thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.group_id)
-                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                     thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=False)
                                     thisDate = datetime.datetime.now()
@@ -2496,7 +2496,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
 
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.group_id)
-                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                     thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=True)
                                     thisDate = datetime.datetime.now()
@@ -2514,7 +2514,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     # thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.group_id)
-                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                                    thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                                     thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=False)
                                     thisDate = datetime.datetime.now()
@@ -2571,7 +2571,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrMessageID = self.request.get('vstrMessageID')
 
-                findRequest = DeliveryReport.query(DeliveryReport.strGroupID == vstrGroupID,DeliveryReport.strMessageID == vstrMessageID,DeliveryReport.strResponseReceived == True)
+                findRequest = DeliveryReport.query(DeliveryReport.group_id == vstrGroupID, DeliveryReport.message_id == vstrMessageID, DeliveryReport.response_received == True)
                 thisDeliveryReportList = findRequest.fetch()
 
                 template = template_env.get_template('templates/sms/groups/responses/responseslist.html')
@@ -2609,7 +2609,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                 vstrDepositAmount = self.request.get('vstrDepositAmount')
                 vstrDepositMethod = self.request.get('vstrDepositMethod')
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisMainAccount.organization_id)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
@@ -2642,7 +2642,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == vstrOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == vstrOrganizationID)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
@@ -2908,7 +2908,7 @@ class TwilioCallbacksRoutersHandler(webapp2.RequestHandler):
         message_status = self.request.get("MessageStatus")
         import logging
 
-        findRequest = DeliveryReport.query(DeliveryReport.strMessageID == message_sid)
+        findRequest = DeliveryReport.query(DeliveryReport.message_id == message_sid)
         thisDeliveryList = findRequest.fetch()
 
         if len(thisDeliveryList) > 0:
@@ -2941,7 +2941,7 @@ class TwilioCallbacksRoutersHandler(webapp2.RequestHandler):
         message_status = self.request.get("MessageStatus")
         import logging
 
-        findRequest = DeliveryReport.query(DeliveryReport.strMessageID == message_sid)
+        findRequest = DeliveryReport.query(DeliveryReport.message_id == message_sid)
         thisDeliveryList = findRequest.fetch()
 
         if len(thisDeliveryList) > 0:

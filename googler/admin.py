@@ -49,7 +49,7 @@ class AdminHandler(webapp2.RequestHandler):
                 thisAccount = Accounts()
 
 
-        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
+        findRequest = SMSAccount.query(SMSAccount.organization_id == thisAccount.organization_id)
         thisSMSAccountList = findRequest.fetch()
 
         if len(thisSMSAccountList) > 0:
@@ -104,7 +104,7 @@ class ThisAccountHandler(webapp2.RequestHandler):
                 thisAccount = Accounts()
 
 
-        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
+        findRequest = SMSAccount.query(SMSAccount.organization_id == thisAccount.organization_id)
         thisSMSAccountList = findRequest.fetch()
 
         if len(thisSMSAccountList) > 0:

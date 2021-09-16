@@ -42,12 +42,12 @@ indexes:
 - kind: DeliveryReport
   properties:
   - name: date
-  - name: strSendingStatus
+  - name: sending_status
   - name: time
 
 - kind: DeliveryReport
   properties:
-  - name: strLimitReached
+  - name: limit_reached
   - name: response_received
   - name: date
 

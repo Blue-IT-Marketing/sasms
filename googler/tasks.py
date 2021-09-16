@@ -40,9 +40,9 @@ def BulkSMSHandler():
     thisDate = Today.date()
     thisTime = Today.time()
 
-    findRequest = MessageSchedule.query(MessageSchedule.strStatus == "Scheduled",
-                                        MessageSchedule.strStartDate == thisDate,
-                                        MessageSchedule.strStartTime >= thisTime)
+    findRequest = MessageSchedule.query(MessageSchedule.status == "Scheduled",
+                                        MessageSchedule.start_date == thisDate,
+                                        MessageSchedule.start_time >= thisTime)
     thisMessageScheduleList = findRequest.fetch()
 
     if len(thisMessageScheduleList) > 0:
@@ -66,7 +66,7 @@ def BulkSMSHandler():
         else:
             thisGroup = Groups()
 
-        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.organization_id)
+        findRequest = SMSAccount.query(SMSAccount.organization_id == thisGroup.organization_id)
         thisSMSAccountList = findRequest.fetch()
 
         if len(thisSMSAccountList) > 0:
@@ -85,7 +85,7 @@ def BulkSMSHandler():
             if not (thisContact.cell_number == None):
                 ReceipientList.append(thisContact.cell_number)
 
-        if thisSchedule.strNotifyOnStart == True:
+        if thisSchedule.notify_on_start == True:
             findRequest = Accounts.query(Accounts.uid == thisSchedule.uid)
             thisAccountsList = findRequest.fetch()
 
@@ -109,7 +109,7 @@ def BulkSMSHandler():
 
                 if thisVoda.CronSendMessages(strCellNumberList=ReceipientList,
                                              strMessage=thisMessage.message,
-                                             strAccountID=thisSMSAccount.strOrganizationID):
+                                             strAccountID=thisSMSAccount.organization_id):
                     thisSchedule.writeStatus(strinput="Completed")
                     thisSchedule.put()
                     thisMessage.writeDateSubmitted(strinput=thisDate)
@@ -120,7 +120,7 @@ def BulkSMSHandler():
                         thisDeliveryReport = DeliveryReport()
                         thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                         thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
-                        thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                        thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                         thisDeliveryReport.writeReference(strinput="voda")
                         thisDeliveryReport.writeCell(strinput=StrCell)
                         thisDeliveryReport.writeDate(strinput=thisDate)
@@ -146,7 +146,7 @@ def BulkSMSHandler():
                             thisDeliveryReport = DeliveryReport()
                             thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                             thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
-                            thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                            thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                             thisDeliveryReport.writeReference(strinput=ref)
                             thisDeliveryReport.writeCell(strinput=thisContact)
                             thisDeliveryReport.writeDate(strinput=thisDate)
@@ -181,7 +181,7 @@ def BulkSMSHandler():
                         thisDeliveryReport = DeliveryReport()
                         thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                         thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
-                        thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                        thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                         thisDeliveryReport.writeReference(strinput=ref)
                         thisDeliveryReport.writeCell(strinput=thisContact)
                         thisDeliveryReport.writeDate(strinput=thisDate)
@@ -218,7 +218,7 @@ def BulkSMSHandler():
                         thisDeliveryReport = DeliveryReport()
                         thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                         thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
-                        thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                        thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                         thisDeliveryReport.writeReference(strinput=ref)
                         thisDeliveryReport.writeCell(strinput=thisContact)
                         thisDeliveryReport.writeDate(strinput=thisDate)
@@ -714,9 +714,9 @@ def CheckBulkSMSResponses():
     #
     # # TODO-Code Fix ended here
 
-    findRequest = DeliveryReport.query(DeliveryReport.strDate <= strThisDate,
-                                       DeliveryReport.strResponseReceived == False,
-                                       DeliveryReport.strLimitReached == False)
+    findRequest = DeliveryReport.query(DeliveryReport.date_created <= strThisDate,
+                                       DeliveryReport.response_received == False,
+                                       DeliveryReport.limit_reached == False)
     thisDeliveryList = findRequest.fetch()
 
     thisPortal = SMSPortalBudget()
@@ -735,9 +735,9 @@ def CheckBulkSMSResponses():
                 # TODO- On Bulk SMS Message Module Responses can be loaded there for each bulk SMS Module
             else:
                 try:
-                    thisDelivery.strResponseCounter += 1
-                    if thisDelivery.strResponseCheckLimit == thisDelivery.strResponseCounter:
-                        thisDelivery.strLimitReached = True
+                    thisDelivery.response_counter += 1
+                    if thisDelivery.response_check_limit == thisDelivery.response_counter:
+                        thisDelivery.limit_reached = True
 
                 except:
                     pass
@@ -982,9 +982,9 @@ def BulkSMSStatus():
         minutes=15)  # The only status that will be checked is those with a delivery report created on the last run
     strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute, second=vstrThisDate.second)
 
-    findRequest = DeliveryReport.query(DeliveryReport.strSendingStatus == "NoStatus",
-                                       DeliveryReport.strDate == strThisDate,
-                                       DeliveryReport.strTime <= strThisTime)
+    findRequest = DeliveryReport.query(DeliveryReport.sending_status == "NoStatus",
+                                       DeliveryReport.date_created == strThisDate,
+                                       DeliveryReport.time_created <= strThisTime)
     thisReportList = findRequest.fetch()
 
     findRequest = SMSPortalBudget.query()
@@ -1006,7 +1006,7 @@ def BulkSMSStatus():
             strStatus = str(strStatus)
             if "UNDELIVERED" in strStatus:  # TODO-Note that we have to verify that the status code is actually undelivered for this
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisReport.organization_id)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == thisReport.organization_id)
                 thisSMSAccountList = findRequest.fetch()
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]
