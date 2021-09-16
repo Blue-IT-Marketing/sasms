@@ -16,16 +16,9 @@
 
 
 import os
-import webapp2
 import jinja2
 import datetime
-from google.appengine.ext import ndb
-from google.appengine.api import users
-from google.appengine.api import mail
-from google.appengine.api import urlfetch
-from google.appengine.api import app_identity
-import cloudstorage
-import urllib,urllib2
+from google.cloud import ndb
 
 from userRights import UserRights
 from accounts import Accounts
@@ -38,8 +31,8 @@ from xml.etree import ElementTree
 
 class Groups(ndb.Expando):
 
-    strUserID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
+    uid = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
 
     strGroupID = ndb.StringProperty()
     strGroupName = ndb.StringProperty()
@@ -52,7 +45,7 @@ class Groups(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -62,7 +55,7 @@ class Groups(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -1400,7 +1393,7 @@ class SMSGroupHandler(webapp2.RequestHandler):
                 else:
                     thisAdmin = Accounts()
 
-                findRequest = Groups.query(Groups.strOrganizationID == thisAdmin.organization_id)
+                findRequest = Groups.query(Groups.organization_id == thisAdmin.organization_id)
                 thisGroupsList = findRequest.fetch()
 
                 template = template_env.get_template('templates/sms/creategroups.html')
@@ -1427,7 +1420,7 @@ class SMSGroupHandler(webapp2.RequestHandler):
                     thisAdmin = Accounts()
 
 
-                findRequest = Groups.query(Groups.strGroupName == vstrGroupName, Groups.strOrganizationID == thisAdmin.organization_id)
+                findRequest = Groups.query(Groups.strGroupName == vstrGroupName, Groups.organization_id == thisAdmin.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1589,7 +1582,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
                 thisContact.put()
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1707,7 +1700,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1761,7 +1754,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1787,7 +1780,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
                 vstrGroupID = self.request.get('vstrGroupID')
 
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 for thisGroup in thisGroupList:
@@ -1848,7 +1841,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
                             thisContact.writeUserID(strinput=thisMainAccount.uid)
                             thisContact.put()
 
-                            findRequest = Groups.query(Groups.strOrganizationID == thisMainAccount.organization_id, Groups.strGroupID == vstrGroupID)
+                            findRequest = Groups.query(Groups.organization_id == thisMainAccount.organization_id, Groups.strGroupID == vstrGroupID)
                             thisGroupList = findRequest.fetch()
 
                             if len(thisGroupList) > 0:
@@ -2124,7 +2117,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 findRequest = SMSContacts.query(SMSContacts.strGroupID == vstrGroupID)
                 thisSMSContactsList = findRequest.fetch()
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.strOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.organization_id)
                 thisSMSAccountList = findRequest.fetch()
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]
@@ -2169,7 +2162,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 findRequest = SMSContacts.query(SMSContacts.strGroupID == vstrGroupID)
                 thisSMSContactsList = findRequest.fetch()
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.strOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.organization_id)
                 thisSMSAccountList = findRequest.fetch()
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]

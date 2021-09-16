@@ -66,7 +66,7 @@ def BulkSMSHandler():
         else:
             thisGroup = Groups()
 
-        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.strOrganizationID)
+        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.organization_id)
         thisSMSAccountList = findRequest.fetch()
 
         if len(thisSMSAccountList) > 0:
@@ -74,7 +74,7 @@ def BulkSMSHandler():
 
         else:
             thisSMSAccount = SMSAccount()
-            thisSMSAccount.writeOrganizationID(strinput=thisGroup.strOrganizationID)
+            thisSMSAccount.writeOrganizationID(strinput=thisGroup.organization_id)
             thisSMSAccount.put()
 
         findRequest = SMSContacts.query(SMSContacts.strGroupID == thisMessage.strGroupID)
@@ -642,7 +642,7 @@ def GetContactsFromPartners():
     from advertise import OurContacts
     from myapi import PartnerSites,strDefaultWhiteList
     import json
-    findRequest = PartnerSites.query(PartnerSites.strServiceName == "Contacts")
+    findRequest = PartnerSites.query(PartnerSites.service_name == "Contacts")
     thisPartnerSiteList = findRequest.fetch()
 
     if len(thisPartnerSiteList) == 0:
@@ -654,7 +654,7 @@ def GetContactsFromPartners():
             thisPartner.writeURL(strinput=site)
             thisPartner.put()
 
-        findRequest = PartnerSites.query(PartnerSites.strServiceName == "Contacts")
+        findRequest = PartnerSites.query(PartnerSites.service_name == "Contacts")
         thisPartnerSiteList = findRequest.fetch()
 
 
@@ -1036,7 +1036,7 @@ def FaxToEmailOrganizer():
     """
     from myfax import AvailableEmailEndPoints
 
-    findRequest = AvailableEmailEndPoints.query(AvailableEmailEndPoints.strAssigned == False)
+    findRequest = AvailableEmailEndPoints.query(AvailableEmailEndPoints.assigned == False)
     thisAvailableEmailsList = findRequest.fetch()
 
     if len(thisAvailableEmailsList) < 100:
@@ -1045,7 +1045,7 @@ def FaxToEmailOrganizer():
             ThisEndPoint.writeEmailReference(strinput=ThisEndPoint.CreateEmailReference())
             vstrEmailAddress = ThisEndPoint.CreateEmailAddress()
             findRequest = AvailableEmailEndPoints.query(
-                AvailableEmailEndPoints.strEmailAddress == vstrEmailAddress)
+                AvailableEmailEndPoints.email_address == vstrEmailAddress)
             thisDuplicateList = findRequest.fetch()
             if len(thisDuplicateList) == 0:
                 ThisEndPoint.writeEmailAddress(strinput=vstrEmailAddress)
