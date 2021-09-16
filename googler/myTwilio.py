@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+from typing import Optional
+
 import jinja2
 import datetime
 from google.cloud import ndb
@@ -26,6 +28,8 @@ import logging
 from twilio.rest import Client
 
 import json
+
+
 class MyTwilioPortal(ndb.Model):
     twilio_sid = ndb.StringProperty(default=os.environ.get('TWILIO_ACCOUNT_SID'))
     twilio_token = ndb.StringProperty(default=os.environ.get('TWILIO_AUTH_TOKEN'))
@@ -35,44 +39,24 @@ class MyTwilioPortal(ndb.Model):
     available_credit = ndb.IntegerProperty(default=0)
     status_callback = ndb.StringProperty(default="https://sa-sms.appspot.com/twilio/callback/status")
 
-    #TODO-Add Modules for Voice, SMS, Receive, Video Conferencing with Video Intellegence API from Google
-    #TODO- and Add Translation API for two communications on the contact management module
+    # TODO-Add Modules for Voice, SMS, Receive, Video Conferencing with Video Intellegence API from Google
+    # TODO- and Add Translation API for two communications on the contact management module
 
-    def send_sms(self, to, message, from_cell=None, media_url=None):
+    def send_sms(self, to_cell: str, message: str, from_cell: str = None, media_url: str = None) -> Optional[str]:
         """
-        :param to:
+        :param to_cell:
         :param from_cell:
         :param message:
         :param media_url:
         :return:
-        {
-           "account_sid": "ACb10f84fd6a3b46afb0123544dd927fa1",
-           "api_version": "2010-04-01",
-           "body": "Jenny please?! I love you <3",
-           "num_segments": "1",
-           "num_media": "1",
-           "date_created": "Wed, 18 Aug 2010 20:01:40 +0000",
-           "date_sent": null,
-           "date_updated": "Wed, 18 Aug 2010 20:01:40 +0000",
-           "direction": "outbound-api",
-           "error_code": null,
-           "error_message": null,
-           "from": "+14158141829",
-           "price": null,
-           "sid": "MM90c6fc909d8504d45ecdb3a3d5b3556e",
-           "status": "queued",
-           "to": "+15558675309",
-           "uri": "/2010-04-01/Accounts/ACb10f84fd6a3b46afb0123544dd927fa1/Messages/MM90c6fc909d8504d45ecdb3a3d5b3556e.json"
-        }
         """
         try:
             client = Client(self.twilio_sid, self.twilio_token)
-
-            if from_cell == None:
+            if from_cell:
                 from_cell = self.sms_number
 
             message = client.messages.create(
-                to=to,
+                to=to_cell,
                 from_=from_cell,
                 body=message,
                 status_callback=self.status_callback,
@@ -104,7 +88,7 @@ class MyTwilioPortal(ndb.Model):
         except:
             return None
 
-    def writeMySMSNumber(self,strinput):
+    def writeMySMSNumber(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -114,7 +98,8 @@ class MyTwilioPortal(ndb.Model):
                 return False
         except:
             return False
-    def writeMyFaxNumber(self,strinput):
+
+    def writeMyFaxNumber(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -124,7 +109,8 @@ class MyTwilioPortal(ndb.Model):
                 return False
         except:
             return False
-    def writeAvailableCredit(self,strinput):
+
+    def writeAvailableCredit(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -134,5 +120,3 @@ class MyTwilioPortal(ndb.Model):
                 return False
         except:
             return False
-
-

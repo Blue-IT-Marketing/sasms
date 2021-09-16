@@ -20,8 +20,7 @@ from google.cloud import ndb
 import requests
 import logging
 import math
-import datetime
-from datetime import timedelta
+from datetime import timedelta, date, datetime, time
 
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
@@ -33,49 +32,57 @@ class BulkSMSCron:
     def __init__(self):
         pass
 
+    @staticmethod
+    def create_delivery_report(_message, cell_number, reference, this_date, this_sms_account, this_time):
+        from mysms import DeliveryReport
+        delivery_report = DeliveryReport()
+        delivery_report.message_id = _message.message_id
+        delivery_report.group_id = _message.group_id
+        delivery_report.organization_id = this_sms_account.organization_id
+        delivery_report.reference = reference
+        delivery_report.cell = cell_number
+        delivery_report.date_created = this_date
+        delivery_report.time_created = this_time
+        delivery_report.delivered = True
+        delivery_report.put()
+
+    @staticmethod
+    def messages_sent(_message, schedule, this_date, this_sms_account, this_time, total_delivered):
+        _message.date_created = this_date
+        _message.time_created = this_time
+        _message.submitted = True
+        _message.put()
+
     def bulk_sms_handler(self):
         from mysms import MessageSchedule, Messages, SMSContacts, Groups, SMSAccount
         from accounts import Accounts
 
-        _today = datetime.datetime.now()
-        this_date = _today.date()
-        this_time = _today.time()
+        _today: datetime = datetime.now()
+        this_date: date = _today.date()
+        this_time: time = _today.time()
 
-        _group_query = MessageSchedule.query(MessageSchedule.status == "Scheduled",
-                                             MessageSchedule.start_date == this_date,
-                                             MessageSchedule.start_time >= this_time)
-        message_schedule_list = _group_query.fetch()
-
+        message_schedule_list = MessageSchedule.query(MessageSchedule.status == "Scheduled",
+                                                      MessageSchedule.start_date == this_date,
+                                                      MessageSchedule.start_time >= this_time).fetch()
         if message_schedule_list:
             logging.info("There are messages scheduled")
 
         for schedule in message_schedule_list:
-            _group_query = Messages.query(Messages.message_id == schedule.message_id,
-                                          Messages.submitted == False)
-            message_list = _group_query.fetch()
+            _message = Messages.query(Messages.message_id == schedule.message_id, Messages.submitted == False).get()
 
-            _message = message_list[0] if message_list else Messages()
+            this_group = Groups.query(Groups.group_id == _message.group_id).get()
 
-            _group_query = Groups.query(Groups.group_id == _message.group_id)
-            groups_list = _group_query.fetch()
-            this_group = groups_list[0] if groups_list else Groups()
+            this_sms_account = SMSAccount.query(SMSAccount.organization_id == this_group.organization_id).get()
 
-            _group_query = SMSAccount.query(SMSAccount.organization_id == this_group.organization_id)
-            this_sms_account_list = _group_query.fetch()
-
-            if this_sms_account_list:
-                this_sms_account = this_sms_account_list[0]
-            else:
+            if not isinstance(this_sms_account, SMSAccount):
                 this_sms_account = SMSAccount()
                 this_sms_account.organization_id = this_group.organization_id
                 this_sms_account.put()
 
             contacts_list = SMSContacts.query(SMSContacts.group_id == _message.group_id).fetch()
-
             recipients_list = [this_contact.cell_number for this_contact in contacts_list if this_contact.cell_number]
 
             if schedule.notify_on_start:
-
                 _this_account = Accounts.query(Accounts.uid == schedule.uid).get()
                 if _this_account.cell not in recipients_list:
                     recipients_list.append(_this_account.cell)
@@ -88,31 +95,12 @@ class BulkSMSCron:
                     self.send_with_budget(_message, recipients_list, schedule, this_date, this_sms_account, this_time)
 
                 elif this_sms_account.use_portal == "ClickSend":
-                    self.send_with_click_send(_message, recipients_list, schedule, this_date, this_sms_account, this_time)
+                    self.send_with_click_send(_message, recipients_list, schedule, this_date, this_sms_account,
+                                              this_time)
 
                 elif this_sms_account.use_portal == "Twilio":
                     self.send_with_twilio(_message, recipients_list, schedule, this_date, this_sms_account, this_time)
 
-    @staticmethod
-    def create_delivery_report(_message, cell_number, reference, this_date, this_sms_account, this_time):
-        from mysms import DeliveryReport
-        delivery_report = DeliveryReport()
-        delivery_report.writeMessageID(strinput=_message.message_id)
-        delivery_report.writeGroupID(strinput=_message.group_id)
-        delivery_report.writeOrganizationID(strinput=this_sms_account.organization_id)
-        delivery_report.writeReference(strinput=reference)
-        delivery_report.writeCell(strinput=cell_number)
-        delivery_report.writeDate(strinput=this_date)
-        delivery_report.writeTime(strinput=this_time)
-        delivery_report.writeDelivered(strinput=True)
-        delivery_report.put()
-
-    @staticmethod
-    def messages_sent(_message, schedule, this_date, this_sms_account, this_time, total_delivered):
-        _message.writeDateSubmitted(strinput=this_date)
-        _message.writeTimeSubmitted(strinput=this_time)
-        _message.writeSubmitted(strinput=True)
-        _message.put()
 
     def send_with_twilio(self, _message, recipients_list, schedule, this_date, this_sms_account, this_time):
         from myTwilio import MyTwilioPortal
@@ -120,14 +108,15 @@ class BulkSMSCron:
         total_delivered = 0
         for cell_number in recipients_list:
             # to, message, from_cell=None, media_url=None):
-            reference = _twilio_portal.send_sms(to=cell_number, from_cell=_twilio_portal.sms_number,
-                                                message=_message.message)
+            reference = _twilio_portal.send_sms(to_cell=cell_number, message=_message.message,
+                                                from_cell=_twilio_portal.sms_number)
             if reference:
                 self.create_delivery_report(_message, cell_number, reference, this_date, this_sms_account, this_time)
                 total_delivered += 1
+
         self.messages_sent(_message, schedule, this_date, this_sms_account, this_time, total_delivered)
         schedule.put()
-        this_sms_account.writeTotalSMS(strinput=(this_sms_account.total_sms - total_delivered))
+        this_sms_account.total_sms -= total_delivered
         this_sms_account.put()
 
     def send_with_click_send(self, _message, recipients_list, schedule, this_date, this_sms_account, this_time):
@@ -155,7 +144,8 @@ class BulkSMSCron:
         total_delivered = 0
 
         for cell_number in recipients_list:
-            reference = _this_portal.send_sms(message=_message.message, message_id=_message.message_id, cell=cell_number)
+            reference = _this_portal.send_sms(message=_message.message, message_id=_message.message_id,
+                                              cell=cell_number)
 
             reference = reference.strip()
             if reference:

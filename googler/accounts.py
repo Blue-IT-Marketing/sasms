@@ -1015,7 +1015,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                                 logging.info("Sending invitations through Twilio Portal")
 
-                                if thisTwilioPortal.send_sms(to=vstrCell, message=strInviteMessage) != None:
+                                if thisTwilioPortal.send_sms(to_cell=vstrCell, message=strInviteMessage) != None:
                                     thisSMSAccount.total_sms = thisSMSAccount.total_sms - 4
                                     self.response.write("Successfully sent an invite message")
                                 else:
