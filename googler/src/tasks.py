@@ -18,13 +18,10 @@ import os
 from typing import List
 
 import jinja2
-from google.cloud import ndb
-import requests
 import logging
-import math
-from datetime import timedelta, date, datetime, time
+from datetime import date, datetime, time
 
-from googler.mysms import SMSAccount, Messages, MessageSchedule
+from googler.src.mysms import SMSAccount, Messages, MessageSchedule
 
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
@@ -314,7 +311,7 @@ def SendAdvertsHandler():
 
 
 def SendAdvertCreditHandler():
-    from advertise import OurContacts, Advert, Stats, SentReport, Orders
+    from advertise import OurContacts, Advert, Stats, SentReport
     from mysms import SMSPortalBudget, SMSPortalVodacom, ClickSendSMSPortal
     from myTwilio import MyTwilioPortal
     import random
@@ -630,7 +627,7 @@ def GetContactsFromPartners():
 
 
 def CheckBulkSMSResponses():
-    from mysms import Messages, SMSPortalBudget, DeliveryReport
+    from mysms import SMSPortalBudget, DeliveryReport
     vstrThisDate = datetime.datetime.now()
     strThisDate = vstrThisDate.date()
     strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute, second=vstrThisDate.second)
@@ -686,7 +683,7 @@ def CheckBulkSMSResponses():
 
 def ScheduledSendSurveys():
     from surveys import SurveyOrders, SurveySchedules, SurveyContacts, Surveys, MultiChoiceSurveys, \
-        GeneralQuestionsSurvey, MultiChoiceSurveyAnswers, SurveyTracker
+        MultiChoiceSurveyAnswers, SurveyTracker
     from accounts import Accounts, Organization
     from mysms import SMSPortalBudget
 
@@ -855,7 +852,7 @@ def SurveysResponses():
     :return:
     """
     from surveys import SurveyTracker, MultiChoiceSurveyAnswers, SurveyContacts, MultiChoiceSurveys
-    from mysms import SMSPortalBudget, SMSAccount
+    from mysms import SMSPortalBudget
     findRequest = SurveyTracker.query(SurveyTracker.response_received == False,
                                       SurveyTracker.client_participation == True,
                                       SurveyTracker.run_times <= 10)
@@ -985,10 +982,6 @@ def FaxToEmailOrganizer():
 
 
 def SendSurveysCredits():
-    from surveys import Surveys
-    from mysms import SMSAccount, SMSPortalBudget, ClickSendSMSPortal, SMSPortalVodacom
-    from advertise import OurContacts
-
     pass
     # TODO- Finish up sending surveys this is very important
 
