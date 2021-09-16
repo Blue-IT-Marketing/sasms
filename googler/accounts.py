@@ -1656,7 +1656,7 @@ class AccountsAPIHandler(webapp2.RequestHandler):
             if len(thisAccountList) > 0:
                 thisAccount = thisAccountList[0]
                 if thisAccount.verified:
-                    findRequest = EndPoints.query(EndPoints.strOrganizationID == thisAccount.organization_id)
+                    findRequest = EndPoints.query(EndPoints.organization_id == thisAccount.organization_id)
                     thisEndPointList = findRequest.fetch()
 
                     if len(thisEndPointList) > 0:
@@ -1693,7 +1693,7 @@ class AccountsAPIHandler(webapp2.RequestHandler):
             if len(thisAccountList) > 0:
                 thisAccount = thisAccountList[0]
 
-                findRequest = EndPoints.query(EndPoints.strOrganizationID == thisAccount.organization_id)
+                findRequest = EndPoints.query(EndPoints.organization_id == thisAccount.organization_id)
                 thisEndPointList = findRequest.fetch()
 
                 if len(thisEndPointList) > 0:
