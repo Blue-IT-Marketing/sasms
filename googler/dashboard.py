@@ -649,7 +649,7 @@ class BulkSMSHandler(webapp2.RequestHandler):
                 else:
                     thisSMSAccount = SMSAccount()
 
-                findRequest = Groups.query(Groups.strOrganizationID == thisSMSAccount.strOrganizationID)
+                findRequest = Groups.query(Groups.organization_id == thisSMSAccount.strOrganizationID)
                 thisGroupsList = findRequest.fetch()
 
                 template = template_env.get_template('templates/sms/creategroups.html')
@@ -969,7 +969,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                 vstrPartnerURL = self.request.get('vstrPartnerURL')
                 vstrPartnerURL = vstrPartnerURL.strip()
 
-                findRequest = PartnerSites.query(PartnerSites.strURL == vstrPartnerURL)
+                findRequest = PartnerSites.query(PartnerSites.url == vstrPartnerURL)
                 thisPartnerSiteList = findRequest.fetch()
 
                 if len(thisPartnerSiteList) > 0:
@@ -989,7 +989,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                 vstrEndpoint = self.request.get('vstrEndpoint')
                 vstrEndpoint = vstrEndpoint.strip()
 
-                findRequest = EndPoints.query(EndPoints.strPointURL == vstrEndpoint)
+                findRequest = EndPoints.query(EndPoints.point_url == vstrEndpoint)
                 thisEndpointList = findRequest.fetch()
 
                 if len(thisEndpointList) > 0:
@@ -1251,13 +1251,13 @@ class thisTopUpVerificationHandler(webapp2.RequestHandler):
                     pass
 
                 elif vstrAccountName == "FAX":
-                    findRequest = FaxAccount.query(FaxAccount.strTopUpReference == vstrTopUpReference)
+                    findRequest = FaxAccount.query(FaxAccount.top_up_reference == vstrTopUpReference)
                     thisFaxAccountList = findRequest.fetch()
 
                     if len(thisFaxAccountList) > 0:
                         thisFaxAccount = thisFaxAccountList[0]
 
-                        thisFaxAccount.strCreditInPages += thisFaxAccount.top_up_credit
+                        thisFaxAccount.credit_in_pages += thisFaxAccount.top_up_credit
                         thisFaxAccount.top_up_credit = 0
                         thisFaxAccount.total_top_up_cost = 0
                         thisFaxAccount.put()
