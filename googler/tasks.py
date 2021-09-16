@@ -300,8 +300,8 @@ def SendAdvertsHandler():
     vstrThisDate = datetime.datetime.now()
     strThisDate = vstrThisDate.date()
     strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute, second=vstrThisDate.second)
-    findRequest = Orders.query(Orders.strRunOrder == True, Orders.strFullyPaid == True,
-                               Orders.strOrderStartDate == strThisDate, Orders.strOrderStartTime >= strThisTime)
+    findRequest = Orders.query(Orders.run_order == True, Orders.fully_paid == True,
+                               Orders.order_start_date == strThisDate, Orders.order_start_time >= strThisTime)
     thisOrdersList = findRequest.fetch()
 
     findRequest = OurContacts.query()
@@ -320,7 +320,7 @@ def SendAdvertsHandler():
         thisAdvertList = findRequest.fetch()
         if len(thisAdvertList) > 0:
             thisAdvert = thisAdvertList[0]
-            for i in range(thisOrder.strTotalSMS):
+            for i in range(thisOrder.total_sms):
                 if i < len(thisOurContactList):
                     try:
                         thisContact = thisOurContactList[i]
@@ -1010,7 +1010,7 @@ def BulkSMSStatus():
                 thisSMSAccountList = findRequest.fetch()
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]
-                    thisSMSAccount.writeTotalSMS(strinput=str(thisSMSAccount.strTotalSMS + 1))
+                    thisSMSAccount.writeTotalSMS(strinput=str(thisSMSAccount.total_sms + 1))
                     thisSMSAccount.put()
                     # TODO- Consider creating a retry function here, it should take in all the messages that are suppose
                     # TODO- to be retried and feed them in

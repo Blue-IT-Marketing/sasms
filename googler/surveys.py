@@ -2626,7 +2626,7 @@ class ThisPaymentHandler(webapp2.RequestHandler):
                         thisPayment.writeUserID(strinput=vstrUserID)
                         thisPayment.writeOrderID(strinput=thisSurveyOrder.order_id)
                         thisPayment.writeOrganizationID(strinput=thisSurveyOrder.organization_id)
-                        thisPayment.writeDepositReference(strinput=thisSurveyOrder.strDepositReference)
+                        thisPayment.writeDepositReference(strinput=thisSurveyOrder.deposit_reference)
                         thisPayment.writePaymentID(strinput=thisPayment.CreatePaymentID())
                         thisPayment.writeAmountPaid(strinput=vstrDepositAmount)
                         thisPayment.writePaymentMethod(strinput=vstrDepositMethod)

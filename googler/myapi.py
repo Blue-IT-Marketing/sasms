@@ -371,7 +371,7 @@ class RoutesHandler(webapp2.RequestHandler):
         if len(thisSMSAccountList) > 0:
             thisSMSAccount = thisSMSAccountList[0]
 
-            if thisSMSAccount.strTotalSMS > 0:
+            if thisSMSAccount.total_sms > 0:
                 findRequest = SMSPortalBudget.query()
                 thisPortalList = findRequest.fetch()
                 if len(thisPortalList) > 0:
@@ -386,7 +386,7 @@ class RoutesHandler(webapp2.RequestHandler):
                         strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute,
                                                     second=vstrThisDate.second)
 
-                        thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.strTotalSMS - 1))
+                        thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.total_sms - 1))
                         thisSMSAccount.put()
 
 

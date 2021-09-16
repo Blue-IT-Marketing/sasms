@@ -965,7 +965,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                         logging.info("We will be sending this message to the user : " + strInviteMessage)
 
-                        if thisSMSAccount.strTotalSMS > 0:
+                        if thisSMSAccount.total_sms > 0:
 
                             if thisSMSAccount.use_portal == "Vodacom":
                                 findRequest = SMSPortalVodacom.query()
@@ -982,7 +982,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
                                 if thisVodaPortal.CronSendMessages(strCellNumberList=strCellList,
                                                                    strMessage=strInviteMessage,
                                                                    strAccountID=thisAccount.organization_id):
-                                    thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 4
+                                    thisSMSAccount.total_sms = thisSMSAccount.total_sms - 4
                                     self.response.write("Successfully sent an invitation message")
                                 else:
                                     self.response.write("Error sending SMS Invitation")
@@ -999,7 +999,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                                 if thisBudgetPortal.SendCronMessage(strCell=vstrCell,
                                                                     strMessage=strInviteMessage) != None:
-                                    thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 4
+                                    thisSMSAccount.total_sms = thisSMSAccount.total_sms - 4
                                     self.response.write("Successfully sent an invite message")
                                 else:
                                     self.response.write("Error sending SMS Invitation")
@@ -1016,7 +1016,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
                                 logging.info("Sending invitations through Twilio Portal")
 
                                 if thisTwilioPortal.sendSMS(strTo=vstrCell, strMessage=strInviteMessage) != None:
-                                    thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 4
+                                    thisSMSAccount.total_sms = thisSMSAccount.total_sms - 4
                                     self.response.write("Successfully sent an invite message")
                                 else:
                                     self.response.write("Error sending SMS Invitation")
@@ -1032,7 +1032,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
                                 logging.info("Sending Invitations through Click Send Portal")
 
                                 if thisClickSendPortal.SendSMS(strCell=vstrCell, strMessage=strInviteMessage) != None:
-                                    thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 4
+                                    thisSMSAccount.total_sms = thisSMSAccount.total_sms - 4
                                     self.response.write("Successfully sent an invite message")
                                 else:
                                     self.response.write("Error sending SMS Invitation")
@@ -1259,10 +1259,10 @@ class ThisOrgHandler(webapp2.RequestHandler):
                                      Accounts.suspended == True)
         thisSuspendedUserAccountsList = findRequest.fetch()
 
-        findRequest = Orders.query(Orders.strOrganizationID == strOrganizationID, Orders.strFullyPaid == True)
+        findRequest = Orders.query(Orders.organization_id == strOrganizationID, Orders.fully_paid == True)
         thisActiveAdvertisingOrdersList = findRequest.fetch()
 
-        findRequest = Orders.query(Orders.strOrganizationID == strOrganizationID, Orders.strFullyPaid == False)
+        findRequest = Orders.query(Orders.organization_id == strOrganizationID, Orders.fully_paid == False)
         thisOutStandingAdvertisingOrderList = findRequest.fetch()
 
         templates = template_env.get_template('templates/dashboard/dashfiles/thisorg.html')
@@ -1406,7 +1406,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                             thisBudgetPortal = thisBudgetPortaList[0]
                             thisBudgetPortal.SendCronMessage(strCell=vstrCell,
                                                              strMessage=thisOpenInvite.security_code)
-                            thisSMSAccount.strTotalSMS -= 1
+                            thisSMSAccount.total_sms -= 1
                             thisSMSAccount.put()
 
                     template = template_env.get_template('templates/users/sub/accept.html')
@@ -1492,7 +1492,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                             thisBudgetPortal = thisBudgetPortaList[0]
                             if thisBudgetPortal.SendCronMessage(strCell=vstrCell,
                                                                 strMessage=thisOpenInvite.security_code) != None:
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                                 thisSMSAccount.put()
                                 self.response.write("Security Code successfully sent please enter the code")
 
@@ -1506,7 +1506,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                             thisTwilioPortal = MyTwilioPortal()
 
                         if thisTwilioPortal.sendSMS(strTo=vstrCell, strMessage=thisOpenInvite.security_code) != None:
-                            thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                            thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                             thisSMSAccount.put()
                             self.response.write("Security Code successfully sent please enter the code")
 
@@ -1521,7 +1521,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
 
                         if thisClickSendPortal.SendSMS(strCell=vstrCell,
                                                        strMessage=thisOpenInvite.security_code) != None:
-                            thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                            thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                             thisSMSAccount.put()
                             self.response.write("Security Code successfully sent please enter the code")
 
@@ -1541,7 +1541,7 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
         strDepositReference = strURLlist[len(strURLlist) - 1]
 
         # The Actual Order requested
-        findRequest = Orders.query(Orders.strDepositReference == strDepositReference)
+        findRequest = Orders.query(Orders.deposit_reference == strDepositReference)
         thisOrderList = findRequest.fetch()
 
         if len(thisOrderList) > 0:
@@ -1550,7 +1550,7 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
             thisOrder = Orders()
 
         # Organization details of the owner of the account
-        findRequest = Organization.query(Organization.strOrganizationID == thisOrder.strOrganizationID)
+        findRequest = Organization.query(Organization.strOrganizationID == thisOrder.organization_id)
         thisOrgList = findRequest.fetch()
 
         if len(thisOrgList) > 0:
@@ -1559,7 +1559,7 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
             thisOrg = Organization()
 
         # Main Account Details of the owner of the account
-        findRequest = Accounts.query(Accounts.uid == thisOrder.strUserID)
+        findRequest = Accounts.query(Accounts.uid == thisOrder.uid)
         thisAccountList = findRequest.fetch()
 
         if len(thisAccountList) > 0:
@@ -1568,7 +1568,7 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
             thisAccount = Accounts()
 
         # The Advert being paid for
-        findRequest = Advert.query(Advert.advert_id == thisOrder.strAdvertID)
+        findRequest = Advert.query(Advert.advert_id == thisOrder.advert_id)
         thisAdvertList = findRequest.fetch()
 
         if len(thisAdvertList) > 0:
@@ -1578,11 +1578,11 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
 
         from advertise import Payments  # This is to force the use of payments class in adverts
         # Payment details Advert
-        findRequest = Payments.query(Payments.strOrderID == thisOrder.strOrderID)
+        findRequest = Payments.query(Payments.strOrderID == thisOrder.order_id)
         thisRelatedPaymentList = findRequest.fetch()
 
         # User Organization Payment Details
-        findRequest = Payments.query(Payments.strOrganizationID == thisOrder.strOrganizationID)
+        findRequest = Payments.query(Payments.strOrganizationID == thisOrder.organization_id)
         thisOrganizationPaymentsList = findRequest.fetch()
 
         template = template_env.get_template('templates/dashboard/payments/AdvertOrders.html')
@@ -1604,7 +1604,7 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
             vstrAmount = self.request.get('vstrAmount')
             vstrPaymentMethod = self.request.get('vstrPaymentMethod')
 
-            findRequest = Orders.query(Orders.strDepositReference == vstrDepositReference)
+            findRequest = Orders.query(Orders.deposit_reference == vstrDepositReference)
             thisOrderList = findRequest.fetch()
 
             if len(thisOrderList) > 0:
@@ -1617,11 +1617,11 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
             strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute, second=vstrThisDate.second)
 
             thisPayment = Payments()
-            thisPayment.writeOrderID(strinput=thisOrder.strOrderID)
-            thisPayment.writeUserID(strinput=thisOrder.strUserID)
-            thisPayment.writeOrganizationID(strinput=thisOrder.strOrganizationID)
+            thisPayment.writeOrderID(strinput=thisOrder.order_id)
+            thisPayment.writeUserID(strinput=thisOrder.uid)
+            thisPayment.writeOrganizationID(strinput=thisOrder.organization_id)
             thisPayment.writePaymentID(strinput=thisPayment.CreatePaymentID())
-            thisPayment.writeDepositReference(strinput=thisOrder.strDepositReference)
+            thisPayment.writeDepositReference(strinput=thisOrder.deposit_reference)
 
             thisPayment.writeAmountPaid(strinput=vstrAmount)
             thisPayment.writePaymentMethod(strinput=vstrPaymentMethod)
@@ -1630,9 +1630,9 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
             thisPayment.writeTimePaid(strinput=strThisTime)
             thisPayment.writePaymentVerified(strinput=True)
             thisPayment.put()
-            strTotalPaid = thisOrder.strTotalPaid + int(vstrAmount)
+            strTotalPaid = thisOrder.total_paid + int(vstrAmount)
             thisOrder.writeTotalPaid(strinput=strTotalPaid)
-            if thisOrder.strTotalPaid >= thisOrder.strQoutedAmount:
+            if thisOrder.total_paid >= thisOrder.quoted_amount:
                 thisOrder.writeFullyPaid(strinput=True)
                 thisOrder.writeRunOrder(strinput=True)
             thisOrder.put()
@@ -1792,8 +1792,8 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
-                            if (thisSMSAccount.strTotalSMS >= int(vstrBulkCredits)) and (int(vstrBulkCredits) > 10):
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - int(vstrBulkCredits)
+                            if (thisSMSAccount.total_sms >= int(vstrBulkCredits)) and (int(vstrBulkCredits) > 10):
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - int(vstrBulkCredits)
                                 thisAdvertAccount.total_credits += int(vstrBulkCredits)
                                 thisSMSAccount.put()
                                 thisAdvertAccount.put()
@@ -1826,8 +1826,8 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
-                            if (thisSMSAccount.strTotalSMS >= int(vstrBulkCredits)) and (int(vstrBulkCredits) > 10):
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - int(vstrBulkCredits)
+                            if (thisSMSAccount.total_sms >= int(vstrBulkCredits)) and (int(vstrBulkCredits) > 10):
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - int(vstrBulkCredits)
                                 thisSurveyAccount.total_credits += int(vstrBulkCredits)
                                 thisSMSAccount.put()
                                 thisSurveyAccount.put()
@@ -1870,7 +1870,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                                     int(vstrAdvertsCredits) > 0)):
                                 thisAdvertAccount.total_credits = thisAdvertAccount.total_credits - int(
                                     vstrAdvertsCredits)
-                                thisSMSAccount.strTotalSMS += int(vstrAdvertsCredits)
+                                thisSMSAccount.total_sms += int(vstrAdvertsCredits)
                                 thisSMSAccount.put()
                                 thisAdvertAccount.put()
                                 self.response.write(
@@ -1949,7 +1949,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                             if (thisSurveyAccount.total_credits >= int(vstrSurveyCredits)):
                                 thisSurveyAccount.total_credits = thisSurveyAccount.total_credits - int(
                                     vstrSurveyCredits)
-                                thisSMSAccount.strTotalSMS += int(vstrSurveyCredits)
+                                thisSMSAccount.total_sms += int(vstrSurveyCredits)
                                 thisSMSAccount.put()
                                 thisSurveyAccount.put()
                                 self.response.write(
@@ -2030,7 +2030,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                             if thisAffiliate.strAvailableCredit >= int(vstrAffiliateCredits):
                                 thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(
                                     vstrAffiliateCredits)
-                                thisSMSAccount.strTotalSMS += int(vstrAffiliateCredits)
+                                thisSMSAccount.total_sms += int(vstrAffiliateCredits)
                                 thisAffiliate.put()
                                 thisSMSAccount.put()
                                 self.response.write(

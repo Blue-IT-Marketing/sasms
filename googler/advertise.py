@@ -882,26 +882,26 @@ class Orders(ndb.Expando):
     """
         #RunOrder Activated by an auto payment system or by admin on manual deposit reference verification, once activated the order will start running
     """
-    strUserID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strAdvertID = ndb.StringProperty()
-    strItemCount = ndb.IntegerProperty(default=0)
-    strOrderID = ndb.StringProperty()
-    strTotalSMS = ndb.IntegerProperty(default=0)
-    strQoutedAmount = ndb.IntegerProperty(default=0)
-    strTotalPaid = ndb.IntegerProperty(default=0)
-    strFullyPaid = ndb.BooleanProperty(default=False)
-    strOrderCompleted = ndb.BooleanProperty(default=False)
-    strOrderStartDate = ndb.DateProperty()
-    strOrderStartTime = ndb.TimeProperty()
-    strDepositReference = ndb.StringProperty()
-    strRunOrder = ndb.BooleanProperty(default=False)
+    uid = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    advert_id = ndb.StringProperty()
+    item_count = ndb.IntegerProperty(default=0)
+    order_id = ndb.StringProperty()
+    total_sms = ndb.IntegerProperty(default=0)
+    quoted_amount = ndb.IntegerProperty(default=0)
+    total_paid = ndb.IntegerProperty(default=0)
+    fully_paid = ndb.BooleanProperty(default=False)
+    order_completed = ndb.BooleanProperty(default=False)
+    order_start_date = ndb.DateProperty()
+    order_start_time = ndb.TimeProperty()
+    deposit_reference = ndb.StringProperty()
+    run_order = ndb.BooleanProperty(default=False)
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -911,7 +911,7 @@ class Orders(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -921,7 +921,7 @@ class Orders(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAdvertID = strinput
+                self.advert_id = strinput
                 return True
             else:
                 return False
@@ -931,7 +931,7 @@ class Orders(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strItemCount = int(strinput)
+                self.item_count = int(strinput)
                 return True
             else:
                 return False
@@ -941,7 +941,7 @@ class Orders(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrderID = strinput
+                self.order_id = strinput
                 return True
             else:
                 return False
@@ -960,7 +960,7 @@ class Orders(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strQoutedAmount = int(strinput)
+                self.quoted_amount = int(strinput)
                 return True
             else:
                 return False
@@ -970,7 +970,7 @@ class Orders(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTotalPaid = int(strinput)
+                self.total_paid = int(strinput)
                 return True
             else:
                 return False
@@ -979,7 +979,7 @@ class Orders(ndb.Expando):
     def writeFullyPaid(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strFullyPaid = strinput
+                self.fully_paid = strinput
                 return True
             else:
                 return False
@@ -988,7 +988,7 @@ class Orders(ndb.Expando):
     def writeOrderCompleted(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strOrderCompleted = strinput
+                self.order_completed = strinput
                 return True
             else:
                 return False
@@ -997,7 +997,7 @@ class Orders(ndb.Expando):
     def writeOrderStartDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strOrderStartDate = strinput
+                self.order_start_date = strinput
                 return True
             else:
                 return False
@@ -1006,7 +1006,7 @@ class Orders(ndb.Expando):
     def writeOrderStartTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strOrderStartTime = strinput
+                self.order_start_time = strinput
                 return True
             else:
                 return False
@@ -1016,7 +1016,7 @@ class Orders(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTotalSMS = int(strinput)
+                self.total_sms = int(strinput)
                 return True
             else:
                 return False
@@ -1036,7 +1036,7 @@ class Orders(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDepositReference = strinput
+                self.deposit_reference = strinput
                 return True
             else:
                 return False
@@ -1046,7 +1046,7 @@ class Orders(ndb.Expando):
     def writeRunOrder(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strRunOrder = strinput
+                self.run_order = strinput
                 return True
             else:
                 return False
@@ -1062,7 +1062,7 @@ class Payments(ndb.Expando):
         once a payment verification is received an invoice is generated and the order marked as paid if fully paid and the totla paid amount
         adjusted...on the payment record the same is done for easy creation of invoices...
     """
-    strUserID = ndb.StringProperty()
+    uid = ndb.StringProperty()
     strOrderID = ndb.StringProperty()
     strOrganizationID = ndb.StringProperty()
     strPaymentID = ndb.StringProperty()
@@ -1077,7 +1077,7 @@ class Payments(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -1385,7 +1385,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                     thisOrder.writeItemCount(strinput=str(1))
                     thisOrder.writeFullyPaid(strinput=False)
                     thisOrder.writeTotalSMS(strinput=vstrPackage)
-                    strQuoteAmount = ((thisBudget.strAdvertSellRate * thisOrder.strTotalSMS)/100)
+                    strQuoteAmount = ((thisBudget.strAdvertSellRate * thisOrder.total_sms) / 100)
 
                     thisOrder.writeQuoteAmount(strinput=strQuoteAmount)
                     thisOrder.writeOrderID(strinput=thisOrder.CreateOrderID())
@@ -1413,10 +1413,10 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
                     #TODO- Note that intergrating an advert account allows for granular or more relevant user rights to be created inside the advert account
 
-                    findRequest = Orders.query(Orders.strOrganizationID == thisMainAccount.organization_id, Orders.strFullyPaid == True)
+                    findRequest = Orders.query(Orders.organization_id == thisMainAccount.organization_id, Orders.fully_paid == True)
                     thisPaidList = findRequest.fetch()
 
-                    findRequest = Orders.query(Orders.strOrganizationID == thisMainAccount.organization_id, Orders.strFullyPaid == False)
+                    findRequest = Orders.query(Orders.organization_id == thisMainAccount.organization_id, Orders.fully_paid == False)
                     thisNewOrdersList = findRequest.fetch()
 
                     template = template_env.get_template('templates/advertise/sub/orders.html')
@@ -1708,7 +1708,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
 
 
                 if thisAdvert.advert_status in ["Running", "Completed"]:
-                    findRequest = Orders.query(Orders.strAdvertID == thisAdvert.advert_id)
+                    findRequest = Orders.query(Orders.advert_id == thisAdvert.advert_id)
                     thisOrderList = findRequest.fetch()
                     #TODO-Please finish up the contacts functions allow it to load as many contacts as
                     #TODO-Possible and then start running adverts, also consider adding the contacts list
@@ -1733,7 +1733,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Orders.query(Orders.strAdvertID == vstrAdvertID)
+                findRequest = Orders.query(Orders.advert_id == vstrAdvertID)
                 thisOrdersList = findRequest.fetch()
 
 
@@ -1746,7 +1746,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                         ThisPaymentsList.append(thisPayment)
 
 
-                findRequest = Orders.query(Orders.strAdvertID == vstrAdvertID,Orders.strFullyPaid == False)
+                findRequest = Orders.query(Orders.advert_id == vstrAdvertID, Orders.fully_paid == False)
                 thisUpaidOrderList = findRequest.fetch()
 
 
@@ -1837,7 +1837,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                     thisStats = Stats()
 
                 #TODO- Investigate the Quotation System the way it is , is not satisfactory there might be bugs here
-                strQuoteAmount = ((thisBudget.strAdvertSellRate * thisOrder.strTotalSMS) / 100)
+                strQuoteAmount = ((thisBudget.strAdvertSellRate * thisOrder.total_sms) / 100)
                 thisOrder.writeQuoteAmount(strinput=strQuoteAmount)
                 thisOrder.writeOrderID(strinput=thisOrder.CreateOrderID())
 
@@ -1865,7 +1865,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 if vstrPaymentMethod == "Direct Deposit":
-                    findRequest = Orders.query(Orders.strOrderID == vstrSelectOrder)
+                    findRequest = Orders.query(Orders.order_id == vstrSelectOrder)
                     thisOrderList = findRequest.fetch()
 
                     if len(thisOrderList) > 0:
@@ -1931,7 +1931,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Orders.query(Orders.strOrderID == vstrOrderID)
+                findRequest = Orders.query(Orders.order_id == vstrOrderID)
                 thisOrderList = findRequest.fetch()
 
                 if len(thisOrderList) > 0:
@@ -1975,7 +1975,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                 vstrBranchName = "Branch Name : " + thisDepositAccount.strBranchName + "%0A"
                 vstrBranchCode = "Branch Code : " + thisDepositAccount.strBranchCode + "%0A"
                 vstrBanking = vstrAccountHolder + vstrAccountNumber + vstrBankName + vstrBranchName + vstrBranchCode
-                vstrReference = "Deposit Reference : " + thisOrder.strDepositReference
+                vstrReference = "Deposit Reference : " + thisOrder.deposit_reference
 
                 vstrMessage = vstrMessage + vstrDepositAmount + vstrSMSPackage + vstrBanking + vstrReference
 
@@ -2034,7 +2034,7 @@ class ThisPaymentAdvertHandler(webapp2.RequestHandler):
         strURLlist = URL.split("/")
         strOrderID = strURLlist[len(strURLlist) - 1]
 
-        findRequest = Orders.query(Orders.strOrderID == strOrderID)
+        findRequest = Orders.query(Orders.order_id == strOrderID)
         thisOrderList = findRequest.fetch()
 
         if len(thisOrderList) > 0:
@@ -2073,7 +2073,7 @@ class ThisInvoiceHandler(webapp2.RequestHandler):
             thisOrg = thisOrgList[0]
 
 
-            findRequest = Orders.query(Orders.strOrderID == thisPayment.strOrderID)
+            findRequest = Orders.query(Orders.order_id == thisPayment.strOrderID)
             thisOrderList = findRequest.fetch()
 
             if len(thisOrderList) > 0:
@@ -2081,7 +2081,7 @@ class ThisInvoiceHandler(webapp2.RequestHandler):
             else:
                 thisOrder = Orders()
 
-            findRequest = Advert.query(Advert.advert_id == thisOrder.strAdvertID)
+            findRequest = Advert.query(Advert.advert_id == thisOrder.advert_id)
             thisAdvertList = findRequest.fetch()
 
             if len(thisAdvertList) > 0:

@@ -69,10 +69,10 @@ indexes:
 
 - kind: Orders
   properties:
-  - name: strFullyPaid
-  - name: strOrderStartDate
-  - name: strRunOrder
-  - name: strOrderStartTime
+  - name: fully_paid
+  - name: order_start_date
+  - name: run_order
+  - name: order_start_time
 
 - kind: Post
   properties:
@@ -114,9 +114,9 @@ indexes:
 
 - kind: SurveyOrders
   properties:
-  - name: strOrderStartDate
-  - name: strRunOrder
-  - name: strOrderStartTime
+  - name: order_start_date
+  - name: run_order
+  - name: order_start_time
 
 - kind: SurveySchedules
   properties:

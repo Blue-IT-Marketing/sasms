@@ -2668,7 +2668,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                     strBankName = "Bank Name : " + thisBankAccount.strBankName + "%0A"
                     strBranchName = "Branch Name : " + thisBankAccount.strBranchName + "%0A"
                     strBranchCode = "Branch Code : " + thisBankAccount.strBranchCode  + "%0A"
-                    strDepositReference = "Reference : " + thisSMSAccount.strDepositReference + "%0A"
+                    strDepositReference = "Reference : " + thisSMSAccount.deposit_reference + "%0A"
 
                     strMessage = strAccountNumber + strBankName + strBranchName + strBranchCode  + strDepositReference
 
