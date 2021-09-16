@@ -1767,7 +1767,7 @@ class SurveyHandler(webapp2.RequestHandler):
                         strThisDate = datetime.date(year=vstrThisDate.year,month=vstrThisDate.month,day=vstrThisDate.day)
                         vstrThisDate += datetime.timedelta(days=30)
                         strPayByDate = datetime.date(year=vstrThisDate.year, month=vstrThisDate.month, day=vstrThisDate.day)
-                        strTotalCost = (thisPortal.strAdvertSellRate * int(vstrAddCredits))/100
+                        strTotalCost = (thisPortal.advert_sell_rate * int(vstrAddCredits)) / 100
 
                         thisSurveyAccount.writeTotalTopUpCost(strinput=strTotalCost)
 
@@ -2192,8 +2192,8 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
 
                         strTotalContacts = len(thisContactLists)
-                        logging.info(thisBudgetPortal.strAdvertSellRate)
-                        strSellRate = thisBudgetPortal.strAdvertSellRate / 100
+                        logging.info(thisBudgetPortal.advert_sell_rate)
+                        strSellRate = thisBudgetPortal.advert_sell_rate / 100
                         logging.info(strSellRate)
                         strQuotedAmount = float(strTotalContacts * strTotalSurveyQuestions * strSellRate)
                         logging.info(strQuotedAmount)

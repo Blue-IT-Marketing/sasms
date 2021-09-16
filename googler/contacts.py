@@ -1095,7 +1095,7 @@ class ThisContactHandler():
                         else:
                             thisSMSAccount = SMSAccount()
 
-                        if thisSMSAccount.strUsePortal == "Vodacom":
+                        if thisSMSAccount.use_portal == "Vodacom":
 
                             findRequest = SMSPortalVodacom.query()
                             thisPortalList = findRequest.fetch()
@@ -1108,12 +1108,12 @@ class ThisContactHandler():
                             i = 0
 
                             message = mail.EmailMessage()
-                            message.sender = thisPortal.strSenderAddress
-                            message.to = thisPortal.strEmailAddress
+                            message.sender = thisPortal.sender_address
+                            message.to = thisPortal.email_address
                             message.subject = vstrCell
                             message.body = vstrMessage
                             message.send()
-                            thisPortal.strAvailableCredit = thisPortal.strAvailableCredit - 1
+                            thisPortal.available_credit = thisPortal.available_credit - 1
 
                             thisDeliveryReport = DeliveryReport()
                             thisDeliveryReport.writeGroupID(vstrContactID)
@@ -1130,7 +1130,7 @@ class ThisContactHandler():
                             thisDeliveryReport.put()
                             thisPortal.put()
 
-                            thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                            thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                             thisSMSAccount.put()
 
 
@@ -1144,7 +1144,7 @@ class ThisContactHandler():
 
                             self.response.write("SMS Successfully sent")
 
-                        elif thisSMSAccount.strUsePortal == "Budget":
+                        elif thisSMSAccount.use_portal == "Budget":
                             findRequest = SMSPortalBudget.query()
                             thisPortalList = findRequest.fetch()
 
@@ -1169,7 +1169,7 @@ class ThisContactHandler():
 
                             if not(ref == None):
 
-                                thisPortal.strAvailableCredit = thisPortal.strAvailableCredit - 1
+                                thisPortal.available_credit = thisPortal.available_credit - 1
 
                                 thisDeliveryReport = DeliveryReport()
                                 thisDeliveryReport.writeGroupID(vstrContactID)
@@ -1188,14 +1188,14 @@ class ThisContactHandler():
                                 thisDeliveryReport.put()
                                 thisPortal.put()
 
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                                 thisSMSAccount.put()
 
                                 self.response.write("SMS Successfully Sent")
                             else:
                                 self.response.write("Unable to send SMS Message")
 
-                        elif thisSMSAccount.strUsePortal == "ClickSend":
+                        elif thisSMSAccount.use_portal == "ClickSend":
                             findRequest = ClickSendSMSPortal.query()
                             thisClickSendPortalList = findRequest.fetch()
 
@@ -1238,14 +1238,14 @@ class ThisContactHandler():
                                 thisDeliveryReport.put()
                                 thisPortal.put()
 
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                                 thisSMSAccount.put()
 
                                 self.response.write("SMS Successfully Sent")
                             else:
                                 self.response.write("Unable to send SMS Message")
 
-                        elif thisSMSAccount.strUsePortal == "Twilio":
+                        elif thisSMSAccount.use_portal == "Twilio":
                             findRequest = MyTwilioPortal.query()
                             thisTwilioPortalList = findRequest.fetch()
 
@@ -1288,7 +1288,7 @@ class ThisContactHandler():
                                 thisDeliveryReport.put()
                                 thisPortal.put()
 
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                                 thisSMSAccount.put()
 
                                 self.response.write("SMS Successfully Sent")

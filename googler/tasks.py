@@ -96,8 +96,8 @@ def BulkSMSHandler():
                 else:
                     ReceipientList.append(thisAccounts.cell)
 
-        if thisSMSAccount.strTotalSMS >= len(ReceipientList):
-            if thisSMSAccount.strUsePortal == "Vodacom":
+        if thisSMSAccount.total_sms >= len(ReceipientList):
+            if thisSMSAccount.use_portal == "Vodacom":
                 findRequest = SMSPortalVodacom.query()
                 thisVodaList = findRequest.fetch()
 
@@ -129,7 +129,7 @@ def BulkSMSHandler():
                         thisDeliveryReport.put()
                     logging.info("Bulk SMS Schedule executed")
 
-            elif thisSMSAccount.strUsePortal == "Budget":
+            elif thisSMSAccount.use_portal == "Budget":
                 findRequest = SMSPortalBudget.query()
                 thisBudgetPortalList = findRequest.fetch()
 
@@ -161,10 +161,10 @@ def BulkSMSHandler():
                     thisMessage.writeSubmitted(strinput=True)
                     thisMessage.put()
 
-                    thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.strTotalSMS - strTotalDelivered))
+                    thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.total_sms - strTotalDelivered))
                     thisSMSAccount.put()
 
-            elif thisSMSAccount.strUsePortal == "ClickSend":
+            elif thisSMSAccount.use_portal == "ClickSend":
                 findRequest = ClickSendSMSPortal.query()
                 thisClickSendPortalList = findRequest.fetch()
                 if len(thisClickSendPortalList) > 0:
@@ -196,10 +196,10 @@ def BulkSMSHandler():
                 thisMessage.writeSubmitted(strinput=True)
                 thisMessage.put()
 
-                thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.strTotalSMS - strTotalDelivered))
+                thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.total_sms - strTotalDelivered))
                 thisSMSAccount.put()
 
-            elif thisSMSAccount.strUsePortal == "Twilio":
+            elif thisSMSAccount.use_portal == "Twilio":
                 findRequest = MyTwilioPortal.query()
                 thisTwilioList = findRequest.fetch()
 
@@ -233,7 +233,7 @@ def BulkSMSHandler():
                 thisMessage.writeSubmitted(strinput=True)
                 thisMessage.put()
 
-                thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.strTotalSMS - strTotalDelivered))
+                thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.total_sms - strTotalDelivered))
                 thisSMSAccount.put()
 
 

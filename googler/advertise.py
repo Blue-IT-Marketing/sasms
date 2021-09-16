@@ -1385,7 +1385,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                     thisOrder.writeItemCount(strinput=str(1))
                     thisOrder.writeFullyPaid(strinput=False)
                     thisOrder.writeTotalSMS(strinput=vstrPackage)
-                    strQuoteAmount = ((thisBudget.strAdvertSellRate * thisOrder.total_sms) / 100)
+                    strQuoteAmount = ((thisBudget.advert_sell_rate * thisOrder.total_sms) / 100)
 
                     thisOrder.writeQuoteAmount(strinput=strQuoteAmount)
                     thisOrder.writeOrderID(strinput=thisOrder.CreateOrderID())
@@ -1487,7 +1487,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                         strThisDate = datetime.date(year=vstrThisDate.year,month=vstrThisDate.month,day=vstrThisDate.day)
                         vstrThisDate += datetime.timedelta(days=30)
                         strPayByDate = datetime.date(year=vstrThisDate.year,month=vstrThisDate.month,day=vstrThisDate.day)
-                        strTotalCost = (thisPortal.strAdvertSellRate * int(vstrAddCredits))/100
+                        strTotalCost = (thisPortal.advert_sell_rate * int(vstrAddCredits)) / 100
                         thisAdvertAccount.writeTotalTopUpCost(strinput=strTotalCost)
                         #thisAdvertAccount.writeTotalCredits(strinput=vstrAddCredits)
                         thisAdvertAccount.writeTopUpCredit(strinput=vstrAddCredits) #Will be added to Total Credits on verification of payment
@@ -1837,7 +1837,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                     thisStats = Stats()
 
                 #TODO- Investigate the Quotation System the way it is , is not satisfactory there might be bugs here
-                strQuoteAmount = ((thisBudget.strAdvertSellRate * thisOrder.total_sms) / 100)
+                strQuoteAmount = ((thisBudget.advert_sell_rate * thisOrder.total_sms) / 100)
                 thisOrder.writeQuoteAmount(strinput=strQuoteAmount)
                 thisOrder.writeOrderID(strinput=thisOrder.CreateOrderID())
 

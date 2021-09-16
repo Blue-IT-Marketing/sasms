@@ -29,7 +29,7 @@ import logging
 from xml.etree import ElementTree
 
 
-class Groups(ndb.Expando):
+class Groups(ndb.Model):
 
     uid = ndb.StringProperty()
     organization_id = ndb.StringProperty()
@@ -111,7 +111,7 @@ class Groups(ndb.Expando):
         except:
             return False
 
-class SMSContacts(ndb.Expando):
+class SMSContacts(ndb.Model):
     uid = ndb.StringProperty()
     cell_number = ndb.StringProperty()
     email = ndb.StringProperty() #TODO intergrate email with the rest of the contacts
@@ -182,7 +182,7 @@ class SMSContacts(ndb.Expando):
         except:
             return False
 
-class Messages(ndb.Expando):
+class Messages(ndb.Model):
 
     group_id = ndb.StringProperty()
     message_id = ndb.StringProperty() # Also as reference number for the message
@@ -305,7 +305,7 @@ class Messages(ndb.Expando):
         except:
             return False
 
-class MessageSchedule(ndb.Expando):
+class MessageSchedule(ndb.Model):
 
     uid = ndb.StringProperty()
     message_id = ndb.StringProperty()
@@ -408,7 +408,7 @@ class MessageSchedule(ndb.Expando):
         except:
             return False
 
-class DeliveryReport(ndb.Expando):
+class DeliveryReport(ndb.Model):
 
     message_id = ndb.StringProperty()
 
@@ -590,21 +590,21 @@ class DeliveryReport(ndb.Expando):
         except:
             return False
 
-class SMSAccount(ndb.Expando):
+class SMSAccount(ndb.Model):
 
     organization_id = ndb.StringProperty()
-    strCreditAmount = ndb.FloatProperty(default=0)
-    strCostPerSMS = ndb.FloatProperty(default=35)
-    strTotalSMS = ndb.IntegerProperty(default=10)
+    credit_amount = ndb.FloatProperty(default=0)
+    cost_per_sms = ndb.FloatProperty(default=35)
+    total_sms = ndb.IntegerProperty(default=10)
 
-    strDateCredited = ndb.DateProperty(auto_now_add=True)
-    strTimeCredited = ndb.TimeProperty(auto_now_add=True)
+    date_created = ndb.DateProperty(auto_now_add=True)
+    time_created = ndb.TimeProperty(auto_now_add=True)
 
-    strUsePortal = ndb.StringProperty(default="Budget") # Budget, Vodacom, ClickSend, Twilio
+    use_portal = ndb.StringProperty(default="Budget") # Budget, Vodacom, ClickSend, Twilio
 
-    strDepositReference = ndb.StringProperty(default="mobjustice budget")
+    deposit_reference = ndb.StringProperty(default="mobjustice budget")
 
-    strSuspend = ndb.BooleanProperty(default=False)
+    suspended = ndb.BooleanProperty(default=False)
 
     #TODO intergrate the proforma invoice payment system to the messaging module
 
@@ -621,7 +621,7 @@ class SMSAccount(ndb.Expando):
     def writeCreditAmount(self,strinput):
         try:
             if isinstance(strinput,float) or isinstance(strinput,int):
-                self.strCreditAmount = strinput
+                self.credit_amount = strinput
                 return True
             else:
                 return False
@@ -630,7 +630,7 @@ class SMSAccount(ndb.Expando):
     def writeCostPerSMS(self,strinput):
         try:
             if isinstance(strinput,float) or isinstance(strinput,int):
-                self.strCostPerSMS = strinput
+                self.cost_per_sms = strinput
                 return True
             else:
                 return False
@@ -638,7 +638,7 @@ class SMSAccount(ndb.Expando):
             return False
     def CalculateTotalSMS(self):
         try:
-            strTotalSMS = (self.strCreditAmount * 100)//self.strCostPerSMS
+            strTotalSMS = (self.credit_amount * 100) // self.cost_per_sms
             return str(strTotalSMS)
         except:
             return None
@@ -646,7 +646,7 @@ class SMSAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTotalSMS = int(strinput)
+                self.total_sms = int(strinput)
                 return True
             else:
                 return False
@@ -656,7 +656,7 @@ class SMSAccount(ndb.Expando):
         try:
 
             if isinstance(strinput,datetime.date):
-                self.strDateCredited = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -665,7 +665,7 @@ class SMSAccount(ndb.Expando):
     def writeTimeCredited(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeCredited = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -675,7 +675,7 @@ class SMSAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUsePortal = strinput
+                self.use_portal = strinput
                 return True
             else:
                 return False
@@ -686,7 +686,7 @@ class SMSAccount(ndb.Expando):
             strinput = str(strinput)
 
             if strinput.isdigit():
-                self.strTotalSMS += int(strinput)
+                self.total_sms += int(strinput)
                 return True
             else:
                 return False
@@ -696,7 +696,7 @@ class SMSAccount(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDepositReference = strinput
+                self.deposit_reference = strinput
                 return True
             else:
                 return False
@@ -711,36 +711,36 @@ class SMSAccount(ndb.Expando):
     def WriteSuspend(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strSuspend = strinput
+                self.suspended = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class SMSPortalVodacom(ndb.Expando):
+class SMSPortalVodacom(ndb.Model):
     """
         When using the CSV file format send the file as an attachment
     """
-    strSenderAddress = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_SENDER_EMAIL'))
-    strEmailAddress = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_EMAIL'))
-    strCSVEmail = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_CSV_EMAIL'))
-    strSMSSizeLimit = ndb.IntegerProperty(default=600)
-    strAvailableCredit = ndb.IntegerProperty(default=67)
-    strBuyRate = ndb.IntegerProperty(default=32)
-    strSellRate = ndb.IntegerProperty(default=35)
-    strProfit = ndb.ComputedProperty(lambda self: self.strSellRate - self.strBuyRate)
-    strPortalAddress = ndb.StringProperty(default="https://vodacommessaging.co.za")
-    strSystemCredit = ndb.IntegerProperty(default=0)
-    strPortalLogin = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_LOGIN'))
-    strPortalPassword = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_PASSWORD'))
+    sender_address = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_SENDER_EMAIL'))
+    email_address = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_EMAIL'))
+    csv_email = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_CSV_EMAIL'))
+    sms_size_limit = ndb.IntegerProperty(default=600)
+    available_credit = ndb.IntegerProperty(default=67)
+    buy_rate = ndb.IntegerProperty(default=32)
+    sell_rate = ndb.IntegerProperty(default=35)
+    profit = ndb.ComputedProperty(lambda self: self.sell_rate - self.buy_rate)
+    portal_address = ndb.StringProperty(default="https://vodacommessaging.co.za")
+    system_credit = ndb.IntegerProperty(default=0)
+    portal_login = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_LOGIN'))
+    portal_password = ndb.StringProperty(default=os.environ.get('PORTAL_VODACOM_PASSWORD'))
 
 
     def writeSenderAddress(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSenderAddress = strinput
+                self.sender_address = strinput
                 return True
             else:
                 return False
@@ -751,7 +751,7 @@ class SMSPortalVodacom(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCSVEmail = strinput
+                self.csv_email = strinput
                 return True
             else:
                 return False
@@ -761,7 +761,7 @@ class SMSPortalVodacom(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmailAddress = strinput
+                self.email_address = strinput
                 return True
             else:
                 return False
@@ -771,7 +771,7 @@ class SMSPortalVodacom(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) <= 160):
-                self.strSMSSizeLimit = int(strinput)
+                self.sms_size_limit = int(strinput)
                 return True
             else:
                 return False
@@ -781,7 +781,7 @@ class SMSPortalVodacom(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) >= 0):
-                self.strAvailableCredit = int(strinput)
+                self.available_credit = int(strinput)
                 return True
             else:
                 return False
@@ -791,8 +791,8 @@ class SMSPortalVodacom(ndb.Expando):
     def writeSellRate(self,strinput):
         try:
             strinput = str(strinput)
-            if strinput.isdigit() and (int(strinput) >= self.strBuyRate):
-                self.strSellRate = int(strinput)
+            if strinput.isdigit() and (int(strinput) >= self.buy_rate):
+                self.sell_rate = int(strinput)
                 return True
             else:
                 return False
@@ -802,7 +802,7 @@ class SMSPortalVodacom(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) >= 0):
-                self.strBuyRate = int(strinput)
+                self.buy_rate = int(strinput)
                 return True
             else:
                 return False
@@ -812,7 +812,7 @@ class SMSPortalVodacom(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) >= 0):
-                self.strSystemCredit = int(strinput)
+                self.system_credit = int(strinput)
                 return True
             else:
                 return False
@@ -822,7 +822,7 @@ class SMSPortalVodacom(ndb.Expando):
         try:
             strinput = str(strinput)
             if (strinput == None):
-                self.strPortalLogin = strinput
+                self.portal_login = strinput
                 return True
             else:
                 return False
@@ -832,7 +832,7 @@ class SMSPortalVodacom(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPortalPassword = strinput
+                self.portal_password = strinput
                 return True
             else:
                 return False
@@ -842,7 +842,7 @@ class SMSPortalVodacom(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPortalAddress = strinput
+                self.portal_address = strinput
                 return True
             else:
                 return False
@@ -872,9 +872,9 @@ class SMSPortalVodacom(ndb.Expando):
 
 
             #def SendEmail(strFrom,strTo,subject,body,strTextType,strAttachFileContent=None,strAttachFileName=None):
-            if SendEmail(strFrom=self.strSenderAddress,strTo=self.strEmailAddress,strSubject=strSubject,strBody=strMessage,strTextType="text/plain"):
+            if SendEmail(strFrom=self.sender_address, strTo=self.email_address, strSubject=strSubject, strBody=strMessage, strTextType="text/plain"):
                 try:
-                    self.writeAvailableCredit(strinput=str(self.strAvailableCredit - len(strCellNumberList)))
+                    self.writeAvailableCredit(strinput=str(self.available_credit - len(strCellNumberList)))
                     self.put()
                 except:
                     pass
@@ -922,14 +922,14 @@ class SMSPortalVodacom(ndb.Expando):
                     thisSMSAccount.put()
 
 
-                if thisSMSAccount.strTotalSMS >= len(strCellNumberList):
+                if thisSMSAccount.total_sms >= len(strCellNumberList):
 
                     #def SendEmail(strFrom,strTo,subject,body,strTextType,strAttachFileContent=None,strAttachFileName=None):
-                    if SendEmail(strFrom=self.strSenderAddress,strTo=self.strEmailAddress,strSubject=strSubject,strBody=strMessage,strTextType="text/plain"):
+                    if SendEmail(strFrom=self.sender_address, strTo=self.email_address, strSubject=strSubject, strBody=strMessage, strTextType="text/plain"):
 
-                        thisSMSAccount.writeTotalSMS(strinput=str(thisSMSAccount.strTotalSMS - len(strCellNumberList)))
+                        thisSMSAccount.writeTotalSMS(strinput=str(thisSMSAccount.total_sms - len(strCellNumberList)))
                         thisSMSAccount.put()
-                        self.writeAvailableCredit(strinput=str(self.strAvailableCredit - len(strCellNumberList)))
+                        self.writeAvailableCredit(strinput=str(self.available_credit - len(strCellNumberList)))
                         self.put()
                         return True
                     else:
@@ -974,7 +974,7 @@ class SMSPortalVodacom(ndb.Expando):
                 strInvalid = True
 
 
-            if SendEmail(strFrom=self.strSenderAddress, strTo=self.strEmailAddress, strSubject=strSubject, strBody=strMessage,strTextType="text/plain"):
+            if SendEmail(strFrom=self.sender_address, strTo=self.email_address, strSubject=strSubject, strBody=strMessage, strTextType="text/plain"):
                 return True
             else:
                 return False
@@ -982,30 +982,30 @@ class SMSPortalVodacom(ndb.Expando):
             return False
 
 
-class SMSPortalBudget(ndb.Expando):
+class SMSPortalBudget(ndb.Model):
 
-    strSendHTTPS = ndb.StringProperty(default="https://www.budgetmessaging.com/sendsms.ashx")
-    strStatusHTTPS = ndb.StringProperty(default="https://www.budgetmessaging.com/smsstatus.ashx")
-    strRepliesHTTPS = ndb.StringProperty(default="https://www.budgetmessaging.com/smsreply.ashx")
-    strCreditsHTTPS = ndb.StringProperty(default="https://www.budgetmessaging.com/credits.ashx")
-    strLoginName = ndb.StringProperty(default=os.environ.get('PORTAL_BUDGET_LOGIN'))
-    strPassword = ndb.StringProperty(default=os.environ.get('PORTAL_BUDGET_PASSWORD'))
-    strPortalAddress = ndb.StringProperty(default="https://www.budgetmessaging.com")
+    rest_send_api = ndb.StringProperty(default="https://www.budgetmessaging.com/sendsms.ashx")
+    rest_status_api = ndb.StringProperty(default="https://www.budgetmessaging.com/smsstatus.ashx")
+    rest_replies_api = ndb.StringProperty(default="https://www.budgetmessaging.com/smsreply.ashx")
+    rest_credits_api = ndb.StringProperty(default="https://www.budgetmessaging.com/credits.ashx")
+    login_name = ndb.StringProperty(default=os.environ.get('PORTAL_BUDGET_LOGIN'))
+    password = ndb.StringProperty(default=os.environ.get('PORTAL_BUDGET_PASSWORD'))
+    portal_address = ndb.StringProperty(default="https://www.budgetmessaging.com")
 
-    strSMSSizeLimit = ndb.IntegerProperty(default=150)
-    strAvailableCredit = ndb.FloatProperty(default=0)
-    strSellRate = ndb.IntegerProperty(default=35)
-    strAdvertSellRate = ndb.IntegerProperty(default=30)
-    strBuyRate = ndb.IntegerProperty(default=17)
-    strProfit = ndb.ComputedProperty(lambda self: self.strSellRate - self.strBuyRate)
-    strSystemCredit = ndb.IntegerProperty(default=0)
+    sms_size_limit = ndb.IntegerProperty(default=150)
+    available_credit = ndb.FloatProperty(default=0)
+    sell_rate = ndb.IntegerProperty(default=35)
+    advert_sell_rate = ndb.IntegerProperty(default=30)
+    buy_rate = ndb.IntegerProperty(default=17)
+    profit = ndb.ComputedProperty(lambda self: self.sell_rate - self.buy_rate)
+    system_credit = ndb.IntegerProperty(default=0)
 
 
     def writeSystemCredit(self,strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) >= 0):
-                self.strSystemCredit = int(strinput)
+                self.system_credit = int(strinput)
                 return  True
             else:
                 return False
@@ -1015,7 +1015,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) >= 0):
-                self.strBuyRate = int(strinput)
+                self.buy_rate = int(strinput)
                 return True
             else:
                 return False
@@ -1025,7 +1025,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strAdvertSellRate = int(strinput)
+                self.advert_sell_rate = int(strinput)
                 return True
             else:
                 return False
@@ -1035,7 +1035,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSendHTTPS = strinput
+                self.rest_api = strinput
                 return True
             else:
                 return False
@@ -1056,7 +1056,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strRepliesHTTPS = strinput
+                self.rest_replies_api = strinput
                 return True
             else:
                 return False
@@ -1066,7 +1066,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCreditsHTTPS = strinput
+                self.rest_credits_api = strinput
                 return True
             else:
                 return False
@@ -1076,7 +1076,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strLoginName = strinput
+                self.login_name = strinput
                 return True
             else:
                 return False
@@ -1086,7 +1086,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPassword = strinput
+                self.password = strinput
                 return True
             else:
                 return False
@@ -1096,7 +1096,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strSMSSizeLimit = int(strinput)
+                self.sms_size_limit = int(strinput)
                 return True
             else:
                 return False
@@ -1106,7 +1106,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAvailableCredit = float(strinput)
+                self.available_credit = float(strinput)
                 return True
             else:
                 return False
@@ -1116,7 +1116,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strSellRate = int(strinput)
+                self.sell_rate = int(strinput)
                 return True
             else:
                 return False
@@ -1126,7 +1126,7 @@ class SMSPortalBudget(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPortalAddress = strinput
+                self.portal_address = strinput
                 return True
             else:
                 return False
@@ -1136,9 +1136,9 @@ class SMSPortalBudget(ndb.Expando):
     def SendMessage(self,strMessage,strMessageID,strCell):
         try:
             strMessage = strMessage + " Optout:Reply STOP"
-            form_data = 'user=' + self.strLoginName + '&password=' + self.strPassword + '&cell=' + strCell + '&msg=' + strMessage + '&ref=' + strMessageID
+            form_data = 'user=' + self.login_name + '&password=' + self.password + '&cell=' + strCell + '&msg=' + strMessage + '&ref=' + strMessageID
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            result = urlfetch.fetch(url=self.strSendHTTPS,payload=form_data,method=urlfetch.POST,headers=headers,validate_certificate=True)
+            result = urlfetch.fetch(url=self.rest_api, payload=form_data, method=urlfetch.POST, headers=headers, validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400) :
                 strResult = result.content
                 strResult = strResult.replace("ACCEPTED"," ")
@@ -1152,9 +1152,9 @@ class SMSPortalBudget(ndb.Expando):
     def SendCronMessage(self,strMessage,strCell):
         try:
             strMessage = strMessage + " Optout:Reply STOP"
-            form_data = 'user=' + self.strLoginName + '&password=' + self.strPassword + '&cell=' + strCell + '&msg=' + strMessage
+            form_data = 'user=' + self.login_name + '&password=' + self.password + '&cell=' + strCell + '&msg=' + strMessage
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            result = urlfetch.fetch(url=self.strSendHTTPS,payload=form_data,method=urlfetch.POST,headers=headers,validate_certificate=True)
+            result = urlfetch.fetch(url=self.rest_api, payload=form_data, method=urlfetch.POST, headers=headers, validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400):
                 strResult = result.content
                 strResult = strResult.replace("ACCEPTED", " ")
@@ -1172,7 +1172,7 @@ class SMSPortalBudget(ndb.Expando):
 
             strRef = strRef.strip()
             logging.info(strRef)
-            form_data = 'user=' + self.strLoginName + '&password=' + self.strPassword + '&ref=' + strRef+"_"+strCell
+            form_data = 'user=' + self.login_name + '&password=' + self.password + '&ref=' + strRef + "_" + strCell
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
             result = urlfetch.fetch(url=self.strStatusHTTPS, payload=form_data, method=urlfetch.POST, headers=headers,validate_certificate=True)
 
@@ -1204,7 +1204,7 @@ class SMSPortalBudget(ndb.Expando):
             strEDay = strEndDate.day
             strEndDate = strEDay + "/" + strEMonth + "/" + strEYear
 
-            form_data = '&user=' + self.strLoginName + '&password=' + self.strPassword + '&ref=' + strMessageID + '&startdate=' + strStartDate + '&enddate=' + strEndDate
+            form_data = '&user=' + self.login_name + '&password=' + self.password + '&ref=' + strMessageID + '&startdate=' + strStartDate + '&enddate=' + strEndDate
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
             result = urlfetch.fetch(url=self.strStatusHTTPS, payload=form_data, method=urlfetch.POST, headers=headers,validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400):
@@ -1217,9 +1217,9 @@ class SMSPortalBudget(ndb.Expando):
 
     def CheckMessageReplies(self,strStartDate,strEndDate):
         try:
-            form_data = '&user=' + self.strLoginName + '&password=' + self.strPassword + '&startdate=' + strStartDate + '&enddate=' + strEndDate
+            form_data = '&user=' + self.login_name + '&password=' + self.password + '&startdate=' + strStartDate + '&enddate=' + strEndDate
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            result = urlfetch.fetch(url=self.strRepliesHTTPS, payload=form_data, method=urlfetch.POST, headers=headers,
+            result = urlfetch.fetch(url=self.rest_replies_api, payload=form_data, method=urlfetch.POST, headers=headers,
                                     validate_certificate=True)
 
             if (result.status_code >= 200) and (result.status_code < 400):
@@ -1238,9 +1238,9 @@ class SMSPortalBudget(ndb.Expando):
             strRef = strRef.strip()
 
             logging.info(strRef)
-            form_data = 'user=' + self.strLoginName + '&password=' + self.strPassword + '&ref=' + strRef
+            form_data = 'user=' + self.login_name + '&password=' + self.password + '&ref=' + strRef
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            result = urlfetch.fetch(url=self.strRepliesHTTPS, payload=form_data, method=urlfetch.POST, headers=headers,
+            result = urlfetch.fetch(url=self.rest_replies_api, payload=form_data, method=urlfetch.POST, headers=headers,
                                     validate_certificate=True)
 
             if (result.status_code >= 200) and (result.status_code < 400):
@@ -1254,14 +1254,14 @@ class SMSPortalBudget(ndb.Expando):
                 return None
 
         except urlfetch.Error:
-            logging.exception('Caught exception fetching ' + self.strRepliesHTTPS)
+            logging.exception('Caught exception fetching ' + self.rest_replies_api)
 
 
     def CheckCredits(self):
         try:
-            form_data = '&user=' + self.strLoginName + '&password=' + self.strPassword
+            form_data = '&user=' + self.login_name + '&password=' + self.password
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            result = urlfetch.fetch(url=self.strCreditsHTTPS, payload=form_data, method=urlfetch.POST, headers=headers,
+            result = urlfetch.fetch(url=self.rest_credits_api, payload=form_data, method=urlfetch.POST, headers=headers,
                                     validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400):
                 return result.content
@@ -1273,16 +1273,16 @@ class SMSPortalBudget(ndb.Expando):
         except urlfetch.Error:
             return None
 
-class ClickSendSMSPortal(ndb.Expando):
+class ClickSendSMSPortal(ndb.Model):
     """
         Send SMS Example
         https://api-mapper.clicksend.com/http/v2/send.php?method=http&username=mobiusndou@gmail.com&key=DBC95D5A-FB8F-4C12-8857-956557D14A68&to=0790471559&message=you are the boss
     """
-    strHTTPSBaseURL = ndb.StringProperty(default="https://api-mapper.clicksend.com/http/v2/send.php")
-    strHTTPSSMSReplies = ndb.StringProperty(default="https://sa-sms.appspot.com/clicksend/sms/replies")
-    strHTTPSSMSReports = ndb.StringProperty(default="https://sa-sms.appspot.com/clicksend/sms/reports")
-    strHTTPSFaxReports = ndb.StringProperty(default="https://sa-sms.appspotmail.com/clicksend/fax/reports")
-    strEmailIncomingFaxes = ndb.StringProperty(default="incomingfaxes@sa-sms.appspotmail.com")
+    rest_send_api = ndb.StringProperty(default="https://api-mapper.clicksend.com/http/v2/send.php")
+    rest_reply_api = ndb.StringProperty(default="https://sa-sms.appspot.com/clicksend/sms/replies")
+    rest_reports_api = ndb.StringProperty(default="https://sa-sms.appspot.com/clicksend/sms/reports")
+    rest_fax_reports_api = ndb.StringProperty(default="https://sa-sms.appspotmail.com/clicksend/fax/reports")
+    email_incoming_fax = ndb.StringProperty(default="incomingfaxes@sa-sms.appspotmail.com")
     strSendFaxEmail = ndb.StringProperty(default="@fax.clicksend.com")
     strAutho = ndb.StringProperty(default=os.environ.get('CLICK_SEND_AUTH'))
     strUserName = ndb.StringProperty(default=os.environ.get('CLICK_SEND_LOGIN'))
@@ -1296,7 +1296,7 @@ class ClickSendSMSPortal(ndb.Expando):
 
             form_data = "method=http&username=" + self.strUserName + "&key=" + self.strAPIKey + "&to="+strCell+"&message=" + strMessage
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            result = urlfetch.fetch(url=self.strHTTPSBaseURL,payload=form_data,method=urlfetch.POST,headers=headers,validate_certificate=True)
+            result = urlfetch.fetch(url=self.rest_send_api, payload=form_data, method=urlfetch.POST, headers=headers, validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400):
                 return result.content
             else:
@@ -2174,7 +2174,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 thisOrgList = findRequest.fetch()
 
                 if len(thisOrgList) > 0:
-                    if thisSMSAccount.strUsePortal == "Vodacom":
+                    if thisSMSAccount.use_portal == "Vodacom":
 
                         findRequest = SMSPortalVodacom.query()
                         thisPortalList = findRequest.fetch()
@@ -2196,15 +2196,15 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                             </thead>
                             <tbody>
                         """)
-                        while (thisSMSAccount.strTotalSMS > 0) and (i < len(thisSMSContactsList)):
+                        while (thisSMSAccount.total_sms > 0) and (i < len(thisSMSContactsList)):
                             thisContact = thisSMSContactsList[i]
 
-                            thisMessage = SendEmail(strFrom=thisPortal.strSenderAddress, strTo=thisPortal.strEmailAddress, strSubject=thisContact.cell_number, strBody=thisMessage.message, strTextType="text/plain")
+                            thisMessage = SendEmail(strFrom=thisPortal.sender_address, strTo=thisPortal.email_address, strSubject=thisContact.cell_number, strBody=thisMessage.message, strTextType="text/plain")
                             if thisMessage == True:
                                 self.response.write(""" <tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
                                 i = i + 1
 
-                                thisPortal.strAvailableCredit = thisPortal.strAvailableCredit - 1
+                                thisPortal.available_credit = thisPortal.available_credit - 1
                                 thisDeliveryReport = DeliveryReport()
                                 thisDeliveryReport.writeGroupID(thisGroup.group_id)
                                 thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
@@ -2234,7 +2234,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                         """)
                         thisPortal.put()
                         i = i + 1
-                        thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - (i)
+                        thisSMSAccount.total_sms = thisSMSAccount.total_sms - (i)
                         thisSMSAccount.put()
                         thisMessage.writeSubmitted(strinput=True)
 
@@ -2245,7 +2245,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                         thisMessage.writeDateSubmitted(strinput=strThisDate)
                         thisMessage.writeTimeSubmitted(strinput=strThisTime)
                         thisMessage.put()
-                    elif thisSMSAccount.strUsePortal == "Budget":
+                    elif thisSMSAccount.use_portal == "Budget":
                         findRequest = SMSPortalBudget.query()
                         thisBudgetPortalList = findRequest.fetch()
 
@@ -2267,7 +2267,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                             </thead>
                             <tbody>
                         """)
-                        while (thisSMSAccount.strTotalSMS > 0) and (i < len(thisSMSContactsList)):
+                        while (thisSMSAccount.total_sms > 0) and (i < len(thisSMSContactsList)):
                             try:
                                 thisContact = thisSMSContactsList[i]
                                 thisDate = datetime.datetime.now()
@@ -2284,7 +2284,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
 
                                 if isSent:
                                     i = i + 1
-                                    thisBudgetPortal.strAvailableCredit = thisBudgetPortal.strAvailableCredit - 1
+                                    thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.group_id)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
@@ -2317,9 +2317,9 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     thisDeliveryReport.writeTime(strinput=strThisTime)
                                     thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                     thisDeliveryReport.put()
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                             except:
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                                 i = i + 1
 
                         thisSMSAccount.put()
@@ -2346,7 +2346,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                         thisMessage.writeTimeSubmitted(strinput=strThisTime)
                         thisMessage.put()
 
-                    elif thisSMSAccount.strUsePortal == "ClickSend":
+                    elif thisSMSAccount.use_portal == "ClickSend":
                         findRequest = ClickSendSMSPortal.query()
                         thisClickSendSMSList = findRequest.fetch()
 
@@ -2369,7 +2369,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                             </thead>
                             <tbody>
                         """)
-                        while (thisSMSAccount.strTotalSMS > 0) and (i < len(thisSMSContactsList)):
+                        while (thisSMSAccount.total_sms > 0) and (i < len(thisSMSContactsList)):
                             try:
                                 thisContact = thisSMSContactsList[i]
                                 thisDate = datetime.datetime.now()
@@ -2421,9 +2421,9 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     thisDeliveryReport.writeTime(strinput=strThisTime)
                                     thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                     thisDeliveryReport.put()
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                             except:
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                                 i = i + 1
 
 
@@ -2451,7 +2451,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                         thisMessage.writeTimeSubmitted(strinput=strThisTime)
                         thisMessage.put()
 
-                    elif thisSMSAccount.strUsePortal == "Twilio":
+                    elif thisSMSAccount.use_portal == "Twilio":
                         findRequest = MyTwilioPortal.query()
                         thisTwilioPortalList = findRequest.fetch()
 
@@ -2473,7 +2473,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                             </thead>
                             <tbody>
                         """)
-                        while (thisSMSAccount.strTotalSMS > 0) and (i < len(thisSMSContactsList)):
+                        while (thisSMSAccount.total_sms > 0) and (i < len(thisSMSContactsList)):
                             try:
                                 thisContact = thisSMSContactsList[i]
                                 thisDate = datetime.datetime.now()
@@ -2526,9 +2526,9 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     thisDeliveryReport.writeTime(strinput=strThisTime)
                                     thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                     thisDeliveryReport.put()
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                             except:
-                                thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
+                                thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                                 i = i + 1
 
                         thisSMSAccount.put()

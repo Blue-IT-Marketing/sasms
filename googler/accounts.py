@@ -1106,7 +1106,7 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
             ReceipientList.append(thisOrg.cell)
             strMessage = thisOrg.verification_id
 
-            if thisSMSAccount.strUsePortal == "Vodacom":
+            if thisSMSAccount.use_portal == "Vodacom":
                 findRequests = SMSPortalVodacom.query()
                 thisVodaPortalList = findRequests.fetch()
 
@@ -1122,7 +1122,7 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                 else:
                     logging.info("Error sending activation message")
 
-            elif thisSMSAccount.strUsePortal == "Budget":
+            elif thisSMSAccount.use_portal == "Budget":
                 findRequests = SMSPortalBudget.query()
                 thisBudgetPortalList = findRequests.fetch()
 
@@ -1142,7 +1142,7 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
 
 
 
-            elif thisSMSAccount.strUsePortal == "ClickSend":
+            elif thisSMSAccount.use_portal == "ClickSend":
                 findRequest = ClickSendSMSPortal.query()
                 thisClickSendList = findRequest.fetch()
 
@@ -1159,7 +1159,7 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                     else:
                         logging.info("Error Sending Verification Message")
 
-            elif thisSMSAccount.strUsePortal == "Twilio":
+            elif thisSMSAccount.use_portal == "Twilio":
                 findRequest = MyTwilioPortal.query()
                 thisMyTwilioPortalList = findRequest.fetch()
 

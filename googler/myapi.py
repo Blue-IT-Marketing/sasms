@@ -519,7 +519,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
         try:
             if thisSMSAccount:
-                strBulkSMSCredit = thisSMSAccount.strTotalSMS
+                strBulkSMSCredit = thisSMSAccount.total_sms
             else:
                 strBulkSMSCredit = 0
         except:
