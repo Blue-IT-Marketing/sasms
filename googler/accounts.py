@@ -1745,7 +1745,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
             else:
                 thisSurveyAccount = SurveyAccount()
 
-            findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+            findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
             thisAffiliateList = findRequest.fetch()
 
             if len(thisAffiliateList) > 0:
@@ -2022,7 +2022,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                     if len(thisSMSAccountList) > 0:
                         thisSMSAccount = thisSMSAccountList[0]
 
-                        findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+                        findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
                         thisAffiliateList = findRequest.fetch()
                         if len(thisAffiliateList) > 0:
                             thisAffiliate = thisAffiliateList[0]
@@ -2059,7 +2059,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                     if len(thisAdvertList) > 0:
                         thisAdvert = thisAdvertList[0]
 
-                        findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+                        findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
                         thisAffiliateList = findRequest.fetch()
                         if len(thisAffiliateList) > 0:
                             thisAffiliate = thisAffiliateList[0]
@@ -2094,7 +2094,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                     if len(thisSurveyList) > 0:
                         thisSurvey = thisSurveyList[0]
 
-                        findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+                        findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
                         thisAffiliateList = findRequest.fetch()
                         if len(thisAffiliateList) > 0:
                             thisAffiliate = thisAffiliateList[0]

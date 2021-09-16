@@ -72,14 +72,14 @@ class SecurityLog(ndb.Model):
         except:
             return False
 
-class SMSMarket(ndb.Expando):
-    strOfferPrice = ndb.IntegerProperty(default=25)
+class SMSMarket(ndb.Model):
+    offer_price = ndb.IntegerProperty(default=25)
 
     def writeOfferPrice(self,strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strOfferPrice = int(strinput)
+                self.offer_price = int(strinput)
                 return True
             else:
                 return False
@@ -87,17 +87,17 @@ class SMSMarket(ndb.Expando):
             return False
 
 class MyAffiliates(ndb.Expando):
-    strUserID = ndb.StringProperty()
-    strAffiliatedID = ndb.StringProperty() # User ID for the Account which is affiliated by this user
-    strDate = ndb.DateProperty(auto_now_add=True)
-    strTime = ndb.TimeProperty(auto_now_add=True)
-    strCredits = ndb.IntegerProperty(default=0)
+    uid = ndb.StringProperty()
+    affiliate_id = ndb.StringProperty() # User ID for the Account which is affiliated by this user
+    date_created = ndb.DateProperty(auto_now_add=True)
+    time_created = ndb.TimeProperty(auto_now_add=True)
+    credits = ndb.IntegerProperty(default=0)
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -107,7 +107,7 @@ class MyAffiliates(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAffiliatedID = strinput
+                self.affiliate_id = strinput
                 return True
             else:
                 return False
@@ -118,7 +118,7 @@ class MyAffiliates(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strCredits += int(strinput)
+                self.credits += int(strinput)
                 return True
             else:
                 return False
@@ -127,7 +127,7 @@ class MyAffiliates(ndb.Expando):
     def writeDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDate = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -136,7 +136,7 @@ class MyAffiliates(ndb.Expando):
     def writeTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTime = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -144,8 +144,8 @@ class MyAffiliates(ndb.Expando):
             return False
 
 class Affiliate(ndb.Expando):
-    strUserID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty() #TODO- Intergrate organization ID with the affiliate account
+    uid = ndb.StringProperty()
+    organization_id = ndb.StringProperty() #TODO- Intergrate organization ID with the affiliate account
     strAffiliateLink = ndb.StringProperty()
     strHitCounter = ndb.IntegerProperty(default=0)
     strTotalSubscriptions = ndb.IntegerProperty(default=0)
@@ -159,7 +159,7 @@ class Affiliate(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -169,7 +169,7 @@ class Affiliate(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -836,7 +836,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                 findRequest = PresentCredits.query(PresentCredits.strUserID == vstrUserID)
                 CreditList = findRequest.fetch()
 
-                findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+                findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:
@@ -874,7 +874,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+                findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:
@@ -882,7 +882,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                 else:
                     thisAffiliate = Affiliate()
 
-                findRequest = MyAffiliates.query(MyAffiliates.strUserID == vstrUserID)
+                findRequest = MyAffiliates.query(MyAffiliates.uid == vstrUserID)
                 thisMyAffiliatesList = findRequest.fetch()
 
                 template = template_env.get_template('templates/affiliate/sub/Accountdetails.html')
@@ -929,7 +929,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                 if len(thisAffiliateLinkList) > 0:
                     thisLinkAffiliate = thisAffiliateLinkList[0]
 
-                    findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+                    findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
                     thisAffiliateList = findRequest.fetch()
 
                     if len(thisAffiliateList) > 0:
@@ -945,7 +945,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                     else:
                         self.response.write("Fatal Error your affiliate account isnt configured")
                 else:
-                    findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+                    findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
                     thisAffiliateList = findRequest.fetch()
 
                     if len(thisAffiliateList) > 0:
@@ -976,7 +976,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]
 
-                    findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+                    findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
                     thisAffiliateList = findRequest.fetch()
 
                     if len(thisAffiliateList) > 0:
@@ -1009,7 +1009,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Affiliate.query(Affiliate.strUserID == thisMainAccount.uid)
+                findRequest = Affiliate.query(Affiliate.uid == thisMainAccount.uid)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:
@@ -1058,7 +1058,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Affiliate.query(Affiliate.strUserID == thisMainAccount.uid)
+                findRequest = Affiliate.query(Affiliate.uid == thisMainAccount.uid)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:
@@ -1086,7 +1086,7 @@ class AffiliateHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
-                findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
+                findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:
@@ -1161,7 +1161,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                     thisOrg = Organization()
 
 
-                findRequest = Affiliate.query(Affiliate.strOrganizationID == thisMainAccount.organization_id)
+                findRequest = Affiliate.query(Affiliate.organization_id == thisMainAccount.organization_id)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:

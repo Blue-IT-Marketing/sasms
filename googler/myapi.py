@@ -526,7 +526,7 @@ class RoutesHandler(webapp2.RequestHandler):
         else:
             thisSurveyAccount = SurveyAccount()
 
-        findRequest = Affiliate.query(Affiliate.strOrganizationID == strOrganizationID)
+        findRequest = Affiliate.query(Affiliate.organization_id == strOrganizationID)
         thisAffiliateList = findRequest.fetch()
         if len(thisAffiliateList) > 0:
             thisAffiliate = thisAffiliateList[0]
