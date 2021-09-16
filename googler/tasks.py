@@ -763,9 +763,9 @@ def ScheduledSendSurveys():
     strThisTime = datetime.time(hour=vstrThisDateTime.hour, minute=vstrThisDateTime.minute,
                                 second=vstrThisDateTime.second)
 
-    findRequest = SurveyOrders.query(SurveyOrders.strRunOrder == True,
-                                     SurveyOrders.strOrderStartDate == strThisDate,
-                                     SurveyOrders.strOrderStartTime >= strThisTime)
+    findRequest = SurveyOrders.query(SurveyOrders.run_order == True,
+                                     SurveyOrders.order_start_date == strThisDate,
+                                     SurveyOrders.order_start_time >= strThisTime)
     thisSurveyOrdersList = findRequest.fetch()
 
     findRequest = SMSPortalBudget.query()
@@ -822,19 +822,19 @@ def ScheduledSendSurveys():
 
                 if thisSurvey.survey_type == "multichoice":
                     findRequest = MultiChoiceSurveys.query(
-                        MultiChoiceSurveys.strSurveyID == thisSurvey.survey_id).order(+MultiChoiceSurveys.strDateCreated)
+                        MultiChoiceSurveys.survey_id == thisSurvey.survey_id).order(+MultiChoiceSurveys.date_created)
                     thisSurveyQuestionList = findRequest.fetch()
 
                     for thisContact in thisContactList:
-                        findRequest = SurveyTracker.query(SurveyTracker.strCell == thisContact.cell,
-                                                          SurveyTracker.strSurveyID == thisSurvey.survey_id)
+                        findRequest = SurveyTracker.query(SurveyTracker.cell == thisContact.cell,
+                                                          SurveyTracker.survey_id == thisSurvey.survey_id)
                         thisTrackerList = findRequest.fetch()
                         if len(thisTrackerList) > 0:
                             thisTracker = thisTrackerList[0]
                             i = 0
                             thisSurveyQuestion = thisSurveyQuestionList[i]
                             while not (
-                                        thisTracker.strCurrentQuestionID == thisSurveyQuestion.strQuestionID) and (
+                                    thisTracker.current_question_id == thisSurveyQuestion.question_id) and (
                                         i < len(thisSurveyQuestionList)):
                                 i += 1
                                 thisSurveyQuestion = thisSurveyQuestionList[i]
@@ -850,7 +850,7 @@ def ScheduledSendSurveys():
                             thisSurveyQuestion = thisSurveyQuestionList[0]
                             thisTracker = SurveyTracker()
                             thisTracker.writeSurveyID(strinput=thisSurvey.survey_id)
-                            thisTracker.writeCurrentQuestionID(strinput=thisSurveyQuestion.strQuestionID)
+                            thisTracker.writeCurrentQuestionID(strinput=thisSurveyQuestion.question_id)
                             thisTracker.writeCell(strinput=thisContact.cell)
 
                             # TODO- Send Survey Intro duction
@@ -865,7 +865,7 @@ def ScheduledSendSurveys():
                         thisTracker.writeDate(strinput=strThisDate)
                         thisTracker.writeTime(strinput=strThisTime)
 
-                        if not (thisTracker.strIsLastQuestion):
+                        if not (thisTracker.is_last_question):
                             thisTracker.writeCurrentQuestionID(strinput=thisSurveyQuestion.strQuestionID)
                         else:
                             pass
@@ -924,9 +924,9 @@ def SurveysResponses():
     """
     from surveys import SurveyTracker, MultiChoiceSurveyAnswers, SurveyContacts, MultiChoiceSurveys
     from mysms import SMSPortalBudget, SMSAccount
-    findRequest = SurveyTracker.query(SurveyTracker.strResponseReceived == False,
-                                      SurveyTracker.strClientParticipation == True,
-                                      SurveyTracker.strRunTimes <= 10)
+    findRequest = SurveyTracker.query(SurveyTracker.response_received == False,
+                                      SurveyTracker.client_participation == True,
+                                      SurveyTracker.run_times <= 10)
     thisSurveyTrackerList = findRequest.fetch()
     findRequest = SMSPortalBudget.query()
     thisPortalList = findRequest.fetch()
@@ -944,7 +944,7 @@ def SurveysResponses():
             thisSurveyAnswer = MultiChoiceSurveyAnswers()
             thisSurveyAnswer.writeCell(thisTracker.cell)
             thisSurveyAnswer.writeSurveyID(strinput=thisTracker.survey_id)
-            thisSurveyAnswer.writeQuestionID(strinput=thisTracker.strCurrentQuestionID)
+            thisSurveyAnswer.writeQuestionID(strinput=thisTracker.current_question_id)
             reply = str(reply)
             reply = reply.strip()
             # TODO- Other reply parameters not saved ...Lots of work still needs to be done to finish up surveys
@@ -960,12 +960,12 @@ def SurveysResponses():
                 thisSurveyAnswer.writeSurname(strinput=thisContact.surname)
 
             findRequest = MultiChoiceSurveys.query(
-                MultiChoiceSurveys.strQuestionID == thisTracker.strCurrentQuestionID)
+                MultiChoiceSurveys.question_id == thisTracker.current_question_id)
             thisQuestionsList = findRequest.fetch()
 
             if len(thisQuestionsList) > 0:
                 thisQuestion = thisQuestionsList[0]
-                thisSurveyAnswer.writeQuestion(strinput=thisQuestion.strQuestion)
+                thisSurveyAnswer.writeQuestion(strinput=thisQuestion.question)
 
             # TODO - please create a Query to obtain names and surname of the person being surveyed
             # TODO- also run a query to obtain the actual Question the client is answering on the survey

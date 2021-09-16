@@ -126,6 +126,6 @@ indexes:
 
 - kind: SurveyTracker
   properties:
-  - name: strClientParticipation
+  - name: client_participation
   - name: response_received
-  - name: strRunTimes
+  - name: run_times

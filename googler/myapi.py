@@ -849,7 +849,7 @@ class RoutesHandler(webapp2.RequestHandler):
         """
         from surveys import MultiChoiceSurveyAnswers
 
-        findRequest = MultiChoiceSurveyAnswers.query(MultiChoiceSurveyAnswers.strSurveyID == strSurveyID)
+        findRequest = MultiChoiceSurveyAnswers.query(MultiChoiceSurveyAnswers.survey_id == strSurveyID)
         thisSurveyAnswersList = findRequest.fetch()
         strLimit = len(thisSurveyAnswersList) - 1
 

@@ -11,6 +11,7 @@ from mysms import SMSPortalBudget
 
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
+
 class SurveyAccount(ndb.Model):
     """
         Advertising Account
@@ -30,7 +31,6 @@ class SurveyAccount(ndb.Model):
 
     total_credits = ndb.IntegerProperty(default=0)
 
-
     total_top_up_cost = ndb.IntegerProperty(default=0)
     top_up_credit = ndb.IntegerProperty(default=0)
     top_up_reference = ndb.StringProperty()
@@ -39,8 +39,7 @@ class SurveyAccount(ndb.Model):
     date_invoice_created = ndb.DateProperty()
     deposit_slip_filename = ndb.StringProperty()
 
-
-    def writeDepositSlipFilename(self,strinput):
+    def writeDepositSlipFilename(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -51,26 +50,27 @@ class SurveyAccount(ndb.Model):
         except:
             return False
 
-
-    def writeDateInvoiceCreated(self,strinput):
+    def writeDateInvoiceCreated(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
+            if isinstance(strinput, datetime.date):
                 self.date_invoice_created = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writePayByDate(self,strinput):
+
+    def writePayByDate(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
+            if isinstance(strinput, datetime.date):
                 self.pay_by_date = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeTotalTopUpCost(self,strinput):
+
+    def writeTotalTopUpCost(self, strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
@@ -80,7 +80,8 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-    def CreateTopUpInvoiceLink(self,strinput):
+
+    def CreateTopUpInvoiceLink(self, strinput):
         """
             strinput should be TopUpReference
         :param strinput:
@@ -95,7 +96,8 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-    def writeTopUpReference(self,strinput):
+
+    def writeTopUpReference(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -106,7 +108,7 @@ class SurveyAccount(ndb.Model):
         except:
             return False
 
-    def writeTopUpCredit(self,strinput):
+    def writeTopUpCredit(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -118,7 +120,7 @@ class SurveyAccount(ndb.Model):
             return False
 
     def CreateTopUpReference(self):
-        import random,string
+        import random, string
         try:
             strTopUpReference = ""
             for i in range(12):
@@ -128,9 +130,7 @@ class SurveyAccount(ndb.Model):
         except:
             return None
 
-
-
-    def writeTotalCredits(self,strinput):
+    def writeTotalCredits(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -141,9 +141,7 @@ class SurveyAccount(ndb.Model):
         except:
             return False
 
-
-
-    def writeUserID(self,strinput):
+    def writeUserID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -153,10 +151,11 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-        #TODO- Intergrate Organization Account to the Add Account
-        #TODO- this will allow all users to access the same organization
-        #TODO- Advertising Account
-    def writeOrganizationID(self,strinput):
+        # TODO- Intergrate Organization Account to the Add Account
+        # TODO- this will allow all users to access the same organization
+        # TODO- Advertising Account
+
+    def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -166,7 +165,8 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-    def writeNames(self,strinput):
+
+    def writeNames(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -176,7 +176,8 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-    def writeSurname(self,strinput):
+
+    def writeSurname(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -186,7 +187,8 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-    def writeCell(self,strinput):
+
+    def writeCell(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -196,7 +198,8 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-    def writeTel(self,strinput):
+
+    def writeTel(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -206,7 +209,8 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-    def writeEmail(self,strinput):
+
+    def writeEmail(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -216,7 +220,8 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-    def writeWebsite(self,strinput):
+
+    def writeWebsite(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -226,7 +231,8 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
-    def writeAccountID(self,strinput):
+
+    def writeAccountID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -236,8 +242,9 @@ class SurveyAccount(ndb.Model):
                 return False
         except:
             return False
+
     def CreateAccountID(self):
-        import string,random
+        import string, random
         try:
             strAccountID = ""
             for i in range(256):
@@ -246,18 +253,20 @@ class SurveyAccount(ndb.Model):
             return strAccountID
         except:
             return None
-    def writeDate(self,strinput):
+
+    def writeDate(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
+            if isinstance(strinput, datetime.date):
                 self.date_created = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeTime(self,strinput):
+
+    def writeTime(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
+            if isinstance(strinput, datetime.time):
                 self.time_created = strinput
                 return True
             else:
@@ -265,10 +274,11 @@ class SurveyAccount(ndb.Model):
         except:
             return False
 
+
 class SurveyContactLists(ndb.Model):
     list_id = ndb.StringProperty()
-    #TODO- Please make sure that the advert account is used to obtain the user id so that only users who owns
-    #TODO- Advertising Accounts can create Survey Lists
+    # TODO- Please make sure that the advert account is used to obtain the user id so that only users who owns
+    # TODO- Advertising Accounts can create Survey Lists
 
     uid = ndb.StringProperty()
     organization_id = ndb.StringProperty()
@@ -279,7 +289,7 @@ class SurveyContactLists(ndb.Model):
     date_created = ndb.DateProperty(auto_now_add=True)
     time_created = ndb.TimeProperty(auto_now_add=True)
 
-    def writeListID(self,strinput):
+    def writeListID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -289,8 +299,9 @@ class SurveyContactLists(ndb.Model):
                 return False
         except:
             return False
+
     def CreateListID(self):
-        import random,string
+        import random, string
         try:
             strListID = ""
             for i in range(256):
@@ -298,7 +309,8 @@ class SurveyContactLists(ndb.Model):
             return strListID
         except:
             return None
-    def writeUserID(self,strinput):
+
+    def writeUserID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -308,7 +320,8 @@ class SurveyContactLists(ndb.Model):
                 return False
         except:
             return False
-    def writeOrganizationID(self,strinput):
+
+    def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -318,7 +331,8 @@ class SurveyContactLists(ndb.Model):
                 return False
         except:
             return False
-    def writeName(self,strinput):
+
+    def writeName(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -328,7 +342,8 @@ class SurveyContactLists(ndb.Model):
                 return False
         except:
             return False
-    def writeDescription(self,strinput):
+
+    def writeDescription(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -338,7 +353,8 @@ class SurveyContactLists(ndb.Model):
                 return False
         except:
             return False
-    def writeTotalContacts(self,strinput):
+
+    def writeTotalContacts(self, strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
@@ -348,25 +364,28 @@ class SurveyContactLists(ndb.Model):
                 return False
         except:
             return False
-    def writeDate(self,strinput):
+
+    def writeDate(self, strinput):
         try:
 
-            if isinstance(strinput,datetime.date):
+            if isinstance(strinput, datetime.date):
                 self.date_created = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeTime(self,strinput):
+
+    def writeTime(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
+            if isinstance(strinput, datetime.time):
                 self.time_created = strinput
                 return True
             else:
                 return False
         except:
             return False
+
 
 class SurveyContacts(ndb.Model):
     """
@@ -379,7 +398,7 @@ class SurveyContacts(ndb.Model):
     surname = ndb.StringProperty()
     cell = ndb.StringProperty()
 
-    def writeListID(self,strinput):
+    def writeListID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -389,7 +408,8 @@ class SurveyContacts(ndb.Model):
                 return False
         except:
             return False
-    def writeContactID(self,strinput):
+
+    def writeContactID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -399,8 +419,9 @@ class SurveyContacts(ndb.Model):
                 return False
         except:
             return False
+
     def CreateContactID(self):
-        import string,random
+        import string, random
         try:
             strContactID = ""
             for i in range(256):
@@ -408,7 +429,8 @@ class SurveyContacts(ndb.Model):
             return strContactID
         except:
             return None
-    def writeName(self,strinput):
+
+    def writeName(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -418,7 +440,8 @@ class SurveyContacts(ndb.Model):
                 return False
         except:
             return False
-    def writeSurname(self,strinput):
+
+    def writeSurname(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -428,7 +451,8 @@ class SurveyContacts(ndb.Model):
                 return False
         except:
             return False
-    def writeCell(self,strinput):
+
+    def writeCell(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -438,6 +462,7 @@ class SurveyContacts(ndb.Model):
                 return False
         except:
             return False
+
 
 class SurveySchedules(ndb.Model):
     """
@@ -465,14 +490,13 @@ class SurveySchedules(ndb.Model):
     start_time = ndb.TimeProperty()
     notify_on_start = ndb.BooleanProperty(default=True)
     notify_on_end = ndb.BooleanProperty(default=True)
-    activate_schedule = ndb.BooleanProperty(default=False) #TODO- Schedule Active to allow schedule to run
+    activate_schedule = ndb.BooleanProperty(default=False)  # TODO- Schedule Active to allow schedule to run
 
-    survey_status = ndb.StringProperty(default="Scheduled") # Running , Completed, Suspended
+    survey_status = ndb.StringProperty(default="Scheduled")  # Running , Completed, Suspended
     date_status_changed = ndb.DateProperty()
     time_status_changed = ndb.TimeProperty()
 
-
-    def writeScheduleID(self,strinput):
+    def writeScheduleID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -482,8 +506,9 @@ class SurveySchedules(ndb.Model):
                 return False
         except:
             return False
+
     def CreateScheduleID(self):
-        import random,string
+        import random, string
         try:
             strScheduleID = ""
             for i in range(256):
@@ -491,7 +516,8 @@ class SurveySchedules(ndb.Model):
             return strScheduleID
         except:
             return None
-    def writeUserID(self,strinput):
+
+    def writeUserID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -501,7 +527,8 @@ class SurveySchedules(ndb.Model):
                 return False
         except:
             return False
-    def writeName(self,strinput):
+
+    def writeName(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -511,7 +538,8 @@ class SurveySchedules(ndb.Model):
                 return False
         except:
             return False
-    def writeDescription(self,strinput):
+
+    def writeDescription(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -521,7 +549,8 @@ class SurveySchedules(ndb.Model):
                 return False
         except:
             return False
-    def writeListID(self,strinput):
+
+    def writeListID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -531,7 +560,8 @@ class SurveySchedules(ndb.Model):
                 return False
         except:
             return False
-    def writeSurveyID(self,strinput):
+
+    def writeSurveyID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -541,79 +571,88 @@ class SurveySchedules(ndb.Model):
                 return False
         except:
             return False
-    def writeStartDate(self,strinput):
+
+    def writeStartDate(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
+            if isinstance(strinput, datetime.date):
                 self.start_date = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeStartTime(self,strinput):
+
+    def writeStartTime(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
+            if isinstance(strinput, datetime.time):
                 self.start_time = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeNotifyOnStart(self,strinput):
+
+    def writeNotifyOnStart(self, strinput):
         try:
-            if strinput in [True,False]:
+            if strinput in [True, False]:
                 self.notify_on_start = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeNotifyOnEnd(self,strinput):
+
+    def writeNotifyOnEnd(self, strinput):
         try:
-            if strinput in [True,False]:
+            if strinput in [True, False]:
                 self.notify_on_end = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeActivateSchedule(self,strinput):
+
+    def writeActivateSchedule(self, strinput):
         try:
-            if strinput in [True,False]:
+            if strinput in [True, False]:
                 self.activate_schedule = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeSurveyStatus(self,strinput):
+
+    def writeSurveyStatus(self, strinput):
         try:
             strinput = str(strinput)
-            if strinput in ["Scheduled","Running","Completed","Suspended"]:
+            if strinput in ["Scheduled", "Running", "Completed", "Suspended"]:
                 self.survey_status = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeDateStatusChange(self,strinput):
+
+    def writeDateStatusChange(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
+            if isinstance(strinput, datetime.date):
                 self.date_status_changed = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeTimeStatusChange(self,strinput):
+
+    def writeTimeStatusChange(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
+            if isinstance(strinput, datetime.time):
                 self.time_status_changed = strinput
                 return True
             else:
                 return False
         except:
             return False
+
 
 class Surveys(ndb.Model):
     uid = ndb.StringProperty()
@@ -622,22 +661,21 @@ class Surveys(ndb.Model):
     survey_id = ndb.StringProperty()
     name = ndb.StringProperty()
     description = ndb.StringProperty()
-    survey_type = ndb.StringProperty(default="multichoice") # general
+    survey_type = ndb.StringProperty(default="multichoice")  # general
     date_created = ndb.DateProperty(auto_now_add=True)
     time_created = ndb.TimeProperty(auto_now_add=True)
 
     start_date = ndb.DateProperty()
     start_time = ndb.TimeProperty()
 
-    strSurveyStatus = ndb.StringProperty(default="Scheduled") # Running, Completed, Scheduled,Building
-    strSurveyIsPaid = ndb.BooleanProperty(default=False)
+    survey_status = ndb.StringProperty(default="Scheduled")  # Running, Completed, Scheduled,Building
+    survey_is_paid = ndb.BooleanProperty(default=False)
 
-    strAssignedCredit = ndb.IntegerProperty(default=0)
+    assigned_credit = ndb.IntegerProperty(default=0)
 
-    strRunFromCredit = ndb.BooleanProperty(default=False)
+    run_from_credit = ndb.BooleanProperty(default=False)
 
-
-    def writeUserID(self,strinput):
+    def writeUserID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -647,7 +685,8 @@ class Surveys(ndb.Model):
                 return False
         except:
             return False
-    def writeOrganizationID(self,strinput):
+
+    def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -657,8 +696,9 @@ class Surveys(ndb.Model):
                 return False
         except:
             return False
+
     def CreateSurveyID(self):
-        import random,string
+        import random, string
         try:
             strSurveyID = ""
             for i in range(256):
@@ -666,7 +706,8 @@ class Surveys(ndb.Model):
             return strSurveyID
         except:
             return None
-    def writeSurveyID(self,strinput):
+
+    def writeSurveyID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -676,7 +717,8 @@ class Surveys(ndb.Model):
                 return False
         except:
             return False
-    def writeSurveyName(self,strinput):
+
+    def writeSurveyName(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -686,7 +728,8 @@ class Surveys(ndb.Model):
                 return False
         except:
             return False
-    def writeSurveyDescription(self,strinput):
+
+    def writeSurveyDescription(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -696,25 +739,28 @@ class Surveys(ndb.Model):
                 return False
         except:
             return False
-    def writeDateCreated(self,strinput):
+
+    def writeDateCreated(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
+            if isinstance(strinput, datetime.date):
                 self.date_created = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeTimeCreated(self,strinput):
+
+    def writeTimeCreated(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
+            if isinstance(strinput, datetime.time):
                 self.time_created = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeSurveyType(self,strinput):
+
+    def writeSurveyType(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -724,101 +770,109 @@ class Surveys(ndb.Model):
                 return False
         except:
             return False
-    def writeStartDate(self,strinput):
+
+    def writeStartDate(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
+            if isinstance(strinput, datetime.date):
                 self.start_date = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeStartTime(self,strinput):
+
+    def writeStartTime(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
+            if isinstance(strinput, datetime.time):
                 self.start_time = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeSurveyStatus(self,strinput):
+
+    def writeSurveyStatus(self, strinput):
         try:
-            if strinput in ["Scheduled","Running","Completed"]:
-                self.strSurveyStatus = strinput
+            if strinput in ["Scheduled", "Running", "Completed"]:
+                self.survey_status = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeSurveyIsPaid(self,strinput):
+
+    def writeSurveyIsPaid(self, strinput):
         try:
-            if strinput in [True,False]:
-                self.strSurveyIsPaid = strinput
+            if strinput in [True, False]:
+                self.survey_is_paid = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeAssignedCredit(self,strinput):
+
+    def writeAssignedCredit(self, strinput):
         try:
             strinput = str(strinput)
             if (strinput.isdigit()) and (int(strinput) > 0):
-                self.strAssignedCredit = int(strinput)
+                self.assigned_credit = int(strinput)
                 return True
             else:
                 return False
         except:
             return False
-    def writeRunFromCredit(self,strinput):
+
+    def writeRunFromCredit(self, strinput):
         try:
 
-            if strinput in [True,False]:
-                self.strRunFromCredit = strinput
+            if strinput in [True, False]:
+                self.run_from_credit = strinput
                 return True
             else:
                 return False
         except:
             return False
 
+
 class MultiChoiceSurveys(ndb.Model):
-    strIndex = ndb.IntegerProperty()
-    strSurveyID = ndb.StringProperty()
-    strQuestionID = ndb.StringProperty()
-    strQuestion = ndb.StringProperty()
-    strChoiceOne = ndb.StringProperty(default="undefined")
-    strChoiceTwo = ndb.StringProperty(default="undefined")
-    strChoiceThree = ndb.StringProperty(default="undefined")
-    strChoiceFour = ndb.StringProperty(default="undefined")
-    strDateCreated = ndb.DateTimeProperty(auto_now_add=True)
+    index = ndb.IntegerProperty()
+    survey_id = ndb.StringProperty()
+    question_id = ndb.StringProperty()
+    question = ndb.StringProperty()
+    choice_one = ndb.StringProperty(default="undefined")
+    choice_two = ndb.StringProperty(default="undefined")
+    choice_three = ndb.StringProperty(default="undefined")
+    choice_four = ndb.StringProperty(default="undefined")
+    date_created = ndb.DateTimeProperty(auto_now_add=True)
+
     # We will sort the qeustions by making use of the Date Created Field
     # This Means the tracker will keep the current Question ID then the next
     # question will be the question with the later date if not exit
 
-
-
-    def writeSurveyID(self,strinput):
+    def writeSurveyID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurveyID = strinput
+                self.survey_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeQuestionID(self,strinput):
+
+    def writeQuestionID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strQuestionID = strinput
+                self.question_id = strinput
                 return True
             else:
                 return False
         except:
             return False
+
     def CreateQuestionID(self):
-        import random,string
+        import random, string
         try:
             strQuestionID = ""
             for i in range(256):
@@ -826,17 +880,19 @@ class MultiChoiceSurveys(ndb.Model):
             return strQuestionID
         except:
             return None
-    def writeQuestion(self,strinput):
+
+    def writeQuestion(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strQuestion = strinput
+                self.question = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeChoiceOne(self,strinput):
+
+    def writeChoiceOne(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -846,158 +902,170 @@ class MultiChoiceSurveys(ndb.Model):
                 return False
         except:
             return False
-    def writeChoiceTwo(self,strinput):
+
+    def writeChoiceTwo(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strChoiceTwo = strinput
+                self.choice_two = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeChoiceThree(self,strinput):
+
+    def writeChoiceThree(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strChoiceThree = strinput
+                self.choice_three = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeChoiceFour(self,strinput):
+
+    def writeChoiceFour(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strChoiceFour = strinput
+                self.choice_four = strinput
                 return True
             else:
                 return False
         except:
             return False
+
 
 class MultiChoiceSurveyAnswers(ndb.Model):
-    strCell = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strRef = ndb.StringProperty()
-    strSurveyID = ndb.StringProperty()
-    strQuestionID = ndb.StringProperty()
-    strQuestion = ndb.StringProperty()
-    strOptionNumber = ndb.IntegerProperty(default=0) # If Zero it means user did not answer
-    strDateTime = ndb.DateTimeProperty(auto_now_add=True)
+    cell = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    reference = ndb.StringProperty()
+    survey_id = ndb.StringProperty()
+    question_id = ndb.StringProperty()
+    question = ndb.StringProperty()
+    option_number = ndb.IntegerProperty(default=0)  # If Zero it means user did not answer
+    date_time = ndb.DateTimeProperty(auto_now_add=True)
 
+    def writeRef(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput != None:
+                self.reference = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
 
-    def writeRef(self,strinput):
+    def writeCell(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strRef = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeCell(self,strinput):
+
+    def writeSurveyID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.survey_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeSurveyID(self,strinput):
+
+    def writeQuestion(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurveyID = strinput
+                self.question = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeQuestion(self,strinput):
+
+    def writeQuestionID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strQuestion = strinput
+                self.question_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeQuestionID(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput != None:
-                self.strQuestionID = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeOptionNumber(self,strinput):
+
+    def writeOptionNumber(self, strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strOptionNumber = int(strinput)
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeNames(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput != None:
-                self.strNames = strinput
+                self.option_number = int(strinput)
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeSurname(self,strinput):
+    def writeNames(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.names = strinput
                 return True
             else:
                 return False
         except:
             return False
+
+    def writeSurname(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput != None:
+                self.surname = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
 
 class GeneralQuestionsSurvey(ndb.Model):
-    strSurveyID = ndb.StringProperty()
-    strQuestionID = ndb.StringProperty()
-    strQuestion = ndb.StringProperty()
+    survey_id = ndb.StringProperty()
+    question_id = ndb.StringProperty()
+    question = ndb.StringProperty()
 
-    def writeSurveyID(self,strinput):
+    def writeSurveyID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurveyID = strinput
+                self.survey_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeQuestionID(self,strinput):
+
+    def writeQuestionID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strQuestionID = strinput
+                self.question_id = strinput
                 return True
             else:
                 return False
         except:
             return False
+
     def CreateQuestionID(self):
-        import random,string
+        import random, string
         try:
             strQuestionID = ""
             for i in range(256):
@@ -1005,87 +1073,93 @@ class GeneralQuestionsSurvey(ndb.Model):
             return strQuestionID
         except:
             return None
-    def writeQuestion(self,strinput):
+
+    def writeQuestion(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strQuestion = strinput
+                self.question = strinput
                 return True
             else:
                 return False
         except:
             return False
+
 
 class SurveyOrders(ndb.Model):
+    uid = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    survey_id = ndb.StringProperty()
+    item_count = ndb.IntegerProperty(default=0)
+    order_id = ndb.StringProperty()
+    schedule_id = ndb.StringProperty()
+    total_sms = ndb.IntegerProperty(default=0)
+    quoted_amount = ndb.FloatProperty(default=0)
+    total_paid = ndb.IntegerProperty(default=0)
+    is_fully_paid = ndb.BooleanProperty(default=False)
+    order_completed = ndb.BooleanProperty(default=False)
+    order_start_date = ndb.DateProperty()
+    order_start_time = ndb.TimeProperty()
+    deposit_reference = ndb.StringProperty()
+    run_order = ndb.BooleanProperty(default=False)
 
-    strUserID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strSurveyID = ndb.StringProperty()
-    strItemCount = ndb.IntegerProperty(default=0)
-    strOrderID = ndb.StringProperty()
-    strScheduleID = ndb.StringProperty()
-    strTotalSMS = ndb.IntegerProperty(default=0)
-    strQoutedAmount = ndb.FloatProperty(default=0)
-    strTotalPaid = ndb.IntegerProperty(default=0)
-    strFullyPaid = ndb.BooleanProperty(default=False)
-    strOrderCompleted = ndb.BooleanProperty(default=False)
-    strOrderStartDate = ndb.DateProperty()
-    strOrderStartTime = ndb.TimeProperty()
-    strDepositReference = ndb.StringProperty()
-    strRunOrder = ndb.BooleanProperty(default=False)
+    def writeUserID(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput != None:
+                self.uid = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
 
-    def writeUserID(self,strinput):
+    def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeOrganizationID(self,strinput):
+
+    def writeSurveyID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.survey_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeSurveyID(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput != None:
-                self.strSurveyID = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeItemCount(self,strinput):
+
+    def writeItemCount(self, strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strItemCount = int(strinput)
+                self.item_count = int(strinput)
                 return True
             else:
                 return False
         except:
             return False
-    def writeOrderID(self,strinput):
+
+    def writeOrderID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrderID = strinput
+                self.order_id = strinput
                 return True
             else:
                 return False
         except:
             return False
+
     def CreateOrderID(self):
-        import random,string
+        import random, string
         try:
             strOrderID = ""
             for i in range(256):
@@ -1093,83 +1167,91 @@ class SurveyOrders(ndb.Model):
             return strOrderID
         except:
             return None
-    def writeQuoteAmount(self,strinput):
+
+    def writeQuoteAmount(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strQoutedAmount = int(strinput)
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeTotalPaid(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput.isdigit():
-                self.strTotalPaid = int(strinput)
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeFullyPaid(self,strinput):
-        try:
-            if strinput in [True,False]:
-                self.strFullyPaid = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeOrderCompleted(self,strinput):
-        try:
-            if strinput in [True,False]:
-                self.strOrderCompleted = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeOrderStartDate(self,strinput):
-        try:
-            if isinstance(strinput,datetime.date):
-                self.strOrderStartDate = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeOrderStartTime(self,strinput):
-        try:
-            if isinstance(strinput,datetime.time):
-                self.strOrderStartTime = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeScheduleID(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput != None:
-                self.strScheduleID = strinput
+                self.quoted_amount = int(strinput)
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeTotalSMS(self,strinput):
+    def writeTotalPaid(self, strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTotalSMS = int(strinput)
+                self.total_paid = int(strinput)
                 return True
             else:
                 return False
         except:
             return False
+
+    def writeFullyPaid(self, strinput):
+        try:
+            if strinput in [True, False]:
+                self.is_fully_paid = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def writeOrderCompleted(self, strinput):
+        try:
+            if strinput in [True, False]:
+                self.order_completed = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def writeOrderStartDate(self, strinput):
+        try:
+            if isinstance(strinput, datetime.date):
+                self.order_start_date = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def writeOrderStartTime(self, strinput):
+        try:
+            if isinstance(strinput, datetime.time):
+                self.order_start_time = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def writeScheduleID(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput != None:
+                self.schedule_id = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def writeTotalSMS(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput.isdigit():
+                self.total_sms = int(strinput)
+                return True
+            else:
+                return False
+        except:
+            return False
+
     def CreatedDepositReference(self):
         import random, string
         try:
@@ -1179,29 +1261,31 @@ class SurveyOrders(ndb.Model):
             return strDepReference
         except:
             return None
-    def writeDepositReference(self,strinput):
+
+    def writeDepositReference(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDepositReference = strinput
+                self.deposit_reference = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeRunOrder(self,strinput):
+
+    def writeRunOrder(self, strinput):
         try:
-            if strinput in [True,False]:
-                self.strRunOrder = strinput
+            if strinput in [True, False]:
+                self.run_order = strinput
                 return True
             else:
                 return False
 
         except:
             return False
+
 
 class SurveyPayments(ndb.Model):
-
     """
         Try using a method where in the administrator section i can verify all loaded payments through their Deposit Reference
         Generated in the Orders Class , The Reference is only used for the specific order only .
@@ -1209,52 +1293,56 @@ class SurveyPayments(ndb.Model):
         once a payment verification is received an invoice is generated and the order marked as paid if fully paid and the totla paid amount
         adjusted...on the payment record the same is done for easy creation of invoices...
     """
-    strUserID = ndb.StringProperty()
-    strOrderID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strPaymentID = ndb.StringProperty()
-    strDepositReference = ndb.StringProperty() # Intergrate this with payments class
-    strAmountPaid = ndb.IntegerProperty(default=0)
-    strPaymentMethod = ndb.StringProperty(default="Direct Deposit") # Cash , EFT
-    strDatePaid = ndb.DateProperty(auto_now_add=True)
-    strTimePaid = ndb.TimeProperty(auto_now_add=True)
-    strPaymentVerified = ndb.BooleanProperty(default=False)
-    strDateVerified = ndb.BooleanProperty(default=False)
-    strTimeVerified = ndb.BooleanProperty(default=False)
-    #TODO- When verification is effected remember to set the dates and time
+    uid = ndb.StringProperty()
+    order_id = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    payment_id = ndb.StringProperty()
+    deposit_reference = ndb.StringProperty()  # Intergrate this with payments class
+    amount_paid = ndb.IntegerProperty(default=0)
+    payment_method = ndb.StringProperty(default="Direct Deposit")  # Cash , EFT
+    date_paid = ndb.DateProperty(auto_now_add=True)
+    time_paid = ndb.TimeProperty(auto_now_add=True)
+    payment_verified = ndb.BooleanProperty(default=False)
+    date_verified = ndb.BooleanProperty(default=False)
+    time_verified = ndb.BooleanProperty(default=False)
 
-    def writeUserID(self,strinput):
+    # TODO- When verification is effected remember to set the dates and time
+
+    def writeUserID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeOrganizationID(self,strinput):
+
+    def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeOrderID(self,strinput):
+
+    def writeOrderID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrderID = strinput
+                self.order_id = strinput
                 return True
             else:
                 return False
         except:
             return False
+
     def CreatePaymentID(self):
-        import random,string
+        import random, string
         try:
             strPaymentID = ""
             for i in range(256):
@@ -1262,94 +1350,102 @@ class SurveyPayments(ndb.Model):
             return strPaymentID
         except:
             return None
-    def writePaymentID(self,strinput):
+
+    def writePaymentID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPaymentID = strinput
+                self.payment_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeAmountPaid(self,strinput):
+
+    def writeAmountPaid(self, strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strAmountPaid = int(strinput)
+                self.amount_paid = int(strinput)
                 return True
             else:
                 return False
         except:
             return False
-    def writePaymentMethod(self,strinput):
+
+    def writePaymentMethod(self, strinput):
         try:
 
-            if strinput in ["Direct Deposit","Cash","EFT","PayPal"]:
-                self.strPaymentMethod = strinput
+            if strinput in ["Direct Deposit", "Cash", "EFT", "PayPal"]:
+                self.payment_method = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeDatePaid(self,strinput):
+
+    def writeDatePaid(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
-                self.strDatePaid = strinput
+            if isinstance(strinput, datetime.date):
+                self.date_paid = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeTimePaid(self,strinput):
+
+    def writeTimePaid(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
-                self.strTimePaid = strinput
+            if isinstance(strinput, datetime.time):
+                self.time_paid = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writePaymentVerified(self,strinput):
+
+    def writePaymentVerified(self, strinput):
         try:
-            if strinput in [True,False]:
-                self.strPaymentVerified = strinput
+            if strinput in [True, False]:
+                self.payment_verified = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeDepositReference(self,strinput):
+
+    def writeDepositReference(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDepositReference = strinput
+                self.deposit_reference = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeDateVerified(self,strinput):
+    def writeDateVerified(self, strinput):
         try:
 
-            if isinstance(strinput,datetime.date):
-                self.strDateVerified = strinput
+            if isinstance(strinput, datetime.date):
+                self.date_verified = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeTimeVerified(self,strinput):
+    def writeTimeVerified(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
-                self.strTimeVerified = strinput
+            if isinstance(strinput, datetime.time):
+                self.time_verified = strinput
                 return True
             else:
                 return False
         except:
             return False
+
 
 class SurveyTracker(ndb.Model):
     """
@@ -1369,144 +1465,156 @@ class SurveyTracker(ndb.Model):
 
     """
 
-    strSurveyID = ndb.StringProperty()
-    strCurrentQuestionID = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strRef = ndb.StringProperty()
-    strResponseReceived = ndb.BooleanProperty(default=False)
-    strClientParticipation = ndb.BooleanProperty(default=True)
-    strDate = ndb.DateProperty()
-    strTime = ndb.TimeProperty()
-    strIsLastQuestion = ndb.BooleanProperty(default=False)
-    strRunTimes = ndb.IntegerProperty(default=0) # Count how many times the Tracker ran looking for answers
+    survey_id = ndb.StringProperty()
+    current_question_id = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    reference = ndb.StringProperty()
+    response_received = ndb.BooleanProperty(default=False)
+    client_participation = ndb.BooleanProperty(default=True)
+    date_created = ndb.DateProperty(auto_now_add=True)
+    time_created = ndb.TimeProperty(auto_now_add=True)
+    is_last_question = ndb.BooleanProperty(default=False)
+    run_times = ndb.IntegerProperty(default=0)  # Count how many times the Tracker ran looking for answers
 
-    def writeSurveyID(self,strinput):
+    def writeSurveyID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurveyID = strinput
+                self.survey_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeCurrentQuestionID(self,strinput):
+
+    def writeCurrentQuestionID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCurrentQuestionID = strinput
+                self.current_question_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeCell(self,strinput):
+
+    def writeCell(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeResponseReceived(self,strinput):
+
+    def writeResponseReceived(self, strinput):
         try:
-            if strinput in [True,False]:
-                self.strResponseReceived = strinput
+            if strinput in [True, False]:
+                self.response_received = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeClientParticipation(self,strinput):
+
+    def writeClientParticipation(self, strinput):
         try:
-            if strinput in [True,False]:
-                self.strClientParticipation = strinput
+            if strinput in [True, False]:
+                self.client_participation = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeDate(self,strinput):
+
+    def writeDate(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
-                self.strDate = strinput
+            if isinstance(strinput, datetime.date):
+                self.date_created = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeTime(self,strinput):
+
+    def writeTime(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
-                self.strTime = strinput
+            if isinstance(strinput, datetime.time):
+                self.time_created = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeIsLastQuestion(self,strinput):
+
+    def writeIsLastQuestion(self, strinput):
         try:
-            if strinput in [True,False]:
-                self.strIsLastQuestion = strinput
+            if strinput in [True, False]:
+                self.is_last_question = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeRunTimes(self,strinput):
+
+    def writeRunTimes(self, strinput):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strRunTimes = int(strinput)
+                self.run_times = int(strinput)
                 return True
             else:
                 return False
         except:
             return False
+
 
 class GeneralQuestionsAnswers(ndb.Model):
-    strCell = ndb.StringProperty()
-    strSurveyID = ndb.StringProperty()
-    strQuestionID = ndb.StringProperty()
-    strAnswer = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    survey_id = ndb.StringProperty()
+    question_id = ndb.StringProperty()
+    answer = ndb.StringProperty()
 
-    def writeCell(self,strinput):
+    def writeCell(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell =strinput
+                self.cell = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeSurveyID(self,strinput):
+
+    def writeSurveyID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurveyID = strinput
+                self.survey_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeQuestionID(self,strinput):
+
+    def writeQuestionID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strQuestionID = strinput
+                self.question_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeAnswer(self,strinput):
+
+    def writeAnswer(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAnswer = strinput
+                self.answer = strinput
                 return True
             else:
                 return False
@@ -1516,10 +1624,10 @@ class GeneralQuestionsAnswers(ndb.Model):
 
 from firebaseadmin import VerifyAndReturnAccount
 
-class SurveyHandler(webapp2.RequestHandler):
 
+class SurveyHandler:
 
-    #TODO- do this for all utilities
+    # TODO- do this for all utilities
 
     def get(self):
         template = template_env.get_template('templates/surveys/mainsurvey.html')
@@ -1532,12 +1640,12 @@ class SurveyHandler(webapp2.RequestHandler):
         # Uploading a Survey
 
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
@@ -1566,7 +1674,7 @@ class SurveyHandler(webapp2.RequestHandler):
         # Upload Survey
         elif vstrChoice == "1":
 
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -1575,12 +1683,12 @@ class SurveyHandler(webapp2.RequestHandler):
             vstrDescription = self.request.get('vstrDescription')
             vstrSurveyType = self.request.get('vstrSurveyType')
 
-
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Surveys.query(Surveys.organization_id == thisMainAccount.organization_id, Surveys.name == vstrSurveyName)
+                findRequest = Surveys.query(Surveys.organization_id == thisMainAccount.organization_id,
+                                            Surveys.name == vstrSurveyName)
                 thisSurveysList = findRequest.fetch()
 
                 if len(thisSurveysList) > 0:
@@ -1591,7 +1699,8 @@ class SurveyHandler(webapp2.RequestHandler):
                     vstrThisDate = datetime.datetime.now()
                     strThisDate = vstrThisDate.date()
 
-                    strThisTime = datetime.time(hour=vstrThisDate.hour,minute=vstrThisDate.minute,second=vstrThisDate.second)
+                    strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute,
+                                                second=vstrThisDate.second)
                     thisSurvey.writeSurveyName(strinput=vstrSurveyName)
                     thisSurvey.writeSurveyDescription(strinput=vstrDescription)
 
@@ -1602,7 +1711,8 @@ class SurveyHandler(webapp2.RequestHandler):
                     thisSurvey.writeSurveyID(strinput=thisSurvey.CreateSurveyID())
                     thisSurvey.writeOrganizationID(strinput=thisMainAccount.organization_id)
                     thisSurvey.put()
-                    self.response.write("Survey Successfully created please dont forget to create your survey questions")
+                    self.response.write(
+                        "Survey Successfully created please dont forget to create your survey questions")
             else:
                 self.response.write("Create your main account")
 
@@ -1610,12 +1720,12 @@ class SurveyHandler(webapp2.RequestHandler):
         # Survey Accounts
 
         elif vstrChoice == "2":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
@@ -1628,33 +1738,33 @@ class SurveyHandler(webapp2.RequestHandler):
                         thisSurveyAccount = SurveyAccount()
 
                     template = template_env.get_template('templates/surveys/sub/accounts.html')
-                    context = {'thisSurveyAccount':thisSurveyAccount,}
+                    context = {'thisSurveyAccount': thisSurveyAccount, }
                     self.response.write(template.render(context))
 
 
         # Main Screen Surveys Orders
         elif vstrChoice == "3":
 
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 if thisMainAccount.verified:
-                    findRequest = SurveyOrders.query(SurveyOrders.strOrganizationID == thisMainAccount.organization_id)
+                    findRequest = SurveyOrders.query(SurveyOrders.organization_id == thisMainAccount.organization_id)
                     thisOrdersList = findRequest.fetch()
 
                     template = template_env.get_template('templates/surveys/orders/mainorderlist.html')
-                    context = {'thisOrdersList':thisOrdersList}
+                    context = {'thisOrdersList': thisOrdersList}
                     self.response.write(template.render(context))
 
-        #Update Survey Account
+        # Update Survey Account
         elif vstrChoice == "4":
 
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
@@ -1665,8 +1775,7 @@ class SurveyHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrWebsite = self.request.get('vstrWebsite')
 
-
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
@@ -1688,7 +1797,8 @@ class SurveyHandler(webapp2.RequestHandler):
                     thisSurveyAccount.writeWebsite(strinput=vstrWebsite)
                     vstrDateTime = datetime.datetime.now()
                     strThisDate = vstrDateTime.date()
-                    strThisTime = datetime.time(hour=vstrDateTime.hour,minute=vstrDateTime.minute,second=vstrDateTime.second)
+                    strThisTime = datetime.time(hour=vstrDateTime.hour, minute=vstrDateTime.minute,
+                                                second=vstrDateTime.second)
                     thisSurveyAccount.writeDate(strinput=strThisDate)
                     thisSurveyAccount.writeTime(strinput=strThisTime)
                     thisSurveyAccount.put()
@@ -1713,28 +1823,25 @@ class SurveyHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-
-
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 if thisMainAccount.verified:
-                    findRequest = SurveyPayments.query(SurveyPayments.strOrganizationID == thisMainAccount.organization_id)
+                    findRequest = SurveyPayments.query(
+                        SurveyPayments.organization_id == thisMainAccount.organization_id)
                     thisPaymentList = findRequest.fetch()
 
                     template = template_env.get_template('templates/surveys/invoices/invoicelist.html')
-                    context = {'thisPaymentList':thisPaymentList}
+                    context = {'thisPaymentList': thisPaymentList}
                     self.response.write(template.render(context))
 
 
         elif vstrChoice == "6":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
-
-
 
             vstrAddCredits = self.request.get("vstrAddCredits")
             vstrPaymentMethod = self.request.get("vstrPaymentMethod")
@@ -1747,7 +1854,7 @@ class SurveyHandler(webapp2.RequestHandler):
             else:
                 thisPortal = SMSPortalBudget()
 
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
@@ -1759,9 +1866,11 @@ class SurveyHandler(webapp2.RequestHandler):
 
                     if vstrPaymentMethod == "DirectDeposit":
                         vstrThisDate = datetime.datetime.now()
-                        strThisDate = datetime.date(year=vstrThisDate.year,month=vstrThisDate.month,day=vstrThisDate.day)
+                        strThisDate = datetime.date(year=vstrThisDate.year, month=vstrThisDate.month,
+                                                    day=vstrThisDate.day)
                         vstrThisDate += datetime.timedelta(days=30)
-                        strPayByDate = datetime.date(year=vstrThisDate.year, month=vstrThisDate.month, day=vstrThisDate.day)
+                        strPayByDate = datetime.date(year=vstrThisDate.year, month=vstrThisDate.month,
+                                                     day=vstrThisDate.day)
                         strTotalCost = (thisPortal.advert_sell_rate * int(vstrAddCredits)) / 100
 
                         thisSurveyAccount.writeTotalTopUpCost(strinput=strTotalCost)
@@ -1772,7 +1881,8 @@ class SurveyHandler(webapp2.RequestHandler):
                         thisSurveyAccount.writePayByDate(strinput=strPayByDate)
                         thisSurveyAccount.writeDateInvoiceCreated(strinput=strThisDate)
                         thisSurveyAccount.put()
-                        findRequest = SurveyAccount.query(SurveyAccount.organization_id == thisMainAccount.organization_id)
+                        findRequest = SurveyAccount.query(
+                            SurveyAccount.organization_id == thisMainAccount.organization_id)
                         thisSurveyAccountList = findRequest.fetch()
                         if len(thisSurveyAccountList) > 0:
                             thisSurveyAccount = thisSurveyAccountList[0]
@@ -1783,13 +1893,12 @@ class SurveyHandler(webapp2.RequestHandler):
 
         elif vstrChoice == "7":
 
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
@@ -1820,10 +1929,7 @@ class SurveyHandler(webapp2.RequestHandler):
                     self.response.write(template.render(context))
 
 
-class ThisSurveyHandler(webapp2.RequestHandler):
-
-    
-
+class ThisSurveyHandler:
 
     def get(self):
 
@@ -1845,19 +1951,19 @@ class ThisSurveyHandler(webapp2.RequestHandler):
             else:
                 thisSurveyAccount = SurveyAccount()
 
-
             if thisSurvey.survey_type == "multichoice":
-                findRequest = MultiChoiceSurveys.query(MultiChoiceSurveys.strSurveyID == strSurveyID)
+                findRequest = MultiChoiceSurveys.query(MultiChoiceSurveys.survey_id == strSurveyID)
                 thisMultiChoiceSurveysList = findRequest.fetch()
 
                 template = template_env.get_template('templates/surveys/multi/multichoice.html')
-                context = {'thisMultiChoiceSurveysList':thisMultiChoiceSurveysList,'survey_id':strSurveyID,'thisSurvey':thisSurvey,'thisSurveyAccount':thisSurveyAccount}
+                context = {'thisMultiChoiceSurveysList': thisMultiChoiceSurveysList, 'survey_id': strSurveyID,
+                           'thisSurvey': thisSurvey, 'thisSurveyAccount': thisSurveyAccount}
                 self.response.write(template.render(context))
             elif thisSurvey.survey_type == "general":
-                findRequest = GeneralQuestionsSurvey.query(GeneralQuestionsSurvey.strSurveyID == strSurveyID)
+                findRequest = GeneralQuestionsSurvey.query(GeneralQuestionsSurvey.survey_id == strSurveyID)
                 thisGeneralQuestionsSurveyList = findRequest.fetch()
                 template = template_env.get_template('templates/survey/general/general.html')
-                context = {'thisGeneralQuestionsSurveyList':thisGeneralQuestionsSurveyList}
+                context = {'thisGeneralQuestionsSurveyList': thisGeneralQuestionsSurveyList}
                 self.response.write(template.render(context))
             else:
                 self.response.write("Fatal Error unable to determine survey type please contact the system admin")
@@ -1872,8 +1978,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
@@ -1892,18 +1997,16 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                     else:
                         thisSurveyAccount = SurveyAccount()
 
-
-
                     template = template_env.get_template('templates/surveys/multi/survey.html')
-                    context = {'thisSurvey':thisSurvey,'thisSurveyAccount':thisSurveyAccount}
+                    context = {'thisSurvey': thisSurvey, 'thisSurveyAccount': thisSurveyAccount}
                     self.response.write(template.render(context))
 
 
-        #Update Multi choice Survey
+        # Update Multi choice Survey
 
         elif vstrChoice == "1":
 
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -1911,7 +2014,6 @@ class ThisSurveyHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
-
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
                 vstrSurveyName = self.request.get('vstrSurveyName')
@@ -1929,10 +2031,10 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                     thisSurvey.put()
                     self.response.write("Survey Successfully updated")
 
-        #Survey Questions Multi choice
+        # Survey Questions Multi choice
 
         elif vstrChoice == "2":
-            #+ '&vstrSurveyID=' + vstrSurveyID + '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # + '&vstrSurveyID=' + vstrSurveyID + '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -1943,7 +2045,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
 
-                findRequest = MultiChoiceSurveys.query(MultiChoiceSurveys.strSurveyID == vstrSurveyID)
+                findRequest = MultiChoiceSurveys.query(MultiChoiceSurveys.survey_id == vstrSurveyID)
                 thisMultiChoiceSurveyList = findRequest.fetch()
                 findRequest = Surveys.query(Surveys.survey_id == vstrSurveyID)
                 thisSurveysList = findRequest.fetch()
@@ -1954,12 +2056,13 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                     thisSurvey = Surveys()
 
                 template = template_env.get_template('templates/surveys/multi/surveyQuestions.html')
-                context = {'thisMultiChoiceSurveyList':thisMultiChoiceSurveyList,'vstrSurveyID':vstrSurveyID,'thisSurvey':thisSurvey}
+                context = {'thisMultiChoiceSurveyList': thisMultiChoiceSurveyList, 'vstrSurveyID': vstrSurveyID,
+                           'thisSurvey': thisSurvey}
                 self.response.write(template.render(context))
-            #Survey Questions Multi choice
+            # Survey Questions Multi choice
 
         elif vstrChoice == "3":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -1975,7 +2078,8 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                 vstrChoiceFour = self.request.get('vstrChoiceFour')
                 vstrSurveyID = self.request.get('vstrSurveyID')
 
-                findRequest = MultiChoiceSurveys.query(MultiChoiceSurveys.strSurveyID == vstrSurveyID,MultiChoiceSurveys.strQuestion == vstrQuestion)
+                findRequest = MultiChoiceSurveys.query(MultiChoiceSurveys.survey_id == vstrSurveyID,
+                                                       MultiChoiceSurveys.question == vstrQuestion)
                 thisMultiChoiceSurveyList = findRequest.fetch()
 
                 if len(thisMultiChoiceSurveyList) > 0:
@@ -2003,10 +2107,9 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-
                 vstrSurveyID = self.request.get('vstrSurveyID')
 
-                findRequest = MultiChoiceSurveyAnswers.query(MultiChoiceSurveyAnswers.strSurveyID == vstrSurveyID)
+                findRequest = MultiChoiceSurveyAnswers.query(MultiChoiceSurveyAnswers.survey_id == vstrSurveyID)
                 thisSurveyAnswersList = findRequest.fetch()
 
                 findRequest = Surveys.query(Surveys.survey_id == vstrSurveyID)
@@ -2017,7 +2120,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                     thisSurvey = Surveys()
 
                 template = template_env.get_template('templates/surveys/multi/responses.html')
-                context = {'thisSurveyAnswersList':thisSurveyAnswersList,'thisSurvey':thisSurvey}
+                context = {'thisSurveyAnswersList': thisSurveyAnswersList, 'thisSurvey': thisSurvey}
                 self.response.write(template.render(context))
         elif vstrChoice == "5":
             # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
@@ -2038,16 +2141,16 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                 else:
                     thisSurveyAccount = SurveyAccount()
 
-
-
-                findRequest = SurveyContactLists.query(SurveyContactLists.organization_id == thisSurveyAccount.organization_id)
+                findRequest = SurveyContactLists.query(
+                    SurveyContactLists.organization_id == thisSurveyAccount.organization_id)
                 thisSurveyContactLists = findRequest.fetch()
 
                 template = template_env.get_template('templates/surveys/contacts/mycontacts.html')
-                context = {'thisSurveyContactLists':thisSurveyContactLists,'vstrSurveyID':vstrSurveyID,'thisSurveyAccount':thisSurveyAccount}
+                context = {'thisSurveyContactLists': thisSurveyContactLists, 'vstrSurveyID': vstrSurveyID,
+                           'thisSurveyAccount': thisSurveyAccount}
                 self.response.write(template.render(context))
         elif vstrChoice == "6":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2061,7 +2164,8 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                 vstrListName = self.request.get('vstrListName')
                 vstrListDescription = self.request.get('vstrListDescription')
 
-                findRequest = SurveyContactLists.query(SurveyContactLists.organization_id == vstrOrganizationID, SurveyContactLists.name == vstrListName)
+                findRequest = SurveyContactLists.query(SurveyContactLists.organization_id == vstrOrganizationID,
+                                                       SurveyContactLists.name == vstrListName)
                 thisSurveyContactLists = findRequest.fetch()
 
                 if len(thisSurveyContactLists) > 0:
@@ -2076,17 +2180,18 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                     thisSurveyCList.writeOrganizationID(strinput=vstrOrganizationID)
                     vstrThisDate = datetime.datetime.now()
                     strThisDate = vstrThisDate.date()
-                    strThisTime = datetime.time(hour=vstrThisDate.hour,minute=vstrThisDate.minute,second=vstrThisDate.second)
+                    strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute,
+                                                second=vstrThisDate.second)
                     thisSurveyCList.writeDate(strinput=strThisDate)
                     thisSurveyCList.writeTime(strinput=strThisTime)
                     thisSurveyCList.writeTotalContacts(strinput=0)
                     thisSurveyCList.put()
                     self.response.write("Successfully uploaded Survey Contact Lists")
-            #Manage Survey Schedules
+            # Manage Survey Schedules
 
         elif vstrChoice == "7":
 
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2094,8 +2199,6 @@ class ThisSurveyHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
-
-
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
 
@@ -2108,17 +2211,18 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                     findRequest = SurveySchedules.query(SurveySchedules.survey_id == vstrSurveyID)
                     thisSurveySchedulesList = findRequest.fetch()
 
-                    findRequest = SurveyContactLists.query(SurveyContactLists.organization_id == thisMainAccount.organization_id)
+                    findRequest = SurveyContactLists.query(
+                        SurveyContactLists.organization_id == thisMainAccount.organization_id)
                     thisContactLists = findRequest.fetch()
 
-
                     template = template_env.get_template('templates/surveys/schedules/schedules.html')
-                    context = {'thisSurveySchedulesList':thisSurveySchedulesList,'thisContactLists':thisContactLists,'vstrSurveyID':vstrSurveyID}
+                    context = {'thisSurveySchedulesList': thisSurveySchedulesList, 'thisContactLists': thisContactLists,
+                               'vstrSurveyID': vstrSurveyID}
                     self.response.write(template.render(context))
-            #Create Multi choice surve order
+            # Create Multi choice surve order
 
         elif vstrChoice == "8":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2126,22 +2230,21 @@ class ThisSurveyHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
-
-
                 vstrSurveyID = self.request.get('vstrSurveyID')
 
                 findRequest = SurveySchedules.query(SurveySchedules.survey_id == vstrSurveyID)
                 thisSurveyScheduleList = findRequest.fetch()
 
-                findRequest = SurveyOrders.query(SurveyOrders.strSurveyID == vstrSurveyID)
+                findRequest = SurveyOrders.query(SurveyOrders.survey_id == vstrSurveyID)
                 thisOrdersList = findRequest.fetch()
 
                 template = template_env.get_template('templates/surveys/orders/neworder.html')
-                context = {'thisSurveyScheduleList':thisSurveyScheduleList,'vstrSurveyID':vstrSurveyID,'thisOrdersList':thisOrdersList}
+                context = {'thisSurveyScheduleList': thisSurveyScheduleList, 'vstrSurveyID': vstrSurveyID,
+                           'thisOrdersList': thisOrdersList}
                 self.response.write(template.render(context))
 
         elif vstrChoice == "9":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2150,11 +2253,9 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-
                 vstrSurveyID = self.request.get('vstrSurveyID')
                 vstrSelectSchedule = self.request.get('vstrSelectSchedule')
                 vstrDepositMethod = self.request.get('vstrDepositMethod')
-
 
                 findRequest = SMSPortalBudget.query()
                 thisBudgetPortalList = findRequest.fetch()
@@ -2176,7 +2277,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                             thisSurvey = thisSurveyList[0]
 
                             if thisSurvey.survey_type == "multichoice":
-                                findRequest = MultiChoiceSurveys.query(MultiChoiceSurveys.strSurveyID == vstrSurveyID)
+                                findRequest = MultiChoiceSurveys.query(MultiChoiceSurveys.survey_id == vstrSurveyID)
                                 thisMultiChoiceSurveyList = findRequest.fetch()
 
                                 strTotalSurveyQuestions = len(thisMultiChoiceSurveyList)
@@ -2185,16 +2286,12 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                         else:
                             strTotalSurveyQuestions = 0
 
-
                         strTotalContacts = len(thisContactLists)
                         logging.info(thisBudgetPortal.advert_sell_rate)
                         strSellRate = thisBudgetPortal.advert_sell_rate / 100
                         logging.info(strSellRate)
                         strQuotedAmount = float(strTotalContacts * strTotalSurveyQuestions * strSellRate)
                         logging.info(strQuotedAmount)
-
-
-
 
                         thisSurveyOrder = SurveyOrders()
                         thisSurveyOrder.writeUserID(strinput=vstrUserID)
@@ -2216,7 +2313,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
                         self.response.write("Survey order successfully created")
         elif vstrChoice == "10":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2250,13 +2347,13 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                         vstrAvailableCredit = int(vstrAvailableCredit) - int(vstrCreditToAssign)
 
                         if len(thisSurveyAccountList) > 0:
-                            thisSurveyAccount =  thisSurveyAccountList[0]
+                            thisSurveyAccount = thisSurveyAccountList[0]
                             thisSurveyAccount.writeTotalCredits(strinput=vstrAvailableCredit)
                             thisSurveyAccount.put()
 
-                            #TODO- find a way to check if the scheduled date and time is in the feature if not set it in the feature and inform the user of this on the email
-                            #TODO- Send an email informing the user that the survey will start running as scheduled
-                            #TODO- send an SMS to the user informing them that their survey will run
+                            # TODO- find a way to check if the scheduled date and time is in the feature if not set it in the feature and inform the user of this on the email
+                            # TODO- Send an email informing the user that the survey will start running as scheduled
+                            # TODO- send an SMS to the user informing them that their survey will run
                             self.response.write("Successfully assigned available credit to Survey")
                         else:
                             self.response.write("Error assiging available Credit")
@@ -2266,9 +2363,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                     self.response.write("Fatal Error Survey not found")
 
 
-class ThisSurveyContactsListHandler(webapp2.RequestHandler):
-
-    
+class ThisSurveyContactsListHandler:
 
     def get(self):
         URL = self.request.url
@@ -2286,9 +2381,8 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
         findRequest = SurveyContacts.query(SurveyContacts.list_id == strListID)
         thisContactList = findRequest.fetch()
 
-
         template = template_env.get_template('templates/surveys/contacts/thiscontactlist.html')
-        context = {'thisSurveyConList':thisSurveyConList,'thisContactList':thisContactList}
+        context = {'thisSurveyConList': thisSurveyConList, 'thisContactList': thisContactList}
         self.response.write(template.render(context))
 
     def post(self):
@@ -2296,31 +2390,30 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
         vstrChoice = self.request.get('vstrChoice')
         if vstrChoice == "0":
 
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
-
                 vstrListID = self.request.get('vstrListID')
 
                 findRequest = SurveyContacts.query(SurveyContacts.list_id == vstrListID)
                 thisContactList = findRequest.fetch()
 
                 template = template_env.get_template('templates/surveys/contacts/sublist.html')
-                context = {'thisContactList':thisContactList,'vstrListID':vstrListID}
+                context = {'thisContactList': thisContactList, 'vstrListID': vstrListID}
                 self.response.write(template.render(context))
 
         elif vstrChoice == "1":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
@@ -2331,8 +2424,9 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
                 vstrSurname = vstrSurname.strip()
                 vstrCell = self.request.get('vstrCellNumber')
                 vstrCell = vstrCell.strip()
-                if not(vstrCell == None) and ((len(vstrCell) == 10) or (len(vstrCell) == 13)):
-                    findRequest = SurveyContacts.query(SurveyContacts.list_id == vstrListID, SurveyContacts.cell == vstrCell)
+                if not (vstrCell == None) and ((len(vstrCell) == 10) or (len(vstrCell) == 13)):
+                    findRequest = SurveyContacts.query(SurveyContacts.list_id == vstrListID,
+                                                       SurveyContacts.cell == vstrCell)
                     thisContactList = findRequest.fetch()
 
                     if len(thisContactList) > 0:
@@ -2358,14 +2452,14 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
                 else:
                     self.response.write("Please enter a valid cell phone number")
 
-        #Bulk Upload Contact Lists
+        # Bulk Upload Contact Lists
         elif vstrChoice == "2":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
@@ -2385,8 +2479,9 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
                                 strNames = strNames.strip()
                                 strSurname = strSplitContact[2]
                                 strSurname = strSurname.strip()
-                                if not(strCell == None) and ((len(strCell) == 10) or (len(strCell) == 13)):
-                                    findRequest = SurveyContacts.query(SurveyContacts.list_id == vstrListID, SurveyContacts.cell == strCell)
+                                if not (strCell == None) and ((len(strCell) == 10) or (len(strCell) == 13)):
+                                    findRequest = SurveyContacts.query(SurveyContacts.list_id == vstrListID,
+                                                                       SurveyContacts.cell == strCell)
                                     thisSurveyConList = findRequest.fetch()
                                     if len(thisSurveyConList) > 0:
                                         thisSurveyCon = thisSurveyConList[0]
@@ -2400,7 +2495,8 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
                                     thisSurveyCon.writeSurname(strinput=strSurname)
                                     thisSurveyCon.put()
                                     strTotalLoaded += 1
-                                    self.response.write("""Contact Loaded : <strong>""" + thisContact + """</strong> <br> """)
+                                    self.response.write(
+                                        """Contact Loaded : <strong>""" + thisContact + """</strong> <br> """)
                     except:
                         pass
 
@@ -2415,23 +2511,24 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
                 if strTotalLoaded == 0:
                     self.response.write("Failure while loading you contacts please check your cell numbers")
 
-        #Bulk Remove Contact List
+        # Bulk Remove Contact List
         elif vstrChoice == "3":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrListID = self.request.get('vstrListID')
                 vstrListID = vstrListID.strip()
-                vstrRemoveCell =self.request.get('vstrRemoveCell')
+                vstrRemoveCell = self.request.get('vstrRemoveCell')
                 vstrRemoveCell = vstrRemoveCell.strip()
 
-                findRequest = SurveyContacts.query(SurveyContacts.cell == vstrRemoveCell, SurveyContacts.list_id == vstrListID)
+                findRequest = SurveyContacts.query(SurveyContacts.cell == vstrRemoveCell,
+                                                   SurveyContacts.list_id == vstrListID)
                 thisSurveyContactsList = findRequest.fetch()
 
                 isDel = False
@@ -2455,16 +2552,14 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
                     self.response.write("Survey Contact not found / Already Deleted")
 
 
-class ThisSchedulesHandler(webapp2.RequestHandler):
-
-    
+class ThisSchedulesHandler:
 
     def get(self):
 
         vstrChoice = self.request.get('vstrChoice')
 
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
 
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
@@ -2493,20 +2588,17 @@ class ThisSchedulesHandler(webapp2.RequestHandler):
                 else:
                     vstrNotifyOnEnd = False
 
-
                 try:
                     strStartDateList = vstrStartDate.split("/")
                     strMonth = strStartDateList[0]
                     strDay = strStartDateList[1]
                     strYear = strStartDateList[2]
 
-
-                    strThisStartDate = datetime.date(year=int(strYear),month=int(strMonth),day=int(strDay))
+                    strThisStartDate = datetime.date(year=int(strYear), month=int(strMonth), day=int(strDay))
                 except:
                     strThisStartDate = datetime.datetime.now()
                     strThisStartDate += datetime.timedelta(days=1)
                     strThisStartDate = strThisStartDate.date()
-
 
                 try:
                     strStartTimeList = vstrStartTime.split(" ")
@@ -2519,12 +2611,14 @@ class ThisSchedulesHandler(webapp2.RequestHandler):
                     if strDayString == "PM":
                         strHour = 12 + int(strHour)
 
-                    strThisTime = datetime.time(hour=int(strHour),minute=int(strMinute),second=0)
+                    strThisTime = datetime.time(hour=int(strHour), minute=int(strMinute), second=0)
                 except:
                     strThisTime = datetime.datetime.now()
-                    strThisTime = datetime.time(hour=strThisTime.hour,minute=strThisTime.minute,second=strThisTime.second)
+                    strThisTime = datetime.time(hour=strThisTime.hour, minute=strThisTime.minute,
+                                                second=strThisTime.second)
 
-                findRequest = SurveySchedules.query(SurveySchedules.survey_id == vstrSurveyID, SurveySchedules.name == vstrName)
+                findRequest = SurveySchedules.query(SurveySchedules.survey_id == vstrSurveyID,
+                                                    SurveySchedules.name == vstrName)
                 thisSurveySchedulesList = findRequest.fetch()
                 if len(thisSurveySchedulesList) > 0:
                     self.response.write("Survey Schedule Already Created please just edit the schedule")
@@ -2545,22 +2639,21 @@ class ThisSchedulesHandler(webapp2.RequestHandler):
                     self.response.write("Survey Schedule Successfully uploaded and activated")
 
 
-class ThisPaymentHandler(webapp2.RequestHandler):
-
+class ThisPaymentHandler:
 
     def get(self):
-        URL =self.request.url
+        URL = self.request.url
         strURLlist = URL.split("/")
         strOrderID = strURLlist[len(strURLlist) - 1]
 
-        findRequest = SurveyOrders.query(SurveyOrders.strOrderID == strOrderID)
+        findRequest = SurveyOrders.query(SurveyOrders.order_id == strOrderID)
         thisOrdersList = findRequest.fetch()
 
         if len(thisOrdersList) > 0:
             thisOrder = thisOrdersList[0]
 
             template = template_env.get_template('templates/surveys/orders/makepayment.html')
-            context = {'thisOrder':thisOrder,'survey_id':thisOrder.survey_id}
+            context = {'thisOrder': thisOrder, 'survey_id': thisOrder.survey_id}
             self.response.write(template.render(context))
 
     def post(self):
@@ -2568,7 +2661,7 @@ class ThisPaymentHandler(webapp2.RequestHandler):
         vstrChoice = self.request.get('vstrChoice')
 
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2579,17 +2672,17 @@ class ThisPaymentHandler(webapp2.RequestHandler):
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
                 vstrOrderID = self.request.get('vstrOrderID')
-                findRequest = SurveyOrders.query(SurveyOrders.strOrderID == vstrOrderID)
+                findRequest = SurveyOrders.query(SurveyOrders.order_id == vstrOrderID)
                 thisOrderList = findRequest.fetch()
                 if len(thisOrderList) > 0:
                     thisOrder = thisOrderList[0]
                     template = template_env.get_template('templates/surveys/orders/subPayment.html')
-                    context = {'thisOrder':thisOrder}
+                    context = {'thisOrder': thisOrder}
                     self.response.write(template.render(context))
 
 
         elif vstrChoice == "1":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2603,18 +2696,17 @@ class ThisPaymentHandler(webapp2.RequestHandler):
                 vstrSurveyID = self.request.get('vstrSurveyID')
                 vstrOrderID = self.request.get('vstrOrderID')
 
-                findRequest = SurveyOrders.query(SurveyOrders.strOrderID == vstrOrderID)
+                findRequest = SurveyOrders.query(SurveyOrders.order_id == vstrOrderID)
                 thisSurveyOrdersList = findRequest.fetch()
 
                 if len(thisSurveyOrdersList) > 0:
                     thisSurveyOrder = thisSurveyOrdersList[0]
 
-
                     if int(vstrDepositAmount) > 0:
-
                         vstrThisDate = datetime.datetime.now()
                         strThisDate = vstrThisDate.date()
-                        strThisTime = datetime.time(hour=vstrThisDate.hour,minute=vstrThisDate.minute,second=vstrThisDate.second)
+                        strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute,
+                                                    second=vstrThisDate.second)
 
                         thisPayment = SurveyPayments()
 
@@ -2630,10 +2722,11 @@ class ThisPaymentHandler(webapp2.RequestHandler):
                         thisPayment.writePaymentVerified(strinput=False)
                         thisPayment.put()
                         self.response.write("""
-                        Payment request Successfully generated please <a href="/surveys/invoices/"""+ thisPayment.strPaymentID + """">click here to print your invoice</a>                        
+                        Payment request Successfully generated please <a href="/surveys/invoices/""" + thisPayment.payment_id + """">click here to print your invoice</a>                        
                         """)
 
-class ThisInvoicesHandler(webapp2.RequestHandler):
+
+class ThisInvoicesHandler:
     def get(self):
 
         from accounts import Organization
@@ -2642,7 +2735,7 @@ class ThisInvoicesHandler(webapp2.RequestHandler):
         strURLlist = URL.split("/")
         strPaymentID = strURLlist[len(strURLlist) - 1]
 
-        findRequest = SurveyPayments.query(SurveyPayments.strPaymentID == strPaymentID)
+        findRequest = SurveyPayments.query(SurveyPayments.payment_id == strPaymentID)
         thisSurveyPaymentList = findRequest.fetch()
 
         if len(thisSurveyPaymentList) > 0:
@@ -2655,7 +2748,7 @@ class ThisInvoicesHandler(webapp2.RequestHandler):
             else:
                 thisOrg = Organization()
 
-            findRequest = SurveyOrders.query(SurveyOrders.strOrderID == thisPayment.order_id)
+            findRequest = SurveyOrders.query(SurveyOrders.order_id == thisPayment.order_id)
             thisOrdersList = findRequest.fetch()
 
             if len(thisOrdersList) > 0:
@@ -2669,13 +2762,12 @@ class ThisInvoicesHandler(webapp2.RequestHandler):
                 else:
                     thisSurvey = Surveys()
 
-
                 template = template_env.get_template('templates/surveys/orders/directdeposit.html')
-                context = {'thisOrg':thisOrg,'thisPayment':thisPayment,'thisSurvey':thisSurvey}
+                context = {'thisOrg': thisOrg, 'thisPayment': thisPayment, 'thisSurvey': thisSurvey}
                 self.response.write(template.render(context))
 
 
-class ThisSurveyScheduleHandler(webapp2.RequestHandler):
+class ThisSurveyScheduleHandler:
     def get(self):
         URL = self.request.url
         strURLlist = URL.split("/")
@@ -2690,7 +2782,7 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
             thisSchedule = SurveySchedules()
 
         template = template_env.get_template('templates/surveys/schedules/thisSchedule.html')
-        context = {'thisSchedule':thisSchedule}
+        context = {'thisSchedule': thisSchedule}
         self.response.write(template.render(context))
 
     def post(self):
@@ -2698,7 +2790,7 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
         vstrChoice = self.request.get('vstrChoice')
 
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2706,7 +2798,6 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
-
 
                 vstrScheduleID = self.request.get('vstrScheduleID')
 
@@ -2719,11 +2810,11 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
                     thisSchedule = SurveySchedules()
 
                 template = template_env.get_template('templates/surveys/schedules/subSchedule.html')
-                context = {'thisSchedule':thisSchedule}
+                context = {'thisSchedule': thisSchedule}
                 self.response.write(template.render(context))
 
         elif vstrChoice == "1":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2739,7 +2830,6 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
                 vstrNotifyOnStart = self.request.get('vstrNotifyOnStart')
                 vstrNotifyOnEnd = self.request.get('vstrNotifyOnEnd')
                 vstrActivateSchedule = self.request.get('vstrActivateSchedule')
-
 
                 try:
                     if vstrNotifyOnStart == "YES":
@@ -2757,7 +2847,6 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
                     else:
                         vstrActivateSchedule = False
 
-
                     vstrStartDateList = vstrStartDate.split("-")
                     vstrYear = vstrStartDateList[0]
                     vstrMonth = vstrStartDateList[1]
@@ -2768,8 +2857,8 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
                     vstrMinute = vstrTimeList[1]
                     vstrSecond = vstrTimeList[2]
 
-                    thisDate = datetime.date(year=int(vstrYear),month=int(vstrMonth),day=int(vstrDay))
-                    thisTime = datetime.time(hour=int(vstrHour),minute=int(vstrMinute),second=int(vstrSecond))
+                    thisDate = datetime.date(year=int(vstrYear), month=int(vstrMonth), day=int(vstrDay))
+                    thisTime = datetime.time(hour=int(vstrHour), minute=int(vstrMinute), second=int(vstrSecond))
 
                     findRequest = SurveySchedules.query(SurveySchedules.schedule_id == vstrScheduleID)
                     thisSurveyScheduleList = findRequest.fetch()
@@ -2783,7 +2872,7 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
                         thisSchedule.writeNotifyOnEnd(strinput=vstrNotifyOnEnd)
                         thisSchedule.writeName(strinput=vstrName)
                         thisSchedule.writeDescription(strinput=vstrDescription)
-                        thisSchedule.writeActivateSchedule(strinput=vstrActivateSchedule )
+                        thisSchedule.writeActivateSchedule(strinput=vstrActivateSchedule)
                         thisSchedule.put()
                         self.response.write("Successfully update schedule")
                     else:
@@ -2792,7 +2881,7 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
                     self.response.write("There was an error with your input please rectify the error and try again")
 
         elif vstrChoice == "2":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2806,7 +2895,7 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
                 thisScheduleList = findRequest.fetch()
 
                 for thisSchedule in thisScheduleList:
-                    findRequest = SurveyOrders.query(SurveyOrders.strScheduleID == thisSchedule.schedule_id)
+                    findRequest = SurveyOrders.query(SurveyOrders.schedule_id == thisSchedule.schedule_id)
                     thisOrdersList = findRequest.fetch()
                     if len(thisOrdersList) > 0:
                         self.response.write("Schedule cannot be deleted as there are orders based on the schedule")
@@ -2815,7 +2904,7 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
                         self.response.write("Schedule Deleted successfully")
 
 
-class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
+class ThisTopUpInvoiceHandler:
     def get(self):
         from accounts import Organization
 
@@ -2836,7 +2925,7 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
             if len(thisOrgList) > 0:
                 thisOrg = thisOrgList[0]
             else:
-                thisOrg =Organization()
+                thisOrg = Organization()
 
             findRequest = AccountDetails.query()
             thisBluetITAccountList = findRequest.fetch()
@@ -2847,7 +2936,8 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                 thisBlueITAccount = AccountDetails()
 
             template = template_env.get_template("templates/surveys/sub/topupproforma.html")
-            context = {'thisOrg':thisOrg,'thisSurveyAccount':thisSurveyAccount,'thisBlueITAccount':thisBlueITAccount}
+            context = {'thisOrg': thisOrg, 'thisSurveyAccount': thisSurveyAccount,
+                       'thisBlueITAccount': thisBlueITAccount}
             self.response.write(template.render(context))
 
     def post(self):
@@ -2855,9 +2945,8 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
 
         vstrChoice = self.request.get('vstrChoice')
 
-
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -2900,7 +2989,9 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                         thisVerifications.writeTopUpReference(strinput=vstrTopUpReference)
                         thisVerifications.put()
 
-                        self.response.write("Reference Verification Error, deposit will take longer to verify please use our support tickets to enquire if it takes more than three days")
+                        self.response.write(
+                            "Reference Verification Error, deposit will take longer to verify please use our support tickets to enquire if it takes more than three days")
+
 
 app = webapp2.WSGIApplication([
     ('/surveys', SurveyHandler),
