@@ -395,8 +395,8 @@ class RoutesHandler(webapp2.RequestHandler):
                         ThisDeliveryReport.writeReference(strinput=ref)
                         ThisDeliveryReport.put()
 
-                        findRequest = SMSContacts.query(SMSContacts.strGroupID == thisEndPoint.api_group_id,
-                                                        SMSContacts.strCellNumber == strCell)
+                        findRequest = SMSContacts.query(SMSContacts.group_id == thisEndPoint.api_group_id,
+                                                        SMSContacts.cell_number == strCell)
                         thisSMSContactList = findRequest.fetch()
 
                         AddContact = False
@@ -413,7 +413,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             AddContact = True
 
                         findRequest = Groups.query(Groups.organization_id == thisEndPoint.organization_id,
-                                                   Groups.strGroupID == thisEndPoint.api_group_id)
+                                                   Groups.group_id == thisEndPoint.api_group_id)
                         thisGroupList = findRequest.fetch()
 
                         if len(thisGroupList) > 0:
@@ -427,7 +427,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             thisGroup.writeGroupDescription(strinput="API Group for messages sent through the API")
                             thisGroup.writeGroupName(strinput="API")
                         if AddContact:
-                            thisGroup.writeTotalNumbers(strinput=str(thisGroup.strTotalNumbers + 1))
+                            thisGroup.writeTotalNumbers(strinput=str(thisGroup.total_numbers + 1))
                             thisGroup.put()
                     form_data = "&ref=" + ref
                     self.response.write(form_data)
