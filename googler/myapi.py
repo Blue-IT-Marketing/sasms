@@ -492,7 +492,7 @@ class RoutesHandler(webapp2.RequestHandler):
             self.response.headers["Content-Type"] = "application/json"
             self.response.status_code = 200
             template = template_env.get_template('templates/api/message-status.json')
-            context = {'strStatus':strStatus,'reference':strRef,'cell':strCell}
+            context = {'status':strStatus,'reference':strRef,'cell':strCell}
             self.response.write(template.render(context))
 
         else:

@@ -59,7 +59,7 @@ indexes:
 - kind: MessageSchedule
   properties:
   - name: start_date
-  - name: strStatus
+  - name: status
   - name: start_time
 
 - kind: MultiChoiceSurveys

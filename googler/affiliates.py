@@ -494,21 +494,19 @@ class WithdrawalRequests(ndb.Model):
             return False
 
 class HitCounter(ndb.Model):
-
-    strAffiliateLink = ndb.StringProperty()
-
-    strHitCounter = ndb.IntegerProperty(default=0)
-    strVisitorsCount = ndb.IntegerProperty(default=0)
-    strRegCounter = ndb.IntegerProperty(default=0)
-    strTimeSpentOnPage = ndb.IntegerProperty(default=0) # Time in Seconds
-    strDate = ndb.DateProperty(auto_now_add=True)
-    strTime = ndb.TimeProperty(auto_now_add=True)
+    affiliate_link = ndb.StringProperty()
+    hit_counter = ndb.IntegerProperty(default=0)
+    visitors_counter = ndb.IntegerProperty(default=0)
+    reg_counter = ndb.IntegerProperty(default=0)
+    time_spent_on_page = ndb.IntegerProperty(default=0) # Time in Seconds
+    date_created = ndb.DateProperty(auto_now_add=True)
+    time_created = ndb.TimeProperty(auto_now_add=True)
 
     def writeAffiliateLink(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAffiliateLink = strinput
+                self.affiliate_link = strinput
                 return True
             else:
                 return False
@@ -516,19 +514,19 @@ class HitCounter(ndb.Model):
             return False
     def AddHitCounter(self):
         try:
-            self.strHitCounter += 1
+            self.hit_counter += 1
             return True
         except:
             return False
     def AddVisitorCount(self):
         try:
-            self.strVisitorsCount += 1
+            self.visitors_counter += 1
             return True
         except:
             return False
     def AddRegCounter(self):
         try:
-            self.strRegCounter += 1
+            self.reg_counter += 1
             return True
         except:
             return False
@@ -536,7 +534,7 @@ class HitCounter(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTimeSpentOnPage = int(strinput)
+                self.time_spent_on_page = int(strinput)
                 return True
             else:
                 return False
@@ -545,7 +543,7 @@ class HitCounter(ndb.Model):
     def writeDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDate = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -555,7 +553,7 @@ class HitCounter(ndb.Model):
     def writeTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTime = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -563,26 +561,25 @@ class HitCounter(ndb.Model):
             return False
 
 class Twitter(ndb.Model):
-    strUserID = ndb.StringProperty()
-    strAffiliateLink = ndb.StringProperty()
+    uid = ndb.StringProperty()
+    affiliate_link = ndb.StringProperty()
+    consumer_api = ndb.StringProperty(default=os.environ.get('TWITTER_CONSUMER_API'))
+    consumer_secret = ndb.StringProperty(default=os.environ.get('TWITTER_CONSUMER_SECRET'))
+    access_token = ndb.StringProperty(default=os.environ.get('TWITTER_ACCESS_TOKEN_KEY'))
+    access_token_secret = ndb.StringProperty(default=os.environ.get('TWITTER_ACCESS_TOKEN_SECRET'))
 
-    strConsumerAPI = ndb.StringProperty(default=os.environ.get('TWITTER_CONSUMER_API'))
-    strConsumerSecret = ndb.StringProperty(default=os.environ.get('TWITTER_CONSUMER_SECRET'))
-    strAccessTokenKey = ndb.StringProperty(default=os.environ.get('TWITTER_ACCESS_TOKEN_KEY'))
-    strAccessTokenSecret = ndb.StringProperty(default=os.environ.get('TWITTER_ACCESS_TOKEN_SECRET'))
-
-    strCallBackURL = ndb.StringProperty(default="https://sa-sms.appspot.com")
-    strAPPOnlyAuthentication = ndb.StringProperty(default="https://api.twitter.com/oauth2/token")
-    strRequestTokenURL = ndb.StringProperty(default="https://api.twitter.com/oauth/request_token")
-    strAuthorizeURL = ndb.StringProperty(default="https://api.twitter.com/oauth/authorize")
-    strAccessTokenURL = ndb.StringProperty(default="https://api.twitter.com/oauth/access_token")
+    call_back_url = ndb.StringProperty(default="https://sa-sms.appspot.com")
+    app_only_authentication = ndb.StringProperty(default="https://api.twitter.com/oauth2/token")
+    request_token_url = ndb.StringProperty(default="https://api.twitter.com/oauth/request_token")
+    authorize_url = ndb.StringProperty(default="https://api.twitter.com/oauth/authorize")
+    access_token_url = ndb.StringProperty(default="https://api.twitter.com/oauth/access_token")
 
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -592,7 +589,7 @@ class Twitter(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAffiliateLink = strinput
+                self.affiliate_link = strinput
                 return True
             else:
                 return False
@@ -602,7 +599,7 @@ class Twitter(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strConsumerAPI = strinput
+                self.consumer_api = strinput
                 return True
             else:
                 return False
@@ -612,7 +609,7 @@ class Twitter(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strConsumerSecret = strinput
+                self.consumer_secret = strinput
                 return True
             else:
                 return False
@@ -622,7 +619,7 @@ class Twitter(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCallBackURL = strinput
+                self.call_back_url = strinput
                 return True
             else:
                 return False
@@ -633,7 +630,7 @@ class Twitter(ndb.Model):
             strinput = str(strinput)
 
             if strinput != None:
-                self.strAPPOnlyAuthentication = strinput
+                self.app_only_authentication = strinput
                 return True
             else:
                 return False
@@ -643,7 +640,7 @@ class Twitter(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strRequestTokenURL = strinput
+                self.request_token_url = strinput
                 return True
             else:
                 return False
@@ -653,7 +650,7 @@ class Twitter(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAuthorizeURL = strinput
+                self.authorize_url = strinput
                 return True
             else:
                 return False
@@ -663,7 +660,7 @@ class Twitter(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccessTokenURL = strinput
+                self.access_token_url = strinput
                 return True
             else:
                 return False
@@ -671,17 +668,17 @@ class Twitter(ndb.Model):
             return False
 
 class MyFacebook(ndb.Model):
-    strUserID = ndb.StringProperty()
-    strAffiliateLink = ndb.StringProperty()
-    strFacebookAPI = ndb.StringProperty()
-    strFacebookSecretCode = ndb.StringProperty()
-    strFacebookGroupIDList = ndb.TextProperty()
+    uid = ndb.StringProperty()
+    affiliate_link = ndb.StringProperty()
+    facebook_api = ndb.StringProperty()
+    secret_code = ndb.StringProperty()
+    group_id_lists = ndb.TextProperty()
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -691,7 +688,7 @@ class MyFacebook(ndb.Model):
         try:
             strinput = str(strinput)
             if not(strinput  == None):
-                self.strAffiliateLink = strinput
+                self.affiliate_link = strinput
                 return True
             else:
                 return False
@@ -701,7 +698,7 @@ class MyFacebook(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strFacebookAPI = strinput
+                self.facebook_api = strinput
                 return True
             else:
                 return False
@@ -711,7 +708,7 @@ class MyFacebook(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strFacebookSecretCode = strinput
+                self.secret_code = strinput
                 return True
             else:
                 return False
@@ -721,7 +718,7 @@ class MyFacebook(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strFacebookGroupIDList = strinput
+                self.group_id_lists = strinput
                 return True
             else:
                 return False
@@ -729,19 +726,19 @@ class MyFacebook(ndb.Model):
             return False
 
 class TransactionHistory(ndb.Model):
-    strUserID = ndb.StringProperty()
-    strTransactionID = ndb.StringProperty()
-    strDate = ndb.DateProperty()
-    strTime = ndb.TimeProperty()
-    strTransactionType = ndb.StringProperty(default="Withdrawal") # Buy SMS
-    strWithDrawalID = ndb.StringProperty()
-    strStatus = ndb.StringProperty(default="Pending") # Complete
+    uid = ndb.StringProperty()
+    transaction_id = ndb.StringProperty()
+    date_created = ndb.DateProperty()
+    time_created = ndb.TimeProperty()
+    transaction_type = ndb.StringProperty(default="Withdrawal") # Buy SMS
+    withdrawal_id = ndb.StringProperty()
+    status = ndb.StringProperty(default="Pending") # Complete
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -751,7 +748,7 @@ class TransactionHistory(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTransactionID = strinput
+                self.transaction_id = strinput
                 return True
             else:
                 return False
@@ -760,7 +757,7 @@ class TransactionHistory(ndb.Model):
     def writeDate(self,strinput):
         try:
             if not(strinput,datetime.date):
-                self.strDate = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -769,7 +766,7 @@ class TransactionHistory(ndb.Model):
     def writeTime(self,strinput):
         try:
             if not(strinput,datetime.time):
-                self.strTime = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -779,7 +776,7 @@ class TransactionHistory(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTransactionType = strinput
+                self.transaction_type = strinput
                 return True
             else:
                 return False
@@ -789,7 +786,7 @@ class TransactionHistory(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strWithDrawalID = strinput
+                self.withdrawal_id = strinput
                 return True
             else:
                 return False
@@ -799,7 +796,7 @@ class TransactionHistory(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strStatus = strinput
+                self.status = strinput
                 return True
             else:
                 return False
@@ -847,7 +844,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                     else:
                         thisSMSMarket = SMSMarket()
 
-                    findRequest = TransactionHistory.query(TransactionHistory.strUserID == vstrUserID)
+                    findRequest = TransactionHistory.query(TransactionHistory.uid == vstrUserID)
                     thisTransactionList = findRequest.fetch()
                 else:
                     thisAffiliate = Affiliate()
@@ -1061,7 +1058,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                 if len(thisAffiliateList) > 0:
                     thisAffiliate = thisAffiliateList[0]
 
-                    findRequest = HitCounter.query(HitCounter.strAffiliateLink == thisAffiliate.affiliate_link)
+                    findRequest = HitCounter.query(HitCounter.affiliate_link == thisAffiliate.affiliate_link)
                     thisHitCountersList = findRequest.fetch()
 
                     if len(thisHitCountersList) > 0:
@@ -1088,7 +1085,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
                 if len(thisAffiliateList) > 0:
                     thisAffiliate = thisAffiliateList[0]
-                    findRequest = MyFacebook.query(MyFacebook.strUserID == vstrUserID)
+                    findRequest = MyFacebook.query(MyFacebook.uid == vstrUserID)
                     thisFacebookList = findRequest.fetch()
 
 
@@ -1124,7 +1121,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                 for GroupID in vstrGroupList:
                     vstrGroupStr = vstrGroupStr + "," + GroupID
 
-                findRequest = MyFacebook.query(MyFacebook.strUserID == vstrUserID)
+                findRequest = MyFacebook.query(MyFacebook.uid == vstrUserID)
                 thisFacebookList = findRequest.fetch()
 
                 if len(thisFacebookList) > 0:
@@ -1209,7 +1206,7 @@ class AffiliatePublicHandler(webapp2.RequestHandler):
         strThisTime = thisDateTime.time()
         strThisTime = datetime.time(hour=strThisTime.hour,minute=strThisTime.minute,second=strThisTime.second)
 
-        findRequest = HitCounter.query(HitCounter.strAffiliateLink == strAffiliateLink,HitCounter.strDate == strThisDay,HitCounter.strTime == strThisTime)
+        findRequest = HitCounter.query(HitCounter.affiliate_link == strAffiliateLink, HitCounter.date_created == strThisDay, HitCounter.time_created == strThisTime)
         thisHitCounterList = findRequest.fetch()
 
         if len(thisHitCounterList) > 0:
@@ -1270,7 +1267,7 @@ class AffiliatePublicHandler(webapp2.RequestHandler):
 
             thisSecurityLog.put()
 
-            findRequest = MyFacebook.query(MyFacebook.strUserID == thisAffiliate.uid)
+            findRequest = MyFacebook.query(MyFacebook.uid == thisAffiliate.uid)
             thisFacebookList = findRequest.fetch()
 
             if len(thisFacebookList) > 0:
