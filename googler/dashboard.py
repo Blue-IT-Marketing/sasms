@@ -524,7 +524,7 @@ class Dashboardhandler(webapp2.RequestHandler):
         if Guser:
             if users.is_current_user_admin():
 
-                findRequest = ContactMessages.query(ContactMessages.strResponseSent == False)
+                findRequest = ContactMessages.query(ContactMessages.response_sent == False)
                 thisContactMessagesList = findRequest.fetch()
 
                 template = template_env.get_template('templates/dashboard/dashboard.html')
@@ -536,7 +536,7 @@ class ContactsHandler(webapp2.RequestHandler):
         Guser = users.get_current_user()
         if Guser:
 
-            findRequest = ContactMessages.query(ContactMessages.strResponseSent == False)
+            findRequest = ContactMessages.query(ContactMessages.response_sent == False)
             thisContactMessageList = findRequest.fetch()
 
             template = template_env.get_template('templates/dashboard/dashfiles/contact.html')
@@ -1021,7 +1021,7 @@ class TicketsHandler(webapp2.RequestHandler):
                 thisUsersList = []
                 for thisTicket in thisTicketList:
 
-                    findRequest = TicketUsers.query(TicketUsers.strUserID == thisTicket.uid)
+                    findRequest = TicketUsers.query(TicketUsers.uid == thisTicket.uid)
                     thisTicketUsersList = findRequest.fetch()
                     if len(thisTicketUsersList) > 0:
                         thisTicketUser = thisTicketUsersList[0]
@@ -1048,7 +1048,7 @@ class TicketsHandler(webapp2.RequestHandler):
                 if len(thisTicketsList) > 0:
                     thisTicket = thisTicketsList[0]
 
-                    findRequest = CommentThread.query(CommentThread.strTicketID == thisTicket.strTicketID)
+                    findRequest = CommentThread.query(CommentThread.strTicketID == thisTicket.ticket_id)
                     thisCommentThreadList = findRequest.fetch()
 
                     if len(thisCommentThreadList) > 0:
@@ -1068,7 +1068,7 @@ class TicketsHandler(webapp2.RequestHandler):
                     vstrThreadID = self.request.get('vstrThreadID')
                     vstrUserID = self.request.get('vstrUserID')
 
-                    findRequest = Tickets.query(Tickets.strTicketID == vstrTicketID)
+                    findRequest = Tickets.query(Tickets.ticket_id == vstrTicketID)
                     thisTicketsList = findRequest.fetch()
 
                     if len(thisTicketsList) > 0:
@@ -1113,7 +1113,7 @@ class TicketsHandler(webapp2.RequestHandler):
                     vstrThreadID = self.request.get('vstrThreadID')
                     vstrUserID = self.request.get('vstrUserID')
 
-                    findRequest = Tickets.query(Tickets.strTicketID == vstrTicketID)
+                    findRequest = Tickets.query(Tickets.ticket_id == vstrTicketID)
                     thisTicketsList = findRequest.fetch()
 
                     if len(thisTicketsList) > 0:

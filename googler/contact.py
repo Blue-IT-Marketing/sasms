@@ -1,31 +1,28 @@
 
 import os
-import webapp2
 import jinja2
-from google.appengine.ext import ndb
-from google.appengine.api import users
-from google.appengine.api import mail
+from google.cloud import ndb
 import datetime
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
 
-class ContactMessages(ndb.Expando):
-    strMessageReference = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strSubject = ndb.StringProperty()
-    strMessage = ndb.StringProperty()
-    strMessageExcerpt = ndb.StringProperty()
+class ContactMessages(ndb.Model):
+    message_reference = ndb.StringProperty()
+    names = ndb.StringProperty()
+    email = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    subject = ndb.StringProperty()
+    message = ndb.StringProperty()
+    message_excerpt = ndb.StringProperty()
 
-    strDateSubmitted = ndb.DateProperty(auto_now_add=True)
-    strTimeSubmitted = ndb.TimeProperty(auto_now_add=True)
+    date_submitted = ndb.DateProperty(auto_now_add=True)
+    time_submitted = ndb.TimeProperty(auto_now_add=True)
 
-    strResponseSent = ndb.BooleanProperty(default=False)
+    response_sent = ndb.BooleanProperty(default=False)
 
     def readDateSubmitted(self):
         try:
-            strTemp = str(self.strDateSubmitted)
+            strTemp = str(self.date_submitted)
             strTemp = strTemp.strip()
 
             return strTemp
@@ -33,7 +30,7 @@ class ContactMessages(ndb.Expando):
             return None
     def readTimeSubmitted(self):
         try:
-            strTemp = str(self.strTimeSubmitted)
+            strTemp = str(self.time_submitted)
             strTemp = strTemp.strip()
 
             return strTemp
@@ -41,14 +38,14 @@ class ContactMessages(ndb.Expando):
             return None
     def readResposeSent(self):
         try:
-            return self.strResponseSent
+            return self.response_sent
         except:
             return False
     def writeResponseSent(self,strinput):
         try:
 
             if strinput in [True,False]:
-                self.strResponseSent = strinput
+                self.response_sent = strinput
                 return True
             else:
                 return False
@@ -57,7 +54,7 @@ class ContactMessages(ndb.Expando):
 
     def readNames(self):
         try:
-            strTemp = str(self.strNames)
+            strTemp = str(self.names)
             strTemp = strTemp.strip()
 
             if strTemp != None:
@@ -72,7 +69,7 @@ class ContactMessages(ndb.Expando):
             strinput = strinput.strip()
 
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
@@ -80,7 +77,7 @@ class ContactMessages(ndb.Expando):
             return False
     def readEmail(self):
         try:
-            strTemp = str(self.strEmail)
+            strTemp = str(self.email)
             strTemp = strTemp.strip()
 
             if strTemp != None:
@@ -95,7 +92,7 @@ class ContactMessages(ndb.Expando):
             strinput = strinput.strip()
 
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -103,7 +100,7 @@ class ContactMessages(ndb.Expando):
             return False
     def readCell(self):
         try:
-            strTemp = str(self.strCell)
+            strTemp = str(self.cell)
             strTemp = strTemp.strip()
 
             if strTemp != None:
@@ -119,7 +116,7 @@ class ContactMessages(ndb.Expando):
             strinput = strinput.strip()
 
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -127,7 +124,7 @@ class ContactMessages(ndb.Expando):
             return False
     def readSubject(self):
         try:
-            strTemp = str(self.strSubject)
+            strTemp = str(self.subject)
             strTemp = strTemp.strip()
 
             if strTemp != None:
@@ -143,7 +140,7 @@ class ContactMessages(ndb.Expando):
             strinput = strinput.strip()
 
             if strinput != None:
-                self.strSubject = strinput
+                self.subject = strinput
                 return True
             else:
                 return False
@@ -174,9 +171,9 @@ class ContactMessages(ndb.Expando):
                 MessageLen = len(self.strMessage)
 
                 if MessageLen > 16:
-                    self.strMessageExcerpt = self.strMessage[0:16]
+                    self.message_excerpt = self.strMessage[0:16]
                 else:
-                    self.strMessageExcerpt = self.strMessage
+                    self.message_excerpt = self.strMessage
 
                 return True
             else:
@@ -187,26 +184,26 @@ class ContactMessages(ndb.Expando):
     def sendResponse(self):
         try:
             sender_address = ('support@sa-sms.appspot.com')
-            mail.send_mail(sender_address, self.strEmail, self.strSubject, self.strMessage)
+            mail.send_mail(sender_address, self.email, self.subject, self.strMessage)
             return True
         except:
             return False
 
 class TicketUsers(ndb.Expando):
 
-    strUserID = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
-    strWebsite = ndb.StringProperty()
+    uid = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    email = ndb.StringProperty()
+    website = ndb.StringProperty()
 
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -216,7 +213,7 @@ class TicketUsers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
@@ -226,7 +223,7 @@ class TicketUsers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
@@ -236,7 +233,7 @@ class TicketUsers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -246,7 +243,7 @@ class TicketUsers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -257,7 +254,7 @@ class TicketUsers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strWebsite = strinput
+                self.website = strinput
                 return True
             else:
                 return False
@@ -265,22 +262,22 @@ class TicketUsers(ndb.Expando):
             return False
 
 class StaffMembers(ndb.Expando):
-    strUserID = ndb.StringProperty()
-    strPresentTicketID = ndb.StringProperty()
-    strName = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strDepartment = ndb.StringProperty()
-    strSkillLevel = ndb.StringProperty(default="Beginner") #Intermediate, Expert
-    strUserAssigned = ndb.BooleanProperty(default=False)
-    strUserOnline = ndb.BooleanProperty(default=False)
-    strNotAvailable = ndb.BooleanProperty(default=False)
+    uid = ndb.StringProperty()
+    ticket_id = ndb.StringProperty()
+    name = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    department = ndb.StringProperty()
+    skill_level = ndb.StringProperty(default="Beginner") #Intermediate, Expert
+    user_assigned = ndb.BooleanProperty(default=False)
+    user_online = ndb.BooleanProperty(default=False)
+    not_available = ndb.BooleanProperty(default=False)
 
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -290,7 +287,7 @@ class StaffMembers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPresentTicketID = strinput
+                self.ticket_id = strinput
                 return True
             else:
                 return False
@@ -300,7 +297,7 @@ class StaffMembers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strName = strinput
+                self.name = strinput
                 return True
             else:
                 return False
@@ -310,7 +307,7 @@ class StaffMembers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
@@ -320,7 +317,7 @@ class StaffMembers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDepartment = strinput
+                self.department = strinput
                 return True
             else:
                 return False
@@ -330,7 +327,7 @@ class StaffMembers(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ["Beginner","Intermediate","Expert"]:
-                self.strSkillLevel = strinput
+                self.skill_level = strinput
                 return True
             else:
                 return False
@@ -339,7 +336,7 @@ class StaffMembers(ndb.Expando):
     def writeUserAssigned(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strUserAssigned = strinput
+                self.user_assigned = strinput
                 return True
             else:
                 return False
@@ -348,7 +345,7 @@ class StaffMembers(ndb.Expando):
     def writeUserOnline(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strUserOnline = strinput
+                self.user_online = strinput
                 return True
             else:
                 return False
@@ -357,7 +354,7 @@ class StaffMembers(ndb.Expando):
     def writeNotAvailable(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strNotAvailable = strinput
+                self.not_available = strinput
                 return True
             else:
                 return False
@@ -365,7 +362,7 @@ class StaffMembers(ndb.Expando):
             return False
 
 class Tickets(ndb.Expando):
-    strTicketID = ndb.StringProperty()
+    ticket_id = ndb.StringProperty()
     strUserID = ndb.StringProperty()
     strSubject = ndb.StringProperty()
     strBody = ndb.StringProperty()
@@ -412,7 +409,7 @@ class Tickets(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTicketID = strinput
+                self.ticket_id = strinput
                 return True
             else:
                 return False
@@ -701,7 +698,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             strmessage = self.request.get('vstrMessage')
 
             ContactMessage = ContactMessages()
-            ContactMessage.strMessageReference = vstrUserID
+            ContactMessage.message_reference = vstrUserID
             ContactMessage.writeNames(strinput=strnames)
             ContactMessage.writeEmail(strinput=strEmail)
             ContactMessage.writeCell(strinput=strcell)
@@ -718,7 +715,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-            findRequest = TicketUsers.query(TicketUsers.strUserID == vstrUserID)
+            findRequest = TicketUsers.query(TicketUsers.uid == vstrUserID)
             thisTicketUserList = findRequest.fetch()
             if len(thisTicketUserList) > 0:
                 thisTicketUser = thisTicketUserList[0]
@@ -736,7 +733,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-            findRequest = TicketUsers.query(TicketUsers.strUserID == vstrUserID)
+            findRequest = TicketUsers.query(TicketUsers.uid == vstrUserID)
             thisTicketUserList = findRequest.fetch()
             if len(thisTicketUserList) > 0:
                 thisTicketUser = thisTicketUserList[0]
@@ -765,7 +762,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             vstrCell = self.request.get("vstrCell")
             vstrEmail = self.request.get("vstrEmail")
 
-            findRequest = TicketUsers.query(TicketUsers.strUserID == vstrUserID)
+            findRequest = TicketUsers.query(TicketUsers.uid == vstrUserID)
             thisTicketUserList = findRequest.fetch()
 
             if len(thisTicketUserList) > 0:
@@ -819,7 +816,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
         strURLlist = URL.split("/")
         strTicketID = strURLlist[len(strURLlist) - 1]
 
-        findRequest = TicketUsers.query(TicketUsers.strUserID == vstrUserID)
+        findRequest = TicketUsers.query(TicketUsers.uid == vstrUserID)
         thisTicketUserList = findRequest.fetch()
 
         if len(thisTicketUserList) > 0:
@@ -828,13 +825,13 @@ class ThisTicketHandler(webapp2.RequestHandler):
             thisTicketUser = TicketUsers()
 
 
-        findRequest = Tickets.query(Tickets.strUserID == vstrUserID,Tickets.strTicketID == strTicketID)
+        findRequest = Tickets.query(Tickets.strUserID == vstrUserID, Tickets.ticket_id == strTicketID)
         thisTicketList = findRequest.fetch()
 
         if len(thisTicketList) > 0:
             thisTicket = thisTicketList[0]
 
-            findRequest = CommentThread.query(CommentThread.strTicketID == thisTicket.strTicketID).order(+CommentThread.strDateTimeCreated)
+            findRequest = CommentThread.query(CommentThread.strTicketID == thisTicket.ticket_id).order(+CommentThread.strDateTimeCreated)
             thisCommentThreadsList = findRequest.fetch()
             if len(thisCommentThreadsList) > 0:
                 thisThread = thisCommentThreadsList[0]
@@ -851,7 +848,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
             else:
                 thisThread = CommentThread()
                 thisThread.writeThreadID(strinput=thisThread.CreateThreadID())
-                thisThread.writeTicketID(strinput=thisTicket.strTicketID)
+                thisThread.writeTicketID(strinput=thisTicket.ticket_id)
                 vstrThisDateTime = datetime.datetime.now()
                 strThisDate = datetime.date(year=vstrThisDateTime.year,month=vstrThisDateTime.month,day=vstrThisDateTime.day)
                 strThisTime = datetime.time(hour=vstrThisDateTime.hour,minute=vstrThisDateTime.minute,second=vstrThisDateTime.second)
@@ -922,7 +919,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
             vstrUserID = self.request.get("vstrUserID")
 
             vstrTicketID = self.request.get("vstrTicketID")
-            findRequest = TicketUsers.query(TicketUsers.strUserID == vstrUserID)
+            findRequest = TicketUsers.query(TicketUsers.uid == vstrUserID)
             thisTicketUserList = findRequest.fetch()
 
             if len(thisTicketUserList) > 0:
@@ -930,13 +927,13 @@ class ThisTicketHandler(webapp2.RequestHandler):
             else:
                 thisTicketUser = TicketUsers()
 
-            findRequest = Tickets.query(Tickets.strUserID == vstrUserID, Tickets.strTicketID == vstrTicketID)
+            findRequest = Tickets.query(Tickets.strUserID == vstrUserID, Tickets.ticket_id == vstrTicketID)
             thisTicketList = findRequest.fetch()
 
             if len(thisTicketList) > 0:
                 thisTicket = thisTicketList[0]
 
-                findRequest = CommentThread.query(CommentThread.strTicketID == thisTicket.strTicketID).order(+CommentThread.strDateTimeCreated)
+                findRequest = CommentThread.query(CommentThread.strTicketID == thisTicket.ticket_id).order(+CommentThread.strDateTimeCreated)
                 thisCommentThreadsList = findRequest.fetch()
                 if len(thisCommentThreadsList) > 0:
                     thisThread = thisCommentThreadsList[0]
@@ -962,7 +959,7 @@ class readContactHandler(webapp2.RequestHandler):
         URLlist = URL.split("/")
         strReference = URLlist[len(URLlist) - 1]
 
-        findRequest = ContactMessages.query(ContactMessages.strMessageReference == strReference)
+        findRequest = ContactMessages.query(ContactMessages.message_reference == strReference)
         thisContactMessagesList = findRequest.fetch()
 
         if len(thisContactMessagesList) > 0:

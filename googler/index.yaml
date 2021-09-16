@@ -30,12 +30,12 @@ indexes:
 
 - kind: CommentThread
   properties:
-  - name: strTicketID
+  - name: ticket_id
   - name: strDateTimeCreated
 
 - kind: CommentThread
   properties:
-  - name: strTicketID
+  - name: ticket_id
   - name: strDateTimeCreated
     direction: desc
 
@@ -76,12 +76,12 @@ indexes:
 
 - kind: Post
   properties:
-  - name: strPublished
+  - name: published
   - name: date
 
 - kind: Responses
   properties:
-  - name: strTicketID
+  - name: ticket_id
   - name: strThreadID
   - name: date_created
   - name: time_created

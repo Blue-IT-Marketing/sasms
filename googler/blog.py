@@ -15,12 +15,8 @@
 # limitations under the License.
 #
 import os
-from google.appengine.ext import blobstore
-from google.appengine.ext.webapp import blobstore_handlers
-import webapp2
 import jinja2
-from google.appengine.ext import ndb
-from google.appengine.api import users
+from google.cloud import ndb
 import logging
 import datetime
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
@@ -28,23 +24,20 @@ template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
 from firebaseadmin import VerifyAndReturnAccount
 
-class Post(ndb.Expando):
-    strPostReference = ndb.StringProperty()
-    strPostHeading = ndb.StringProperty()
-    strPostBody = ndb.TextProperty()
-    strAuthor = ndb.StringProperty()
-
-    strSnippet = ndb.StringProperty()
-
-    strDate = ndb.DateProperty()
-    strTime = ndb.TimeProperty()
-
-    strPublished = ndb.BooleanProperty(default=False)
+class Post(ndb.Model):
+    post_reference = ndb.StringProperty()
+    post_heading = ndb.StringProperty()
+    post_body = ndb.TextProperty()
+    author = ndb.StringProperty()
+    snippet = ndb.StringProperty()
+    date_created = ndb.DateProperty()
+    time_created = ndb.TimeProperty()
+    published = ndb.BooleanProperty(default=False)
 
     def writePublished(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strPublished = strinput
+                self.published = strinput
                 return True
             else:
                 return False
@@ -55,7 +48,7 @@ class Post(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPostReference = strinput
+                self.post_reference = strinput
                 return True
             else:
                 return False
@@ -66,7 +59,7 @@ class Post(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPostHeading = strinput
+                self.post_heading = strinput
                 return True
             else:
                 return False
@@ -77,7 +70,7 @@ class Post(ndb.Expando):
         try:
 
             if strinput != None:
-                self.strPostBody = strinput
+                self.post_body = strinput
                 return True
             else:
                 return False
@@ -88,7 +81,7 @@ class Post(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAuthor = strinput
+                self.author = strinput
                 return True
             else:
                 return False
@@ -98,7 +91,7 @@ class Post(ndb.Expando):
     def writeDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDate = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -108,7 +101,7 @@ class Post(ndb.Expando):
     def writeTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTime = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -119,7 +112,7 @@ class Post(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSnippet = strinput
+                self.snippet = strinput
                 return True
             else:
                 return False
@@ -142,7 +135,7 @@ class Post(ndb.Expando):
 class BlogHandler(webapp2.RequestHandler):
     def get(self):
 
-        findRequest = Post.query(Post.strPublished == True).order(Post.strDate)
+        findRequest = Post.query(Post.published == True).order(Post.date_created)
         thisPostsList = findRequest.fetch()
 
         if len(thisPostsList) > 0:
@@ -193,7 +186,7 @@ class ThisBlogHandler(webapp2.RequestHandler):
         strURLList = URL.split("/")
         strPostReference = strURLList[len(strURLList) - 1]
 
-        findRequest = Post.query(Post.strPostReference == strPostReference)
+        findRequest = Post.query(Post.post_reference == strPostReference)
         thisPostList = findRequest.fetch()
 
         if len(thisPostList) > 0:
@@ -211,7 +204,7 @@ class ThisBlogHandler(webapp2.RequestHandler):
         if vstrChoice == "0":
             vstrArticleID = self.request.get('vstrarticleID')
 
-            findRequest = Post.query(Post.strPostReference == vstrArticleID)
+            findRequest = Post.query(Post.post_reference == vstrArticleID)
             thisPostList = findRequest.fetch()
 
             if len(thisPostList) > 0:
