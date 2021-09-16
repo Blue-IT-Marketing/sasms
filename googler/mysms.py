@@ -878,7 +878,7 @@ class SMSPortalVodacom(ndb.Expando):
                 strInvalid = True
 
 
-            #def SendEmail(strFrom,strTo,subject,strBody,strTextType,strAttachFileContent=None,strAttachFileName=None):
+            #def SendEmail(strFrom,strTo,subject,body,strTextType,strAttachFileContent=None,strAttachFileName=None):
             if SendEmail(strFrom=self.strSenderAddress,strTo=self.strEmailAddress,strSubject=strSubject,strBody=strMessage,strTextType="text/plain"):
                 try:
                     self.writeAvailableCredit(strinput=str(self.strAvailableCredit - len(strCellNumberList)))
@@ -931,7 +931,7 @@ class SMSPortalVodacom(ndb.Expando):
 
                 if thisSMSAccount.strTotalSMS >= len(strCellNumberList):
 
-                    #def SendEmail(strFrom,strTo,subject,strBody,strTextType,strAttachFileContent=None,strAttachFileName=None):
+                    #def SendEmail(strFrom,strTo,subject,body,strTextType,strAttachFileContent=None,strAttachFileName=None):
                     if SendEmail(strFrom=self.strSenderAddress,strTo=self.strEmailAddress,strSubject=strSubject,strBody=strMessage,strTextType="text/plain"):
 
                         thisSMSAccount.writeTotalSMS(strinput=str(thisSMSAccount.strTotalSMS - len(strCellNumberList)))

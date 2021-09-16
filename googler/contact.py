@@ -363,18 +363,18 @@ class StaffMembers(ndb.Expando):
 
 class Tickets(ndb.Expando):
     ticket_id = ndb.StringProperty()
-    strUserID = ndb.StringProperty()
-    strSubject = ndb.StringProperty()
-    strBody = ndb.StringProperty()
-    strDateCreated = ndb.DateProperty()
-    strTimeCreated = ndb.TimeProperty()
-    strTicketOpen = ndb.BooleanProperty(default=True) # Ticket Open or Close
-    strTicketPreference = ndb.StringProperty(default="Normal") # Normal / Urgent
-    strDepartment = ndb.StringProperty(default="Sales") # Programming, Hosting
+    uid = ndb.StringProperty()
+    subject = ndb.StringProperty()
+    body = ndb.StringProperty()
+    date_created = ndb.DateProperty()
+    time_created = ndb.TimeProperty()
+    ticket_open = ndb.BooleanProperty(default=True) # Ticket Open or Close
+    ticket_preference = ndb.StringProperty(default="Normal") # Normal / Urgent
+    department = ndb.StringProperty(default="Sales") # Programming, Hosting
 
-    strTicketEscalated = ndb.BooleanProperty(default=False)
-    strAssignedTo = ndb.StringProperty() # Assigned to Carries the ID of the Staff Member assigned the ticket
-    strEscalatedToID = ndb.StringProperty() # Staff Member the Ticket is Escalated To
+    ticket_escalated = ndb.BooleanProperty(default=False)
+    assigned_to = ndb.StringProperty() # Assigned to Carries the ID of the Staff Member assigned the ticket
+    escalated_to_uid = ndb.StringProperty() # Staff Member the Ticket is Escalated To
 
     def writeEscalate(self,strinput):
         try:
@@ -389,7 +389,7 @@ class Tickets(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAssignedTo = strinput
+                self.assigned_to = strinput
                 return True
             else:
                 return False
@@ -399,7 +399,7 @@ class Tickets(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEscalatedToID = strinput
+                self.escalated_to_uid = strinput
                 return True
             else:
                 return False
@@ -438,7 +438,7 @@ class Tickets(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSubject = strinput
+                self.subject = strinput
                 return True
             else:
                 return False
@@ -448,7 +448,7 @@ class Tickets(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBody = strinput
+                self.body = strinput
                 return True
             else:
                 return False
@@ -458,7 +458,7 @@ class Tickets(ndb.Expando):
         try:
 
             if isinstance(strinput,datetime.date):
-                self.strDateCreated = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -467,7 +467,7 @@ class Tickets(ndb.Expando):
     def writeTimeCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeCreated = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -476,7 +476,7 @@ class Tickets(ndb.Expando):
     def writeTicketOpen(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strTicketOpen = strinput
+                self.ticket_open = strinput
                 return True
             else:
                 return False
@@ -486,7 +486,7 @@ class Tickets(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ["Normal","Urgent"]:
-                self.strTicketPreference = strinput
+                self.ticket_preference = strinput
                 return True
             else:
                 return False
@@ -496,7 +496,7 @@ class Tickets(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ["Sales","Programming","Bulk SMS","Advertising","Surveys","Affiliate","Hosting"]:
-                self.strDepartment = strinput
+                self.department = strinput
                 return True
             else:
                 return False

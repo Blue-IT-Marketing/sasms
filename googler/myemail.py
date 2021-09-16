@@ -634,7 +634,7 @@ class myEmailHandler(webapp2.RequestHandler):
                         #message.subject = thisSent.subject
                         #message.body = thisSent.strBodyHTML
                         #message.send()
-                        #def SendEmail(strFrom,strTo,subject,strBody,strTextType):
+                        #def SendEmail(strFrom,strTo,subject,body,strTextType):
                         if SendEmail(strFrom=thisEmailSetting.strEmailAddress,strTo=thisSent.strToAddress,strSubject=thisSent.strSubject,strBody=thisSent.strBodyHTML,strTextType="text/html"):
 
                             Now = datetime.datetime.now()

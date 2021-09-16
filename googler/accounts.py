@@ -769,7 +769,7 @@ class OrganizaHandler(webapp2.RequestHandler):
                 Blue IT Marketing Pty LTD
                 Team
                 """
-                # def SendEmail(strFrom,strTo,subject,strBody,strTextType,strAttachFileContent=None,strAttachFileName=None):
+                # def SendEmail(strFrom,strTo,subject,body,strTextType,strAttachFileContent=None,strAttachFileName=None):
                 if SendEmail(strFrom="verifications@sa-sms.appspotmail.com", strTo=thisOrg.strEmail,
                              strSubject="Business Messaging and Contact Management Account Activation",
                              strBody=strMessage, strTextType='text/html'):

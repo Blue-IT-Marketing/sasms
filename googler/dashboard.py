@@ -1016,7 +1016,7 @@ class TicketsHandler(webapp2.RequestHandler):
 
             if vstrChoice == "0":
 
-                findRequest = Tickets.query(Tickets.strTicketOpen == True)
+                findRequest = Tickets.query(Tickets.ticket_open == True)
                 thisTicketList = findRequest.fetch()
                 thisUsersList = []
                 for thisTicket in thisTicketList:
@@ -1043,7 +1043,7 @@ class TicketsHandler(webapp2.RequestHandler):
             if vstrChoice == "0":
                 vstrUserID = self.request.get('vstrUserID')
 
-                findRequest = Tickets.query(Tickets.strUserID == vstrUserID,Tickets.strTicketOpen == True)
+                findRequest = Tickets.query(Tickets.strUserID == vstrUserID, Tickets.ticket_open == True)
                 thisTicketsList = findRequest.fetch()
                 if len(thisTicketsList) > 0:
                     thisTicket = thisTicketsList[0]
