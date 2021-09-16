@@ -1091,14 +1091,14 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
             thisOrg = thisOrgList[0]
 
             thisAdminStaff = Employees()
-            findRequests = SMSAccount.query(SMSAccount.strOrganizationID == thisAdminStaff.strStaffID)
+            findRequests = SMSAccount.query(SMSAccount.strOrganizationID == thisAdminStaff.staff_id)
             thisSMSAccountList = findRequests.fetch()
 
             if len(thisSMSAccountList) > 0:
                 thisSMSAccount = thisSMSAccountList[0]
             else:
                 thisSMSAccount = SMSAccount()
-                thisSMSAccount.writeOrganizationID(strinput=thisAdminStaff.strStaffID)
+                thisSMSAccount.writeOrganizationID(strinput=thisAdminStaff.staff_id)
                 thisSMSAccount.writeUsePortal(strinput="Budget")
                 thisSMSAccount.put()
 
@@ -1117,7 +1117,7 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                     Voda.put()
 
                 if Voda.CronSendMessages(strCellNumberList=ReceipientList, strMessage=strMessage,
-                                         strAccountID=thisAdminStaff.strStaffID):
+                                         strAccountID=thisAdminStaff.staff_id):
                     logging.info("Successfully sent activation message")
                 else:
                     logging.info("Error sending activation message")

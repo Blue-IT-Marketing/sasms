@@ -2223,7 +2223,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 strThisTime = datetime.time(hour=strThisTime.hour, minute=strThisTime.minute,second=strThisTime.second)
                                 thisDeliveryReport.writeDate(strinput=strThisDate)
                                 thisDeliveryReport.writeTime(strinput=strThisTime)
-                                thisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
+                                thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
                                 thisDeliveryReport.put()
 
                             else:
@@ -2690,7 +2690,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                                     thisVodaPortal = SMSPortalVodacom()
                                 RecipientList = []
                                 RecipientList.append(thisOrganization.cell)
-                                if thisVodaPortal.CronSendMessages(strCellNumberList=RecipientList,strMessage=strMessage,strAccountID=thisBankAccount.strStaffID):
+                                if thisVodaPortal.CronSendMessages(strCellNumberList=RecipientList, strMessage=strMessage, strAccountID=thisBankAccount.staff_id):
                                     self.response.write("Successfully sent banking details to your mobile phone")
                                 else:
                                     self.response.write("Error sending banking details to mobile please try again later")

@@ -1969,11 +1969,11 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                 vstrMessage = "Business Messaging and Contact Management : " + "%0A"
                 vstrDepositAmount = "Deposit Amount : " + "%0A"
                 vstrSMSPackage = "SMS Package : " +  "%0A"
-                vstrAccountHolder = "Account Holder : " + thisDepositAccount.strAccountHolder + "%0A"
-                vstrAccountNumber = "Account Number : " + thisDepositAccount.strAccountNumber + "%0A"
-                vstrBankName = "Bank Name : " + thisDepositAccount.strBankName + "%0A"
-                vstrBranchName = "Branch Name : " + thisDepositAccount.strBranchName + "%0A"
-                vstrBranchCode = "Branch Code : " + thisDepositAccount.strBranchCode + "%0A"
+                vstrAccountHolder = "Account Holder : " + thisDepositAccount.account_holder + "%0A"
+                vstrAccountNumber = "Account Number : " + thisDepositAccount.account_holder + "%0A"
+                vstrBankName = "Bank Name : " + thisDepositAccount.bank_name + "%0A"
+                vstrBranchName = "Branch Name : " + thisDepositAccount.branch_name + "%0A"
+                vstrBranchCode = "Branch Code : " + thisDepositAccount.branch_code + "%0A"
                 vstrBanking = vstrAccountHolder + vstrAccountNumber + vstrBankName + vstrBranchName + vstrBranchCode
                 vstrReference = "Deposit Reference : " + thisOrder.deposit_reference
 

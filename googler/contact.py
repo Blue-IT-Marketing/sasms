@@ -671,7 +671,7 @@ class Comments(ndb.Model):
         except:
             return False
 
-class ThisContactHandler(webapp2.RequestHandler):
+class ThisContactHandler():
     def get(self):
         #TODO - its easier to get session id if it exists
         #TODO- with the session then obtain userid
@@ -805,7 +805,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             self.response.write(template.render(context))
 
 
-class ThisTicketHandler(webapp2.RequestHandler):
+class ThisTicketHandler():
     def get(self):
 
         vstrUserID = self.request.get('vstrUserID')
@@ -952,7 +952,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
                     self.response.write(template.render(context))
 
 
-class readContactHandler(webapp2.RequestHandler):
+class readContactHandler():
     def get(self):
 
         URL = self.request.url

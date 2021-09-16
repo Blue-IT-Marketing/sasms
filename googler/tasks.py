@@ -49,7 +49,7 @@ def BulkSMSHandler():
         logging.info("There are messages scheduled")
 
     for thisSchedule in thisMessageScheduleList:
-        findRequest = Messages.query(Messages.strMessageID == thisSchedule.strMessageID,
+        findRequest = Messages.query(Messages.strMessageID == thisSchedule.message_id,
                                      Messages.strSubmitted == False)
         thisMessageList = findRequest.fetch()
 

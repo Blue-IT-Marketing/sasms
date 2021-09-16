@@ -15,32 +15,30 @@
 # limitations under the License.
 #
 import os
-from google.appengine.ext import blobstore
-from google.appengine.ext.webapp import blobstore_handlers
-import webapp2
 import jinja2
-from google.appengine.ext import ndb
-from google.appengine.api import users,mail
+from google.cloud import ndb
 import logging
 import math
 import datetime
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 from myemail import SendEmail
-class Notes(ndb.Expando):
-    
-    strContactID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
 
-    strSubject = ndb.StringProperty()
-    strNotes = ndb.StringProperty()
-    strDateTaken = ndb.DateProperty()
-    strTimeTaken = ndb.TimeProperty()
+
+class Notes(ndb.Model):
+    
+    contact_id = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+
+    subject = ndb.StringProperty()
+    notes = ndb.StringProperty()
+    date_taken = ndb.DateProperty()
+    time_taken = ndb.TimeProperty()
 
     def writeContactID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strContactID = strinput
+                self.contact_id = strinput
                 return True
             else:
                 return False
@@ -50,7 +48,7 @@ class Notes(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -60,7 +58,7 @@ class Notes(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSubject = strinput
+                self.subject = strinput
                 return True
             else:
                 return False
@@ -71,7 +69,7 @@ class Notes(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strNotes = strinput
+                self.notes = strinput
                 return True
             else:
                 return False
@@ -81,7 +79,7 @@ class Notes(ndb.Expando):
         try:
 
             if isinstance(strinput,datetime.date):
-                self.strDateTaken = strinput
+                self.date_taken = strinput
                 return True
             else:
                 return False
@@ -92,32 +90,32 @@ class Notes(ndb.Expando):
         try:
 
             if isinstance(strinput,datetime.time):
-                self.strTimeTaken = strinput
+                self.time_taken = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class Contacts(ndb.Expando):
-    strUserID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
+class Contacts(ndb.Model):
+    uid = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
 
 
-    strContactID = ndb.StringProperty()
+    contact_id = ndb.StringProperty()
 
-    strIDNumber = ndb.StringProperty()
+    id_number = ndb.StringProperty()
 
-    strTitle = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strTel = ndb.StringProperty()
-    strFax = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
-    strWebsite = ndb.StringProperty()
+    title = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    tel = ndb.StringProperty()
+    fax = ndb.StringProperty()
+    email = ndb.StringProperty()
+    website = ndb.StringProperty()
 
-    strDateCreated = ndb.DateProperty()
+    date_created = ndb.DateProperty()
 
 
     def CreateContactID(self):
@@ -134,7 +132,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strContactID = strinput
+                self.contact_id = strinput
                 return True
             else:
                 return False
@@ -146,7 +144,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTitle = strinput
+                self.title = strinput
                 return True
             else:
                 return False
@@ -157,7 +155,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -167,7 +165,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -178,7 +176,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
@@ -188,7 +186,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
@@ -199,7 +197,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -209,7 +207,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTel = strinput
+                self.tel = strinput
                 return True
             else:
                 return False
@@ -219,7 +217,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strFax = strinput
+                self.fax = strinput
                 return True
             else:
                 return False
@@ -230,7 +228,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -240,7 +238,7 @@ class Contacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strWebsite = strinput
+                self.website = strinput
                 return True
             else:
                 return False
@@ -249,7 +247,7 @@ class Contacts(ndb.Expando):
     def writeDateCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateCreated = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -266,14 +264,14 @@ class Contacts(ndb.Expando):
     def sendFax(self):
         pass
 
-class PostalAddress(ndb.Expando):
-    strContactID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strBox = ndb.StringProperty()
-    strCityTown = ndb.StringProperty()
-    strProvince = ndb.StringProperty()
-    strCountry = ndb.StringProperty()
-    strPostalCode = ndb.StringProperty()
+class PostalAddress(ndb.Model):
+    contact_id = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    box = ndb.StringProperty()
+    city_town = ndb.StringProperty()
+    province = ndb.StringProperty()
+    country = ndb.StringProperty()
+    postal_code = ndb.StringProperty()
 
 
     def writeContactID(self,strinput):
@@ -281,7 +279,7 @@ class PostalAddress(ndb.Expando):
             strinput = str(strinput)
 
             if strinput != None:
-                self.strContactID = strinput
+                self.contact_id = strinput
                 return True
             else:
                 return False
@@ -292,7 +290,7 @@ class PostalAddress(ndb.Expando):
 
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -302,7 +300,7 @@ class PostalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBox = strinput
+                self.box = strinput
                 return True
             else:
                 return False
@@ -312,7 +310,7 @@ class PostalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCityTown = strinput
+                self.city_town = strinput
                 return True
             else:
                 return False
@@ -322,7 +320,7 @@ class PostalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strProvince = strinput
+                self.province = strinput
                 return True
             else:
                 return False
@@ -332,7 +330,7 @@ class PostalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCountry = strinput
+                self.country = strinput
                 return True
             else:
                 return False
@@ -342,30 +340,30 @@ class PostalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPostalCode = strinput
+                self.postal_code = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class PhysicalAddress(ndb.Expando):
-    strContactID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
+class PhysicalAddress(ndb.Model):
+    contact_id = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
 
-    strStandNumber = ndb.StringProperty()
-    strStreetName = ndb.StringProperty()
-    strCityTown = ndb.StringProperty()
-    strProvince = ndb.StringProperty()
-    strCountry = ndb.StringProperty()
-    strPostalCode = ndb.StringProperty()
+    stand_number = ndb.StringProperty()
+    street_name = ndb.StringProperty()
+    city_town = ndb.StringProperty()
+    province = ndb.StringProperty()
+    country = ndb.StringProperty()
+    postal_code = ndb.StringProperty()
 
 
     def writeContactID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strContactID = strinput
+                self.contact_id = strinput
                 return True
             else:
                 return False
@@ -375,7 +373,7 @@ class PhysicalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -385,7 +383,7 @@ class PhysicalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strStandNumber = strinput
+                self.stand_number = strinput
                 return True
             else:
                 return False
@@ -395,7 +393,7 @@ class PhysicalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strStreetName = strinput
+                self.street_name = strinput
                 return True
             else:
                 return False
@@ -406,7 +404,7 @@ class PhysicalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCityTown = strinput
+                self.city_town = strinput
                 return True
             else:
                 return False
@@ -416,7 +414,7 @@ class PhysicalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strProvince =  strinput
+                self.province =  strinput
                 return True
             else:
                 return False
@@ -426,7 +424,7 @@ class PhysicalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCountry = strinput
+                self.country = strinput
                 return True
             else:
                 return False
@@ -436,26 +434,26 @@ class PhysicalAddress(ndb.Expando):
         try:
             strinput = str(strinput)
             if not(strinput == None):
-                self.strPostalCode = strinput
+                self.postal_code = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class SMSOutBox(ndb.Expando):
-    strContactID = ndb.StringProperty()
-    strMessageID = ndb.StringProperty()
-    strMessage = ndb.StringProperty()
-    strIsSent = ndb.BooleanProperty(default=False)
-    strDateSent = ndb.DateProperty()
-    strTimeSent = ndb.TimeProperty()
+class SMSOutBox(ndb.Model):
+    contact_id = ndb.StringProperty()
+    message_id = ndb.StringProperty()
+    message = ndb.StringProperty()
+    is_sent = ndb.BooleanProperty(default=False)
+    date_sent = ndb.DateProperty()
+    time_sent = ndb.TimeProperty()
 
     def writeContactID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strContactID = strinput
+                self.contact_id = strinput
                 return True
             else:
                 return False
@@ -466,7 +464,7 @@ class SMSOutBox(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessageID = strinput
+                self.message_id = strinput
                 return True
             else:
                 return False
@@ -478,7 +476,7 @@ class SMSOutBox(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessage = strinput
+                self.message = strinput
                 return True
             else:
                 return False
@@ -488,7 +486,7 @@ class SMSOutBox(ndb.Expando):
     def writeIsSent(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strIsSent = strinput
+                self.is_sent = strinput
                 return True
             else:
                 return False
@@ -498,7 +496,7 @@ class SMSOutBox(ndb.Expando):
     def writeDateSent(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateSent = strinput
+                self.date_sent = strinput
                 return True
             else:
                 return False
@@ -509,7 +507,7 @@ class SMSOutBox(ndb.Expando):
     def writeTimeSent(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeSent = strinput
+                self.time_sent = strinput
                 return True
             else:
                 return False
@@ -526,19 +524,19 @@ class SMSOutBox(ndb.Expando):
         except:
             return None
 
-class SMSInBox(ndb.Expando):
-    strContactID = ndb.StringProperty()
-    strMessageID = ndb.StringProperty()
-    strResponse = ndb.StringProperty()
-    strDateReceived = ndb.DateProperty()
-    strTimeReceived = ndb.TimeProperty()
+class SMSInBox(ndb.Model):
+    contact_id = ndb.StringProperty()
+    message_id = ndb.StringProperty()
+    response = ndb.StringProperty()
+    date_received = ndb.DateProperty()
+    time_received = ndb.TimeProperty()
 
 
     def writeContactID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strContactID = strinput
+                self.contact_id = strinput
                 return True
             else:
                 return False
@@ -549,7 +547,7 @@ class SMSInBox(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessageID = strinput
+                self.message_id = strinput
                 return True
             else:
                 return False
@@ -560,7 +558,7 @@ class SMSInBox(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strResponse = strinput
+                self.response = strinput
                 return True
             else:
                 return False
@@ -570,7 +568,7 @@ class SMSInBox(ndb.Expando):
     def writeDateReceived(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateReceived = strinput
+                self.date_received = strinput
                 return True
             else:
                 return False
@@ -580,7 +578,7 @@ class SMSInBox(ndb.Expando):
     def writeTimeReceived(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeReceived = strinput
+                self.time_received = strinput
                 return True
             else:
                 return False
@@ -588,22 +586,22 @@ class SMSInBox(ndb.Expando):
         except:
             return False
 
-class EmailOutBox(ndb.Expando):
-    strContactID = ndb.StringProperty()
-    strSubject = ndb.StringProperty()
-    strMessage = ndb.StringProperty()
-    strIsSent = ndb.BooleanProperty(default=False)
-    strDateSent = ndb.DateProperty()
-    strTimeSent = ndb.TimeProperty()
-    strMessageID = ndb.StringProperty()
-    strFromEmail = ndb.StringProperty()
+class EmailOutBox(ndb.Model):
+    contact_id = ndb.StringProperty()
+    subject = ndb.StringProperty()
+    message = ndb.StringProperty()
+    is_sent = ndb.BooleanProperty(default=False)
+    date_sent = ndb.DateProperty()
+    time_sent = ndb.TimeProperty()
+    message_id = ndb.StringProperty()
+    from_email = ndb.StringProperty()
 
     def writeContactID(self,strinput):
         try:
             strinput = str(strinput)
 
             if strinput != None:
-                self.strContactID = strinput
+                self.contact_id = strinput
                 return True
             else:
                 return False
@@ -614,7 +612,7 @@ class EmailOutBox(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSubject = strinput
+                self.subject = strinput
                 return True
             else:
                 return False
@@ -625,7 +623,7 @@ class EmailOutBox(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessage = strinput
+                self.message = strinput
                 return True
             else:
                 return False
@@ -635,7 +633,7 @@ class EmailOutBox(ndb.Expando):
     def writeIsSent(self,strinput):
         try:
             if isinstance(strinput,bool):
-                self.strIsSent = strinput
+                self.is_sent = strinput
                 return True
             else:
                 return False
@@ -645,7 +643,7 @@ class EmailOutBox(ndb.Expando):
     def writeDateSent(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateSent = strinput
+                self.date_sent = strinput
                 return True
             else:
                 return False
@@ -654,7 +652,7 @@ class EmailOutBox(ndb.Expando):
     def writeTimeSent(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeSent = strinput
+                self.time_sent = strinput
                 return True
             else:
                 return False
@@ -663,7 +661,7 @@ class EmailOutBox(ndb.Expando):
     def writeMessageID(self,strinput):
         try:
             if isinstance(strinput,str):
-                self.strMessageID = strinput
+                self.message_id = strinput
                 return True
             else:
                 return False
@@ -685,15 +683,15 @@ class EmailOutBox(ndb.Expando):
         :return:
         """
         try:
-            findRequest = Contacts.query(Contacts.strContactID == self.strContactID)
+            findRequest = Contacts.query(Contacts.contact_id == self.contact_id)
             thisContactList = findRequest.fetch()
 
             if len(thisContactList) > 0:
                 thisContact = thisContactList[0]
 
-                self.strFromEmail =  str(self.strContactID) + "@sa-sms.appspotmail.com"
+                self.from_email = str(self.contact_id) + "@sa-sms.appspotmail.com"
 
-                if SendEmail(strFrom=self.strFromEmail, strTo=thisContact.email, strSubject=self.strSubject, strBody=self.strMessage, strTextType='text/plain'):
+                if SendEmail(strFrom=self.from_email, strTo=thisContact.email, strSubject=self.subject, strBody=self.message, strTextType='text/plain'):
                     return True
                 else:
                     return False
@@ -702,20 +700,20 @@ class EmailOutBox(ndb.Expando):
         except:
             return False
 
-class EmailInBox(ndb.Expando):
-    strContactID = ndb.StringProperty()
-    strSubject = ndb.StringProperty()
-    strResponse = ndb.StringProperty()
-    strDateReceived = ndb.DateProperty()
-    strTimeReceived = ndb.TimeProperty()
-    strMessageID = ndb.StringProperty()
+class EmailInBox(ndb.Model):
+    contact_id = ndb.StringProperty()
+    subject = ndb.StringProperty()
+    response = ndb.StringProperty()
+    date_received = ndb.DateProperty()
+    time_received = ndb.TimeProperty()
+    message_id = ndb.StringProperty()
 
 
     def writeContactID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strContactID = strinput
+                self.contact_id = strinput
                 return True
             else:
                 return False
@@ -726,7 +724,7 @@ class EmailInBox(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSubject = strinput
+                self.subject = strinput
                 return True
             else:
                 return False
@@ -738,7 +736,7 @@ class EmailInBox(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strResponse = strinput
+                self.response = strinput
                 return True
             else:
                 return False
@@ -747,7 +745,7 @@ class EmailInBox(ndb.Expando):
     def writeDateReceived(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateReceived = strinput
+                self.date_received = strinput
                 return True
             else:
                 return False
@@ -756,7 +754,7 @@ class EmailInBox(ndb.Expando):
     def writeTimeReceived(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeReceived = strinput
+                self.time_received = strinput
                 return True
             else:
                 return False
@@ -765,7 +763,7 @@ class EmailInBox(ndb.Expando):
     def writeMessageID(self,strinput):
         try:
             if strinput != None:
-                self.strMessageID = strinput
+                self.message_id = strinput
                 return True
             else:
                 return False
@@ -775,7 +773,7 @@ class EmailInBox(ndb.Expando):
 
 from firebaseadmin import VerifyAndReturnAccount
 
-class ContactsHandler(webapp2.RequestHandler):
+class ContactsHandler():
 
 
     def get(self):
@@ -789,7 +787,7 @@ class ContactsHandler(webapp2.RequestHandler):
         thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
         if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-            findRequests = Contacts.query(Contacts.strOrganizationID == thisMainAccount.organization_id)
+            findRequests = Contacts.query(Contacts.organization_id == thisMainAccount.organization_id)
             thisContactsList = findRequests.fetch()
 
 
@@ -825,7 +823,7 @@ class ContactsHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequests = Contacts.query(Contacts.strCell == vstrCell, Contacts.strOrganizationID == thisMainAccount.organization_id)
+                findRequests = Contacts.query(Contacts.cell == vstrCell, Contacts.organization_id == thisMainAccount.organization_id)
                 thisContactList = findRequests.fetch()
 
                 if len(thisContactList) > 0:
@@ -848,13 +846,13 @@ class ContactsHandler(webapp2.RequestHandler):
                 self.response.write("Contact successfully uploaded")
 
 
-class ThisContactHandler(webapp2.RequestHandler):
+class ThisContactHandler():
     def get(self):
         URL = self.request.url
         URLlist = URL.split("/")
         vstrCell = URLlist[len(URLlist) - 1]
 
-        findRequest = Contacts.query(Contacts.strCell == vstrCell)
+        findRequest = Contacts.query(Contacts.cell == vstrCell)
         thisContactList = findRequest.fetch()
 
         if len(thisContactList) > 0:
@@ -884,7 +882,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequests = Contacts.query(Contacts.strCell == vstrCell, Contacts.strOrganizationID == thisMainAccount.organization_id)
+                findRequests = Contacts.query(Contacts.cell == vstrCell, Contacts.organization_id == thisMainAccount.organization_id)
                 thisContactList = findRequests.fetch()
 
                 if len(thisContactList) > 0:
@@ -893,30 +891,30 @@ class ThisContactHandler(webapp2.RequestHandler):
                     thisContact = Contacts()
 
 
-                findRequests = Notes.query(Notes.strContactID == thisContact.strContactID)
+                findRequests = Notes.query(Notes.contact_id == thisContact.contact_id)
                 thisNotesList = findRequests.fetch()
 
-                findRequests = PostalAddress.query(PostalAddress.strContactID == thisContact.strContactID)
+                findRequests = PostalAddress.query(PostalAddress.contact_id == thisContact.contact_id)
                 thisPostalAddressList = findRequests.fetch()
 
                 if len(thisPostalAddressList) > 0:
                     thisPostalAddress = thisPostalAddressList[0]
                 else:
                     thisPostalAddress = PostalAddress()
-                    thisPostalAddress.writeContactID(strinput=thisContact.strContactID)
-                    thisPostalAddress.writeOrganizationID(strinput=thisContact.strOrganizationID)
+                    thisPostalAddress.writeContactID(strinput=thisContact.contact_id)
+                    thisPostalAddress.writeOrganizationID(strinput=thisContact.organization_id)
                     thisPostalAddress.put()
 
 
-                findRequests = PhysicalAddress.query(PhysicalAddress.strContactID == thisContact.strContactID)
+                findRequests = PhysicalAddress.query(PhysicalAddress.contact_id == thisContact.contact_id)
                 thisPhysicalAddressList = findRequests.fetch()
 
                 if len(thisPhysicalAddressList) > 0:
                     thisPhysicalAddress = thisPhysicalAddressList[0]
                 else:
                     thisPhysicalAddress = PhysicalAddress()
-                    thisPhysicalAddress.writeContactID(strinput=thisContact.strContactID)
-                    thisPhysicalAddress.writeOrganizationID(strinput=thisContact.strOrganizationID)
+                    thisPhysicalAddress.writeContactID(strinput=thisContact.contact_id)
+                    thisPhysicalAddress.writeOrganizationID(strinput=thisContact.organization_id)
                     thisPhysicalAddress.put()
 
                 template = template_env.get_template('templates/contacts/sub/manage.html')
@@ -940,7 +938,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequests = PostalAddress.query(PostalAddress.strContactID == vstrContactID)
+                findRequests = PostalAddress.query(PostalAddress.contact_id == vstrContactID)
                 thisPostalAddressList = findRequests.fetch()
 
 
@@ -973,7 +971,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                 vstrNotes = self.request.get('vstrNotes')
                 vstrContactID = self.request.get('vstrContactID')
 
-                findRequests = Notes.query(Notes.strContactID == vstrContactID,Notes.strSubject == vstrSubject,Notes.strNotes == vstrNotes)
+                findRequests = Notes.query(Notes.contact_id == vstrContactID, Notes.subject == vstrSubject, Notes.notes == vstrNotes)
                 thisNotesList = findRequests.fetch()
 
                 if len(thisNotesList) > 0:
@@ -1012,7 +1010,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                 vstrPhyCountry = self.request.get('vstrPhyCountry')
                 vstrPhyPostalCode = self.request.get('vstrPhyPostalCode')
 
-                findRequests = PhysicalAddress.query(PhysicalAddress.strContactID == vstrContactID)
+                findRequests = PhysicalAddress.query(PhysicalAddress.contact_id == vstrContactID)
                 thisPhysicalAddressList = findRequests.fetch()
 
                 if len(thisPhysicalAddressList) > 0:
@@ -1044,7 +1042,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
-                findRequests = Contacts.query(Contacts.strOrganizationID == thisMainAccount.organization_id, Contacts.strCell == vstrCell)
+                findRequests = Contacts.query(Contacts.organization_id == thisMainAccount.organization_id, Contacts.cell == vstrCell)
                 thisContactList = findRequests.fetch()
 
                 if len(thisContactList) > 0:
@@ -1052,10 +1050,10 @@ class ThisContactHandler(webapp2.RequestHandler):
                 else:
                     thisContact = Contacts()
 
-                findRequests = SMSInBox.query(SMSInBox.strContactID == thisContact.strContactID)
+                findRequests = SMSInBox.query(SMSInBox.contact_id == thisContact.contact_id)
                 thisInBoxMessagesList = findRequests.fetch()
 
-                findRequests = SMSOutBox.query(SMSOutBox.strContactID == thisContact.strContactID)
+                findRequests = SMSOutBox.query(SMSOutBox.contact_id == thisContact.contact_id)
                 thisSMSOutBoxList = findRequests.fetch()
 
 
@@ -1185,7 +1183,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                                 strThisTime = datetime.time(hour=strThisTime.hour, minute=strThisTime.minute,second=strThisTime.second)
                                 thisDeliveryReport.writeDate(strinput=strThisDate)
                                 thisDeliveryReport.writeTime(strinput=strThisTime)
-                                thisDeliveryReport.writeMessageID(strinput=thisOutBox.strMessageID)
+                                thisDeliveryReport.writeMessageID(strinput=thisOutBox.message_id)
                                 thisDeliveryReport.writeReference(strinput=ref)
                                 thisDeliveryReport.put()
                                 thisPortal.put()
@@ -1235,7 +1233,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                                                             second=strThisTime.second)
                                 thisDeliveryReport.writeDate(strinput=strThisDate)
                                 thisDeliveryReport.writeTime(strinput=strThisTime)
-                                thisDeliveryReport.writeMessageID(strinput=thisOutBox.strMessageID)
+                                thisDeliveryReport.writeMessageID(strinput=thisOutBox.message_id)
                                 thisDeliveryReport.writeReference(strinput=ref)
                                 thisDeliveryReport.put()
                                 thisPortal.put()
@@ -1285,7 +1283,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                                                             second=strThisTime.second)
                                 thisDeliveryReport.writeDate(strinput=strThisDate)
                                 thisDeliveryReport.writeTime(strinput=strThisTime)
-                                thisDeliveryReport.writeMessageID(strinput=thisOutBox.strMessageID)
+                                thisDeliveryReport.writeMessageID(strinput=thisOutBox.message_id)
                                 thisDeliveryReport.writeReference(strinput=ref)
                                 thisDeliveryReport.put()
                                 thisPortal.put()
@@ -1311,7 +1309,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
-                findRequest = Contacts.query(Contacts.strCell == vstrCell)
+                findRequest = Contacts.query(Contacts.cell == vstrCell)
                 thisContactList = findRequest.fetch()
 
                 if len(thisContactList) > 0:
@@ -1320,10 +1318,10 @@ class ThisContactHandler(webapp2.RequestHandler):
                     thisContact = Contacts()
 
 
-                findRequest = EmailInBox.query(EmailInBox.strContactID == thisContact.strContactID)
+                findRequest = EmailInBox.query(EmailInBox.contact_id == thisContact.contact_id)
                 thisEmailInboxList = findRequest.fetch()
 
-                findRequest = EmailOutBox.query(EmailOutBox.strContactID == thisContact.strContactID)
+                findRequest = EmailOutBox.query(EmailOutBox.contact_id == thisContact.contact_id)
                 thisEmailOutBoxList = findRequest.fetch()
 
                 template = template_env.get_template('templates/contacts/sub/email.html')
@@ -1354,7 +1352,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                     if thisOrg.verified:
 
 
-                        findRequest = Contacts.query(Contacts.strCell == vstrCell)
+                        findRequest = Contacts.query(Contacts.cell == vstrCell)
                         thisContactList = findRequest.fetch()
 
                         if len(thisContactList) > 0:
@@ -1362,7 +1360,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                         else:
                             thisContact = Contacts()
 
-                        findRequest = EmailOutBox.query(EmailOutBox.strSubject == vstrSubject,EmailOutBox.strMessage == vstrMessage)
+                        findRequest = EmailOutBox.query(EmailOutBox.subject == vstrSubject, EmailOutBox.message == vstrMessage)
                         thisEmailOutBoxList = findRequest.fetch()
 
                         if len(thisEmailOutBoxList) > 0:
@@ -1370,7 +1368,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                         else:
                             thisEmailOutBox = EmailOutBox()
 
-                        thisEmailOutBox.writeContactID(strinput=thisContact.strContactID)
+                        thisEmailOutBox.writeContactID(strinput=thisContact.contact_id)
                         thisEmailOutBox.writeMessageID(strinput=thisEmailOutBox.CreateMessageID())
                         thisEmailOutBox.writeMessage(strinput=vstrMessage)
                         thisDate = datetime.datetime.now()

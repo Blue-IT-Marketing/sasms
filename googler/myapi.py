@@ -420,7 +420,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             pass
                         else:
                             thisContact = SMSContacts()
-                            thisContact.writeUserID(strinput=thisEndPoint.strAPI)
+                            thisContact.writeUserID(strinput=thisEndPoint.api)
                             thisContact.writeCellNumber(strinput=strCell)
                             thisContact.writeGroupID(strinput=thisEndPoint.strAPIGroupID)
                             thisContact.writeNames(strinput="API")
@@ -439,7 +439,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
                             thisGroup.writeGroupID(strinput=EndPoints.strAPIGroupID)
                             thisGroup.writeOrganizationID(strinput=thisEndPoint.organization_id)
-                            thisGroup.writeUserID(strinput=thisEndPoint.strAPI)  # THE API Key User means the Group is owned by the API Key
+                            thisGroup.writeUserID(strinput=thisEndPoint.api)  # THE API Key User means the Group is owned by the API Key
                             thisGroup.writeGroupDescription(strinput="API Group for messages sent through the API")
                             thisGroup.writeGroupName(strinput="API")
                         if AddContact:
@@ -1063,7 +1063,7 @@ class RoutesHandler(webapp2.RequestHandler):
                         elif strFunction == "message-send":
                             strCell = self.request.get('cell')
                             strMessage = self.request.get('message')
-                            # SendMessage(self, strMessage, cell, organization_id, thisEndPoint):
+                            # SendMessage(self, message, cell, organization_id, thisEndPoint):
                             self.SendMessageHandler(strMessage=strMessage, strCell=strCell, strOrganizationID=thisOrg.organization_id, thisEndPoint=thisEndPoint)
 
                         elif strFunction == "message-response":

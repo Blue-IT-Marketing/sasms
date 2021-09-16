@@ -16,27 +16,15 @@
 
 
 import os
-import webapp2
 import jinja2
 import datetime
-from google.appengine.ext import ndb
-from google.appengine.api import users
-from google.appengine.api import mail
-from google.appengine.api import urlfetch
-from google.appengine.api import app_identity
-import cloudstorage
-import urllib,urllib2
-
+import urllib
+from google.cloud import ndb
 from userRights import UserRights
 from accounts import Accounts
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 import logging
-
-try:
-    from urllib.request import urlopen
-except:
-    from urllib2 import urlopen
-
+import requests
 import re
 
 
@@ -60,21 +48,18 @@ class ShortenURL(object):
         self.userid = userid
         self.password = password
 
-    def Shorten(self,long_url):
+    def Shorten(self, long_url):
         """ Call TinyURL API and returned shortened URL result.
-
         Args:
             long_url: URL string to shorten
-
         Returns:
             The shortened URL as a string
-
         Note:
             long_url is required and no checks are made to ensure completeness
         """
 
         result = None
-        f = urlopen("http://tinyurl.com/api-create.php?url={0}".format(
+        f = requests.get("http://tinyurl.com/api-create.php?url={0}".format(
             long_url))
         try:
             result = f.read()
@@ -89,18 +74,18 @@ class ShortenURL(object):
         else:
             return result
 
-class FacebookMessages(ndb.Expando):
-    strMessageID = ndb.StringProperty()
-    strMessage = ndb.TextProperty()
-    strMessageStatus = ndb.StringProperty(default="Ready") # Sent
-    strDateSent = ndb.DateProperty()
-    strTimeSent = ndb.TimeProperty()
+class FacebookMessages(ndb.Model):
+    message_id = ndb.StringProperty()
+    message = ndb.TextProperty()
+    message_status = ndb.StringProperty(default="Ready") # Sent
+    date_sent = ndb.DateProperty()
+    time_sent = ndb.TimeProperty()
 
     def writeMessageID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessageID = strinput
+                self.message_id = strinput
                 return True
             else:
                 return False
@@ -110,7 +95,7 @@ class FacebookMessages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessage = strinput
+                self.message = strinput
                 return True
             else:
                 return False
@@ -120,7 +105,7 @@ class FacebookMessages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ["Sent","sent","Ready","ready"]:
-                self.strMessageStatus = strinput
+                self.message_status = strinput
                 return True
             else:
                 return False
@@ -129,7 +114,7 @@ class FacebookMessages(ndb.Expando):
     def writeDateSent(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateSent = strinput
+                self.date_sent = strinput
                 return True
             else:
                 return False
@@ -138,7 +123,7 @@ class FacebookMessages(ndb.Expando):
     def writeTimeSent(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeSent = strinput
+                self.time_sent = strinput
                 return True
             else:
                 return False
@@ -154,17 +139,17 @@ class FacebookMessages(ndb.Expando):
         except:
             return None
 
-class FacebookGroups(ndb.Expando):
-    strGroupID = ndb.StringProperty()
-    strGroupState = ndb.StringProperty(default="Open") # Closed
-    strBlocked = ndb.BooleanProperty(default=False)
-    strFailedAttempts = ndb.IntegerProperty(default=0)
+class FacebookGroups(ndb.Model):
+    group_id = ndb.StringProperty()
+    group_state = ndb.StringProperty(default="Open") # Closed
+    blocked = ndb.BooleanProperty(default=False)
+    failed_attempts = ndb.IntegerProperty(default=0)
 
     def writeGroupID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strGroupID = strinput
+                self.group_id = strinput
                 return True
             else:
                 return False
@@ -174,7 +159,7 @@ class FacebookGroups(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ["Open","Closed","open","closed"]:
-                self.strGroupState = strinput
+                self.group_state = strinput
                 return True
             else:
                 return False
@@ -184,7 +169,7 @@ class FacebookGroups(ndb.Expando):
     def writeBlocked(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strBlocked = strinput
+                self.blocked = strinput
                 return True
             else:
                 return False
@@ -195,26 +180,26 @@ class FacebookGroups(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) > 0):
-                self.strFailedAttempts += int(strinput)
+                self.failed_attempts += int(strinput)
                 return True
             else:
                 return False
         except:
             return False
 
-class FaceGroupAutoPosterSettings(ndb.Expando):
-    strAPI = ndb.StringProperty(os.environ.get('FACEBOOK_GRAPH_API_KEY'))
-    strLastMessageSentID = ndb.StringProperty()
-    strStartRun = ndb.BooleanProperty(default=False)
-    strRetry = ndb.IntegerProperty(default=5)
-    strFirstRun = ndb.BooleanProperty(default=True)
+class FaceGroupAutoPosterSettings(ndb.Model):
+    api = ndb.StringProperty(os.environ.get('FACEBOOK_GRAPH_API_KEY'))
+    last_message_sent = ndb.StringProperty()
+    start_run = ndb.BooleanProperty(default=False)
+    retry = ndb.IntegerProperty(default=5)
+    first_run = ndb.BooleanProperty(default=True)
 
 
     def writeAPI(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAPI = strinput
+                self.api = strinput
                 return True
             else:
                 return False
@@ -224,7 +209,7 @@ class FaceGroupAutoPosterSettings(ndb.Expando):
     def writeStartRun(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strStartRun = strinput
+                self.start_run = strinput
                 return True
             else:
                 return False
@@ -235,7 +220,7 @@ class FaceGroupAutoPosterSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) > 0):
-                self.strRetry = int(strinput)
+                self.retry = int(strinput)
                 return True
             else:
                 return False
@@ -245,29 +230,29 @@ class FaceGroupAutoPosterSettings(ndb.Expando):
     def writeFirstRun(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strFirstRun = strinput
+                self.first_run = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class TwitterSettings(ndb.Expando):
+class TwitterSettings(ndb.Model):
     #api = TwitterAPI(consumer_key,consumer_secret,auth_type='oAuth2')
-    strSettingsID = ndb.StringProperty()
-    strConsumerAPI = ndb.StringProperty(default=os.environ.get('TWITTER_CONSUMER_API'))
-    strConsumerSecret = ndb.StringProperty(default=os.environ.get('TWITTER_CONSUMER_SECRET'))
-    strAccessTokenKey = ndb.StringProperty(default=os.environ.get('TWITTER_ACCESS_TOKEN_KEY'))
-    strAccessTokenSecret = ndb.StringProperty(default=os.environ.get('TWITTER_ACCESS_TOKEN_SECRET'))
+    settings_id = ndb.StringProperty()
+    consumer_api = ndb.StringProperty(default=os.environ.get('TWITTER_CONSUMER_API'))
+    consumer_secret = ndb.StringProperty(default=os.environ.get('TWITTER_CONSUMER_SECRET'))
+    access_token_key = ndb.StringProperty(default=os.environ.get('TWITTER_ACCESS_TOKEN_KEY'))
+    access_token_secret = ndb.StringProperty(default=os.environ.get('TWITTER_ACCESS_TOKEN_SECRET'))
 
-    strCallBackURL = ndb.StringProperty(default="https://sa-sms.appspot.com")
-    strAPPOnlyAuthentication = ndb.StringProperty(default="https://api.twitter.com/oauth2/token")
-    strRequestTokenURL = ndb.StringProperty(default="https://api.twitter.com/oauth/request_token")
-    strAuthorizeURL = ndb.StringProperty(default="https://api.twitter.com/oauth/authorize")
-    strAccessTokenURL = ndb.StringProperty(default="https://api.twitter.com/oauth/access_token")
+    call_back_url = ndb.StringProperty(default="https://sa-sms.appspot.com")
+    app_only_authentication = ndb.StringProperty(default="https://api.twitter.com/oauth2/token")
+    request_token_url = ndb.StringProperty(default="https://api.twitter.com/oauth/request_token")
+    authorize_url = ndb.StringProperty(default="https://api.twitter.com/oauth/authorize")
+    access_token_url = ndb.StringProperty(default="https://api.twitter.com/oauth/access_token")
 
-    strRateLimit = ndb.IntegerProperty(default=0) # Rate at which tweets can be sent
-    strCredentialsWorks = ndb.BooleanProperty(default=True)
+    rate_limit = ndb.IntegerProperty(default=0) # Rate at which tweets can be sent
+    credentials_worked = ndb.BooleanProperty(default=True)
 
 
 
@@ -275,7 +260,7 @@ class TwitterSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strConsumerAPI = strinput
+                self.consumer_api = strinput
                 return True
             else:
                 return False
@@ -286,7 +271,7 @@ class TwitterSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strConsumerSecret = strinput
+                self.consumer_secret = strinput
                 return True
             else:
                 return False
@@ -297,7 +282,7 @@ class TwitterSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccessTokenKey = strinput
+                self.access_token_key = strinput
                 return True
             else:
                 return False
@@ -307,7 +292,7 @@ class TwitterSettings(ndb.Expando):
     def writeCredentialsWorks(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strCredentialsWorks = strinput
+                self.credentials_worked = strinput
                 return True
             else:
                 return False
@@ -318,7 +303,7 @@ class TwitterSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccessTokenSecret = strinput
+                self.access_token_secret = strinput
                 return True
             else:
                 return False
@@ -329,7 +314,7 @@ class TwitterSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCallBackURL = strinput
+                self.call_back_url = strinput
                 return True
             else:
                 return False
@@ -341,7 +326,7 @@ class TwitterSettings(ndb.Expando):
             strinput = str(strinput)
 
             if strinput != None:
-                self.strAPPOnlyAuthentication = strinput
+                self.app_only_authentication = strinput
                 return True
             else:
                 return False
@@ -352,7 +337,7 @@ class TwitterSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strRequestTokenURL = strinput
+                self.request_token_url = strinput
                 return True
             else:
                 return False
@@ -363,7 +348,7 @@ class TwitterSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAuthorizeURL = strinput
+                self.authorize_url = strinput
                 return True
             else:
                 return False
@@ -374,21 +359,21 @@ class TwitterSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccessTokenURL = strinput
+                self.access_token_url = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class TwitterMessages(ndb.Expando):
-    strMessageID = ndb.StringProperty()
+class TwitterMessages(ndb.Model):
+    message_id = ndb.StringProperty()
 
-    strMessage = ndb.StringProperty(default="Business Messaging, Serious About Marketing Send SMS Adverts, Surveys and Bulk SMS Messages start today https://sa-sms.appspot.com")
-    strMediaURL = ndb.StringProperty(default="https://sa-sms.appspot.com/static/dist/img/sms.jpeg")
-    strMessageStatus = ndb.StringProperty(default="Ready") # Sent
-    strDateSent = ndb.DateProperty()
-    strTimeSent = ndb.TimeProperty()
+    message = ndb.StringProperty(default="Business Messaging, Serious About Marketing Send SMS Adverts, Surveys and Bulk SMS Messages start today https://sa-sms.appspot.com")
+    media_url = ndb.StringProperty(default="https://sa-sms.appspot.com/static/dist/img/sms.jpeg")
+    message_status = ndb.StringProperty(default="Ready") # Sent
+    date_sent = ndb.DateProperty()
+    time_sent = ndb.TimeProperty()
 
 
     def CreateMessageID(self):
@@ -405,7 +390,7 @@ class TwitterMessages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None :
-                self.strMessageID = strinput
+                self.message_id = strinput
                 return True
             else:
                 return False
@@ -416,7 +401,7 @@ class TwitterMessages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMessage = strinput
+                self.message = strinput
                 return True
             else:
                 return False
@@ -428,7 +413,7 @@ class TwitterMessages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMediaURL = strinput
+                self.media_url = strinput
                 return True
             else:
                 return False
@@ -439,7 +424,7 @@ class TwitterMessages(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ["Ready", "Sent","ready","sent"]:
-                self.strMessageStatus = strinput.capitalize()
+                self.message_status = strinput.capitalize()
                 return True
             else:
                 return False
@@ -449,7 +434,7 @@ class TwitterMessages(ndb.Expando):
     def writeDateSent(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateSent = strinput
+                self.date_sent = strinput
                 return True
             else:
                 return False
@@ -459,7 +444,7 @@ class TwitterMessages(ndb.Expando):
     def writeTimeSent(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeSent = strinput
+                self.time_sent = strinput
                 return True
             else:
                 return False
@@ -530,7 +515,7 @@ def FacebookGroupAutoPoster():
         FaceGroupAutoSettings = FaceGroupAutoPosterSettings()
 
 
-    if FaceGroupAutoSettings.strFirstRun == True:
+    if FaceGroupAutoSettings.first_run == True:
         thisFaceGroupsList = []
         for thisID in native_facebook_groups:
             thisFaceGroup = FacebookGroups()
@@ -539,27 +524,27 @@ def FacebookGroupAutoPoster():
             thisFaceGroup.put()
             thisFaceGroupsList.append(thisFaceGroup)
     else:
-        findRequest = FacebookGroups.query(FacebookGroups.strBlocked == False)
+        findRequest = FacebookGroups.query(FacebookGroups.blocked == False)
         thisFaceGroupsList = findRequest.fetch()
 
 
-    findRequest = FacebookMessages.query(FacebookMessages.strMessageStatus == "Ready")
+    findRequest = FacebookMessages.query(FacebookMessages.message_status == "Ready")
     thisMessagesList = findRequest.fetch()
 
-    if (len(thisMessagesList) > 0) and (FaceGroupAutoSettings.strStartRun == True):
+    if (len(thisMessagesList) > 0) and (FaceGroupAutoSettings.start_run == True):
         try:
             from facepy import GraphAPI
-            graph = GraphAPI(FaceGroupAutoSettings.strAPI)
+            graph = GraphAPI(FaceGroupAutoSettings.api)
             import random
             for i in range(5):
                 thisFaceGroup = random.SystemRandom().choice(thisFaceGroupsList)
                 thisMessage = random.SystemRandom().choice(thisMessagesList)
                 try:
 
-                    graph.post(path=str(thisFaceGroup.strGroupID) + '/feed', retry=FaceGroupAutoSettings.strRetry, message=thisMessage)
+                    graph.post(path=str(thisFaceGroup.group_id) + '/feed', retry=FaceGroupAutoSettings.retry, message=thisMessage)
                 except:
                     thisFaceGroup.writeFailedAttempts(strinput=1)
-                    if thisFaceGroup.strFailedAttempts > 5:
+                    if thisFaceGroup.failed_attempts > 5:
                         thisFaceGroup.writeBlocked(strinput=True)
                         thisFaceGroup.writeGroupState(strinput="Closed")
                     thisFaceGroup.put()
@@ -590,7 +575,7 @@ def TweetMessages():
         logging.error("Error with python-twitter module not found")
     import random
 
-    findRequest = TwitterMessages.query(TwitterMessages.strMessageStatus == "Ready")
+    findRequest = TwitterMessages.query(TwitterMessages.message_status == "Ready")
     thisTwitterMessagesList = findRequest.fetch()
 
     findRequest = TwitterSettings.query()
@@ -602,7 +587,7 @@ def TweetMessages():
         thisTwitterSetting = TwitterSettings()
 
     try:
-        myapi = Api(consumer_key=thisTwitterSetting.strConsumerAPI,consumer_secret=thisTwitterSetting.strConsumerSecret,access_token_key=thisTwitterSetting.strAccessTokenKey,access_token_secret=thisTwitterSetting.strAccessTokenSecret)
+        myapi = Api(consumer_key=thisTwitterSetting.consumer_api, consumer_secret=thisTwitterSetting.consumer_secret, access_token_key=thisTwitterSetting.access_token_key, access_token_secret=thisTwitterSetting.access_token_secret)
 
         if len(thisTwitterMessagesList) > 0:
             thisMessage = random.SystemRandom().choice(thisTwitterMessagesList)
@@ -610,11 +595,11 @@ def TweetMessages():
             thisMessage = TwitterMessages()
 
         shortener = ShortenURL()
-        urls = re.findall(URL_REGEXP, thisMessage.strMessage)
+        urls = re.findall(URL_REGEXP, thisMessage.message)
         for url in urls:
-            thisMessage.strMessage = thisMessage.strMessage.replace(url, shortener.Shorten(url), 1)
+            thisMessage.message = thisMessage.message.replace(url, shortener.Shorten(url), 1)
 
-        myapi.PostUpdate(status=thisMessage.strMessage)
+        myapi.PostUpdate(status=thisMessage.message)
 
         thisMessage.writeMessageStatus(strinput="Sent")
         vstrThisDateTime = datetime.datetime.now()

@@ -14,17 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import webapp2
+
 import jinja2
-from google.appengine.ext import ndb
-from google.appengine.api import users
-import cloudstorage as gcs
-from google.appengine.api import app_identity
+from google.cloud import ndb
+import google.cloud.datastore as gcs
 
 my_default_retry_params = gcs.RetryParams(initial_delay=0.2,
                                           max_delay=5.0,
                                           backoff_factor=2,
                                           max_retry_period=50)
+
 gcs.set_default_retry_params(my_default_retry_params)
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
@@ -34,23 +33,23 @@ from accounts import Accounts
 import datetime
 
 class TopUpVerifications(ndb.Expando):
-    strOrganizationID = ndb.StringProperty()
-    strTopUpReference = ndb.StringProperty()
-    strDepositSlipFilename = ndb.StringProperty()
-    strPublicSubLink = ndb.StringProperty(default="https://storage.googleapis.com/sa-sms.appspot.com/")
-    strAccountName = ndb.StringProperty(default="Adverts") # Surveys, Bulk SMS,FAX
-    strSMSCredits = ndb.IntegerProperty(default=0)
-    strCreditAmount = ndb.IntegerProperty(default=0)
-    strVerified = ndb.BooleanProperty(default=False)
-    strDateVerified = ndb.DateProperty()
-    strTimeVerified = ndb.TimeProperty()
-    strVerifiedByUserID = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    top_up_reference = ndb.StringProperty()
+    deposit_slip_filename = ndb.StringProperty()
+    public_sub_link = ndb.StringProperty(default="https://storage.googleapis.com/sa-sms.appspot.com/")
+    account_name = ndb.StringProperty(default="Adverts") # Surveys, Bulk SMS,FAX
+    sms_credits = ndb.IntegerProperty(default=0)
+    credit_amount = ndb.IntegerProperty(default=0)
+    verified = ndb.BooleanProperty(default=False)
+    date_verified = ndb.DateProperty()
+    time_verified = ndb.TimeProperty()
+    verified_by_uid = ndb.StringProperty()
 
     def writeOrganizationID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -60,7 +59,7 @@ class TopUpVerifications(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTopUpReference = strinput
+                self.top_up_reference = strinput
                 return True
             else:
                 return False
@@ -70,7 +69,7 @@ class TopUpVerifications(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDepositSlipFilename = strinput
+                self.deposit_slip_filename = strinput
                 return True
             else:
                 return False
@@ -80,7 +79,7 @@ class TopUpVerifications(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccountName = strinput
+                self.account_name = strinput
                 return True
             else:
                 return False
@@ -90,7 +89,7 @@ class TopUpVerifications(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSMSCredits = int(strinput)
+                self.sms_credits = int(strinput)
                 return True
             else:
                 return False
@@ -100,7 +99,7 @@ class TopUpVerifications(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCreditAmount = int(strinput)
+                self.credit_amount = int(strinput)
                 return True
             else:
                 return False
@@ -109,7 +108,7 @@ class TopUpVerifications(ndb.Expando):
     def writeVerified(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strVerified = strinput
+                self.verified = strinput
                 return True
             else:
                 return False
@@ -118,7 +117,7 @@ class TopUpVerifications(ndb.Expando):
     def writeDateVerified(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateVerified = strinput
+                self.date_verified = strinput
                 return True
             else:
                 return False
@@ -127,7 +126,7 @@ class TopUpVerifications(ndb.Expando):
     def writeTimeVerified(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeVerified = strinput
+                self.time_verified = strinput
                 return True
             else:
                 return False
@@ -137,7 +136,7 @@ class TopUpVerifications(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strVerifiedByUserID = strinput
+                self.verified_by_uid = strinput
                 return True
             else:
                 return False
@@ -145,21 +144,21 @@ class TopUpVerifications(ndb.Expando):
             return False
 
 class Employees(ndb.Expando):
-    strStaffID = ndb.StringProperty(default="111111111111111111111110000222232")
-    strReference = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strTel = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
-    strPosition = ndb.StringProperty(default="Admin") # Technical, Marketing, Consultant
-    strSendNotices = ndb.BooleanProperty(default=True)
+    staff_id = ndb.StringProperty()
+    reference = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    tel = ndb.StringProperty()
+    email = ndb.StringProperty()
+    position = ndb.StringProperty(default="Admin") # Technical, Marketing, Consultant
+    send_notices = ndb.BooleanProperty(default=True)
 
     def writeTel(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTel = strinput
+                self.tel = strinput
                 return True
             else:
                 return False
@@ -170,7 +169,7 @@ class Employees(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strStaffID = strinput
+                self.staff_id = strinput
                 return True
             else:
                 return False
@@ -190,7 +189,7 @@ class Employees(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
@@ -200,7 +199,7 @@ class Employees(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
@@ -210,7 +209,7 @@ class Employees(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -230,7 +229,7 @@ class Employees(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPosition = strinput
+                self.position = strinput
                 return True
             else:
                 return False
@@ -240,7 +239,7 @@ class Employees(ndb.Expando):
         try:
 
             if strinput in [True,False]:
-                self.strSendNotices = strinput
+                self.send_notices = strinput
                 return True
             else:
                 return False
@@ -248,21 +247,21 @@ class Employees(ndb.Expando):
             return False
 
 class Consultants(ndb.Expando):
-    strStaffID = ndb.StringProperty(default="111111111111111111111110000222232")
-    strReference = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strTel = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
-    strPosition = ndb.StringProperty(default="Admin") # Technical, Marketing, Consultant
-    strSendNotices = ndb.BooleanProperty(default=True)
+    staff_id = ndb.StringProperty()
+    reference = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    tel = ndb.StringProperty()
+    email = ndb.StringProperty()
+    position = ndb.StringProperty(default="Admin") # Technical, Marketing, Consultant
+    send_notices = ndb.BooleanProperty(default=True)
 
     def writeTel(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTel = strinput
+                self.tel = strinput
                 return True
             else:
                 return False
@@ -272,7 +271,7 @@ class Consultants(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strStaffID = strinput
+                self.staff_id = strinput
                 return True
             else:
                 return False
@@ -282,7 +281,7 @@ class Consultants(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strReference = strinput
+                self.reference = strinput
                 return True
             else:
                 return False
@@ -292,7 +291,7 @@ class Consultants(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
@@ -302,7 +301,7 @@ class Consultants(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
@@ -312,7 +311,7 @@ class Consultants(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -322,7 +321,7 @@ class Consultants(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -332,7 +331,7 @@ class Consultants(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPosition = strinput
+                self.position = strinput
                 return True
             else:
                 return False
@@ -342,7 +341,7 @@ class Consultants(ndb.Expando):
         try:
 
             if strinput in [True,False]:
-                self.strSendNotices = strinput
+                self.send_notices = strinput
                 return True
             else:
                 return False
@@ -350,18 +349,18 @@ class Consultants(ndb.Expando):
             return False
 
 class AccountDetails(ndb.Expando):
-    strStaffID = ndb.StringProperty(default="111111111111111111111110000222232")
-    strAccountHolder = ndb.StringProperty(default="Cellbright Trading")
-    strAccountNumber = ndb.StringProperty(default="1134 612 265")
-    strBankName = ndb.StringProperty(default="Nedbank")
-    strBranchName = ndb.StringProperty(default="Universal")
-    strBranchCode = ndb.StringProperty(default="198765")
+    staff_id = ndb.StringProperty()
+    account_holder = ndb.StringProperty(default="Cellbright Trading")
+    account_holder = ndb.StringProperty(default="1134 612 265")
+    bank_name = ndb.StringProperty(default="Nedbank")
+    branch_name = ndb.StringProperty(default="Universal")
+    branch_code = ndb.StringProperty(default="198765")
 
     def writeStaffID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strStaffID = strinput
+                self.staff_id = strinput
                 return True
             else:
                 return False
@@ -371,7 +370,7 @@ class AccountDetails(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccountHolder = strinput
+                self.account_holder = strinput
                 return True
             else:
                 return False
@@ -381,7 +380,7 @@ class AccountDetails(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccountNumber = strinput
+                self.account_holder = strinput
                 return True
             else:
                 return False
@@ -391,7 +390,7 @@ class AccountDetails(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBankName = strinput
+                self.bank_name = strinput
                 return True
             else:
                 return False
@@ -401,7 +400,7 @@ class AccountDetails(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBranchName = strinput
+                self.branch_name = strinput
                 return True
             else:
                 return False
@@ -411,7 +410,7 @@ class AccountDetails(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBranchCode = strinput
+                self.branch_code = strinput
                 return True
             else:
                 return False
@@ -424,14 +423,14 @@ class AccountDetails(ndb.Expando):
 
 class BlueITMarketing(ndb.Expando):
 
-    strStaffID = ndb.StringProperty(default="111111111111111111111110000222232")
-    strCompanyName = ndb.StringProperty(default="Blue IT Marketing Pty LTD")
-    strCompanyRegistration = ndb.StringProperty(default="2013/078651/07")
-    strCell = ndb.StringProperty(default="0790471559")
-    strTel = ndb.StringProperty(default="0159620369")
-    strEmail = ndb.StringProperty(default="info@blueitmarketing.co.za")
-    strWebsite = ndb.StringProperty(default="http://www.blueitmarketing.co.za")
-    strAddress = ndb.StringProperty(default="Office G05 Sabina Plaza, Thohoyandou, Limpopo, South Africa 0950")
+    staff_id = ndb.StringProperty()
+    company_name = ndb.StringProperty(default="Blue IT Marketing Pty LTD")
+    reg = ndb.StringProperty(default="2013/078651/07")
+    cell = ndb.StringProperty(default="0790471559")
+    tel = ndb.StringProperty(default="0159620369")
+    email = ndb.StringProperty(default="info@blueitmarketing.co.za")
+    website = ndb.StringProperty(default="http://www.blueitmarketing.co.za")
+    address = ndb.StringProperty(default="Office G05 Sabina Plaza, Thohoyandou, Limpopo, South Africa 0950")
 
     def writeStaffID(self,strinput):
         try:
@@ -447,7 +446,7 @@ class BlueITMarketing(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCompanyName = strinput
+                self.company_name = strinput
                 return True
             else:
                 return False
@@ -458,7 +457,7 @@ class BlueITMarketing(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCompanyRegistration = strinput
+                self.reg = strinput
                 return True
             else:
                 return False
@@ -468,7 +467,7 @@ class BlueITMarketing(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
@@ -478,7 +477,7 @@ class BlueITMarketing(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTel = strinput
+                self.tel = strinput
                 return True
             else:
                 return False
@@ -488,7 +487,7 @@ class BlueITMarketing(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -498,7 +497,7 @@ class BlueITMarketing(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strWebsite = strinput
+                self.website = strinput
                 return True
             else:
                 return False
@@ -508,7 +507,7 @@ class BlueITMarketing(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAddress = strinput
+                self.address = strinput
                 return True
             else:
                 return False
@@ -516,7 +515,7 @@ class BlueITMarketing(ndb.Expando):
             return False
 
 
-class Dashboardhandler(webapp2.RequestHandler):
+class Dashboardhandler():
     def get(self):
 
         Guser = users.get_current_user()
@@ -700,7 +699,7 @@ class BlueITMarketingHandler(webapp2.RequestHandler):
 
             thisAdmin = Employees()
 
-            findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAdmin.strStaffID)
+            findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAdmin.staff_id)
             thisSMSAccountList = findRequest.fetch()
 
             if len(thisSMSAccountList) > 0:
@@ -708,10 +707,10 @@ class BlueITMarketingHandler(webapp2.RequestHandler):
 
             else:
                 thisSMSAccount = SMSAccount()
-                thisSMSAccount.writeOrganizationID(strinput=thisAdmin.strStaffID)
+                thisSMSAccount.writeOrganizationID(strinput=thisAdmin.staff_id)
                 thisSMSAccount.writeUsePortal(strinput="Budget")
                 thisSMSAccount.put()
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAdmin.strStaffID)
+                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAdmin.staff_id)
                 thisSMSAccountList = findRequest.fetch()
                 thisSMSAccount = thisSMSAccountList[0]
 
@@ -738,7 +737,7 @@ class BlueITMarketingHandler(webapp2.RequestHandler):
                 vstrPosition = self.request.get('vstrPosition')
                 vstrSendNotices = self.request.get('vstrSendNotices')
 
-                findRequest = Employees.query(Employees.strCell == vstrCell)
+                findRequest = Employees.query(Employees.cell == vstrCell)
                 thisEmployeesList = findRequest.fetch()
 
                 if len(thisEmployeesList) > 0:
@@ -772,7 +771,7 @@ class BlueITMarketingHandler(webapp2.RequestHandler):
                 vstrConsSendNotices = self.request.get('vstrConsSendNotices')
 
 
-                findRequest = Consultants.query(Consultants.strCell == vstrConsCell)
+                findRequest = Consultants.query(Consultants.cell == vstrConsCell)
                 thisConsultantsList = findRequest.fetch()
 
                 if len(thisConsultantsList) > 0:
@@ -801,7 +800,7 @@ class BlueITMarketingHandler(webapp2.RequestHandler):
                 vstrBranchName = self.request.get('vstrBranchName')
                 vstrBranchCode = self.request.get('vstrBranchCode')
 
-                findRequest = AccountDetails.query(AccountDetails.strAccountNumber == vstrAccountNumber)
+                findRequest = AccountDetails.query(AccountDetails.account_holder == vstrAccountNumber)
                 thisAccountDetailsList = findRequest.fetch()
 
                 if len(thisAccountDetailsList) > 0:
@@ -1165,7 +1164,7 @@ class TopUpVerificationHandler(webapp2.RequestHandler):
     def get(self):
         Guser = users.get_current_user()
         if Guser:
-            findRequest = TopUpVerifications.query(TopUpVerifications.strVerified == False)
+            findRequest = TopUpVerifications.query(TopUpVerifications.verified == False)
             thisTopUpVerificationList = findRequest.fetch()
             template = template_env.get_template('templates/dashboard/topup/topup.html')
             context = {'thisTopUpVerificationList':thisTopUpVerificationList}
@@ -1182,7 +1181,7 @@ class thisTopUpVerificationHandler(webapp2.RequestHandler):
             strURLlist = URL.split("/")
             strTopUpReference = strURLlist[len(strURLlist) - 1]
 
-            findRequest = TopUpVerifications.query(TopUpVerifications.strTopUpReference == strTopUpReference)
+            findRequest = TopUpVerifications.query(TopUpVerifications.top_up_reference == strTopUpReference)
             thisTopUpAccountList = findRequest.fetch()
 
             if len(thisTopUpAccountList) > 0:
@@ -1266,7 +1265,7 @@ class thisTopUpVerificationHandler(webapp2.RequestHandler):
 
 
 
-                findRequest = TopUpVerifications.query(TopUpVerifications.strTopUpReference == vstrTopUpReference)
+                findRequest = TopUpVerifications.query(TopUpVerifications.top_up_reference == vstrTopUpReference)
                 thisTopUpVerificationList = findRequest.fetch()
 
                 if len(thisTopUpVerificationList) > 0:
@@ -1334,7 +1333,7 @@ class ThisMarketingHandler(webapp2.RequestHandler):
             self.response.write("Message Created Successfully")
         elif vstrChoice == "1":
             strMessageID = self.request.get('vstrMessageID')
-            findRequest = FacebookMessages.query(FacebookMessages.strMessageID == strMessageID)
+            findRequest = FacebookMessages.query(FacebookMessages.message_id == strMessageID)
             thisMessageList = findRequest.fetch()
 
             if len(thisMessageList) > 0:
@@ -1352,7 +1351,7 @@ class ThisMarketingHandler(webapp2.RequestHandler):
             self.response.write("Message Created Successfully")
         elif vstrChoice == "3":
             strMessageID = self.request.get('vstrMessageID')
-            findRequest = TwitterMessages.query(TwitterMessages.strMessageID == strMessageID)
+            findRequest = TwitterMessages.query(TwitterMessages.message_id == strMessageID)
             thisMessageList = findRequest.fetch()
 
             if len(thisMessageList) > 0:
