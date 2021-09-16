@@ -12,10 +12,10 @@ indexes:
 
 - kind: Accounts
   properties:
-  - name: strOrganizationID
-  - name: strSuspended
-  - name: strVerified
-  - name: strUserID
+  - name: organization_id
+  - name: suspended
+  - name: verified
+  - name: uid
 
 - kind: Advert
   properties:
@@ -88,29 +88,29 @@ indexes:
 
 - kind: SentReport
   properties:
-  - name: strDateSent
+  - name: date_sent
   - name: strReportDone
   - name: strResponseChecked
-  - name: strDateSent
+  - name: date_sent
 
 - kind: SentReport
   properties:
-  - name: strDateSent
+  - name: date_sent
   - name: strReportDone
   - name: strResponseChecked
-  - name: strTimeSent
+  - name: time_sent
 
 - kind: SentReport
   properties:
-  - name: strDateSent
+  - name: date_sent
   - name: strReportDone
-  - name: strTimeSent
+  - name: time_sent
 
 - kind: SentReport
   properties:
   - name: strReportDone
   - name: strResponseChecked
-  - name: strDateSent
+  - name: date_sent
 
 - kind: SurveyOrders
   properties:

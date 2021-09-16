@@ -402,7 +402,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
                         ThisDeliveryReport = DeliveryReport()
                         ThisDeliveryReport.writeMessageID(strinput=thisMessage.strMessageID)
-                        ThisDeliveryReport.writeOrganizationID(strinput=thisEndPoint.strOrganizationID)
+                        ThisDeliveryReport.writeOrganizationID(strinput=thisEndPoint.organization_id)
                         ThisDeliveryReport.writeDelivered(strinput=True)
                         ThisDeliveryReport.writeCell(strinput=strCell)
                         ThisDeliveryReport.writeGroupID(strinput=thisEndPoint.strAPIGroupID)
@@ -428,7 +428,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             thisContact.put()
                             AddContact = True
 
-                        findRequest = Groups.query(Groups.strOrganizationID == thisEndPoint.strOrganizationID,
+                        findRequest = Groups.query(Groups.strOrganizationID == thisEndPoint.organization_id,
                                                    Groups.strGroupID == thisEndPoint.strAPIGroupID)
                         thisGroupList = findRequest.fetch()
 
@@ -438,7 +438,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             thisGroup = Groups()
 
                             thisGroup.writeGroupID(strinput=EndPoints.strAPIGroupID)
-                            thisGroup.writeOrganizationID(strinput=thisEndPoint.strOrganizationID)
+                            thisGroup.writeOrganizationID(strinput=thisEndPoint.organization_id)
                             thisGroup.writeUserID(strinput=thisEndPoint.strAPI)  # THE API Key User means the Group is owned by the API Key
                             thisGroup.writeGroupDescription(strinput="API Group for messages sent through the API")
                             thisGroup.writeGroupName(strinput="API")
@@ -469,11 +469,11 @@ class RoutesHandler(webapp2.RequestHandler):
 
             strResponse = thisReport.strResponse
             strRef = thisReport.strRef
-            strCell = thisReport.strCell
+            strCell = thisReport.cell
             self.response.headers["Content-Type"] = "application/json"
             self.response.status_code = 200
             template = template_env.get_template('templates/api/message-response.json')
-            context = {'strResponse':strResponse,'strRef':strRef,'strCell':strCell}
+            context = {'strResponse':strResponse,'strRef':strRef,'cell':strCell}
             self.response.write(template.render(context))
         else:
             self.response.headers["Content-Type"] = "text/plain"
@@ -487,12 +487,12 @@ class RoutesHandler(webapp2.RequestHandler):
             thisReport = thisDeliveryReportList[0]
             strStatus = thisReport.strSendingStatus
             strRef = thisReport.strRef
-            strCell = thisReport.strCell
+            strCell = thisReport.cell
 
             self.response.headers["Content-Type"] = "application/json"
             self.response.status_code = 200
             template = template_env.get_template('templates/api/message-status.json')
-            context = {'strStatus':strStatus,'strRef':strRef,'strCell':strCell}
+            context = {'strStatus':strStatus,'strRef':strRef,'cell':strCell}
             self.response.write(template.render(context))
 
         else:
@@ -582,7 +582,7 @@ class RoutesHandler(webapp2.RequestHandler):
         """
         from advertise import AddAccount,Advert
 
-        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisEndPoint.strOrganizationID)
+        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisEndPoint.organization_id)
         thisAdvertAccountList = findRequest.fetch()
 
         if len(thisAdvertAccountList) > 0:
@@ -591,7 +591,7 @@ class RoutesHandler(webapp2.RequestHandler):
             if thisAdvertAccount.strTotalCredits <= int(strCreditLimit):
                 thisAdvert = Advert()
                 thisAdvert.writeUserID(strinput=thisEndPoint.strAPIKey)
-                thisAdvert.writeOrganizationID(strinput=thisEndPoint.strOrganizationID)
+                thisAdvert.writeOrganizationID(strinput=thisEndPoint.organization_id)
                 thisAdvert.writeAdvert(strinput=strAdvert)
                 thisAdvert.writeAdvertID(strinput=thisAdvert.CreateAdvertID())
                 thisAdvert.writeAdvertIsPaid(strinput=True)
@@ -893,7 +893,7 @@ class RoutesHandler(webapp2.RequestHandler):
         from mysms import ClickSendSMSPortal
         from myTwilio import MyTwilioPortal
 
-        findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisEndPoint.strOrganizationID)
+        findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisEndPoint.organization_id)
         thisFaxAccountList = findRequest.fetch()
 
         if len(thisFaxAccountList) > 0:
@@ -912,7 +912,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
                 elif thisFaxAccount.strUsePortal == "Twilio":
                     thisPortal = MyTwilioPortal()
-                    findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisEndPoint.strOrganizationID)
+                    findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisEndPoint.organization_id)
                     thisFaxSettingsList = findRequest.fetch()
 
                     if len(thisFaxSettingsList) > 0:
@@ -926,7 +926,7 @@ class RoutesHandler(webapp2.RequestHandler):
                         strThisTime = datetime.time(hour=vstrThisDateTime.hour,minute=vstrThisDateTime.minute,second=vstrThisDateTime.second)
 
                         thisSentFax = SentFax()
-                        thisSentFax.writeOrganizationID(strinput=thisEndPoint.strOrganizationID)
+                        thisSentFax.writeOrganizationID(strinput=thisEndPoint.organization_id)
                         thisSentFax.writeUserID(strinput=thisEndPoint.strAPIKey)
                         thisSentFax.writeFaxNumber(strinput=strFaxNumber)
                         thisSentFax.writeDateSent(strinput=strThisDate)
@@ -1035,13 +1035,13 @@ class RoutesHandler(webapp2.RequestHandler):
             if strMyPointURL.startswith(strOriginURL):
                 logging.info("We got my point url is equal to endpoint")
 
-                findRequest = Organization.query(Organization.strOrganizationID == thisEndPoint.strOrganizationID)
+                findRequest = Organization.query(Organization.strOrganizationID == thisEndPoint.organization_id)
                 thisOrgList = findRequest.fetch()
 
                 if len(thisOrgList) > 0:
                     thisOrg = thisOrgList[0]
 
-                    if thisOrg.strVerified:
+                    if thisOrg.verified:
                         logging.info("Organization is verified")
 
                         if strFunction == "contacts-get":
@@ -1052,7 +1052,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             strEmail = self.request.get('email')
                             strNames = self.request.get('names')
                             strSurname = self.request.get('surname')
-                            #AddContactsHandler(self, strNames, strSurname, strCell, strEmail):
+                            #AddContactsHandler(self, names, surname, cell, email):
                             self.AddContactsHandler(strNames=strNames,strSurname=strSurname,strCell=strCell,strEmail=strEmail)
 
                         elif strFunction == "contact-exist":
@@ -1063,8 +1063,8 @@ class RoutesHandler(webapp2.RequestHandler):
                         elif strFunction == "message-send":
                             strCell = self.request.get('cell')
                             strMessage = self.request.get('message')
-                            # SendMessage(self, strMessage, strCell, strOrganizationID, thisEndPoint):
-                            self.SendMessageHandler(strMessage=strMessage,strCell=strCell,strOrganizationID=thisOrg.strOrganizationID,thisEndPoint=thisEndPoint)
+                            # SendMessage(self, strMessage, cell, organization_id, thisEndPoint):
+                            self.SendMessageHandler(strMessage=strMessage, strCell=strCell, strOrganizationID=thisOrg.organization_id, thisEndPoint=thisEndPoint)
 
                         elif strFunction == "message-response":
                             strCell = self.request.get('cell')
@@ -1078,7 +1078,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             self.MessageStatusHandler(strRef=strRef,strCell=strCell)
 
                         elif strFunction == "credits":
-                            self.CreditsHandler(strOrganizationID=thisEndPoint.strOrganizationID)
+                            self.CreditsHandler(strOrganizationID=thisEndPoint.organization_id)
 
                         elif strFunction == "advert-set":
                             strAdvert = self.request.get('advert')
@@ -1110,7 +1110,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             self.AdvertResponsesHandler(strRef=strRef)
 
                         elif strFunction == "advert-credit":
-                            self.AdvertAccountCredit(strOrganizationID=thisEndPoint.strOrganizationID)
+                            self.AdvertAccountCredit(strOrganizationID=thisEndPoint.organization_id)
 
                         elif strFunction == "survey-build":
                             strQuestion = self.request.get('survey-question')
@@ -1139,13 +1139,13 @@ class RoutesHandler(webapp2.RequestHandler):
                             self.SurveyResponses(strSurveyID=strSurveyID)
 
                         elif strFunction == "survey-credit":
-                            self.SurveyCredit(strOrganizationID=thisEndPoint.strOrganizationID)
+                            self.SurveyCredit(strOrganizationID=thisEndPoint.organization_id)
 
                         elif strFunction == "fax-send":
                             #def SendFax(self,strFaxMediaURL,strFaxNumber):
                             strFaxMediaURL = self.request.get('media-url')
                             strFaxNumber = self.request.get('fax-number')
-                            self.SendFax(strFaxMediaURL=strFaxMediaURL,strFaxNumber=strFaxNumber,thisEndPoint=thisEndPoint.strOrganizationID)
+                            self.SendFax(strFaxMediaURL=strFaxMediaURL, strFaxNumber=strFaxNumber, thisEndPoint=thisEndPoint.organization_id)
 
                         elif strFunction == "fax-status":
                             strRef = self.request.get('ref')
@@ -1154,7 +1154,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             strFaxToEmailAddress = self.request.get('fax-email')
                             self.ReceiveFax(strFaxEmail=strFaxToEmailAddress)
                         elif strFunction == "fax-credit":
-                            self.FaxCredit(strOrganizationID=thisEndPoint.strOrganizationID)
+                            self.FaxCredit(strOrganizationID=thisEndPoint.organization_id)
                     else:
                         self.response.headers["Content-Type"] = "text/plain"
                         self.response.status_code = 401

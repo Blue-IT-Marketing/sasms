@@ -1925,9 +1925,9 @@ class MyFaxHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisFaxAccountList = findRequest.fetch()
 
                 if len(thisFaxAccountList) > 0:
@@ -1947,7 +1947,7 @@ class MyFaxHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrNames = self.request.get("vstrNames")
                 vstrSurname = self.request.get("vstrSurname")
@@ -1956,7 +1956,7 @@ class MyFaxHandler(webapp2.RequestHandler):
 
                 vstrWebsite = self.request.get("vstrWebsite")
 
-                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisFaxAccountList = findRequest.fetch()
 
                 if len(thisFaxAccountList) > 0:
@@ -1964,7 +1964,7 @@ class MyFaxHandler(webapp2.RequestHandler):
                 else:
                     thisFaxAccount = FaxAccount()
 
-                thisFaxAccount.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                thisFaxAccount.writeOrganizationID(strinput=thisMainAccount.organization_id)
                 thisFaxAccount.writeNames(strinput=vstrNames)
                 thisFaxAccount.writeSurname(strinput=vstrSurname)
                 thisFaxAccount.writeCell(strinput=vstrCell)
@@ -1984,12 +1984,12 @@ class MyFaxHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = SentFax.query(SentFax.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = SentFax.query(SentFax.strOrganizationID == thisMainAccount.organization_id)
                 thisSentFaxesList = findRequest.fetch()
 
-                findRequest = ReceivedFax.query(ReceivedFax.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = ReceivedFax.query(ReceivedFax.strOrganizationID == thisMainAccount.organization_id)
                 thisReceivedFaxesList = findRequest.fetch()
 
                 template = template_env.get_template('templates/fax/sub/myfaxes.html')
@@ -2005,7 +2005,7 @@ class MyFaxHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrToFaxNumber = self.request.get("vstrToFaxNumber")
                 vstrSubject = self.request.get("vstrSubject")
@@ -2014,7 +2014,7 @@ class MyFaxHandler(webapp2.RequestHandler):
                 # TODO- find a way to count the pages in a pdf file with python
                 # TODO- once that is done check if credit on the user account is enough to send the fax if yes send
 
-                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisFaxAccountList = findRequest.fetch()
 
                 if len(thisFaxAccountList) > 0:
@@ -2045,9 +2045,9 @@ class MyFaxHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisMainAccount.organization_id)
                 thisFaxSettingsList = findRequest.fetch()
 
                 if len(thisFaxSettingsList) > 0:
@@ -2081,9 +2081,9 @@ class MyFaxHandler(webapp2.RequestHandler):
                 thisTwilioPortal = MyTwilioPortal()
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisFaxAccountList = findRequest.fetch()
 
                 if len(thisFaxAccountList) > 0:
@@ -2112,17 +2112,17 @@ class MyFaxHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
-                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisFaxAccountList = findRequest.fetch()
                 if len(thisFaxAccountList) > 0:
                     thisFaxAccount = thisFaxAccountList[0]
                 else:
                     thisFaxAccount = FaxAccount()
 
-                findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisMainAccount.organization_id)
                 thisFaxSettingsList = findRequest.fetch()
                 if len(thisFaxSettingsList) > 0:
                     thisFaxSettings = thisFaxSettingsList[0]
@@ -2150,7 +2150,7 @@ class SettingsHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 findRequest = AvailableFaxNumbers.query(AvailableFaxNumbers.strAssigned == False)
@@ -2159,7 +2159,7 @@ class SettingsHandler(webapp2.RequestHandler):
                     thisAvailFax = thisAvailableFaxNumbersList[0]
 
                     thisAvailFax.writeAssigned(strinput=True)
-                    thisAvailFax.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                    thisAvailFax.writeOrganizationID(strinput=thisMainAccount.organization_id)
                     self.response.write(thisAvailFax.strFaxNumber)
                     thisAvailFax.put()
                 else:
@@ -2171,7 +2171,7 @@ class SettingsHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
 
@@ -2180,7 +2180,7 @@ class SettingsHandler(webapp2.RequestHandler):
                 if len(thisAvailableEmailsList) > 0:
                     thisEmailEndPoint = thisAvailableEmailsList[0]
                     thisEmailEndPoint.writeAssigned(strinput=True)
-                    thisEmailEndPoint.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                    thisEmailEndPoint.writeOrganizationID(strinput=thisMainAccount.organization_id)
                     self.response.write(thisEmailEndPoint.strEmailAddress)
                     thisEmailEndPoint.put()
                 else:
@@ -2193,7 +2193,7 @@ class SettingsHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 thisFaxSettings = FaxSettings()
                 strAPIKey = thisFaxSettings.CreateAPIKey()
@@ -2205,7 +2205,7 @@ class SettingsHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 thisFaxSettings = FaxSettings()
                 strSecretCode = thisFaxSettings.CreateSecretCode()
@@ -2217,7 +2217,7 @@ class SettingsHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrFaxNumber = self.request.get('vstrFaxNumber')
                 vstrSMSNotifyOnSend = self.request.get('vstrSMSNotifyOnSend')
@@ -2227,14 +2227,14 @@ class SettingsHandler(webapp2.RequestHandler):
                 vstrAPIKey = self.request.get('vstrAPIKey')
                 vstrSecretCode = self.request.get('vstrSecretCode')
 
-                findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisMainAccount.organization_id)
                 thisFaxSettingsList = findRequest.fetch()
 
                 if len(thisFaxSettingsList) > 0:
                     thisFaxSetting = thisFaxSettingsList[0]
                 else:
                     thisFaxSetting = FaxSettings()
-                thisFaxSetting.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                thisFaxSetting.writeOrganizationID(strinput=thisMainAccount.organization_id)
                 thisFaxSetting.writeFaxNumber(strinput=vstrFaxNumber)
                 if vstrSMSNotifyOnSend == "YES":
                     thisFaxSetting.writeSMSNotifyOnSend(strinput=True)
@@ -2274,7 +2274,7 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
         if len(thisFaxAccountList) > 0:
             thisFaxAccount = thisFaxAccountList[0]
 
-            findRequest = Organization.query(Organization.strOrganizationID == thisFaxAccount.strOrganizationID)
+            findRequest = Organization.query(Organization.strOrganizationID == thisFaxAccount.organization_id)
             thisOrgList = findRequest.fetch()
 
             if len(thisOrgList) > 0:
@@ -2310,8 +2310,8 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
-                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
+                findRequest = FaxAccount.query(FaxAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisFaxAccountList = findRequest.fetch()
 
                 if len(thisFaxAccountList) > 0:
@@ -2321,7 +2321,7 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                         thisFaxAccount.put()
 
                         thisVerifications = TopUpVerifications()
-                        thisVerifications.writeOrganizationID(strinput=thisFaxAccount.strOrganizationID)
+                        thisVerifications.writeOrganizationID(strinput=thisFaxAccount.organization_id)
                         strFax = "FAX"
                         thisVerifications.writeAccountName(strinput=strFax)
                         thisVerifications.writeCreditAmount(strinput=thisFaxAccount.strTotalTopUpCost)
@@ -2337,7 +2337,7 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                         thisFaxAccount.put()
 
                         thisVerifications = TopUpVerifications()
-                        thisVerifications.writeOrganizationID(strinput=thisFaxAccount.strOrganizationID)
+                        thisVerifications.writeOrganizationID(strinput=thisFaxAccount.organization_id)
                         strFax = "FAX"
                         thisVerifications.writeAccountName(strinput=strFax)
                         thisVerifications.writeCreditAmount(strinput=thisFaxAccount.strTotalTopUpCost)

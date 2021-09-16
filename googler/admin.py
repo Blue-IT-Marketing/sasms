@@ -15,10 +15,8 @@
 # limitations under the License.
 #
 import os
-
-import webapp2
 import jinja2
-from google.appengine.api import users
+from google.cloud import ndb
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
 class AdminHandler(webapp2.RequestHandler):
@@ -36,13 +34,13 @@ class AdminHandler(webapp2.RequestHandler):
         vstrUserEmail = self.request.get('vstrUserEmail')
         vstraccessToken = self.request.get('vstraccessToken')
 
-        findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+        findRequest = Accounts.query(Accounts.uid == vstrUserID)
         thisAccountList = findRequest.fetch()
 
         if len(thisAccountList) > 0:
             thisAccount = thisAccountList[0]
         else:
-            findRequest = Accounts.query(Accounts.strEmail == vstrUserEmail, Accounts.strVerified == True)
+            findRequest = Accounts.query(Accounts.email == vstrUserEmail, Accounts.verified == True)
             thisAccountList = findRequest.fetch()
 
             if len(thisAccountList) > 0:
@@ -51,7 +49,7 @@ class AdminHandler(webapp2.RequestHandler):
                 thisAccount = Accounts()
 
 
-        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.strOrganizationID)
+        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
         thisSMSAccountList = findRequest.fetch()
 
         if len(thisSMSAccountList) > 0:
@@ -60,7 +58,7 @@ class AdminHandler(webapp2.RequestHandler):
             thisSMSAccount = SMSAccount()
 
 
-        findRequest = Organization.query(Organization.strOrganizationID == thisAccount.strOrganizationID)
+        findRequest = Organization.query(Organization.strOrganizationID == thisAccount.organization_id)
         thisOrgList = findRequest.fetch()
 
         if len(thisOrgList) > 0:
@@ -91,13 +89,13 @@ class ThisAccountHandler(webapp2.RequestHandler):
 
 
 
-        findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+        findRequest = Accounts.query(Accounts.uid == vstrUserID)
         thisAccountList = findRequest.fetch()
 
         if len(thisAccountList) > 0:
             thisAccount = thisAccountList[0]
         else:
-            findRequest = Accounts.query(Accounts.strEmail == vstrEmail)
+            findRequest = Accounts.query(Accounts.email == vstrEmail)
             thisAccountList = findRequest.fetch()
 
             if len(thisAccountList) > 0:
@@ -106,7 +104,7 @@ class ThisAccountHandler(webapp2.RequestHandler):
                 thisAccount = Accounts()
 
 
-        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.strOrganizationID)
+        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
         thisSMSAccountList = findRequest.fetch()
 
         if len(thisSMSAccountList) > 0:
@@ -114,7 +112,7 @@ class ThisAccountHandler(webapp2.RequestHandler):
         else:
             thisSMSAccount = SMSAccount()
 
-        findRequest = Organization.query(Organization.strOrganizationID == thisAccount.strOrganizationID)
+        findRequest = Organization.query(Organization.strOrganizationID == thisAccount.organization_id)
         thisOrgList = findRequest.fetch()
 
         if len(thisOrgList) > 0:

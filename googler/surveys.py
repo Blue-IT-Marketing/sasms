@@ -447,7 +447,7 @@ class SurveyContacts(ndb.Expando):
 class SurveySchedules(ndb.Expando):
     """
         Schedule ID is used to differentiate one schedule from another
-        strUserID used to identify the user creating the schedule
+        uid used to identify the user creating the schedule
         Schedule Name and Description for user identification
         ListID is used to recognize the contact list to send the survey to
         SurveyID is used to recognize the actual Survey to send as scheduled
@@ -1544,10 +1544,10 @@ class SurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                if thisMainAccount.strVerified:
-                    findRequest = Surveys.query(Surveys.strOrganizationID == thisMainAccount.strOrganizationID)
+                if thisMainAccount.verified:
+                    findRequest = Surveys.query(Surveys.strOrganizationID == thisMainAccount.organization_id)
                     thisSurveysList = findRequest.fetch()
 
                     template = template_env.get_template('templates/surveys/surveys.html')
@@ -1583,9 +1583,9 @@ class SurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Surveys.query(Surveys.strOrganizationID == thisMainAccount.strOrganizationID,Surveys.strName == vstrSurveyName)
+                findRequest = Surveys.query(Surveys.strOrganizationID == thisMainAccount.organization_id, Surveys.strName == vstrSurveyName)
                 thisSurveysList = findRequest.fetch()
 
                 if len(thisSurveysList) > 0:
@@ -1605,7 +1605,7 @@ class SurveyHandler(webapp2.RequestHandler):
                     thisSurvey.writeTimeCreated(strinput=strThisTime)
                     thisSurvey.writeUserID(strinput=vstrUserID)
                     thisSurvey.writeSurveyID(strinput=thisSurvey.CreateSurveyID())
-                    thisSurvey.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                    thisSurvey.writeOrganizationID(strinput=thisMainAccount.organization_id)
                     thisSurvey.put()
                     self.response.write("Survey Successfully created please dont forget to create your survey questions")
             else:
@@ -1622,10 +1622,10 @@ class SurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                if thisMainAccount.strVerified:
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                if thisMainAccount.verified:
+                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.organization_id)
                     thisSurveyAccountList = findRequest.fetch()
                     if len(thisSurveyAccountList) > 0:
                         thisSurveyAccount = thisSurveyAccountList[0]
@@ -1646,10 +1646,10 @@ class SurveyHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                if thisMainAccount.strVerified:
-                    findRequest = SurveyOrders.query(SurveyOrders.strOrganizationID == thisMainAccount.strOrganizationID)
+                if thisMainAccount.verified:
+                    findRequest = SurveyOrders.query(SurveyOrders.strOrganizationID == thisMainAccount.organization_id)
                     thisOrdersList = findRequest.fetch()
 
                     template = template_env.get_template('templates/surveys/orders/mainorderlist.html')
@@ -1673,16 +1673,16 @@ class SurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                if thisMainAccount.strVerified:
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                if thisMainAccount.verified:
+                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.organization_id)
                     thisSurveyAccountList = findRequest.fetch()
                     if len(thisSurveyAccountList) > 0:
                         thisSurveyAccount = thisSurveyAccountList[0]
                     else:
                         thisSurveyAccount = SurveyAccount()
-                        thisSurveyAccount.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                        thisSurveyAccount.writeOrganizationID(strinput=thisMainAccount.organization_id)
                         thisSurveyAccount.writeUserID(strinput=vstrUserID)
                         thisSurveyAccount.writeAccountID(strinput=thisSurveyAccount.CreateAccountID())
                     thisSurveyAccount.writeNames(strinput=vstrNames)
@@ -1722,10 +1722,10 @@ class SurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                if thisMainAccount.strVerified:
-                    findRequest = SurveyPayments.query(SurveyPayments.strOrganizationID == thisMainAccount.strOrganizationID)
+                if thisMainAccount.verified:
+                    findRequest = SurveyPayments.query(SurveyPayments.strOrganizationID == thisMainAccount.organization_id)
                     thisPaymentList = findRequest.fetch()
 
                     template = template_env.get_template('templates/surveys/invoices/invoicelist.html')
@@ -1754,9 +1754,9 @@ class SurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisSurveyAccountList = findRequest.fetch()
 
                 if len(thisSurveyAccountList) > 0:
@@ -1777,7 +1777,7 @@ class SurveyHandler(webapp2.RequestHandler):
                         thisSurveyAccount.writePayByDate(strinput=strPayByDate)
                         thisSurveyAccount.writeDateInvoiceCreated(strinput=strThisDate)
                         thisSurveyAccount.put()
-                        findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                        findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.organization_id)
                         thisSurveyAccountList = findRequest.fetch()
                         if len(thisSurveyAccountList) > 0:
                             thisSurveyAccount = thisSurveyAccountList[0]
@@ -1796,9 +1796,9 @@ class SurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Organization.query(Organization.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Organization.query(Organization.strOrganizationID == thisMainAccount.organization_id)
                 thisOrgList = findRequest.fetch()
 
                 if len(thisOrgList) > 0:
@@ -1806,13 +1806,13 @@ class SurveyHandler(webapp2.RequestHandler):
                 else:
                     thisOrg = Organization()
 
-                if thisMainAccount.strVerified and thisOrg.strVerified:
-                    findRequest = Surveys.query(Surveys.strOrganizationID == thisMainAccount.strOrganizationID)
+                if thisMainAccount.verified and thisOrg.strVerified:
+                    findRequest = Surveys.query(Surveys.strOrganizationID == thisMainAccount.organization_id)
                     thisSurveysList = findRequest.fetch()
 
                     strTotalSurveys = len(thisSurveysList)
 
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.organization_id)
                     thisSurveysAccountList = findRequest.fetch()
                     if len(thisSurveysAccountList) > 0:
                         thisSurveyAccount = thisSurveysAccountList[0]
@@ -1842,7 +1842,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
         if len(thisSurveyList) > 0:
             thisSurvey = thisSurveyList[0]
 
-            findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisSurvey.strOrganizationID)
+            findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisSurvey.organization_id)
             thisSurveyAccountList = findRequest.fetch()
 
             if len(thisSurveyAccountList) > 0:
@@ -1880,7 +1880,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
 
@@ -1889,7 +1889,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                 if len(thisSurveysList) > 0:
                     thisSurvey = thisSurveysList[0]
 
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisSurvey.strOrganizationID)
+                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisSurvey.organization_id)
                     thisSurveyAccountList = findRequest.fetch()
 
                     if len(thisSurveyAccountList) > 0:
@@ -1915,7 +1915,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
@@ -1944,7 +1944,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
 
@@ -1971,7 +1971,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrQuestion = self.request.get('vstrQuestion')
                 vstrChoiceOne = self.request.get('vstrChoiceOne')
@@ -2006,7 +2006,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
@@ -2032,7 +2032,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
 
@@ -2059,7 +2059,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
                 vstrOrganizationID = self.request.get('vstrOrganizationID')
@@ -2098,13 +2098,13 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
 
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID )
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisMainAccountList = findRequest.fetch()
 
                 if len(thisMainAccountList) > 0:
@@ -2113,7 +2113,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
                     findRequest = SurveySchedules.query(SurveySchedules.strSurveyID == vstrSurveyID)
                     thisSurveySchedulesList = findRequest.fetch()
 
-                    findRequest = SurveyContactLists.query(SurveyContactLists.strOrganizationID == thisMainAccount.strOrganizationID)
+                    findRequest = SurveyContactLists.query(SurveyContactLists.strOrganizationID == thisMainAccount.organization_id)
                     thisContactLists = findRequest.fetch()
 
 
@@ -2130,7 +2130,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
@@ -2153,7 +2153,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
@@ -2203,7 +2203,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
                         thisSurveyOrder = SurveyOrders()
                         thisSurveyOrder.writeUserID(strinput=vstrUserID)
-                        thisSurveyOrder.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                        thisSurveyOrder.writeOrganizationID(strinput=thisMainAccount.organization_id)
                         thisSurveyOrder.writeOrderStartDate(strinput=thisSchedule.strStartDate)
                         thisSurveyOrder.writeOrderStartTime(strinput=thisSchedule.strStartTime)
                         thisSurveyOrder.writeSurveyID(strinput=thisSchedule.strSurveyID)
@@ -2228,7 +2228,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrCreditToAssign = self.request.get("vstrCreditToAssign")
                 vstrAvailableCredit = self.request.get("vstrAvailableCredit")
@@ -2249,7 +2249,7 @@ class ThisSurveyHandler(webapp2.RequestHandler):
 
                         thisSurvey.put()
 
-                        findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisSurvey.strOrganizationID)
+                        findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisSurvey.organization_id)
                         thisSurveyAccountList = findRequest.fetch()
 
                         vstrAvailableCredit = int(vstrAvailableCredit) - int(vstrCreditToAssign)
@@ -2308,7 +2308,7 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrListID = self.request.get('vstrListID')
 
@@ -2327,7 +2327,7 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrListID = self.request.get('vstrListID')
                 vstrName = self.request.get('vstrNames')
@@ -2372,7 +2372,7 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrContacts = self.request.get('vstrContacts')
                 vstrListID = self.request.get('vstrListID')
@@ -2429,7 +2429,7 @@ class ThisSurveyContactsListHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrListID = self.request.get('vstrListID')
                 vstrListID = vstrListID.strip()
@@ -2477,7 +2477,7 @@ class ThisSchedulesHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
                 vstrListID = self.request.get('vstrContactList')
@@ -2580,7 +2580,7 @@ class ThisPaymentHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrSurveyID = self.request.get('vstrSurveyID')
                 vstrOrderID = self.request.get('vstrOrderID')
@@ -2601,7 +2601,7 @@ class ThisPaymentHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrDepositAmount = self.request.get('vstrDepositAmount')
                 vstrDepositMethod = self.request.get('vstrDepositMethod')
@@ -2625,7 +2625,7 @@ class ThisPaymentHandler(webapp2.RequestHandler):
 
                         thisPayment.writeUserID(strinput=vstrUserID)
                         thisPayment.writeOrderID(strinput=thisSurveyOrder.strOrderID)
-                        thisPayment.writeOrganizationID(strinput=thisSurveyOrder.strOrganizationID)
+                        thisPayment.writeOrganizationID(strinput=thisSurveyOrder.organization_id)
                         thisPayment.writeDepositReference(strinput=thisSurveyOrder.strDepositReference)
                         thisPayment.writePaymentID(strinput=thisPayment.CreatePaymentID())
                         thisPayment.writeAmountPaid(strinput=vstrDepositAmount)
@@ -2653,7 +2653,7 @@ class ThisInvoicesHandler(webapp2.RequestHandler):
         if len(thisSurveyPaymentList) > 0:
             thisPayment = thisSurveyPaymentList[0]
 
-            findRequest = Organization.query(Organization.strOrganizationID == thisPayment.strOrganizationID)
+            findRequest = Organization.query(Organization.strOrganizationID == thisPayment.organization_id)
             thisOrgList = findRequest.fetch()
             if len(thisOrgList) > 0:
                 thisOrg = thisOrgList[0]
@@ -2710,7 +2710,7 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrScheduleID = self.request.get('vstrScheduleID')
@@ -2734,7 +2734,7 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrScheduleID = self.request.get('vstrScheduleID')
                 vstrName = self.request.get('vstrName')
@@ -2803,7 +2803,7 @@ class ThisSurveyScheduleHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrScheduleID = self.request.get('vstrScheduleID')
 
@@ -2836,7 +2836,7 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
         if len(thisSurveyAccountList) > 0:
             thisSurveyAccount = thisSurveyAccountList[0]
 
-            findRequest = Organization.query(Organization.strOrganizationID == thisSurveyAccount.strOrganizationID)
+            findRequest = Organization.query(Organization.strOrganizationID == thisSurveyAccount.organization_id)
             thisOrgList = findRequest.fetch()
             if len(thisOrgList) > 0:
                 thisOrg = thisOrgList[0]
@@ -2869,13 +2869,13 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrTopUpReference = self.request.get("vstrTopUpReference")
                 vstrYourReferenceNumber = self.request.get("vstrYourReferenceNumber")
                 vstrDepositSlipFile = self.request.get("vstrDepositSlipFile")
 
-                findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisSurveyAccountList = findRequest.fetch()
 
                 if len(thisSurveyAccountList) > 0:
@@ -2884,7 +2884,7 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                         thisSurveyAccount.writeDepositSlipFilename(strinput=vstrDepositSlipFile)
                         thisSurveyAccount.put()
                         thisVerifications = TopUpVerifications()
-                        thisVerifications.writeOrganizationID(strinput=thisSurveyAccount.strOrganizationID)
+                        thisVerifications.writeOrganizationID(strinput=thisSurveyAccount.organization_id)
                         thisVerifications.writeAccountName(strinput="Surveys")
                         thisVerifications.writeCreditAmount(strinput=thisSurveyAccount.strTotalTopUpCost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)
@@ -2897,7 +2897,7 @@ class ThisTopUpInvoiceHandler(webapp2.RequestHandler):
                         thisSurveyAccount.writeDepositSlipFilename(strinput=vstrDepositSlipFile)
                         thisSurveyAccount.put()
                         thisVerifications = TopUpVerifications()
-                        thisVerifications.writeOrganizationID(strinput=thisSurveyAccount.strOrganizationID)
+                        thisVerifications.writeOrganizationID(strinput=thisSurveyAccount.organization_id)
                         thisVerifications.writeAccountName(strinput="Surveys")
                         thisVerifications.writeCreditAmount(strinput=thisSurveyAccount.strTotalTopUpCost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)

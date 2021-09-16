@@ -1210,10 +1210,10 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                if thisMainAccount.strVerified:
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                if thisMainAccount.verified:
+                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
                     thisAddAccountList = findRequest.fetch()
 
                     if len(thisAddAccountList) > 0:
@@ -1256,9 +1256,9 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisAddAccountList = findRequest.fetch()
 
                 if len(thisAddAccountList) > 0:
@@ -1267,7 +1267,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                     thisAddAccount = AddAccount()
                 thisAddAccount.writeUserID(strinput=vstrUserID)
                 thisAddAccount.writeAccountID(strinput=thisAddAccount.CreateAccountID())
-                thisAddAccount.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                thisAddAccount.writeOrganizationID(strinput=thisMainAccount.organization_id)
                 thisAddAccount.writeNames(strinput=vstrNames)
                 thisAddAccount.writeCell(strinput=vstrCell)
                 thisAddAccount.writeEmail(strinput=vstrEmail)
@@ -1285,11 +1285,11 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                if thisMainAccount.strVerified:
+                if thisMainAccount.verified:
 
-                    findRequest = Advert.query(Advert.strOrganizationID == thisMainAccount.strOrganizationID)
+                    findRequest = Advert.query(Advert.strOrganizationID == thisMainAccount.organization_id)
                     thisAdvertList = findRequest.fetch()
 
                     template = template_env.get_template('templates/advertise/sub/adverts.html')
@@ -1351,9 +1351,9 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisAddAccountList = findRequest.fetch()
 
                 if len(thisAddAccountList) > 0:
@@ -1362,7 +1362,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                     thisAdvert = Advert()
                     thisAdvert.writeUserID(strinput=vstrUserID)
                     thisAdvert.writeAccountID(strinput=thisAddAccount.strAccountID)
-                    thisAdvert.writeOrganizationID(strinput=thisAddAccount.strOrganizationID)
+                    thisAdvert.writeOrganizationID(strinput=thisAddAccount.organization_id)
                     thisAdvert.writeAdvertID(strinput=thisAdvert.CreateAdvertID())
                     thisAdvert.writeAdvert(strinput=vstrAdvert)
                     thisAdvert.writeStartDate(strinput=strThisStartDate)
@@ -1386,7 +1386,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
                     thisOrder = Orders()
                     thisOrder.writeUserID(strinput=vstrUserID)
-                    thisOrder.writeOrganizationID(strinput=thisAddAccount.strOrganizationID)
+                    thisOrder.writeOrganizationID(strinput=thisAddAccount.organization_id)
                     thisOrder.writeItemCount(strinput=str(1))
                     thisOrder.writeFullyPaid(strinput=False)
                     thisOrder.writeTotalSMS(strinput=vstrPackage)
@@ -1412,16 +1412,16 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                if thisMainAccount.strVerified:
+                if thisMainAccount.verified:
 
                     #TODO- Note that intergrating an advert account allows for granular or more relevant user rights to be created inside the advert account
 
-                    findRequest = Orders.query(Orders.strOrganizationID == thisMainAccount.strOrganizationID,Orders.strFullyPaid == True)
+                    findRequest = Orders.query(Orders.strOrganizationID == thisMainAccount.organization_id, Orders.strFullyPaid == True)
                     thisPaidList = findRequest.fetch()
 
-                    findRequest = Orders.query(Orders.strOrganizationID == thisMainAccount.strOrganizationID,Orders.strFullyPaid == False)
+                    findRequest = Orders.query(Orders.strOrganizationID == thisMainAccount.organization_id, Orders.strFullyPaid == False)
                     thisNewOrdersList = findRequest.fetch()
 
                     template = template_env.get_template('templates/advertise/sub/orders.html')
@@ -1450,11 +1450,11 @@ class AdvertiseHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                if thisMainAccount.strVerified:
+                if thisMainAccount.verified:
 
-                    findRequest = Payments.query(Payments.strOrganizationID == thisMainAccount.strOrganizationID)
+                    findRequest = Payments.query(Payments.strOrganizationID == thisMainAccount.organization_id)
                     thisPaymentsList = findRequest.fetch()
 
                     template = template_env.get_template('templates/advertise/paymethods/invoices.html')
@@ -1470,9 +1470,9 @@ class AdvertiseHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisAdvertAccountList = findRequest.fetch()
 
                 findRequest = SMSPortalBudget.query()
@@ -1502,7 +1502,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
                         thisAdvertAccount.writePayByDate(strinput=strPayByDate)
                         thisAdvertAccount.writeDateInvoiceCreated(strinput=strThisDate)
                         thisAdvertAccount.put()
-                        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
                         thisAdvertAccountList = findRequest.fetch()
                         if len(thisAdvertAccountList) > 0:
                             thisAdvertAccount = thisAdvertAccountList[0]
@@ -1518,13 +1518,13 @@ class AdvertiseHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Advert.query(Advert.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Advert.query(Advert.strOrganizationID == thisMainAccount.organization_id)
                 thisAdvertsList = findRequest.fetch()
                 strTotalAdverts = len(thisAdvertsList)
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisAdvertiseAccountList = findRequest.fetch()
                 if len(thisAdvertiseAccountList) > 0:
                     thisAdvertAccount = thisAdvertiseAccountList[0]
@@ -1548,7 +1548,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
         if len(thisAdvertList) > 0:
             thisAdvert = thisAdvertList[0]
 
-            findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.strOrganizationID)
+            findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.organization_id)
             thisAdvertisingAccountList = findRequest.fetch()
 
             if len(thisAdvertisingAccountList) > 0:
@@ -1575,14 +1575,14 @@ class ThisAdvertHandler(webapp2.RequestHandler):
 
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 findRequest = Advert.query(Advert.strAdvertID == strAdvertID)
                 thisAdvertList = findRequest.fetch()
 
                 if len(thisAdvertList) > 0:
                     thisAdvert = thisAdvertList[0]
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.strOrganizationID)
+                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
                     if len(thisAdvertAccountList) > 0:
                         thisAdvertAccount = thisAdvertAccountList[0]
@@ -1606,7 +1606,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 try:
                     if "-" in vstrStartDate:
@@ -1675,7 +1675,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 findRequest = Stats.query(Stats.strAdvertID == vstrAdvertID)
@@ -1699,7 +1699,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
 
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrAdvertID = self.request.get('vstrAdvertID')
 
@@ -1736,7 +1736,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             vstrAdvertID = self.request.get('vstrAdvertID')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 findRequest = Orders.query(Orders.strAdvertID == vstrAdvertID)
                 thisOrdersList = findRequest.fetch()
@@ -1762,7 +1762,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                     thisAdvert = thisAdvertList[0]
 
 
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.strOrganizationID)
+                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
 
                     if len(thisAdvertAccountList) > 0:
@@ -1785,7 +1785,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 try:
                     strStartDateList = vstrStartDate.split("/")
@@ -1818,7 +1818,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
 
                 thisOrder = Orders()
                 thisOrder.writeUserID(strinput=vstrUserID)
-                thisOrder.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                thisOrder.writeOrganizationID(strinput=thisMainAccount.organization_id)
                 thisOrder.writeAdvertID(strinput=vstrAdvertID)
                 thisOrder.writeOrderStartDate(strinput=strThisStartDate)
                 thisOrder.writeOrderStartTime(strinput=strThisTime)
@@ -1867,7 +1867,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 if vstrPaymentMethod == "Direct Deposit":
                     findRequest = Orders.query(Orders.strOrderID == vstrSelectOrder)
@@ -1934,7 +1934,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 findRequest = Orders.query(Orders.strOrderID == vstrOrderID)
                 thisOrderList = findRequest.fetch()
@@ -1984,7 +1984,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
 
                 vstrMessage = vstrMessage + vstrDepositAmount + vstrSMSPackage + vstrBanking + vstrReference
 
-                thisBudgetPortal.SendCronMessage(strMessage=vstrMessage,strCell=thisMainAccount.strCell)
+                thisBudgetPortal.SendCronMessage(strMessage=vstrMessage, strCell=thisMainAccount.cell)
 
         elif vstrChoice == "8":
             vstrAdvertID = self.request.get("vstrAdvertID")
@@ -1996,7 +1996,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 findRequest = Advert.query(Advert.strAdvertID == vstrAdvertID)
                 thisAdvertList = findRequest.fetch()
@@ -2014,7 +2014,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
                         thisAdvert.put()
 
                         vstrAvailableCredit = int(vstrAvailableCredit) - int(vstrCreditToAssign)
-                        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.strOrganizationID)
+                        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAdvert.organization_id)
                         thisAdvertAccountList = findRequest.fetch()
 
                         if len(thisAdvertAccountList) > 0:
@@ -2145,14 +2145,14 @@ class TopUpInvoiceHandler(webapp2.RequestHandler):
 
         vstrChoice = self.request.get('vstrChoice')
         thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-        if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+        if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
             if vstrChoice == "0":
                 vstrTopUpReference = self.request.get("vstrTopUpReference")
                 vstrYourReferenceNumber = self.request.get("vstrYourReferenceNumber")
                 vstrDepositSlipFile = self.request.get("vstrDepositSlipFile")
 
-                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = AddAccount.query(AddAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisAdvertAccountList = findRequest.fetch()
 
                 if len(thisAdvertAccountList) > 0:
@@ -2161,7 +2161,7 @@ class TopUpInvoiceHandler(webapp2.RequestHandler):
                         thisAdvertAccount.writeDepositSlipFilename(strinput=vstrDepositSlipFile)
                         thisAdvertAccount.put()
                         thisVerifications = TopUpVerifications()
-                        thisVerifications.writeOrganizationID(strinput=thisAdvertAccount.strOrganizationID)
+                        thisVerifications.writeOrganizationID(strinput=thisAdvertAccount.organization_id)
                         thisVerifications.writeAccountName(strinput="Adverts")
                         thisVerifications.writeCreditAmount(strinput=thisAdvertAccount.strTotalTopUpCost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)
@@ -2174,7 +2174,7 @@ class TopUpInvoiceHandler(webapp2.RequestHandler):
                         thisAdvertAccount.writeDepositSlipFilename(strinput=vstrDepositSlipFile)
                         thisAdvertAccount.put()
                         thisVerifications = TopUpVerifications()
-                        thisVerifications.writeOrganizationID(strinput=thisAdvertAccount.strOrganizationID)
+                        thisVerifications.writeOrganizationID(strinput=thisAdvertAccount.organization_id)
                         thisVerifications.writeAccountName(strinput="Adverts")
                         thisVerifications.writeCreditAmount(strinput=thisAdvertAccount.strTotalTopUpCost)
                         thisVerifications.writeDepositSlipFileName(strinput=vstrDepositSlipFile)

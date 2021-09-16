@@ -86,15 +86,15 @@ def BulkSMSHandler():
                 ReceipientList.append(thisContact.strCellNumber)
 
         if thisSchedule.strNotifyOnStart == True:
-            findRequest = Accounts.query(Accounts.strUserID == thisSchedule.strUserID)
+            findRequest = Accounts.query(Accounts.uid == thisSchedule.uid)
             thisAccountsList = findRequest.fetch()
 
             if len(thisAccountsList) > 0:
                 thisAccounts = thisAccountsList[0]
-                if thisAccounts.strCell in ReceipientList:
+                if thisAccounts.cell in ReceipientList:
                     pass
                 else:
-                    ReceipientList.append(thisAccounts.strCell)
+                    ReceipientList.append(thisAccounts.cell)
 
         if thisSMSAccount.strTotalSMS >= len(ReceipientList):
             if thisSMSAccount.strUsePortal == "Vodacom":
@@ -262,8 +262,8 @@ def AdvertContactsHandler():
             pass
         else:
             thisOurContact = OurContacts()
-            thisOurContact.writeSurname(strinput=thisSMSContact.strSurname)
-            thisOurContact.writeNames(strinput=thisSMSContact.strNames)
+            thisOurContact.writeSurname(strinput=thisSMSContact.surname)
+            thisOurContact.writeNames(strinput=thisSMSContact.names)
             thisOurContact.writeCell(strinput=thisSMSContact.strCellNumber)
             thisOurContact.writeEmail(strinput="example@example.com")
             thisOurContact.writeOurContactID(strinput=thisOurContact.CreateContactID())
@@ -277,7 +277,7 @@ def AdvertContactsHandler():
 
     for thisContact in thiSurveyContactList:
 
-        findRequest = OurContacts.query(OurContacts.strCell == thisContact.strCell)
+        findRequest = OurContacts.query(OurContacts.strCell == thisContact.cell)
         thisOurContactsList = findRequest.fetch()
 
         if len(thisOurContactsList) > 0:
@@ -285,8 +285,8 @@ def AdvertContactsHandler():
         else:
             thisOurContact = OurContacts()
             thisOurContact.writeNames(strinput=thisContact.strName)
-            thisOurContact.writeSurname(strinput=thisContact.strSurname)
-            thisOurContact.writeCell(strinput=thisContact.strCell)
+            thisOurContact.writeSurname(strinput=thisContact.surname)
+            thisOurContact.writeCell(strinput=thisContact.cell)
             thisOurContact.writeEmail(strinput="example@example.com")
             thisOurContact.writeOurContactID(strinput=thisOurContact.CreateContactID())
             thisOurContact.put()
@@ -325,12 +325,12 @@ def SendAdvertsHandler():
                     try:
                         thisContact = thisOurContactList[i]
                         ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.strAdvert,
-                                                               strCell=thisContact.strCell)
+                                                               strCell=thisContact.cell)
                         thisSentReport = SentReport()
-                        thisSentReport.writeCell(strinput=thisContact.strCell)
+                        thisSentReport.writeCell(strinput=thisContact.cell)
                         thisSentReport.writeOrderID(strinput=thisOrder.strOrderID)
                         thisSentReport.writeAdvertID(strinput=thisOrder.strAdvertID)
-                        # thisSentReport.writeMessageStatus(strinput=thisPortalBudget.CheckMessageStatusByCell(strCell=thisContact.strCell))
+                        # thisSentReport.writeMessageStatus(strinput=thisPortalBudget.CheckMessageStatusByCell(cell=thisContact.cell))
                         # Check The Message status of all sent messages through a separate function
                         thisSentReport.writeAdvertSent(strinput=True)
                         thisSentReport.writeMessageReference(strinput=ref)
@@ -434,32 +434,32 @@ def SendAdvertCreditHandler():
             try:
 
                 thisContact = random.choice(thisOurContactList)
-                if not(thisContact.strCell in sentList):
+                if not(thisContact.cell in sentList):
                     try:
                         if thisAdvert.strUsePortal == "Budget":
-                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.strAdvert,strCell=thisContact.strCell)
-                            sentList.append(thisContact.strCell)
+                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.strAdvert, strCell=thisContact.cell)
+                            sentList.append(thisContact.cell)
                         elif thisAdvert.strUsePortal == "ClickSend":
-                            ref = thisClickSendPortal.SendSMS(strCell=thisContact.strCell,strMessage=thisAdvert.strAdvert)
-                            sentList.append(thisContact.strCell)
+                            ref = thisClickSendPortal.SendSMS(strCell=thisContact.cell, strMessage=thisAdvert.strAdvert)
+                            sentList.append(thisContact.cell)
 
                         elif thisAdvert.strUsePortal == "Twilio":
-                            ref = thisTwilioPortal.sendSMS(strTo=thisContact.strCell,strFrom=thisTwilioPortal.strMySMSNumber,strMessage=thisAdvert.strAdvert)
-                            sentList.append(thisContact.strCell)
+                            ref = thisTwilioPortal.sendSMS(strTo=thisContact.cell, strFrom=thisTwilioPortal.strMySMSNumber, strMessage=thisAdvert.strAdvert)
+                            sentList.append(thisContact.cell)
                         elif  thisAdvert.strUsePortal == "Vodacom":
-                            sentList.append(thisContact.strCell)
+                            sentList.append(thisContact.cell)
                         else:
-                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.strAdvert,strCell=thisContact.strCell)
-                            sentList.append(thisContact.strCell)
+                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.strAdvert, strCell=thisContact.cell)
+                            sentList.append(thisContact.cell)
                     except:
                         ref = None
 
 
                     if ref != None:
                         thisSentReport = SentReport()
-                        thisSentReport.writeCell(strinput=thisContact.strCell)
+                        thisSentReport.writeCell(strinput=thisContact.cell)
                         thisSentReport.writeAdvertID(strinput=thisAdvert.strAdvertID)
-                        # thisSentReport.writeMessageStatus(strinput=thisPortalBudget.CheckMessageStatusByCell(strCell=thisContact.strCell))
+                        # thisSentReport.writeMessageStatus(strinput=thisPortalBudget.CheckMessageStatusByCell(cell=thisContact.cell))
                         # Check The Message status of all sent messages through a separate function
                         thisSentReport.writeAdvertSent(strinput=True)
                         thisSentReport.writeMessageReference(strinput=ref)
@@ -544,7 +544,7 @@ def BulkMessageStatus():
 
     for thisReport in thisSentReportList:
         if thisReport.strPortalUsed == "Budget":
-            thisReport.writeMessageStatus(strinput=thisBudgetPortal.CheckMessageStatus(strRef=thisReport.strRef, strCell=thisReport.strCell))
+            thisReport.writeMessageStatus(strinput=thisBudgetPortal.CheckMessageStatus(strRef=thisReport.strRef, strCell=thisReport.cell))
             thisReport.writeReportDone(strinput=True)
             thisReport.put()
         elif thisReport.strPortalUsed == "Twilio":
@@ -589,7 +589,7 @@ def CheckAdvertsResponses():
                 ThisResponse.writeResponse(strinput=strResponse)
                 ThisResponse.writeAdvertID(strinput=thisReport.strAdvertID)
                 ThisResponse.writeReference(strinput=ThisResponse.CreateReference())
-                ThisResponse.writeCell(strinput=thisReport.strCell)
+                ThisResponse.writeCell(strinput=thisReport.cell)
 
                 vstrThisDate = datetime.datetime.now()
                 strThisDate = vstrThisDate.date()
@@ -616,7 +616,7 @@ def CheckAdvertsResponses():
             ThisResponse.writeResponse(strinput=strResponse)
             ThisResponse.writeAdvertID(strinput=thisReport.strAdvertID)
             ThisResponse.writeReference(strinput=ThisResponse.CreateReference())
-            ThisResponse.writeCell(strinput=thisReport.strCell)
+            ThisResponse.writeCell(strinput=thisReport.cell)
             vstrThisDate = datetime.datetime.now()
             strThisDate = vstrThisDate.date()
             strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute,
@@ -663,7 +663,7 @@ def GetContactsFromPartners():
     thisContactList = findRequest.fetch()
     numList = []
     for thisContact in thisContactList:
-        numList.append(thisContact.strCell)
+        numList.append(thisContact.cell)
 
 
     for thisPartner in thisPartnerSiteList:
@@ -782,25 +782,25 @@ def ScheduledSendSurveys():
     for thisOrder in thisSurveyOrdersList:
         logging.info("Schedule found")
 
-        findRequest = Accounts.query(Accounts.strUserID == thisOrder.strUserID)
+        findRequest = Accounts.query(Accounts.uid == thisOrder.uid)
         thisAccountList = findRequest.fetch()
         if len(thisAccountList) > 0:
             thisAccount = thisAccountList[0]
-            findRequest = Organization.query(Organization.strOrganizationID == thisAccount.strOrganizationID)
+            findRequest = Organization.query(Organization.strOrganizationID == thisAccount.organization_id)
             thisOrgList = findRequest.fetch()
             if len(thisOrgList) > 0:
                 thisOrg = thisOrgList[0]
 
-            if not (thisAccount.strCell == None):
+            if not (thisAccount.cell == None):
                 # TODO- Fix up the message formatting
                 strMessage = "Your Survey Schedule : " + " Started Running at : " + str(
                     strThisDate) + " " + str(strThisTime)
-                strRef = thisPortal.SendCronMessage(strMessage=strMessage, strCell=thisAccount.strCell)
+                strRef = thisPortal.SendCronMessage(strMessage=strMessage, strCell=thisAccount.cell)
                 logging.info("Just Sent the notification message : " + strRef)
             else:
                 strMessage = "Your Survey Schedule : " + " Started Running at : " + str(
                     strThisDate) + " " + str(strThisTime)
-                strRef = thisPortal.SendCronMessage(strMessage=strMessage, strCell=thisOrg.strCell)
+                strRef = thisPortal.SendCronMessage(strMessage=strMessage, strCell=thisOrg.cell)
                 logging.info("Just Sent the notification message : " + strRef)
 
             findRequest = SurveySchedules.query(SurveySchedules.strScheduleID == thisOrder.strScheduleID)
@@ -826,7 +826,7 @@ def ScheduledSendSurveys():
                     thisSurveyQuestionList = findRequest.fetch()
 
                     for thisContact in thisContactList:
-                        findRequest = SurveyTracker.query(SurveyTracker.strCell == thisContact.strCell,
+                        findRequest = SurveyTracker.query(SurveyTracker.strCell == thisContact.cell,
                                                           SurveyTracker.strSurveyID == thisSurvey.strSurveyID)
                         thisTrackerList = findRequest.fetch()
                         if len(thisTrackerList) > 0:
@@ -851,11 +851,11 @@ def ScheduledSendSurveys():
                             thisTracker = SurveyTracker()
                             thisTracker.writeSurveyID(strinput=thisSurvey.strSurveyID)
                             thisTracker.writeCurrentQuestionID(strinput=thisSurveyQuestion.strQuestionID)
-                            thisTracker.writeCell(strinput=thisContact.strCell)
+                            thisTracker.writeCell(strinput=thisContact.cell)
 
                             # TODO- Send Survey Intro duction
                             strMessage = thisOrg.strOrganizationName + "%0A" + "Invites you to participate in a survey. %0A Respond with option numbers on each question. %0A For example if the right answer is option 1. the respond by tapping one and send in your keypad"
-                            thisPortal.SendCronMessage(strMessage=strMessage, strCell=thisContact.strCell)
+                            thisPortal.SendCronMessage(strMessage=strMessage, strCell=thisContact.cell)
 
                         vstrThisDateTime = datetime.datetime.now()
                         strThisDate = vstrThisDateTime.date()
@@ -895,11 +895,11 @@ def ScheduledSendSurveys():
                             strMessage = strMessage + strOptions
 
                             strRef = thisPortal.SendCronMessage(strMessage=strMessage,
-                                                                strCell=thisContact.strCell)
+                                                                strCell=thisContact.cell)
                             thisAnswers = MultiChoiceSurveyAnswers()
-                            thisAnswers.writeCell(strinput=thisContact.strCell)
+                            thisAnswers.writeCell(strinput=thisContact.cell)
                             thisAnswers.writeNames(strinput=thisContact.strName)
-                            thisAnswers.writeSurname(strinput=thisContact.strSurname)
+                            thisAnswers.writeSurname(strinput=thisContact.surname)
                             thisAnswers.writeRef(strinput=strRef)
                             thisAnswers.writeSurveyID(strinput=thisSurvey.strSurveyID)
                             thisAnswers.writeQuestionID(strinput=thisSurveyQuestion.strQuestionID)
@@ -942,7 +942,7 @@ def SurveysResponses():
             reply = None
         if not (reply == None) and not ("error" in reply):
             thisSurveyAnswer = MultiChoiceSurveyAnswers()
-            thisSurveyAnswer.writeCell(thisTracker.strCell)
+            thisSurveyAnswer.writeCell(thisTracker.cell)
             thisSurveyAnswer.writeSurveyID(strinput=thisTracker.strSurveyID)
             thisSurveyAnswer.writeQuestionID(strinput=thisTracker.strCurrentQuestionID)
             reply = str(reply)
@@ -951,13 +951,13 @@ def SurveysResponses():
             thisSurveyAnswer.writeOptionNumber(strinput=reply)
             thisSurveyAnswer.writeRef(strinput=thisTracker.strRef)
 
-            findRequest = SurveyContacts.query(SurveyContacts.strCell == thisTracker.strCell)
+            findRequest = SurveyContacts.query(SurveyContacts.strCell == thisTracker.cell)
             thisContactList = findRequest.fetch()
             if len(thisContactList) > 0:
                 thisContact = thisContactList[0]
 
                 thisSurveyAnswer.writeNames(strinput=thisContact.strName)
-                thisSurveyAnswer.writeSurname(strinput=thisContact.strSurname)
+                thisSurveyAnswer.writeSurname(strinput=thisContact.surname)
 
             findRequest = MultiChoiceSurveys.query(
                 MultiChoiceSurveys.strQuestionID == thisTracker.strCurrentQuestionID)
@@ -998,7 +998,7 @@ def BulkSMSStatus():
 
         # TODO - There could be a timing issue with this task so it should process reports that are at least three minutes old
         #TODO - Check which Portal was used to send the message and act appropriately
-        strStatus = thisPortal.CheckMessageStatus(strRef=thisReport.strRef, strCell=thisReport.strCell)
+        strStatus = thisPortal.CheckMessageStatus(strRef=thisReport.strRef, strCell=thisReport.cell)
 
         if not (strStatus == None):
             thisReport.writeSendingStatus(strinput=strStatus)
@@ -1006,7 +1006,7 @@ def BulkSMSStatus():
             strStatus = str(strStatus)
             if "UNDELIVERED" in strStatus:  # TODO-Note that we have to verify that the status code is actually undelivered for this
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisReport.strOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisReport.organization_id)
                 thisSMSAccountList = findRequest.fetch()
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]

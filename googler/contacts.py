@@ -693,7 +693,7 @@ class EmailOutBox(ndb.Expando):
 
                 self.strFromEmail =  str(self.strContactID) + "@sa-sms.appspotmail.com"
 
-                if SendEmail(strFrom=self.strFromEmail,strTo=thisContact.strEmail,strSubject=self.strSubject,strBody=self.strMessage,strTextType='text/plain'):
+                if SendEmail(strFrom=self.strFromEmail, strTo=thisContact.email, strSubject=self.strSubject, strBody=self.strMessage, strTextType='text/plain'):
                     return True
                 else:
                     return False
@@ -787,9 +787,9 @@ class ContactsHandler(webapp2.RequestHandler):
         vstrAccessToken = self.request.get('vstrAccessToken')
 
         thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-        if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+        if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-            findRequests = Contacts.query(Contacts.strOrganizationID == thisMainAccount.strOrganizationID)
+            findRequests = Contacts.query(Contacts.strOrganizationID == thisMainAccount.organization_id)
             thisContactsList = findRequests.fetch()
 
 
@@ -823,9 +823,9 @@ class ContactsHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequests = Contacts.query(Contacts.strCell == vstrCell,Contacts.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequests = Contacts.query(Contacts.strCell == vstrCell, Contacts.strOrganizationID == thisMainAccount.organization_id)
                 thisContactList = findRequests.fetch()
 
                 if len(thisContactList) > 0:
@@ -834,7 +834,7 @@ class ContactsHandler(webapp2.RequestHandler):
                     thisContact = Contacts()
                     thisContact.writeContactID(strinput=thisContact.CreateContactID())
 
-                thisContact.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                thisContact.writeOrganizationID(strinput=thisMainAccount.organization_id)
                 thisContact.writeNames(strinput=vstrNames)
                 thisContact.writeSurname(strinput=vstrSurname)
                 thisContact.writeCell(strinput=vstrCell)
@@ -882,9 +882,9 @@ class ThisContactHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequests = Contacts.query(Contacts.strCell == vstrCell,Contacts.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequests = Contacts.query(Contacts.strCell == vstrCell, Contacts.strOrganizationID == thisMainAccount.organization_id)
                 thisContactList = findRequests.fetch()
 
                 if len(thisContactList) > 0:
@@ -938,7 +938,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 findRequests = PostalAddress.query(PostalAddress.strContactID == vstrContactID)
                 thisPostalAddressList = findRequests.fetch()
@@ -949,7 +949,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                 else:
                     thisPostalAddress = PostalAddress()
 
-                thisPostalAddress.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                thisPostalAddress.writeOrganizationID(strinput=thisMainAccount.organization_id)
                 thisPostalAddress.writeContactID(strinput=vstrContactID)
                 thisPostalAddress.writeBox(strinput=vstrBox)
                 thisPostalAddress.writeCityTown(strinput=vstrCityTown)
@@ -968,7 +968,7 @@ class ThisContactHandler(webapp2.RequestHandler):
 
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
                 vstrSubject = self.request.get('vstrSubject')
                 vstrNotes = self.request.get('vstrNotes')
                 vstrContactID = self.request.get('vstrContactID')
@@ -982,7 +982,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                     thisNote = Notes()
 
                 thisNote.writeContactID(strinput=vstrContactID)
-                thisNote.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                thisNote.writeOrganizationID(strinput=thisMainAccount.organization_id)
                 thisDate = datetime.datetime.now()
                 thisDate  = thisDate.date()
                 thisNote.writeDateTaken(strinput=thisDate)
@@ -1002,7 +1002,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrContactID = self.request.get('vstrContactID')
                 vstrStandNumber = self.request.get('vstrStandNumber')
@@ -1021,7 +1021,7 @@ class ThisContactHandler(webapp2.RequestHandler):
                     thisPhysicalAddress = PhysicalAddress()
 
                 thisPhysicalAddress.writeContactID(strinput=vstrContactID)
-                thisPhysicalAddress.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                thisPhysicalAddress.writeOrganizationID(strinput=thisMainAccount.organization_id)
                 thisPhysicalAddress.writeStandNumber(strinput=vstrStandNumber)
                 thisPhysicalAddress.writeStreetName(strinput=vstrStreetName)
                 thisPhysicalAddress.writeCityTown(strinput=vstrPhyCityTown)
@@ -1041,10 +1041,10 @@ class ThisContactHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
-                findRequests = Contacts.query(Contacts.strOrganizationID == thisMainAccount.strOrganizationID,Contacts.strCell == vstrCell)
+                findRequests = Contacts.query(Contacts.strOrganizationID == thisMainAccount.organization_id, Contacts.strCell == vstrCell)
                 thisContactList = findRequests.fetch()
 
                 if len(thisContactList) > 0:
@@ -1081,16 +1081,16 @@ class ThisContactHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Organization.query(Organization.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Organization.query(Organization.strOrganizationID == thisMainAccount.organization_id)
                 thisOrgList = findRequest.fetch()
 
                 if len(thisOrgList) > 0:
                     thisOrg = thisOrgList[0]
-                    if thisOrg.strVerified:
+                    if thisOrg.verified:
 
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
@@ -1308,7 +1308,7 @@ class ThisContactHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 findRequest = Contacts.query(Contacts.strCell == vstrCell)
@@ -1340,18 +1340,18 @@ class ThisContactHandler(webapp2.RequestHandler):
 
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
                 vstrCell = self.request.get('vstrCell')
                 vstrSubject = self.request.get('vstrSubject')
                 vstrMessage = self.request.get('vstrMessage')
 
-                findRequest = Organization.query(Organization.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Organization.query(Organization.strOrganizationID == thisMainAccount.organization_id)
                 thisOrgList = findRequest.fetch()
 
                 if len(thisOrgList) > 0:
                     thisOrg = thisOrgList[0]
 
-                    if thisOrg.strVerified:
+                    if thisOrg.verified:
 
 
                         findRequest = Contacts.query(Contacts.strCell == vstrCell)

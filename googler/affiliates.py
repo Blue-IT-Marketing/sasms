@@ -835,7 +835,7 @@ class AffiliateHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 findRequest = PresentCredits.query(PresentCredits.strUserID == vstrUserID)
                 CreditList = findRequest.fetch()
@@ -876,7 +876,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
                 thisAffiliateList = findRequest.fetch()
@@ -902,7 +902,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrAffiliateLink = self.request.get('vstrAffiliateLink')
 
@@ -924,7 +924,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 findRequest = Affiliate.query(Affiliate.strAffiliateLink == vstrAffiliateLink)
@@ -939,7 +939,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                     if len(thisAffiliateList) > 0:
                         thisAffiliate = thisAffiliateList[0]
 
-                        if thisLinkAffiliate.strUserID == thisAffiliate.strUserID:
+                        if thisLinkAffiliate.uid == thisAffiliate.uid:
                             thisAffiliate.writeAffiliateLink(strinput=vstrAffiliateLink)
                             thisAffiliate.writePaymentMethod(strinput=vstrPaymentMethod)
                             thisAffiliate.put()
@@ -972,9 +972,9 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
@@ -1011,9 +1011,9 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Affiliate.query(Affiliate.strUserID == thisMainAccount.strUserID)
+                findRequest = Affiliate.query(Affiliate.strUserID == thisMainAccount.uid)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:
@@ -1022,7 +1022,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                     if thisAffiliate.strAvailableCredit <= int(vstrWithDrawCredit):
                         thisAffiliate.strAvailableCredit -= int(vstrWithDrawCredit)
                         thisWithDrawalRequest = WithdrawalRequests()
-                        thisWithDrawalRequest.writeUserID(strinput=thisMainAccount.strUserID)
+                        thisWithDrawalRequest.writeUserID(strinput=thisMainAccount.uid)
                         vstrWithdrawalAmount = str(vstrWithdrawalAmount)
                         if not (vstrWithdrawalAmount == "0"):
                             vstrWithdrawalAmount = float(vstrWithdrawalAmount)
@@ -1060,9 +1060,9 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Affiliate.query(Affiliate.strUserID == thisMainAccount.strUserID)
+                findRequest = Affiliate.query(Affiliate.strUserID == thisMainAccount.uid)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:
@@ -1089,7 +1089,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
                 findRequest = Affiliate.query(Affiliate.strUserID == vstrUserID)
                 thisAffiliateList = findRequest.fetch()
 
@@ -1122,7 +1122,7 @@ class AffiliateHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupList = vstrGroupIDs.split(",")
 
@@ -1154,9 +1154,9 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = Organization.query(Organization.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Organization.query(Organization.strOrganizationID == thisMainAccount.organization_id)
                 thisOrgList = findRequest.fetch()
 
                 if len(thisOrgList) > 0:
@@ -1165,7 +1165,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                     thisOrg = Organization()
 
 
-                findRequest = Affiliate.query(Affiliate.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Affiliate.query(Affiliate.strOrganizationID == thisMainAccount.organization_id)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:
@@ -1173,7 +1173,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                 else:
                     thisAffiliate = Affiliate()
                     thisAffiliate.writeUserID(strinput=vstrUserID)
-                    thisAffiliate.writeOrganizationID(strinput=thisMainAccount.strOrganizationID)
+                    thisAffiliate.writeOrganizationID(strinput=thisMainAccount.organization_id)
                     thisAffiliate.writeAffiliateLink(thisAffiliate.CreateAffiliateLink())
                     thisAffiliate.put()
 
@@ -1277,7 +1277,7 @@ class AffiliatePublicHandler(webapp2.RequestHandler):
 
             thisSecurityLog.put()
 
-            findRequest = MyFacebook.query(MyFacebook.strUserID == thisAffiliate.strUserID)
+            findRequest = MyFacebook.query(MyFacebook.strUserID == thisAffiliate.uid)
             thisFacebookList = findRequest.fetch()
 
             if len(thisFacebookList) > 0:

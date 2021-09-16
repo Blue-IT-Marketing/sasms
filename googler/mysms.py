@@ -1374,7 +1374,7 @@ class mySMSHandler(webapp2.RequestHandler):
         vstrAccessToken = self.request.get('vstrAccessToken')
 
         thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-        if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+        if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
             template = template_env.get_template('templates/sms/sms.html')
             context = {}
@@ -1392,15 +1392,15 @@ class SMSGroupHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAdminList = findRequest.fetch()
                 if len(thisAdminList) > 0:
                     thisAdmin = thisAdminList[0]
                 else:
                     thisAdmin = Accounts()
 
-                findRequest = Groups.query(Groups.strOrganizationID == thisAdmin.strOrganizationID)
+                findRequest = Groups.query(Groups.strOrganizationID == thisAdmin.organization_id)
                 thisGroupsList = findRequest.fetch()
 
                 template = template_env.get_template('templates/sms/creategroups.html')
@@ -1417,8 +1417,8 @@ class SMSGroupHandler(webapp2.RequestHandler):
             vstrGroupDescription = self.request.get('vstrGroupDescription')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAdminList = findRequest.fetch()
 
                 if len(thisAdminList) > 0:
@@ -1427,7 +1427,7 @@ class SMSGroupHandler(webapp2.RequestHandler):
                     thisAdmin = Accounts()
 
 
-                findRequest = Groups.query(Groups.strGroupName == vstrGroupName, Groups.strOrganizationID == thisAdmin.strOrganizationID)
+                findRequest = Groups.query(Groups.strGroupName == vstrGroupName, Groups.strOrganizationID == thisAdmin.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1435,7 +1435,7 @@ class SMSGroupHandler(webapp2.RequestHandler):
                 else:
                     thisGroup = Groups()
 
-                thisGroup.writeOrganizationID(strinput=thisAdmin.strOrganizationID)
+                thisGroup.writeOrganizationID(strinput=thisAdmin.organization_id)
                 thisGroup.writeGroupName(strinput=vstrGroupName)
                 thisGroup.writeGroupDescription(strinput=vstrGroupDescription)
                 thisGroup.writeUserID(strinput=vstrUserID)
@@ -1456,9 +1456,9 @@ class SMSGroupHandler(webapp2.RequestHandler):
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = UserRights.query(UserRights.strUserID == thisMainAccount.strUserID)
+                findRequest = UserRights.query(UserRights.strUserID == thisMainAccount.uid)
                 thisUserRightList = findRequest.fetch()
 
                 if len(thisUserRightList) > 0:
@@ -1467,7 +1467,7 @@ class SMSGroupHandler(webapp2.RequestHandler):
                     thisUserRight = UserRights()
 
                 if thisUserRight.strAdminUser:
-                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.organization_id)
                     thisSMSAccountList = findRequest.fetch()
 
                     if len(thisSMSAccountList) > 0:
@@ -1504,7 +1504,7 @@ class SMSGroupHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 template = template_env.get_template('templates/sms/groups/reports.html')
                 context = {}
@@ -1542,7 +1542,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrGroupID = self.request.get('vstrGroupID')
@@ -1569,7 +1569,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrGroupID = URLlist[len(URLlist) - 1]
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 findRequest = SMSContacts.query(SMSContacts.strGroupID == vstrGroupID,SMSContacts.strCellNumber == vstrCellNumber)
@@ -1582,14 +1582,14 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
 
                 thisContact.writeGroupID(strinput=vstrGroupID)
-                thisContact.writeUserID(strinput=thisMainAccount.strUserID)
+                thisContact.writeUserID(strinput=thisMainAccount.uid)
                 thisContact.writeNames(strinput=vstrNames)
                 thisContact.writeSurname(strinput=vstrSurname)
                 thisContact.writeCellNumber(strinput=vstrCellNumber)
 
                 thisContact.put()
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID,Groups.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.strOrganizationID == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1609,7 +1609,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
@@ -1626,7 +1626,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrMessage = self.request.get('vstrMessage')
@@ -1656,7 +1656,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrGroupList = self.request.get('vstrGroupList')
@@ -1672,10 +1672,10 @@ class GroupManagerHandler(webapp2.RequestHandler):
                     thisSMSContacts = SMSContacts()
 
 
-                    thisSMSContacts.writeUserID(strinput=thisMainAccount.strUserID)
+                    thisSMSContacts.writeUserID(strinput=thisMainAccount.uid)
                     thisSMSContacts.writeNames(strinput=thisMainAccount.strMemberNames)
                     thisSMSContacts.writeSurname(strinput=thisMainAccount.strMemberSurname)
-                    thisSMSContacts.writeCellNumber(strinput=thisMainAccount.strCell)
+                    thisSMSContacts.writeCellNumber(strinput=thisMainAccount.cell)
                     thisSMSContacts.writeGroupID(strinput=strGroupID)
 
                     thisSMSContacts.put()
@@ -1702,12 +1702,12 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID,Groups.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.strOrganizationID == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1729,7 +1729,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrGroupName = self.request.get('vstrGroupName')
@@ -1756,12 +1756,12 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID,Groups.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.strOrganizationID == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1781,13 +1781,13 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID,Groups.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.strOrganizationID == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 for thisGroup in thisGroupList:
@@ -1808,7 +1808,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrContacts = self.request.get('vstrContacts')
@@ -1845,10 +1845,10 @@ class GroupManagerHandler(webapp2.RequestHandler):
                             thisContact.writeGroupID(strinput=vstrGroupID)
                             thisContact.writeNames(strinput=vstrFirstname)
                             thisContact.writeSurname(strinput=vstrSurname)
-                            thisContact.writeUserID(strinput=thisMainAccount.strUserID)
+                            thisContact.writeUserID(strinput=thisMainAccount.uid)
                             thisContact.put()
 
-                            findRequest = Groups.query(Groups.strOrganizationID == thisMainAccount.strOrganizationID,Groups.strGroupID == vstrGroupID)
+                            findRequest = Groups.query(Groups.strOrganizationID == thisMainAccount.organization_id, Groups.strGroupID == vstrGroupID)
                             thisGroupList = findRequest.fetch()
 
                             if len(thisGroupList) > 0:
@@ -1865,7 +1865,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
@@ -1882,7 +1882,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrRemoveCell = self.request.get('vstrRemoveCell')
@@ -1937,7 +1937,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrMessageID = self.request.get('vstrMessageID')
@@ -1979,7 +1979,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrMessageID = self.request.get('vstrMessageID')
@@ -2004,7 +2004,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrMessageID = self.request.get('vstrMessageID')
@@ -2101,7 +2101,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrMessageID = self.request.get('vstrMessageID')
@@ -2143,7 +2143,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
                 vstrGroupID = self.request.get('vstrGroupID')
@@ -2208,7 +2208,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
 
                             thisMessage = SendEmail(strFrom=thisPortal.strSenderAddress,strTo=thisPortal.strEmailAddress,strSubject=thisContact.strCellNumber,strBody=thisMessage.strMessage,strTextType="text/plain")
                             if thisMessage == True:
-                                self.response.write(""" <tr> <td> """ + thisContact.strNames + """</td><td> """ + thisContact.strSurname + """</td><td>""" +  thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
+                                self.response.write(""" <tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
                                 i = i + 1
 
                                 thisPortal.strAvailableCredit = thisPortal.strAvailableCredit - 1
@@ -2283,11 +2283,11 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 result = thisBudgetPortal.SendCronMessage(strMessage=thisMessage.strMessage,strCell=thisContact.strCellNumber)
                                 if result == None:
                                     isSent = False
-                                    self.response.write("""<tr> <td> """ + thisContact.strNames + """</td><td> """ + thisContact.strSurname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
+                                    self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
                                 else:
                                     isSent = True
                                     logging.info("THIS IS THE RETURNED RESULT : " + str(result))
-                                    self.response.write("""<tr> <td> """ + thisContact.strNames + """</td><td> """ + thisContact.strSurname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
+                                    self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
 
                                 if isSent:
                                     i = i + 1
@@ -2387,11 +2387,11 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 if result == None:
                                     isSent = False
                                     self.response.write(
-                                        """<tr> <td> """ + thisContact.strNames + """</td><td> """ + thisContact.strSurname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
+                                        """<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
                                 else:
                                     isSent = True
                                     logging.info("THIS IS THE RETURNED RESULT : " + str(result))
-                                    self.response.write("""<tr> <td> """ + thisContact.strNames + """</td><td> """ + thisContact.strSurname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
+                                    self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
 
                                 if isSent:
                                     i = i + 1
@@ -2491,12 +2491,12 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 if result == None:
                                     isSent = False
                                     self.response.write(
-                                        """<tr> <td> """ + thisContact.strNames + """</td><td> """ + thisContact.strSurname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
+                                        """<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
                                 else:
                                     isSent = True
                                     logging.info("THIS IS THE RETURNED RESULT : " + str(result))
                                     self.response.write(
-                                        """<tr> <td> """ + thisContact.strNames + """</td><td> """ + thisContact.strSurname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
+                                        """<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
 
                                 if isSent:
                                     i = i + 1
@@ -2573,7 +2573,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrMessageID = self.request.get('vstrMessageID')
@@ -2609,14 +2609,14 @@ class BuyCreditsHandler(webapp2.RequestHandler):
 
 
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 vstrOrganizationID = self.request.get('vstrOrganizationID')
                 vstrSMSPackages = self.request.get('vstrSMSPackages')
                 vstrDepositAmount = self.request.get('vstrDepositAmount')
                 vstrDepositMethod = self.request.get('vstrDepositMethod')
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.strOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisMainAccount.organization_id)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
@@ -2647,7 +2647,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
 
             vstrOrganizationID = self.request.get('vstrOrganizationID')
             thisMainAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
-            if (thisMainAccount != None) and (thisMainAccount.strEmail == vstrEmail):
+            if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
                 findRequest = SMSAccount.query(SMSAccount.strOrganizationID == vstrOrganizationID)
                 thisSMSAccountList = findRequest.fetch()
@@ -2679,7 +2679,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                         thisOrganization = thisOrganizationList[0]
 
 
-                        if thisOrganization.strVerified:
+                        if thisOrganization.verified:
 
                             if thisSMSAccount.strUsePortal == "Vodacom":
                                 findRequest = SMSPortalVodacom.query()
@@ -2689,7 +2689,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                                 else:
                                     thisVodaPortal = SMSPortalVodacom()
                                 RecipientList = []
-                                RecipientList.append(thisOrganization.strCell)
+                                RecipientList.append(thisOrganization.cell)
                                 if thisVodaPortal.CronSendMessages(strCellNumberList=RecipientList,strMessage=strMessage,strAccountID=thisBankAccount.strStaffID):
                                     self.response.write("Successfully sent banking details to your mobile phone")
                                 else:
@@ -2703,7 +2703,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                                 else:
                                     thisBudgetPortal = SMSPortalBudget()
 
-                                if not(thisBudgetPortal.SendCronMessage(strMessage=strMessage,strCell=thisOrganization.strCell) == None):
+                                if not(thisBudgetPortal.SendCronMessage(strMessage=strMessage, strCell=thisOrganization.cell) == None):
                                     self.response.write("Successfully sent banking details to your mobile phone")
                                 else:
                                     self.response.write("Error sending banking details to mobile please try again later")
@@ -2717,7 +2717,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                                 else:
                                     thisClickSend = ClickSendSMSPortal()
 
-                                    strResult = thisClickSend.SendSMS(strCell=thisOrganization.strCell,strMessage=strMessage)
+                                    strResult = thisClickSend.SendSMS(strCell=thisOrganization.cell, strMessage=strMessage)
 
                                     if strResult != None:
                                         self.response.write("Successfully sent Banking Details to your mobile phone")
@@ -2734,7 +2734,7 @@ class BuyCreditsHandler(webapp2.RequestHandler):
                                 else:
                                     thisTwilio = MyTwilioPortal()
 
-                                strResult = thisTwilio.sendSMS(strTo=thisOrganization.strCell,strFrom=thisTwilio.strMySMSNumber,strMessage=strMessage)
+                                strResult = thisTwilio.sendSMS(strTo=thisOrganization.cell, strFrom=thisTwilio.strMySMSNumber, strMessage=strMessage)
 
                                 if strResult != None:
                                     self.response.write("Successfully sent Banking Details to your mobile phone")

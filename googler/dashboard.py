@@ -1021,7 +1021,7 @@ class TicketsHandler(webapp2.RequestHandler):
                 thisUsersList = []
                 for thisTicket in thisTicketList:
 
-                    findRequest = TicketUsers.query(TicketUsers.strUserID == thisTicket.strUserID)
+                    findRequest = TicketUsers.query(TicketUsers.strUserID == thisTicket.uid)
                     thisTicketUsersList = findRequest.fetch()
                     if len(thisTicketUsersList) > 0:
                         thisTicketUser = thisTicketUsersList[0]
@@ -1188,7 +1188,7 @@ class thisTopUpVerificationHandler(webapp2.RequestHandler):
             if len(thisTopUpAccountList) > 0:
                 thisTopUpAccount = thisTopUpAccountList[0]
 
-                findRequest = Organization.query(Organization.strOrganizationID == thisTopUpAccount.strOrganizationID)
+                findRequest = Organization.query(Organization.strOrganizationID == thisTopUpAccount.organization_id)
                 thisOrgList = findRequest.fetch()
 
                 if len(thisOrgList) > 0:

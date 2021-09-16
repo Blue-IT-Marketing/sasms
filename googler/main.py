@@ -99,13 +99,13 @@ class MainRouterHandler(webapp2.RequestHandler):
             #decode_token = auth.verify_id_token(vstrAccessToken)
             #uid = decode_token['uid']
 
-            findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+            findRequest = Accounts.query(Accounts.uid == vstrUserID)
             thisAccountList = findRequest.fetch()
 
             if len(thisAccountList) > 0:
                 thisAccount = thisAccountList[0]
                 thisAccount.writeEmail(strinput=vstrEmail)
-                findRequest = Organization.query(Organization.strOrganizationID == thisAccount.strOrganizationID)
+                findRequest = Organization.query(Organization.strOrganizationID == thisAccount.organization_id)
                 thisOrgList = findRequest.fetch()
                 if len(thisOrgList) > 0:
                     thisOrg = thisOrgList[0]
@@ -113,12 +113,12 @@ class MainRouterHandler(webapp2.RequestHandler):
                     thisOrg.put()
 
             else:
-                findRequest = Accounts.query(Accounts.strEmail == vstrEmail)
+                findRequest = Accounts.query(Accounts.email == vstrEmail)
                 thisAccountList = findRequest.fetch()
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
                     thisAccount.writeUserID(strinput=vstrUserID)
-                    findRequest = Organization.query(Organization.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = Organization.query(Organization.strOrganizationID == thisAccount.organization_id)
                     thisOrgList = findRequest.fetch()
                     if len(thisOrgList) > 0:
                         thisOrg = thisOrgList[0]

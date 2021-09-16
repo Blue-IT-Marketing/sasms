@@ -371,7 +371,7 @@ class NewslettersHandler(webapp2.RequestHandler):
     def get(self):
         Guser = users.get_current_user()
         if Guser:
-            findRequest = Accounts.query(Accounts.strUserID == Guser.user_id())
+            findRequest = Accounts.query(Accounts.uid == Guser.user_id())
             thisAccountsList = findRequest.fetch()
 
             if len(thisAccountsList) > 0:
@@ -379,7 +379,7 @@ class NewslettersHandler(webapp2.RequestHandler):
             else:
                 thisAccounts = Accounts()
 
-            findRequest = MailingList.query(MailingList.strOrganizationID == thisAccounts.strOrganizationID)
+            findRequest = MailingList.query(MailingList.strOrganizationID == thisAccounts.organization_id)
             thisMailingList = findRequest.fetch()
 
             template = template_env.get_template('templates/newsletter/newsletter.html')
@@ -416,7 +416,7 @@ class NewslettersHandler(webapp2.RequestHandler):
 
 
 
-            findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+            findRequest = Accounts.query(Accounts.uid == vstrUserID)
             thisAccountsList = findRequest.fetch()
 
             if len(thisAccountsList) > 0:
@@ -424,7 +424,7 @@ class NewslettersHandler(webapp2.RequestHandler):
             else:
                 thisAccounts = Accounts()
 
-            findRequest = MailingList.query(MailingList.strOrganizationID == thisAccounts.strOrganizationID,MailingList.strListName == vstrListName,MailingList.strListDescription == vstrListDescription)
+            findRequest = MailingList.query(MailingList.strOrganizationID == thisAccounts.organization_id, MailingList.strListName == vstrListName, MailingList.strListDescription == vstrListDescription)
             thisMailingList = findRequest.fetch()
 
             if len(thisMailingList) > 0:
@@ -433,7 +433,7 @@ class NewslettersHandler(webapp2.RequestHandler):
                 thisMailing = MailingList()
                 thisMailing.writeListID(strinput=thisMailing.CreateListID())
 
-            thisMailing.writeOrganizationID(strinput=thisAccounts.strOrganizationID)
+            thisMailing.writeOrganizationID(strinput=thisAccounts.organization_id)
             thisMailing.writeListName(strinput=vstrListName)
             thisMailing.writeListDescription(strinput=vstrListDescription)
             thisMailing.writeStartSendingDate(strinput=vstrDate)
@@ -452,7 +452,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             vstrURLlist = URL.split("/")
             vstrListID = vstrURLlist[len(vstrURLlist) - 1]
 
-            findRequest = Accounts.query(Accounts.strUserID == Guser.user_id())
+            findRequest = Accounts.query(Accounts.uid == Guser.user_id())
             thisAccountsList = findRequest.fetch()
 
             if len(thisAccountsList) > 0:
@@ -460,7 +460,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             else:
                 thisAccounts = Accounts()
 
-            findRequest = MailingList.query(MailingList.strListID == vstrListID,MailingList.strOrganizationID == thisAccounts.strOrganizationID)
+            findRequest = MailingList.query(MailingList.strListID == vstrListID, MailingList.strOrganizationID == thisAccounts.organization_id)
             thisMailingList = findRequest.fetch()
 
             if len(thisMailingList) > 0:
@@ -478,7 +478,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
         vstrChoice = self.request.get('vstrChoice')
 
 
-        findRequest = Accounts.query(Accounts.strUserID == Guser.user_id())
+        findRequest = Accounts.query(Accounts.uid == Guser.user_id())
         thisAccountsList = findRequest.fetch()
 
         if len(thisAccountsList) > 0:
@@ -530,7 +530,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
                 thisLetter.writeTimeCreated(strinput=strTime)
                 thisLetter.writeMemberID(strinput=Guser.user_id())
 
-            thisLetter.writeOrganizationID(strinput=thisAccounts.strOrganizationID)
+            thisLetter.writeOrganizationID(strinput=thisAccounts.organization_id)
             thisLetter.writeLetterHeading(strinput=vstrLetterHeading)
             thisLetter.writeLetterBody(strinput=vstrLetterBody)
             thisLetter.writeListID(strinput=vstrListID)
@@ -565,7 +565,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             vstrListID = self.request.get('vstrListID')
             vstrContacts = self.request.get('vstrContacts')
 
-            findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+            findRequest = Accounts.query(Accounts.uid == vstrUserID)
             thisAccountsList = findRequest.fetch()
 
             if len(thisAccountsList) > 0:
@@ -591,7 +591,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
                     strContact.writeEmail(strinput=thisContactList[1])
                     strContact.writeNames(strinput=thisContactList[2])
                     strContact.writeSurname(strinput=thisContactList[3])
-                    strContact.writeOrganizationID(strinput=thisAccounts.strOrganizationID)
+                    strContact.writeOrganizationID(strinput=thisAccounts.organization_id)
                     strContact.put()
             self.response.write("Contact list updated successfully")
 
@@ -607,7 +607,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             vstrCellNumber = self.request.get('vstrCellNumber')
             vstrEmail = self.request.get('vstrEmail')
 
-            findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+            findRequest = Accounts.query(Accounts.uid == vstrUserID)
             thisAccountsList = findRequest.fetch()
 
             if len(thisAccountsList) > 0:
@@ -623,7 +623,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             else:
                 thisContact = ContactList()
 
-            thisContact.writeOrganizationID(strinput=thisAccounts.strOrganizationID)
+            thisContact.writeOrganizationID(strinput=thisAccounts.organization_id)
             thisContact.writeListID(strinput=vstrListID)
             thisContact.writeNames(strinput=vstrNames)
             thisContact.writeSurname(strinput=vstrSurname)
