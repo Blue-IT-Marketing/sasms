@@ -1,32 +1,28 @@
 import os
-from google.appengine.ext import blobstore
-from google.appengine.ext.webapp import blobstore_handlers
-import webapp2
 import jinja2
-from google.appengine.ext import ndb
-from google.appengine.api import users
+from google.cloud import ndb
 import logging
 import datetime
 
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
-class SecurityLog(ndb.Expando):
+class SecurityLog(ndb.Model):
 
-    strClientIP = ndb.StringProperty()
-    strRecentCounter = ndb.IntegerProperty(default=0)
+    client_ip = ndb.StringProperty()
+    recent_counter = ndb.IntegerProperty(default=0)
 
-    strUserName = ndb.StringProperty()
-    strDateAccessed = ndb.DateProperty()
-    strTimeAccessed = ndb.TimeProperty()
-    strAffiliateLink = ndb.StringProperty()
-    strLockAccount = ndb.BooleanProperty(default=False)
+    username = ndb.StringProperty()
+    date_accessed = ndb.DateProperty()
+    time_accessed = ndb.TimeProperty()
+    affiliate_link = ndb.StringProperty()
+    lock_account = ndb.BooleanProperty(default=False)
 
 
     def writeClientIP(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strClientIP = strinput
+                self.client_ip = strinput
                 return True
             else:
                 return False
@@ -37,7 +33,7 @@ class SecurityLog(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserName = strinput
+                self.username = strinput
                 return True
             else:
                 return False
@@ -48,7 +44,7 @@ class SecurityLog(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAffiliateLink = strinput
+                self.affiliate_link = strinput
                 return True
             else:
                 return False
@@ -59,7 +55,7 @@ class SecurityLog(ndb.Expando):
         try:
 
             if isinstance(strinput,datetime.date):
-                self.strDateAccessed = strinput
+                self.date_accessed = strinput
                 return True
             else:
                 return False
@@ -69,7 +65,7 @@ class SecurityLog(ndb.Expando):
     def writeTimeAccessed(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeAccessed = strinput
+                self.time_accessed = strinput
                 return True
             else:
                 return False
@@ -1068,7 +1064,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                 if len(thisAffiliateList) > 0:
                     thisAffiliate = thisAffiliateList[0]
 
-                    findRequest = HitCounter.query(HitCounter.strAffiliateLink == thisAffiliate.strAffiliateLink)
+                    findRequest = HitCounter.query(HitCounter.strAffiliateLink == thisAffiliate.affiliate_link)
                     thisHitCountersList = findRequest.fetch()
 
                     if len(thisHitCountersList) > 0:
@@ -1103,7 +1099,7 @@ class AffiliateHandler(webapp2.RequestHandler):
                         thisFacebook = thisFacebookList[0]
                     else:
                         thisFacebook = MyFacebook()
-                        thisFacebook.writeAffiliateLink(strinput=thisAffiliate.strAffiliateLink)
+                        thisFacebook.writeAffiliateLink(strinput=thisAffiliate.affiliate_link)
                         thisFacebook.writeUserID(strinput=vstrUserID)
                         thisFacebook.put()
 
@@ -1208,7 +1204,7 @@ class AffiliatePublicHandler(webapp2.RequestHandler):
         strURLlist = URL.split("/")
 
         strAffiliateLink = strURLlist[len(strURLlist) - 1]
-        findRequest = SecurityLog.query(SecurityLog.strClientIP == strIPAddress)
+        findRequest = SecurityLog.query(SecurityLog.client_ip == strIPAddress)
         thisSecurityLogList = findRequest.fetch()
 
         thisDateTime = datetime.datetime.now()
@@ -1251,10 +1247,10 @@ class AffiliatePublicHandler(webapp2.RequestHandler):
         thisHitCounter.put()
 
 
-        if thisSecurityLog.strLockAccount:
+        if thisSecurityLog.lock_account:
             time.sleep(30)
-            thisSecurityLog.strRecentCounter = 0
-            thisSecurityLog.strLockAccount = False
+            thisSecurityLog.recent_counter = 0
+            thisSecurityLog.lock_account = False
 
 
         findRequest = Affiliate.query(Affiliate.strAffiliateLink == strAffiliateLink)
@@ -1262,15 +1258,15 @@ class AffiliatePublicHandler(webapp2.RequestHandler):
 
         if len(thisAffiliateList) > 0:
             thisAffiliate = thisAffiliateList[0]
-            if (not(thisSecurityLog.strTimeAccessed == None)) and (thisSecurityLog.strTimeAccessed < strSecureThisTime):
-                thisSecurityLog.strRecentCounter += 1
+            if (not(thisSecurityLog.time_accessed == None)) and (thisSecurityLog.time_accessed < strSecureThisTime):
+                thisSecurityLog.recent_counter += 1
             else:
-                thisSecurityLog.strRecentCounter = 0
+                thisSecurityLog.recent_counter = 0
 
-            if thisSecurityLog.strRecentCounter > 35:
-                thisSecurityLog.strLockAccount = True
+            if thisSecurityLog.recent_counter > 35:
+                thisSecurityLog.lock_account = True
             else:
-                thisSecurityLog.strLockAccount = False
+                thisSecurityLog.lock_account = False
 
             thisSecurityLog.writeDateAccessed(strinput=strThisDate)
             thisSecurityLog.writeTimeAccessed(strinput=strThisTime)
