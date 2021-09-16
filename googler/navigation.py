@@ -1,8 +1,5 @@
 import os
-import webapp2
 import jinja2
-
-from google.appengine.api import users
 
 
 import logging
@@ -12,7 +9,7 @@ template_env = jinja2.Environment(
 loader=jinja2.FileSystemLoader(os.getcwd()))
 
 
-class NavigationHandler(webapp2.RequestHandler):
+class NavigationHandler():
     def get(self):
         url = str(self.request.url)
         strRouter = url.split("/")

@@ -1015,7 +1015,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                                 logging.info("Sending invitations through Twilio Portal")
 
-                                if thisTwilioPortal.sendSMS(strTo=vstrCell, strMessage=strInviteMessage) != None:
+                                if thisTwilioPortal.send_sms(to=vstrCell, message=strInviteMessage) != None:
                                     thisSMSAccount.total_sms = thisSMSAccount.total_sms - 4
                                     self.response.write("Successfully sent an invite message")
                                 else:
@@ -1169,8 +1169,8 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                     thisTwilioPortal = MyTwilioPortal()
 
                 for thisNumber in ReceipientList:
-                    strRef = thisTwilioPortal.sendSMS(strTo=thisNumber, strFrom=thisTwilioPortal.strMySMSNumber,
-                                                      strMessage=strMessage)
+                    strRef = thisTwilioPortal.send_sms(to=thisNumber, message=strMessage,
+                                                       from_cell=thisTwilioPortal.sms_number)
                     if strRef != None:
                         logging.info("Successfully sent Verification Mesage")
                     else:
@@ -1505,7 +1505,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                         else:
                             thisTwilioPortal = MyTwilioPortal()
 
-                        if thisTwilioPortal.sendSMS(strTo=vstrCell, strMessage=thisOpenInvite.security_code) != None:
+                        if thisTwilioPortal.send_sms(to=vstrCell, message=thisOpenInvite.security_code) != None:
                             thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                             thisSMSAccount.put()
                             self.response.write("Security Code successfully sent please enter the code")

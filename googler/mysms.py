@@ -2479,7 +2479,9 @@ class thisSMSManagerHandler():
                                 thisDate = datetime.datetime.now()
                                 thisDate = thisDate.date()
 
-                                result = thisTwilioPortal.sendSMS(strTo=thisContact.cell_number, strFrom=thisTwilioPortal.strMySMSNumber, strMessage=thisMessage.message)
+                                result = thisTwilioPortal.send_sms(to=thisContact.cell_number,
+                                                                   message=thisMessage.message,
+                                                                   from_cell=thisTwilioPortal.sms_number)
 
                                 if result == None:
                                     isSent = False
@@ -2727,7 +2729,8 @@ class BuyCreditsHandler():
                                 else:
                                     thisTwilio = MyTwilioPortal()
 
-                                strResult = thisTwilio.sendSMS(strTo=thisOrganization.cell, strFrom=thisTwilio.strMySMSNumber, strMessage=strMessage)
+                                strResult = thisTwilio.send_sms(to=thisOrganization.cell, message=strMessage,
+                                                                from_cell=thisTwilio.sms_number)
 
                                 if strResult != None:
                                     self.response.write("Successfully sent Banking Details to your mobile phone")

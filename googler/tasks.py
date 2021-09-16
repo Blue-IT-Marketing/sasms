@@ -211,7 +211,7 @@ def BulkSMSHandler():
                 strTotalDelivered = 0
 
                 for thisContact in ReceipientList:
-                    ref = thisTwilio.sendSMS(strTo=thisContact, strFrom=thisTwilio.strMySMSNumber,
+                    ref = thisTwilio.sendSMS(strTo=thisContact, strFrom=thisTwilio.sms_number,
                                              strMessage=thisMessage.message)
 
                     if (ref != None):
@@ -444,7 +444,7 @@ def SendAdvertCreditHandler():
                             sentList.append(thisContact.cell)
 
                         elif thisAdvert.use_portal == "Twilio":
-                            ref = thisTwilioPortal.sendSMS(strTo=thisContact.cell, strFrom=thisTwilioPortal.strMySMSNumber, strMessage=thisAdvert.advert)
+                            ref = thisTwilioPortal.sendSMS(strTo=thisContact.cell, strFrom=thisTwilioPortal.sms_number, strMessage=thisAdvert.advert)
                             sentList.append(thisContact.cell)
                         elif  thisAdvert.use_portal == "Vodacom":
                             sentList.append(thisContact.cell)

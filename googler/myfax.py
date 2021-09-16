@@ -2088,7 +2088,7 @@ class MyFaxHandler():
                         strThisDate = datetime.date(year=vstrThisDate.year,month=vstrThisDate.month,day=vstrThisDate.day)
                         vstrThisDate += datetime.timedelta(days=30)
                         strPayByDate = datetime.date(year=vstrThisDate.year, month=vstrThisDate.month, day=vstrThisDate.day)
-                        strTotalCost = (thisTwilioPortal.strCostPerPage * int(vstrAddCredits))/100
+                        strTotalCost = (thisTwilioPortal.cost_per_page * int(vstrAddCredits)) / 100
                         thisFaxAccount.writeTotalTopUpCost(strinput=strTotalCost)
                         thisFaxAccount.writeTopUpCredit(strinput=vstrAddCredits)
                         thisFaxAccount.writeTopUpReference(strinput=thisFaxAccount.CreateTopUpReference())

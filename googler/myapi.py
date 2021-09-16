@@ -901,7 +901,8 @@ class RoutesHandler(webapp2.RequestHandler):
 
                     if len(thisFaxSettingsList) > 0:
                         thisFaxSettings = thisFaxSettingsList[0]
-                        strRef = thisPortal.sendFax(strFrom=thisFaxSettings.fax_number, strTo=strFaxNumber, strFaxURL=strFaxMediaURL)
+                        strRef = thisPortal.send_fax(to_tel=strFaxNumber, fax_url=strFaxMediaURL,
+                                                     from_=thisFaxSettings.fax_number)
 
                         #TODO- Consider also donwloading the fax file here once obtained send as fax, obtain the filename below
                         strFileName = ""
