@@ -1578,11 +1578,11 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
 
         from advertise import Payments  # This is to force the use of payments class in adverts
         # Payment details Advert
-        findRequest = Payments.query(Payments.strOrderID == thisOrder.order_id)
+        findRequest = Payments.query(Payments.order_id == thisOrder.order_id)
         thisRelatedPaymentList = findRequest.fetch()
 
         # User Organization Payment Details
-        findRequest = Payments.query(Payments.strOrganizationID == thisOrder.organization_id)
+        findRequest = Payments.query(Payments.organization_id == thisOrder.organization_id)
         thisOrganizationPaymentsList = findRequest.fetch()
 
         template = template_env.get_template('templates/dashboard/payments/AdvertOrders.html')

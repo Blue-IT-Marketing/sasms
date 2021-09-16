@@ -1063,15 +1063,15 @@ class Payments(ndb.Expando):
         adjusted...on the payment record the same is done for easy creation of invoices...
     """
     uid = ndb.StringProperty()
-    strOrderID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strPaymentID = ndb.StringProperty()
-    strDepositReference = ndb.StringProperty() # Intergrate this with payments class
-    strAmountPaid = ndb.IntegerProperty(default=0)
-    strPaymentMethod = ndb.StringProperty(default="Direct Deposit") # Cash , EFT
-    strDatePaid = ndb.DateProperty(auto_now_add=True)
-    strTimePaid = ndb.TimeProperty(auto_now_add=True)
-    strPaymentVerified = ndb.BooleanProperty(default=False)
+    order_id = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    payment_id = ndb.StringProperty()
+    deposit_reference = ndb.StringProperty() # Intergrate this with payments class
+    amount_paid = ndb.IntegerProperty(default=0)
+    payment_method = ndb.StringProperty(default="Direct Deposit") # Cash , EFT
+    date_paid = ndb.DateProperty(auto_now_add=True)
+    time_paid = ndb.TimeProperty(auto_now_add=True)
+    payment_verified = ndb.BooleanProperty(default=False)
 
     def writeUserID(self,strinput):
         try:
@@ -1087,7 +1087,7 @@ class Payments(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -1097,7 +1097,7 @@ class Payments(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrderID = strinput
+                self.order_id = strinput
                 return True
             else:
                 return False
@@ -1116,7 +1116,7 @@ class Payments(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPaymentID = strinput
+                self.payment_id = strinput
                 return True
             else:
                 return False
@@ -1126,7 +1126,7 @@ class Payments(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strAmountPaid = int(strinput)
+                self.amount_paid = int(strinput)
                 return True
             else:
                 return False
@@ -1136,7 +1136,7 @@ class Payments(ndb.Expando):
         try:
 
             if strinput in ["Direct Deposit","Cash","EFT","PayPal"]:
-                self.strPaymentMethod = strinput
+                self.payment_method = strinput
                 return True
             else:
                 return False
@@ -1145,7 +1145,7 @@ class Payments(ndb.Expando):
     def writeDatePaid(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDatePaid = strinput
+                self.date_paid = strinput
                 return True
             else:
                 return False
@@ -1154,7 +1154,7 @@ class Payments(ndb.Expando):
     def writeTimePaid(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimePaid = strinput
+                self.time_paid = strinput
                 return True
             else:
                 return False
@@ -1163,7 +1163,7 @@ class Payments(ndb.Expando):
     def writePaymentVerified(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strPaymentVerified = strinput
+                self.payment_verified = strinput
                 return True
             else:
                 return False
@@ -1173,7 +1173,7 @@ class Payments(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strDepositReference = strinput
+                self.deposit_reference = strinput
                 return True
             else:
                 return False
@@ -1449,7 +1449,7 @@ class AdvertiseHandler(webapp2.RequestHandler):
 
                 if thisMainAccount.verified:
 
-                    findRequest = Payments.query(Payments.strOrganizationID == thisMainAccount.organization_id)
+                    findRequest = Payments.query(Payments.organization_id == thisMainAccount.organization_id)
                     thisPaymentsList = findRequest.fetch()
 
                     template = template_env.get_template('templates/advertise/paymethods/invoices.html')
@@ -1739,7 +1739,7 @@ class ThisAdvertHandler(webapp2.RequestHandler):
 
                 ThisPaymentsList = []
                 for thisOrder in thisOrdersList:
-                    findRequest = Payments.query(Payments.strOrderID == thisOrder.order_id)
+                    findRequest = Payments.query(Payments.order_id == thisOrder.order_id)
                     thisPaymentList = findRequest.fetch()
 
                     for thisPayment in thisPaymentList:
@@ -2058,7 +2058,7 @@ class ThisInvoiceHandler(webapp2.RequestHandler):
         strURLlist = URL.split("/")
         strPaymentID = strURLlist[len(strURLlist) - 1]
 
-        findRequest = Payments.query(Payments.strPaymentID == strPaymentID)
+        findRequest = Payments.query(Payments.payment_id == strPaymentID)
         thisPaymentList = findRequest.fetch()
 
         if len(thisPaymentList) > 0:
@@ -2066,14 +2066,14 @@ class ThisInvoiceHandler(webapp2.RequestHandler):
         else:
             thisPayment = Payments()
 
-        findRequest = Organization.query(Organization.strOrganizationID == thisPayment.strOrganizationID)
+        findRequest = Organization.query(Organization.strOrganizationID == thisPayment.organization_id)
         thisOrgList = findRequest.fetch()
 
         if len(thisOrgList) > 0:
             thisOrg = thisOrgList[0]
 
 
-            findRequest = Orders.query(Orders.order_id == thisPayment.strOrderID)
+            findRequest = Orders.query(Orders.order_id == thisPayment.order_id)
             thisOrderList = findRequest.fetch()
 
             if len(thisOrderList) > 0:
