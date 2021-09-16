@@ -189,7 +189,7 @@ class ContactMessages(ndb.Model):
         except:
             return False
 
-class TicketUsers(ndb.Expando):
+class TicketUsers(ndb.Model):
 
     uid = ndb.StringProperty()
     names = ndb.StringProperty()
@@ -261,7 +261,7 @@ class TicketUsers(ndb.Expando):
         except:
             return False
 
-class StaffMembers(ndb.Expando):
+class StaffMembers(ndb.Model):
     uid = ndb.StringProperty()
     ticket_id = ndb.StringProperty()
     name = ndb.StringProperty()
@@ -361,7 +361,7 @@ class StaffMembers(ndb.Expando):
         except:
             return False
 
-class Tickets(ndb.Expando):
+class Tickets(ndb.Model):
     ticket_id = ndb.StringProperty()
     uid = ndb.StringProperty()
     subject = ndb.StringProperty()
@@ -503,21 +503,21 @@ class Tickets(ndb.Expando):
         except:
             return False
 
-class CommentThread(ndb.Expando):
-    strTicketID = ndb.StringProperty()
-    strThreadID = ndb.StringProperty()
-    strCommentsList = ndb.StringProperty() # a Comma Separated String with IDS of the comments in order
-    strDateTimeCreated = ndb.DateTimeProperty(auto_now_add=True)
+class CommentThread(ndb.Model):
+    ticket_id = ndb.StringProperty()
+    thread_id = ndb.StringProperty()
+    comments_list = ndb.StringProperty() # a Comma Separated String with IDS of the comments in order
+    datetime_created = ndb.DateTimeProperty(auto_now_add=True)
 
     def AddCommentID(self,strinput):
         try:
             strinput = str(strinput)
             if len(strinput) == 16:
-                if self.strCommentsList == None:
-                    self.strCommentsList = strinput
+                if self.comments_list == None:
+                    self.comments_list = strinput
                     return True
                 else:
-                    self.strCommentsList = self.strCommentsList + "," + strinput
+                    self.comments_list = self.comments_list + "," + strinput
                     return True
             else:
                 return False
@@ -525,8 +525,8 @@ class CommentThread(ndb.Expando):
             return False
     def retrieveCommentsList(self):
         try:
-            if not(self.strCommentsList == None):
-                strTemplList = self.strCommentsList.split(",")
+            if not(self.comments_list == None):
+                strTemplList = self.comments_list.split(",")
                 return strTemplList
             else:
                 return []
@@ -535,17 +535,17 @@ class CommentThread(ndb.Expando):
     def RemoveCommentID(self,strinput):
         try:
             strinput = str(strinput)
-            if not(self.strCommentsList == None):
-                strTempList = self.strCommentsList.split(",")
+            if not(self.comments_list == None):
+                strTempList = self.comments_list.split(",")
                 if strinput in strTempList:
                     strTempList.remove(strinput)
                     if len(strTempList) > 0:
-                        self.strCommentsList = strTempList[0]
+                        self.comments_list = strTempList[0]
                         strTempList = strTempList.remove(strTempList[0])
                         for strinput in strTempList:
-                            self.strCommentsList = self.strCommentsList + "," + strinput
+                            self.comments_list = self.comments_list + "," + strinput
                     else:
-                        self.strCommentsList = None
+                        self.comments_list = None
 
                     return True
                 else:
@@ -558,7 +558,7 @@ class CommentThread(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTicketID = strinput
+                self.ticket_id = strinput
                 return True
             else:
                 return False
@@ -568,7 +568,7 @@ class CommentThread(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strThreadID = strinput
+                self.thread_id = strinput
                 return True
             else:
                 return False
@@ -584,20 +584,20 @@ class CommentThread(ndb.Expando):
         except:
             return None
 
-class Comments(ndb.Expando):
-    strAuthorID = ndb.StringProperty()
-    strThreadID = ndb.StringProperty()
-    strCommentID = ndb.StringProperty() # a Sixteen Character Long ID Identifying this comment
-    strComment = ndb.StringProperty()
-    strCommentDate = ndb.DateProperty()
-    strCommentTime = ndb.TimeProperty()
-    isClientComment = ndb.BooleanProperty(default=True)
+class Comments(ndb.Model):
+    uid = ndb.StringProperty()
+    thread_id = ndb.StringProperty()
+    comment_id = ndb.StringProperty() # a Sixteen Character Long ID Identifying this comment
+    comment = ndb.StringProperty()
+    comment_date = ndb.DateProperty()
+    comment_time = ndb.TimeProperty()
+    is_client_comment = ndb.BooleanProperty(default=True)
 
     def writeAuthorID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAuthorID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -607,7 +607,7 @@ class Comments(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strThreadID = strinput
+                self.thread_id = strinput
                 return True
             else:
                 return False
@@ -617,7 +617,7 @@ class Comments(ndb.Expando):
         try:
             strinput = str(strinput)
             if len(strinput) == 16:
-                self.strCommentID = strinput
+                self.comment_id = strinput
                 return True
             else:
                 return False
@@ -636,7 +636,7 @@ class Comments(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strComment = strinput
+                self.comment = strinput
                 return True
             else:
                 return False
@@ -645,7 +645,7 @@ class Comments(ndb.Expando):
     def writeIsClientComment(self,strinput):
         try:
             if strinput in [True,False]:
-                self.isClientComment = strinput
+                self.is_client_comment = strinput
                 return True
             else:
                 return False
@@ -655,7 +655,7 @@ class Comments(ndb.Expando):
     def writeCommentDate(self,strinput):
         try:
             if isinstance(strinput, datetime.date):
-                self.strCommentDate = strinput
+                self.comment_date = strinput
                 return True
             else:
                 return False
@@ -664,7 +664,7 @@ class Comments(ndb.Expando):
     def writeCommentTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strCommentTime = strinput
+                self.comment_time = strinput
                 return True
             else:
                 return False
@@ -831,7 +831,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
         if len(thisTicketList) > 0:
             thisTicket = thisTicketList[0]
 
-            findRequest = CommentThread.query(CommentThread.strTicketID == thisTicket.ticket_id).order(+CommentThread.strDateTimeCreated)
+            findRequest = CommentThread.query(CommentThread.ticket_id == thisTicket.ticket_id).order(+CommentThread.datetime_created)
             thisCommentThreadsList = findRequest.fetch()
             if len(thisCommentThreadsList) > 0:
                 thisThread = thisCommentThreadsList[0]
@@ -839,7 +839,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
                 strComIDList = thisThread.retrieveCommentsList()
                 thisCommentList = []
                 for thisComID in strComIDList:
-                    findRequest = Comments.query(Comments.strCommentID == thisComID,Comments.strThreadID == thisThread.strThreadID)
+                    findRequest = Comments.query(Comments.comment_id == thisComID, Comments.thread_id == thisThread.thread_id)
                     commList = findRequest.fetch()
                     if len(commList) > 0:
                         thisCommentList.append(commList[0])
@@ -853,7 +853,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
                 strThisDate = datetime.date(year=vstrThisDateTime.year,month=vstrThisDateTime.month,day=vstrThisDateTime.day)
                 strThisTime = datetime.time(hour=vstrThisDateTime.hour,minute=vstrThisDateTime.minute,second=vstrThisDateTime.second)
                 thisComment = Comments()
-                thisComment.writeThreadID(strinput=thisThread.strThreadID)
+                thisComment.writeThreadID(strinput=thisThread.thread_id)
                 thisComment.writeCommentID(strinput=thisComment.CreateCommentID())
                 thisComment.writeAuthorID(strinput="000000")
                 thisComment.writeIsClientComment(strinput=False)
@@ -863,7 +863,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
                 thisComment.put()
                 thisCommentList = []
                 thisCommentList.append(thisComment)
-                thisThread.AddCommentID(strinput=thisComment.strCommentID)
+                thisThread.AddCommentID(strinput=thisComment.comment_id)
                 thisThread.put()
 
             template = template_env.get_template('templates/contact/sub/thisTicket.html')
@@ -884,7 +884,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
             vstrThreadID = self.request.get("vstrThreadID")
             vstrUserID = self.request.get("vstrUserID")
 
-            findRequest = CommentThread.query(CommentThread.strThreadID == vstrThreadID,CommentThread.strTicketID == vstrTicketID)
+            findRequest = CommentThread.query(CommentThread.thread_id == vstrThreadID, CommentThread.ticket_id == vstrTicketID)
             thisCommentThreadList = findRequest.fetch()
 
             vstrThisDateTime = datetime.datetime.now()
@@ -894,18 +894,18 @@ class ThisTicketHandler(webapp2.RequestHandler):
             if len(thisCommentThreadList) > 0:
                 thisCommentThread = thisCommentThreadList[0]
                 thisComment = Comments()
-                thisComment.writeThreadID(strinput=thisCommentThread.strThreadID)
+                thisComment.writeThreadID(strinput=thisCommentThread.thread_id)
                 thisComment.writeAuthorID(strinput=vstrUserID)
                 thisComment.writeIsClientComment(strinput=True)
                 thisComment.writeComment(strinput=vstrComment)
                 thisComment.writeCommentID(strinput=thisComment.CreateCommentID())
                 thisComment.writeCommentDate(strinput=strThisDate)
                 thisComment.writeCommentTime(strinput=strThisTime)
-                thisCommentThread.AddCommentID(strinput=thisComment.strCommentID)
+                thisCommentThread.AddCommentID(strinput=thisComment.comment_id)
                 thisCommentThread.put()
                 thisComment.put()
 
-                findRequest = Comments.query(Comments.strThreadID == thisCommentThread.strThreadID)
+                findRequest = Comments.query(Comments.thread_id == thisCommentThread.thread_id)
                 thisCommentList = findRequest.fetch()
                 thisCommentList.reverse()
                 template = template_env.get_template('templates/contact/sub/AutoUpdate.html')
@@ -933,7 +933,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
             if len(thisTicketList) > 0:
                 thisTicket = thisTicketList[0]
 
-                findRequest = CommentThread.query(CommentThread.strTicketID == thisTicket.ticket_id).order(+CommentThread.strDateTimeCreated)
+                findRequest = CommentThread.query(CommentThread.ticket_id == thisTicket.ticket_id).order(+CommentThread.datetime_created)
                 thisCommentThreadsList = findRequest.fetch()
                 if len(thisCommentThreadsList) > 0:
                     thisThread = thisCommentThreadsList[0]
@@ -941,7 +941,7 @@ class ThisTicketHandler(webapp2.RequestHandler):
                     strComIDList = thisThread.retrieveCommentsList()
                     thisCommentList = []
                     for thisComID in strComIDList:
-                        findRequest = Comments.query(Comments.strCommentID == thisComID,Comments.strThreadID == thisThread.strThreadID)
+                        findRequest = Comments.query(Comments.comment_id == thisComID, Comments.thread_id == thisThread.thread_id)
                         commList = findRequest.fetch()
                         if len(commList) > 0:
                             thisCommentList.append(commList[0])

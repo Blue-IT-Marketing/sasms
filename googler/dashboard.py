@@ -1048,13 +1048,13 @@ class TicketsHandler(webapp2.RequestHandler):
                 if len(thisTicketsList) > 0:
                     thisTicket = thisTicketsList[0]
 
-                    findRequest = CommentThread.query(CommentThread.strTicketID == thisTicket.ticket_id)
+                    findRequest = CommentThread.query(CommentThread.ticket_id == thisTicket.ticket_id)
                     thisCommentThreadList = findRequest.fetch()
 
                     if len(thisCommentThreadList) > 0:
                         thisThread = thisCommentThreadList[0]
 
-                        findRequest = Comments.query(Comments.strThreadID == thisThread.strThreadID)
+                        findRequest = Comments.query(Comments.thread_id == thisThread.thread_id)
                         thisCommentList = findRequest.fetch()
                         thisCommentList.reverse()
 
@@ -1074,7 +1074,7 @@ class TicketsHandler(webapp2.RequestHandler):
                     if len(thisTicketsList) > 0:
                         thisTicket = thisTicketsList[0]
 
-                        findRequest = CommentThread.query(CommentThread.strThreadID == vstrThreadID)
+                        findRequest = CommentThread.query(CommentThread.thread_id == vstrThreadID)
                         thisCommentThreadList = findRequest.fetch()
 
                         vstrDateTime = datetime.datetime.now()
@@ -1093,10 +1093,10 @@ class TicketsHandler(webapp2.RequestHandler):
                             thisComment.writeCommentDate(strinput=strThisDate)
                             thisComment.writeCommentTime(strinput=strThisTime)
                             thisComment.writeComment(strinput=vstrComment)
-                            thisThread.AddCommentID(strinput=thisComment.strCommentID)
+                            thisThread.AddCommentID(strinput=thisComment.comment_id)
                             thisComment.put()
                             thisThread.put()
-                            findRequest = Comments.query(Comments.strThreadID == thisThread.strThreadID)
+                            findRequest = Comments.query(Comments.thread_id == thisThread.thread_id)
                             thisCommentList = findRequest.fetch()
                             thisCommentList.reverse()
                             template = template_env.get_template('templates/dashboard/dashfiles/subTicketChat.html')
@@ -1121,14 +1121,14 @@ class TicketsHandler(webapp2.RequestHandler):
                     else:
                         thisTicket = Tickets()
 
-                    findRequest = CommentThread.query(CommentThread.strTicketID == vstrTicketID,CommentThread.strThreadID == vstrThreadID)
+                    findRequest = CommentThread.query(CommentThread.ticket_id == vstrTicketID, CommentThread.thread_id == vstrThreadID)
                     thisCommentThreadList = findRequest.fetch()
 
                     if len(thisCommentThreadList) > 0:
                         thisThread = thisCommentThreadList[0]
 
 
-                        findRequest = Comments.query(Comments.strThreadID == vstrThreadID)
+                        findRequest = Comments.query(Comments.thread_id == vstrThreadID)
                         thisCommentList = findRequest.fetch()
                         thisCommentList.reverse()
                         template = template_env.get_template('templates/dashboard/dashfiles/AutoUpdate.html')

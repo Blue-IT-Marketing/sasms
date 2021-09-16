@@ -31,12 +31,12 @@ indexes:
 - kind: CommentThread
   properties:
   - name: ticket_id
-  - name: strDateTimeCreated
+  - name: datetime_created
 
 - kind: CommentThread
   properties:
   - name: ticket_id
-  - name: strDateTimeCreated
+  - name: datetime_created
     direction: desc
 
 - kind: DeliveryReport
@@ -82,7 +82,7 @@ indexes:
 - kind: Responses
   properties:
   - name: ticket_id
-  - name: strThreadID
+  - name: thread_id
   - name: date_created
   - name: time_created
 
