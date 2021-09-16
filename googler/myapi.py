@@ -559,7 +559,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
         try:
             if thisAffiliate:
-                strAffiliateCredit = thisAffiliate.strAvailableCredit
+                strAffiliateCredit = thisAffiliate.available_credit
             else:
                 strAffiliateCredit = 0
         except:

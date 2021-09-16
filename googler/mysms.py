@@ -2309,7 +2309,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     thisDeliveryReport.put()
                                 else:
                                     i = i + 1
-                                    #thisBudgetPortal.strAvailableCredit = thisBudgetPortal.strAvailableCredit - 1
+                                    #thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
@@ -2413,7 +2413,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     thisDeliveryReport.put()
                                 else:
                                     i = i + 1
-                                    #thisBudgetPortal.strAvailableCredit = thisBudgetPortal.strAvailableCredit - 1
+                                    #thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
@@ -2518,7 +2518,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     thisDeliveryReport.put()
                                 else:
                                     i = i + 1
-                                    # thisBudgetPortal.strAvailableCredit = thisBudgetPortal.strAvailableCredit - 1
+                                    # thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
                                     thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)

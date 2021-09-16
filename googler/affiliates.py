@@ -86,7 +86,7 @@ class SMSMarket(ndb.Model):
         except:
             return False
 
-class MyAffiliates(ndb.Expando):
+class MyAffiliates(ndb.Model):
     uid = ndb.StringProperty()
     affiliate_id = ndb.StringProperty() # User ID for the Account which is affiliated by this user
     date_created = ndb.DateProperty(auto_now_add=True)
@@ -143,17 +143,17 @@ class MyAffiliates(ndb.Expando):
         except:
             return False
 
-class Affiliate(ndb.Expando):
+class Affiliate(ndb.Model):
     uid = ndb.StringProperty()
     organization_id = ndb.StringProperty() #TODO- Intergrate organization ID with the affiliate account
-    strAffiliateLink = ndb.StringProperty()
-    strHitCounter = ndb.IntegerProperty(default=0)
-    strTotalSubscriptions = ndb.IntegerProperty(default=0)
-    strDiscount = ndb.IntegerProperty(default=0)
-    strDate = ndb.DateProperty(auto_now_add=True)
-    strTime = ndb.TimeProperty(auto_now_add=True)
-    strPaymentMethod = ndb.StringProperty(default="Bank Deposit") # E-Wallet, Buy SMS
-    strAvailableCredit = ndb.IntegerProperty(default=0)
+    affiliate_link = ndb.StringProperty()
+    hit_counter = ndb.IntegerProperty(default=0)
+    total_subscriptions = ndb.IntegerProperty(default=0)
+    discount = ndb.IntegerProperty(default=0)
+    date_created = ndb.DateProperty(auto_now_add=True)
+    time_created = ndb.TimeProperty(auto_now_add=True)
+    payment_method = ndb.StringProperty(default="Bank Deposit") # E-Wallet, Buy SMS
+    available_credit = ndb.IntegerProperty(default=0)
 
     def writeOrganizationID(self,strinput):
         try:
@@ -179,7 +179,7 @@ class Affiliate(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAffiliateLink = strinput
+                self.affiliate_link = strinput
                 return True
             else:
                 return False
@@ -187,19 +187,19 @@ class Affiliate(ndb.Expando):
             return False
     def addHitCounter(self):
         try:
-            self.strHitCounter += 1
+            self.hit_counter += 1
             return True
         except:
             return False
     def addSubscriber(self):
         try:
-            self.strTotalSubscriptions += 1
+            self.total_subscriptions += 1
             return True
         except:
             return False
     def RemoveSubscriber(self):
         try:
-            self.strTotalSubscriptions -= 1
+            self.total_subscriptions -= 1
             return True
         except:
             return False
@@ -207,7 +207,7 @@ class Affiliate(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strDiscount = int(strinput)
+                self.discount = int(strinput)
                 return True
             else:
                 return False
@@ -216,7 +216,7 @@ class Affiliate(ndb.Expando):
     def writeDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDate = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -225,7 +225,7 @@ class Affiliate(ndb.Expando):
     def writeTime(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTime = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -245,7 +245,7 @@ class Affiliate(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ["Bank Deposit","E-Wallet","Buy SMS"]:
-                self.strPaymentMethod = strinput
+                self.payment_method = strinput
                 return True
             else:
                 return False
@@ -256,14 +256,14 @@ class Affiliate(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strAvailableCredit += int(strinput)
+                self.available_credit += int(strinput)
                 return True
             else:
                 return False
         except:
             return False
 
-class PresentCredits(ndb.Expando):
+class PresentCredits(ndb.Model):
     strUserID = ndb.StringProperty()
     strThisDate = ndb.DateProperty() # This Calculation to be performed after end of every month for each user
     strEarnedCredit = ndb.IntegerProperty(default=0) # Total Earned Credit
@@ -320,7 +320,7 @@ class PresentCredits(ndb.Expando):
         except:
             return False
 
-class PaymentBankAccount(ndb.Expando):
+class PaymentBankAccount(ndb.Model):
     strUserID = ndb.StringProperty()
 
     strAccountHolder = ndb.StringProperty()
@@ -396,7 +396,7 @@ class PaymentBankAccount(ndb.Expando):
         except:
             return False
 
-class WithdrawalRequests(ndb.Expando):
+class WithdrawalRequests(ndb.Model):
 
     strUserID = ndb.StringProperty()
     strWithdrawalID = ndb.StringProperty()
@@ -496,7 +496,7 @@ class WithdrawalRequests(ndb.Expando):
         except:
             return False
 
-class HitCounter(ndb.Expando):
+class HitCounter(ndb.Model):
 
     strAffiliateLink = ndb.StringProperty()
 
@@ -565,7 +565,7 @@ class HitCounter(ndb.Expando):
         except:
             return False
 
-class Twitter(ndb.Expando):
+class Twitter(ndb.Model):
     strUserID = ndb.StringProperty()
     strAffiliateLink = ndb.StringProperty()
 
@@ -673,7 +673,7 @@ class Twitter(ndb.Expando):
         except:
             return False
 
-class MyFacebook(ndb.Expando):
+class MyFacebook(ndb.Model):
     strUserID = ndb.StringProperty()
     strAffiliateLink = ndb.StringProperty()
     strFacebookAPI = ndb.StringProperty()
@@ -731,7 +731,7 @@ class MyFacebook(ndb.Expando):
         except:
             return False
 
-class TransactionHistory(ndb.Expando):
+class TransactionHistory(ndb.Model):
     strUserID = ndb.StringProperty()
     strTransactionID = ndb.StringProperty()
     strDate = ndb.DateProperty()
@@ -902,7 +902,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
                 vstrAffiliateLink = self.request.get('vstrAffiliateLink')
 
-                findRequest = Affiliate.query(Affiliate.strAffiliateLink == vstrAffiliateLink)
+                findRequest = Affiliate.query(Affiliate.affiliate_link == vstrAffiliateLink)
                 thisAffiliateList = findRequest.fetch()
 
                 if len(thisAffiliateList) > 0:
@@ -923,7 +923,7 @@ class AffiliateHandler(webapp2.RequestHandler):
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
-                findRequest = Affiliate.query(Affiliate.strAffiliateLink == vstrAffiliateLink)
+                findRequest = Affiliate.query(Affiliate.affiliate_link == vstrAffiliateLink)
                 thisAffiliateLinkList = findRequest.fetch()
 
                 if len(thisAffiliateLinkList) > 0:
@@ -982,10 +982,10 @@ class AffiliateHandler(webapp2.RequestHandler):
                     if len(thisAffiliateList) > 0:
                         thisAffiliate = thisAffiliateList[0]
 
-                        if (not(vstrSpendCredit == None) ) and (thisAffiliate.strAvailableCredit >= int(vstrSpendCredit)):
+                        if (not(vstrSpendCredit == None) ) and (thisAffiliate.available_credit >= int(vstrSpendCredit)):
 
                             if thisSMSAccount.AddTotalSMS(strinput=vstrSpendCredit):
-                                thisAffiliate.strAvailableCredit -= int(vstrSpendCredit)
+                                thisAffiliate.available_credit -= int(vstrSpendCredit)
                                 thisSMSAccount.put()
                                 thisAffiliate.put()
                                 self.response.write("Successfully bought SMS Credits for your organization main SMS Account")
@@ -1015,8 +1015,8 @@ class AffiliateHandler(webapp2.RequestHandler):
                 if len(thisAffiliateList) > 0:
                     thisAffiliate = thisAffiliateList[0]
 
-                    if thisAffiliate.strAvailableCredit <= int(vstrWithDrawCredit):
-                        thisAffiliate.strAvailableCredit -= int(vstrWithDrawCredit)
+                    if thisAffiliate.available_credit <= int(vstrWithDrawCredit):
+                        thisAffiliate.available_credit -= int(vstrWithDrawCredit)
                         thisWithDrawalRequest = WithdrawalRequests()
                         thisWithDrawalRequest.writeUserID(strinput=thisMainAccount.uid)
                         vstrWithdrawalAmount = str(vstrWithdrawalAmount)
@@ -1253,7 +1253,7 @@ class AffiliatePublicHandler(webapp2.RequestHandler):
             thisSecurityLog.lock_account = False
 
 
-        findRequest = Affiliate.query(Affiliate.strAffiliateLink == strAffiliateLink)
+        findRequest = Affiliate.query(Affiliate.affiliate_link == strAffiliateLink)
         thisAffiliateList = findRequest.fetch()
 
         if len(thisAffiliateList) > 0:

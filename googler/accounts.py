@@ -2027,8 +2027,8 @@ class ManageCreditHandler(webapp2.RequestHandler):
                         if len(thisAffiliateList) > 0:
                             thisAffiliate = thisAffiliateList[0]
 
-                            if thisAffiliate.strAvailableCredit >= int(vstrAffiliateCredits):
-                                thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(
+                            if thisAffiliate.available_credit >= int(vstrAffiliateCredits):
+                                thisAffiliate.available_credit = thisAffiliate.available_credit - int(
                                     vstrAffiliateCredits)
                                 thisSMSAccount.total_sms += int(vstrAffiliateCredits)
                                 thisAffiliate.put()
@@ -2064,8 +2064,8 @@ class ManageCreditHandler(webapp2.RequestHandler):
                         if len(thisAffiliateList) > 0:
                             thisAffiliate = thisAffiliateList[0]
 
-                            if thisAffiliate.strAvailableCredit >= int(vstrAffiliateCredits):
-                                thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(
+                            if thisAffiliate.available_credit >= int(vstrAffiliateCredits):
+                                thisAffiliate.available_credit = thisAffiliate.available_credit - int(
                                     vstrAffiliateCredits)
                                 thisAdvert.total_credits += int(vstrAffiliateCredits)
                                 thisAffiliate.put()
@@ -2099,8 +2099,8 @@ class ManageCreditHandler(webapp2.RequestHandler):
                         if len(thisAffiliateList) > 0:
                             thisAffiliate = thisAffiliateList[0]
 
-                            if thisAffiliate.strAvailableCredit >= int(vstrAffiliateCredits):
-                                thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(
+                            if thisAffiliate.available_credit >= int(vstrAffiliateCredits):
+                                thisAffiliate.available_credit = thisAffiliate.available_credit - int(
                                     vstrAffiliateCredits)
                                 thisSurvey.total_credits += int(vstrAffiliateCredits)
                                 thisAffiliate.put()
