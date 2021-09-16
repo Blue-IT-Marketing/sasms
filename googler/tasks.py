@@ -58,7 +58,7 @@ def BulkSMSHandler():
         else:
             thisMessage = Messages()
 
-        findRequest = Groups.query(Groups.strGroupID == thisMessage.strGroupID)
+        findRequest = Groups.query(Groups.group_id == thisMessage.strGroupID)
         thisGroupList = findRequest.fetch()
 
         if len(thisGroupList) > 0:
@@ -77,13 +77,13 @@ def BulkSMSHandler():
             thisSMSAccount.writeOrganizationID(strinput=thisGroup.organization_id)
             thisSMSAccount.put()
 
-        findRequest = SMSContacts.query(SMSContacts.strGroupID == thisMessage.strGroupID)
+        findRequest = SMSContacts.query(SMSContacts.group_id == thisMessage.strGroupID)
         thisContactsList = findRequest.fetch()
 
         ReceipientList = []
         for thisContact in thisContactsList:
-            if not (thisContact.strCellNumber == None):
-                ReceipientList.append(thisContact.strCellNumber)
+            if not (thisContact.cell_number == None):
+                ReceipientList.append(thisContact.cell_number)
 
         if thisSchedule.strNotifyOnStart == True:
             findRequest = Accounts.query(Accounts.uid == thisSchedule.uid)
@@ -255,7 +255,7 @@ def AdvertContactsHandler():
     thisSMSContactsList = findRequest.fetch()
 
     for thisSMSContact in thisSMSContactsList:
-        findRequest = OurContacts.query(OurContacts.cell == thisSMSContact.strCellNumber)
+        findRequest = OurContacts.query(OurContacts.cell == thisSMSContact.cell_number)
         thisOurContactsList = findRequest.fetch()
 
         if len(thisOurContactsList) > 0:
@@ -264,7 +264,7 @@ def AdvertContactsHandler():
             thisOurContact = OurContacts()
             thisOurContact.writeSurname(strinput=thisSMSContact.surname)
             thisOurContact.writeNames(strinput=thisSMSContact.names)
-            thisOurContact.writeCell(strinput=thisSMSContact.strCellNumber)
+            thisOurContact.writeCell(strinput=thisSMSContact.cell_number)
             thisOurContact.writeEmail(strinput="example@example.com")
             thisOurContact.writeOurContactID(strinput=thisOurContact.CreateContactID())
             thisOurContact.put()
