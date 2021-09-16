@@ -503,7 +503,7 @@ class RoutesHandler(webapp2.RequestHandler):
         else:
             thisAdvertisingAccount = AddAccount()
 
-        findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == strOrganizationID)
+        findRequest = SurveyAccount.query(SurveyAccount.organization_id == strOrganizationID)
         thisSurveyAccountList = findRequest.fetch()
         if len(thisSurveyAccountList) > 0:
             thisSurveyAccount = thisSurveyAccountList[0]
@@ -535,7 +535,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
         try:
             if thisSurveyAccount:
-                strSurveyCredit = thisSurveyAccount.strTotalCredits
+                strSurveyCredit = thisSurveyAccount.total_credits
             else:
                 strSurveyCredit = 0
         except:
@@ -770,7 +770,7 @@ class RoutesHandler(webapp2.RequestHandler):
             strStartTime = datetime.datetime.now()
             strStartTime = strStartTime.time()
 
-        findRequest = Surveys.query(Surveys.strSurveyID == strSurveyID)
+        findRequest = Surveys.query(Surveys.survey_id == strSurveyID)
         thisSurveyList = findRequest.fetch()
 
 
@@ -781,7 +781,7 @@ class RoutesHandler(webapp2.RequestHandler):
             thisSurvey.writeStartDate(strinput=strStartDate)
             thisSurvey.writeStartTime(strinput=strStartTime)
             if int(strCreditLimit) > 0:
-                findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == strOrganizationID)
+                findRequest = SurveyAccount.query(SurveyAccount.organization_id == strOrganizationID)
                 thisSurveyAccountList = findRequest.fetch()
 
                 if len(thisSurveyAccountList) > 0:
@@ -826,7 +826,7 @@ class RoutesHandler(webapp2.RequestHandler):
         """
         from surveys import Surveys
 
-        findRequest = Surveys.query(Surveys.strSurveyID == strSurveyID)
+        findRequest = Surveys.query(Surveys.survey_id == strSurveyID)
         thisSurveysList = findRequest.fetch()
 
         if len(thisSurveysList) > 0:
@@ -860,7 +860,7 @@ class RoutesHandler(webapp2.RequestHandler):
         self.response.write(template.render(context))
     def SurveyCredit(self,strOrganizationID):
         from surveys import SurveyAccount
-        findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == strOrganizationID)
+        findRequest = SurveyAccount.query(SurveyAccount.organization_id == strOrganizationID)
         thisSurveyAccountList = findRequest.fetch()
 
         if len(thisSurveyAccountList) > 0:
@@ -870,7 +870,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
         self.response.headers['Content-Type'] = "application/json"
         template = template_env.get_template('templates/api/credit.json')
-        context = {'total_credits': thisSurveyAccount.strTotalCredits}
+        context = {'total_credits': thisSurveyAccount.total_credits}
         self.response.write(template.render(context))
     def SendFax(self,strFaxMediaURL,strFaxNumber,thisEndPoint):
         from myfax import FaxAccount,FaxSettings,SentFax

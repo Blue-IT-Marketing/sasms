@@ -15,21 +15,17 @@
 # limitations under the License.
 #
 import os
-from google.appengine.ext import blobstore
-from google.appengine.ext.webapp import blobstore_handlers
-import webapp2
 import jinja2
-from google.appengine.ext import ndb
-from google.appengine.api import users,mail
+from google.cloud import ndb
 import logging
 import math
 import datetime
+
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 from accounts import Accounts
 
 
-
-class ContactList(ndb.Expando):
+class ContactList(ndb.Model):
     """
         The newsletter must be useful on the  application for sending out newsletters from users
         second the newsletters will be initially used to launch internal marketing campaigns and then
@@ -37,269 +33,278 @@ class ContactList(ndb.Expando):
 
         The same module must work both as an internal emailing list module and also for clients
     """
-    strListID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
+    list_id = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    email = ndb.StringProperty()
 
-    def writeListID(self,strinput):
+    def writeListID(self, strinput):
         try:
             if strinput != None:
-                self.strListID = strinput
+                self.list_id = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeOrganizationID(self,strinput):
+    def writeOrganizationID(self, strinput):
         try:
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeNames(self,strinput):
+    def writeNames(self, strinput):
         try:
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeSurname(self,strinput):
+    def writeSurname(self, strinput):
         try:
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeCell(self,strinput):
+    def writeCell(self, strinput):
         try:
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeEmail(self,strinput):
+    def writeEmail(self, strinput):
         try:
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class Letters(ndb.Expando):
 
-    strUserID = ndb.StringProperty()
-    strPenName = ndb.StringProperty()
+class Letters(ndb.Model):
+    uid = ndb.StringProperty()
+    pen_name = ndb.StringProperty()
 
-    strLetterIndex = ndb.IntegerProperty(default=0)
-    strListID = ndb.StringProperty() #strNewsLetterID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strArticleID = ndb.StringProperty()
+    letter_index = ndb.IntegerProperty(default=0)
+    list_id = ndb.StringProperty()  # strNewsLetterID = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    article_id = ndb.StringProperty()
 
-    strLetterHeading = ndb.StringProperty()
-    strLetterBody = ndb.StringProperty()
-    strHostedLink = ndb.StringProperty()
-    strSent = ndb.BooleanProperty(default=False)
-    strDateSent = ndb.DateProperty()
+    letter_heading = ndb.StringProperty()
+    letter_body = ndb.StringProperty()
+    hosted_link = ndb.StringProperty()
+    sent = ndb.BooleanProperty(default=False)
+    date_sent = ndb.DateProperty()
 
-    strDateCreated = ndb.DateProperty()
-    strTimeCreated = ndb.TimeProperty()
+    date_created = ndb.DateProperty()
+    time_created = ndb.TimeProperty()
 
-    strPublished = ndb.BooleanProperty(default=False)
-    strDatePublished = ndb.DateProperty()
-    strTimePublished = ndb.TimeProperty()
+    published = ndb.BooleanProperty(default=False)
+    date_published = ndb.DateProperty()
+    time_published = ndb.TimeProperty()
 
-
-    
-
-    def writeIndex(self,strinput):
+    def writeIndex(self, strinput):
         try:
             if strinput != None:
-                self.strLetterIndex = strinput
+                self.letter_index = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeListID(self,strinput):
+
+    def writeListID(self, strinput):
         try:
             if strinput != None:
-                self.strListID = strinput
+                self.list_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeOrganizationID(self,strinput):
+
+    def writeOrganizationID(self, strinput):
         try:
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeLetterHeading(self,strinput):
+
+    def writeLetterHeading(self, strinput):
         try:
             if strinput != None:
-                self.strLetterHeading = strinput
+                self.letter_heading = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeLetterBody(self,strinput):
+
+    def writeLetterBody(self, strinput):
         try:
             if strinput != None:
-                self.strLetterBody = strinput
+                self.letter_body = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeHostedLink(self,strinput):
+
+    def writeHostedLink(self, strinput):
         try:
             if strinput != None:
-                self.strHostedLink = strinput
+                self.hosted_link = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeMemberID(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput != None:
-                self.strUserID = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writePenName(self,strinput):
+
+    def writeMemberID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPenName = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeArticlesID(self,strinput):
+
+    def writePenName(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strArticleID = strinput
+                self.pen_name = strinput
                 return True
             else:
                 return False
         except:
             return False
+
+    def writeArticlesID(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput != None:
+                self.article_id = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
     def CreateArticleID(self):
-        import random,string
+        import random, string
         try:
             strArticleID = ""
             for i in range(256):
-                strArticleID +=  random.SystemRandom().choice(string.ascii_lowercase + string.digits)
+                strArticleID += random.SystemRandom().choice(string.ascii_lowercase + string.digits)
             return strArticleID
         except:
             return None
 
     def CreateHostedLink(self):
-        import random,string
+        import random, string
         try:
             strHostedLink = ""
             for i in range(32):
-                strHostedLink +=  random.SystemRandom().choice(string.ascii_lowercase + string.digits)
+                strHostedLink += random.SystemRandom().choice(string.ascii_lowercase + string.digits)
             return strHostedLink
         except:
             return None
-    def writeDateCreated(self,strinput):
+
+    def writeDateCreated(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
-                self.strDateCreated = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeTimeCreated(self,strinput):
-        try:
-            if isinstance(strinput,datetime.time):
-                self.strTimeCreated = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writePublished(self,strinput):
-        try:
-            if strinput in [True,False]:
-                self.strPublished = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeDatePublished(self,strinput):
-        try:
-            if isinstance(strinput,datetime.date):
-                self.strDatePublished = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeTimePublished(self,strinput):
-        try:
-            if isinstance(strinput,datetime.time):
-                self.strTimePublished = strinput
+            if isinstance(strinput, datetime.date):
+                self.date_created = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class MailingList (ndb.Expando):
+    def writeTimeCreated(self, strinput):
+        try:
+            if isinstance(strinput, datetime.time):
+                self.time_created = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
 
-    strListID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
+    def writePublished(self, strinput):
+        try:
+            if strinput in [True, False]:
+                self.published = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
 
-    strSenderAddress = ndb.StringProperty(default=os.environ.get('NEWS_LETTERS_SENDER'))
-    #TODO- find out if we need to get another newletters email address
+    def writeDatePublished(self, strinput):
+        try:
+            if isinstance(strinput, datetime.date):
+                self.date_published = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
 
-    strListName = ndb.StringProperty()
-    strListDescription = ndb.StringProperty()
+    def writeTimePublished(self, strinput):
+        try:
+            if isinstance(strinput, datetime.time):
+                self.time_published = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
 
-    strStartSendingDate = ndb.DateProperty()
-    strStartSendingTime = ndb.TimeProperty()
 
-    strDateCreated = ndb.DateProperty()
-    strTimeCreated = ndb.TimeProperty()
+class MailingList(ndb.Model):
+    list_id = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
 
+    sender_address = ndb.StringProperty(default=os.environ.get('NEWS_LETTERS_SENDER'))
+    # TODO- find out if we need to get another newletters email address
 
+    list_name = ndb.StringProperty()
+    description = ndb.StringProperty()
+
+    start_sending_date = ndb.DateProperty()
+    start_sending_time = ndb.TimeProperty()
+
+    date_created = ndb.DateProperty()
+    time_created = ndb.TimeProperty()
 
     def CreateListID(self):
-        import string,random
+        import string, random
         try:
             strListID = ""
             for i in range(128):
@@ -308,66 +313,72 @@ class MailingList (ndb.Expando):
         except:
             return None
 
-    def writeListID(self,strinput):
+    def writeListID(self, strinput):
         try:
 
             if strinput != None:
-                self.strListID = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeOrganizationID(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput != None:
-                self.strOrganizationID = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeListName(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput != None:
-                self.strListName = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeListDescription(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput != None:
-                self.strListDescription = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeStartSendingDate(self,strinput):
-        try:
-            if isinstance(strinput,datetime.date):
-                self.strStartSendingDate = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-    def writeStartSendingTime(self,strinput):
-        try:
-            if isinstance(strinput,datetime.time):
-                self.strStartSendingTime = strinput
+                self.list_id = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-class NewslettersHandler(webapp2.RequestHandler):
+    def writeOrganizationID(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput != None:
+                self.organization_id = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def writeListName(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput != None:
+                self.list_name = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def writeListDescription(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput != None:
+                self.description = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def writeStartSendingDate(self, strinput):
+        try:
+            if isinstance(strinput, datetime.date):
+                self.start_sending_date = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def writeStartSendingTime(self, strinput):
+        try:
+            if isinstance(strinput, datetime.time):
+                self.start_sending_time = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
+
+class NewslettersHandler():
     def get(self):
         Guser = users.get_current_user()
         if Guser:
@@ -379,11 +390,11 @@ class NewslettersHandler(webapp2.RequestHandler):
             else:
                 thisAccounts = Accounts()
 
-            findRequest = MailingList.query(MailingList.strOrganizationID == thisAccounts.organization_id)
+            findRequest = MailingList.query(MailingList.organization_id == thisAccounts.organization_id)
             thisMailingList = findRequest.fetch()
 
             template = template_env.get_template('templates/newsletter/newsletter.html')
-            context = {'thisMailingList':thisMailingList}
+            context = {'thisMailingList': thisMailingList}
             self.response.write(template.render(context))
 
     def post(self):
@@ -391,11 +402,10 @@ class NewslettersHandler(webapp2.RequestHandler):
         vstrChoice = self.request.get('vstrChoice')
 
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken
             vstrUserID = self.request.get("vstrUserID")
             vstrEmail = self.request.get("vstrEmail")
             vstrAccessToken = self.request.get("vstrAccessToken")
-
 
             vstrListName = self.request.get('vstrListName')
             vstrListDescription = self.request.get('vstrListDescription')
@@ -405,16 +415,13 @@ class NewslettersHandler(webapp2.RequestHandler):
             strMonth = int(DateList[1])
             strDay = int(DateList[2])
 
-            vstrDate = datetime.date(year=strYear,month=strMonth,day=strDay)
-
+            vstrDate = datetime.date(year=strYear, month=strMonth, day=strDay)
 
             vstrStartSendingTime = self.request.get('vstrStartSendingTime')
             TimeList = vstrStartSendingTime.split(":")
             strHour = int(TimeList[0])
             strMinute = int(TimeList[1])
-            vstrTime = datetime.time(hour=strHour,minute=strMinute,second=0)
-
-
+            vstrTime = datetime.time(hour=strHour, minute=strMinute, second=0)
 
             findRequest = Accounts.query(Accounts.uid == vstrUserID)
             thisAccountsList = findRequest.fetch()
@@ -424,7 +431,9 @@ class NewslettersHandler(webapp2.RequestHandler):
             else:
                 thisAccounts = Accounts()
 
-            findRequest = MailingList.query(MailingList.strOrganizationID == thisAccounts.organization_id, MailingList.strListName == vstrListName, MailingList.strListDescription == vstrListDescription)
+            findRequest = MailingList.query(MailingList.organization_id == thisAccounts.organization_id,
+                                            MailingList.list_name == vstrListName,
+                                            MailingList.description == vstrListDescription)
             thisMailingList = findRequest.fetch()
 
             if len(thisMailingList) > 0:
@@ -442,10 +451,10 @@ class NewslettersHandler(webapp2.RequestHandler):
             self.response.write("Mailing List successfully update")
 
 
-class ThisNewsLetterHandler(webapp2.RequestHandler):
+class ThisNewsLetterHandler():
     def get(self):
         Guser = users.get_current_user()
-        
+
         if Guser:
             URL = self.request.url
 
@@ -460,7 +469,8 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             else:
                 thisAccounts = Accounts()
 
-            findRequest = MailingList.query(MailingList.strListID == vstrListID, MailingList.strOrganizationID == thisAccounts.organization_id)
+            findRequest = MailingList.query(MailingList.list_id == vstrListID,
+                                            MailingList.organization_id == thisAccounts.organization_id)
             thisMailingList = findRequest.fetch()
 
             if len(thisMailingList) > 0:
@@ -469,14 +479,12 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
                 thisNewsLetter = MailingList()
 
             template = template_env.get_template('templates/newsletter/thisNewsletter.html')
-            context = {'thisNewsLetter':thisNewsLetter}
+            context = {'thisNewsLetter': thisNewsLetter}
             self.response.write(template.render(context))
 
     def post(self):
 
-
         vstrChoice = self.request.get('vstrChoice')
-
 
         findRequest = Accounts.query(Accounts.uid == Guser.user_id())
         thisAccountsList = findRequest.fetch()
@@ -488,35 +496,34 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
 
         vstrDateTime = datetime.datetime.now()
         strDate = vstrDateTime.date()
-        strTime = datetime.time(hour=vstrDateTime.hour,minute=vstrDateTime.minute,second=vstrDateTime.second)
+        strTime = datetime.time(hour=vstrDateTime.hour, minute=vstrDateTime.minute, second=vstrDateTime.second)
 
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get("vstrUserID")
             vstrEmail = self.request.get("vstrEmail")
             vstrAccessToken = self.request.get("vstrAccessToken")
 
             vstrListID = self.request.get('vstrListID')
 
-            findRequest = Letters.query(Letters.strListID == vstrListID)
+            findRequest = Letters.query(Letters.list_id == vstrListID)
             thisLettersList = findRequest.fetch()
 
             template = template_env.get_template('templates/newsletter/sub/letters.html')
-            context = {'thisLettersList':thisLettersList,'vstrListID':vstrListID}
+            context = {'thisLettersList': thisLettersList, 'vstrListID': vstrListID}
             self.response.write(template.render(context))
 
         elif vstrChoice == "1":
-            #+ '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # + '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
-
 
             vstrLetterHeading = self.request.get('vstrLetterHeading')
             vstrLetterBody = self.request.get('vstrLetterBody')
             vstrListID = self.request.get('vstrListID')
 
-            findRequest = Letters.query(Letters.strLetterHeading == vstrLetterHeading)
+            findRequest = Letters.query(Letters.letter_heading == vstrLetterHeading)
             thisLettersList = findRequest.fetch()
 
             if len(thisLettersList) > 0:
@@ -540,27 +547,25 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             self.response.write("Article successfully updated")
 
         elif vstrChoice == "2":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get("vstrUserID")
             vstrEmail = self.request.get("vstrEmail")
             vstrAccessToken = self.request.get("vstrAccessToken")
 
-
             vstrListID = self.request.get('vstrListID')
 
-            findRequest = ContactList.query(ContactList.strListID == vstrListID)
+            findRequest = ContactList.query(ContactList.list_id == vstrListID)
             thisContactList = findRequest.fetch()
 
             template = template_env.get_template('templates/newsletter/sub/contact.html')
-            context = {'thisContactList':thisContactList,'vstrListID':vstrListID}
+            context = {'thisContactList': thisContactList, 'vstrListID': vstrListID}
             self.response.write(template.render(context))
 
         elif vstrChoice == "3":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
-
 
             vstrListID = self.request.get('vstrListID')
             vstrContacts = self.request.get('vstrContacts')
@@ -578,7 +583,8 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             for thisContact in strContactList:
                 thisContactList = thisContact.split(",")
                 if len(thisContactList) == 4:
-                    findRequest = ContactList.query(ContactList.strListID == vstrListID,ContactList.strEmail == thisContactList[1])
+                    findRequest = ContactList.query(ContactList.list_id == vstrListID,
+                                                    ContactList.email == thisContactList[1])
                     strthisContactList = findRequest.fetch()
 
                     if len(strthisContactList) > 0:
@@ -596,7 +602,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             self.response.write("Contact list updated successfully")
 
         elif vstrChoice == "4":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -615,7 +621,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             else:
                 thisAccounts = Accounts()
 
-            findRequest = ContactList.query(ContactList.strListID == vstrListID,ContactList.strEmail == vstrEmail)
+            findRequest = ContactList.query(ContactList.list_id == vstrListID, ContactList.email == vstrEmail)
             thisContactList = findRequest.fetch()
 
             if len(thisContactList) > 0:
@@ -634,7 +640,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             self.response.write("Successfully uploaded contact")
 
         elif vstrChoice == "5":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -644,7 +650,7 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             vstrRemoveEmail = self.request.get('vstrRemoveEmail')
             vstrRemoveEmail = vstrRemoveEmail.strip()
 
-            findRequest = ContactList.query(ContactList.strEmail == vstrRemoveEmail,ContactList.strListID == vstrListID)
+            findRequest = ContactList.query(ContactList.email == vstrRemoveEmail, ContactList.list_id == vstrListID)
             thisContactList = findRequest.fetch()
 
             contactRemoved = False
@@ -652,31 +658,29 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
                 thisContact.key.delete()
                 contactRemoved = True
 
-
             if contactRemoved:
                 self.response.write("Successfully removed email")
             else:
                 self.response.write("Contact not removed  :  " + vstrRemoveEmail)
 
         elif vstrChoice == "6":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get("vstrUserID")
             vstrEmail = self.request.get("vstrEmail")
             vstrAccessToken = self.request.get("vstrAccessToken")
 
-
             vstrListID = self.request.get('vstrListID')
             vstrListID = vstrListID.strip()
 
-            findRequest = MailingList.query(MailingList.strListID == vstrListID)
+            findRequest = MailingList.query(MailingList.list_id == vstrListID)
             thisMailingList = findRequest.fetch()
 
             template = template_env.get_template('templates/newsletter/sub/schedule.html')
-            context = {'thisMailingList':thisMailingList,'vstrListID':vstrListID}
+            context = {'thisMailingList': thisMailingList, 'vstrListID': vstrListID}
             self.response.write(template.render(context))
 
         elif vstrChoice == "7":
-            #+ '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # + '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
@@ -689,13 +693,13 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             strYear = strDateList[2]
             vstrTime = self.request.get('vstrTime')
             if "AM" in vstrTime:
-                vstrTime = vstrTime.replace("AM","")
+                vstrTime = vstrTime.replace("AM", "")
                 vstrTime = vstrTime.strip()
                 strTimeList = vstrTime.split(":")
                 strHour = strTimeList[0]
                 strMinute = strTimeList[1]
             elif "PM" in vstrTime:
-                vstrTime = vstrTime.replace("PM","")
+                vstrTime = vstrTime.replace("PM", "")
                 vstrTime = vstrTime.strip()
                 strTimeList = vstrTime.split(":")
                 strHour = strTimeList[0]
@@ -708,10 +712,10 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
                 strHour = strTimeList[0]
                 strMinute = strTimeList[1]
 
-            vstrThisDate = datetime.date(year=int(strYear),month=int(strMonth),day=int(strDay))
-            vstrTime = datetime.time(hour=int(strHour),minute=int(strMinute))
+            vstrThisDate = datetime.date(year=int(strYear), month=int(strMonth), day=int(strDay))
+            vstrTime = datetime.time(hour=int(strHour), minute=int(strMinute))
 
-            findRequest = MailingList.query(MailingList.strListID == vstrListID)
+            findRequest = MailingList.query(MailingList.list_id == vstrListID)
             thisMailingList = findRequest.fetch()
 
             if len(thisMailingList) > 0:
@@ -723,30 +727,30 @@ class ThisNewsLetterHandler(webapp2.RequestHandler):
             else:
                 self.response.write("Error updating scheduled date and time")
 
-class ThisHostedHandler(webapp2.RequestHandler):
+
+class ThisHostedHandler():
     def get(self):
         URL = self.request.url
         URLlist = URL.split("/")
         strHostedURL = URLlist[len(URLlist) - 1]
 
-        findRequest = Letters.query(Letters.strHostedLink == strHostedURL)
+        findRequest = Letters.query(Letters.hosted_link == strHostedURL)
         thisLetterList = findRequest.fetch()
-
 
         if len(thisLetterList) > 0:
             thisArticle = thisLetterList[0]
         else:
             thisArticle = Letters()
 
-        findRequest = Letters.query(Letters.strLetterHeading != None)
+        findRequest = Letters.query(Letters.letter_heading != None)
         thisLettersList = findRequest.fetch(limit=35)
 
-
         template = template_env.get_template('templates/newsletter/hosted/newsletter.html')
-        context = {'thisArticle':thisArticle,'thisLettersList':thisLettersList}
+        context = {'thisArticle': thisArticle, 'thisLettersList': thisLettersList}
         self.response.write(template.render(context))
 
-class ThisArticleEditorHandler(webapp2.RequestHandler):
+
+class ThisArticleEditorHandler():
     def get(self):
         Guser = users.get_current_user()
         if Guser:
@@ -754,8 +758,7 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
             strURLList = URL.split("/")
             strArticleID = strURLList[len(strURLList) - 1]
 
-
-            findRequest = Letters.query(Letters.strArticleID == strArticleID)
+            findRequest = Letters.query(Letters.article_id == strArticleID)
             thisArticlesList = findRequest.fetch()
 
             if len(thisArticlesList) > 0:
@@ -763,9 +766,8 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
             else:
                 thisArticle = Letters()
 
-
             template = template_env.get_template('templates/newsletter/editor/edit.html')
-            context = {'thisArticle':thisArticle}
+            context = {'thisArticle': thisArticle}
             self.response.write(template.render(context))
 
     def post(self):
@@ -776,20 +778,18 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
             if vstrChoice == "0":
                 vstrListID = self.request.get('vstrListID')
 
-                findRequest = Letters.query(Letters.strListID == vstrListID)
+                findRequest = Letters.query(Letters.list_id == vstrListID)
                 thisArticlesList = findRequest.fetch()
 
                 template = template_env.get_template('templates/newsletter/editor/articlelist.html')
-                context = {'thisArticlesList':thisArticlesList}
+                context = {'thisArticlesList': thisArticlesList}
                 self.response.write(template.render(context))
 
             elif vstrChoice == "1":
-                #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+                # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
                 vstrUserID = self.request.get("vstrUserID")
                 vstrEmail = self.request.get("vstrEmail")
                 vstrAccessToken = self.request.get("vstrAccessToken")
-
-
 
                 vstrArticleHeading = self.request.get('vstrArticleHeading')
                 vstrURL = self.request.get('vstrURL')
@@ -797,7 +797,7 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
                 vstrListID = self.request.get('vstrListID')
                 vstrArticleID = self.request.get('vstrArticleID')
 
-                findRequest = Letters.query(Letters.strArticleID == vstrArticleID)
+                findRequest = Letters.query(Letters.article_id == vstrArticleID)
                 thisLettersList = findRequest.fetch()
 
                 if len(thisLettersList) > 0:
@@ -805,7 +805,7 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
 
                     thisArticle.writeArticlesID(strinput=vstrArticleID)
                     thisArticle.writeLetterBody(strinput=vstrArticleEditor)
-                    #TODO- check to see if URL is not already taken if yes then try and differentiate
+                    # TODO- check to see if URL is not already taken if yes then try and differentiate
                     thisArticle.writeHostedLink(strinput=vstrURL)
 
                     thisArticle.writeLetterHeading(strinput=vstrArticleHeading)
@@ -815,14 +815,14 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
                     self.response.write("Error saving article")
 
             elif vstrChoice == "2":
-                #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+                # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
                 vstrUserID = self.request.get("vstrUserID")
                 vstrEmail = self.request.get("vstrEmail")
                 vstrAccessToken = self.request.get("vstrAccessToken")
 
                 vstrArticleID = self.request.get('vstrArticleID')
 
-                findRequest = Letters.query(Letters.strArticleID == vstrArticleID)
+                findRequest = Letters.query(Letters.article_id == vstrArticleID)
                 thisArticleList = findRequest.fetch()
                 isDel = False
                 for thisArticle in thisArticleList:
@@ -836,7 +836,7 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
 
 
             elif vstrChoice == "3":
-                #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+                # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
                 vstrUserID = self.request.get("vstrUserID")
                 vstrEmail = self.request.get("vstrEmail")
                 vstrAccessToken = self.request.get("vstrAccessToken")
@@ -847,7 +847,7 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
                 vstrListID = self.request.get('vstrListID')
                 vstrArticleID = self.request.get('vstrArticleID')
 
-                findRequest = Letters.query(Letters.strArticleID == vstrArticleID)
+                findRequest = Letters.query(Letters.article_id == vstrArticleID)
                 thisLettersList = findRequest.fetch()
 
                 if len(thisLettersList) > 0:
@@ -856,8 +856,9 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
                     thisArticle = Letters()
 
                 vstrThisDate = datetime.datetime.now()
-                strThisDate = datetime.date(year=vstrThisDate.year,month=vstrThisDate.month,day=vstrThisDate.day)
-                strThisTime = datetime.time(hour=vstrThisDate.hour,minute=vstrThisDate.minute,second=vstrThisDate.second)
+                strThisDate = datetime.date(year=vstrThisDate.year, month=vstrThisDate.month, day=vstrThisDate.day)
+                strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute,
+                                            second=vstrThisDate.second)
 
                 thisArticle.writeLetterBody(strinput=vstrArticleEditor)
                 thisArticle.writeLetterHeading(strinput=vstrArticleHeading)
@@ -870,7 +871,8 @@ class ThisArticleEditorHandler(webapp2.RequestHandler):
                 else:
                     self.response.write("Error Publishing Article")
 
-class ThisHostedArticlesHandler(webapp2.RequestHandler):
+
+class ThisHostedArticlesHandler():
     def get(self):
         """
             a list of all open newsletters hosted in church admin
@@ -879,9 +881,8 @@ class ThisHostedArticlesHandler(webapp2.RequestHandler):
         findRequest = Letters.query()
         thisLettersList = findRequest.fetch()
 
-
         template = template_env.get_template('templates/newsletter/hosted/newslist.html')
-        context = {'thisLettersList':thisLettersList}
+        context = {'thisLettersList': thisLettersList}
         self.response.write(template.render(context))
 
 

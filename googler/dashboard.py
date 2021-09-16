@@ -1235,7 +1235,7 @@ class thisTopUpVerificationHandler(webapp2.RequestHandler):
                         #TODO-Consider Creating an Invoice for the payment here
 
                 elif vstrAccountName == "Surveys":
-                    findRequest = SurveyAccount.query(SurveyAccount.strTopUpReference == vstrTopUpReference)
+                    findRequest = SurveyAccount.query(SurveyAccount.top_up_reference == vstrTopUpReference)
                     thisSurveyAccountList = findRequest.fetch()
 
                     if len(thisSurveyAccountList) > 0:

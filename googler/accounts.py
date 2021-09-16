@@ -1737,7 +1737,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
             else:
                 thisAddAccount = AddAccount()
 
-            findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
+            findRequest = SurveyAccount.query(SurveyAccount.organization_id == thisAccount.organization_id)
             thisSurveyAccountList = findRequest.fetch()
 
             if len(thisSurveyAccountList) > 0:
@@ -1816,7 +1816,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = SurveyAccount.query(SurveyAccount.organization_id == thisAccount.organization_id)
                     thisSurveyAccountList = findRequest.fetch()
 
                     if len(thisSurveyAccountList) > 0:
@@ -1898,7 +1898,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                     if len(thisAdvertAccountList) > 0:
                         thisAdvertAccount = thisAdvertAccountList[0]
                         findRequest = SurveyAccount.query(
-                            SurveyAccount.strOrganizationID == thisAccount.organization_id)
+                            SurveyAccount.organization_id == thisAccount.organization_id)
                         thisSurveyAccountList = findRequest.fetch()
                         if len(thisSurveyAccountList) > 0:
                             thisSurveyAccount = thisSurveyAccountList[0]
@@ -1936,7 +1936,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = SurveyAccount.query(SurveyAccount.organization_id == thisAccount.organization_id)
                     thisSurveyAccountList = findRequest.fetch()
 
                     if len(thisSurveyAccountList) > 0:
@@ -1971,7 +1971,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = SurveyAccount.query(SurveyAccount.organization_id == thisAccount.organization_id)
                     thisSurveyAccountList = findRequest.fetch()
 
                     if len(thisSurveyAccountList) > 0:
@@ -2089,7 +2089,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
+                    findRequest = SurveyAccount.query(SurveyAccount.organization_id == thisAccount.organization_id)
                     thisSurveyList = findRequest.fetch()
                     if len(thisSurveyList) > 0:
                         thisSurvey = thisSurveyList[0]

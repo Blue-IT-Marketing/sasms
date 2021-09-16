@@ -803,7 +803,7 @@ def ScheduledSendSurveys():
                 strRef = thisPortal.SendCronMessage(strMessage=strMessage, strCell=thisOrg.cell)
                 logging.info("Just Sent the notification message : " + strRef)
 
-            findRequest = SurveySchedules.query(SurveySchedules.strScheduleID == thisOrder.strScheduleID)
+            findRequest = SurveySchedules.query(SurveySchedules.schedule_id == thisOrder.schedule_id)
             thisScheduleList = findRequest.fetch()
 
             if len(thisScheduleList) > 0:
@@ -811,23 +811,23 @@ def ScheduledSendSurveys():
             else:
                 thisSchedule = SurveySchedules()
 
-            findRequest = SurveyContacts.query(SurveyContacts.strListID == thisSchedule.strListID)
+            findRequest = SurveyContacts.query(SurveyContacts.list_id == thisSchedule.list_id)
             thisContactList = findRequest.fetch()
 
-            findRequest = Surveys.query(Surveys.strSurveyID == thisSchedule.strSurveyID)
+            findRequest = Surveys.query(Surveys.survey_id == thisSchedule.survey_id)
             thisSurveyList = findRequest.fetch()
 
             if len(thisSurveyList) > 0:
                 thisSurvey = thisSurveyList[0]
 
-                if thisSurvey.strSurveyType == "multichoice":
+                if thisSurvey.survey_type == "multichoice":
                     findRequest = MultiChoiceSurveys.query(
-                        MultiChoiceSurveys.strSurveyID == thisSurvey.strSurveyID).order(+MultiChoiceSurveys.strDateCreated)
+                        MultiChoiceSurveys.strSurveyID == thisSurvey.survey_id).order(+MultiChoiceSurveys.strDateCreated)
                     thisSurveyQuestionList = findRequest.fetch()
 
                     for thisContact in thisContactList:
                         findRequest = SurveyTracker.query(SurveyTracker.strCell == thisContact.cell,
-                                                          SurveyTracker.strSurveyID == thisSurvey.strSurveyID)
+                                                          SurveyTracker.strSurveyID == thisSurvey.survey_id)
                         thisTrackerList = findRequest.fetch()
                         if len(thisTrackerList) > 0:
                             thisTracker = thisTrackerList[0]
@@ -849,7 +849,7 @@ def ScheduledSendSurveys():
                         else:
                             thisSurveyQuestion = thisSurveyQuestionList[0]
                             thisTracker = SurveyTracker()
-                            thisTracker.writeSurveyID(strinput=thisSurvey.strSurveyID)
+                            thisTracker.writeSurveyID(strinput=thisSurvey.survey_id)
                             thisTracker.writeCurrentQuestionID(strinput=thisSurveyQuestion.strQuestionID)
                             thisTracker.writeCell(strinput=thisContact.cell)
 
@@ -901,7 +901,7 @@ def ScheduledSendSurveys():
                             thisAnswers.writeNames(strinput=thisContact.name)
                             thisAnswers.writeSurname(strinput=thisContact.surname)
                             thisAnswers.writeRef(strinput=strRef)
-                            thisAnswers.writeSurveyID(strinput=thisSurvey.strSurveyID)
+                            thisAnswers.writeSurveyID(strinput=thisSurvey.survey_id)
                             thisAnswers.writeQuestionID(strinput=thisSurveyQuestion.strQuestionID)
                             thisAnswers.writeQuestion(strinput=strMessage)
                             thisAnswers.writeOptionNumber(strinput=0)
@@ -943,7 +943,7 @@ def SurveysResponses():
         if not (reply == None) and not ("error" in reply):
             thisSurveyAnswer = MultiChoiceSurveyAnswers()
             thisSurveyAnswer.writeCell(thisTracker.cell)
-            thisSurveyAnswer.writeSurveyID(strinput=thisTracker.strSurveyID)
+            thisSurveyAnswer.writeSurveyID(strinput=thisTracker.survey_id)
             thisSurveyAnswer.writeQuestionID(strinput=thisTracker.strCurrentQuestionID)
             reply = str(reply)
             reply = reply.strip()
@@ -951,7 +951,7 @@ def SurveysResponses():
             thisSurveyAnswer.writeOptionNumber(strinput=reply)
             thisSurveyAnswer.writeRef(strinput=thisTracker.reference)
 
-            findRequest = SurveyContacts.query(SurveyContacts.strCell == thisTracker.cell)
+            findRequest = SurveyContacts.query(SurveyContacts.cell == thisTracker.cell)
             thisContactList = findRequest.fetch()
             if len(thisContactList) > 0:
                 thisContact = thisContactList[0]

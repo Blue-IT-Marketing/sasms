@@ -64,7 +64,7 @@ indexes:
 
 - kind: MultiChoiceSurveys
   properties:
-  - name: strSurveyID
+  - name: survey_id
   - name: date_created
 
 - kind: Orders
@@ -120,7 +120,7 @@ indexes:
 
 - kind: SurveySchedules
   properties:
-  - name: strActivateSchedule
+  - name: activate_schedule
   - name: start_date
   - name: start_time
 
