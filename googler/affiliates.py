@@ -264,18 +264,18 @@ class Affiliate(ndb.Model):
             return False
 
 class PresentCredits(ndb.Model):
-    strUserID = ndb.StringProperty()
-    strThisDate = ndb.DateProperty() # This Calculation to be performed after end of every month for each user
-    strEarnedCredit = ndb.IntegerProperty(default=0) # Total Earned Credit
-    strCreditPaid = ndb.BooleanProperty(default=False) # Total Paid Credit
-    strPaidAmount = ndb.IntegerProperty(default=0)
+    uid = ndb.StringProperty()
+    this_date = ndb.DateProperty() # This Calculation to be performed after end of every month for each user
+    earned_credit = ndb.IntegerProperty(default=0) # Total Earned Credit
+    credit_paid = ndb.BooleanProperty(default=False) # Total Paid Credit
+    paid_amount = ndb.IntegerProperty(default=0)
 
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -284,7 +284,7 @@ class PresentCredits(ndb.Model):
     def writeThisDate(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strThisDate = strinput
+                self.this_date = strinput
                 return True
             else:
                 return False
@@ -294,7 +294,7 @@ class PresentCredits(ndb.Model):
         try:
             strinput = str(strinput)
             if not (strinput == None):
-                self.strEarnedCredit += int(strinput)
+                self.earned_credit += int(strinput)
                 return True
             else:
                 return False
@@ -304,7 +304,7 @@ class PresentCredits(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strEarnedCredit = self.strEarnedCredit - int(strinput)
+                self.earned_credit = self.earned_credit - int(strinput)
                 return True
             else:
                 return False
@@ -313,7 +313,7 @@ class PresentCredits(ndb.Model):
     def writeCreditPaid(self,strinput):
         try:
             if strinput in [True,False]:
-                self.strCreditPaid = strinput
+                self.credit_paid = strinput
                 return True
             else:
                 return False
@@ -321,7 +321,7 @@ class PresentCredits(ndb.Model):
             return False
 
 class PaymentBankAccount(ndb.Model):
-    strUserID = ndb.StringProperty()
+    uid = ndb.StringProperty()
 
     strAccountHolder = ndb.StringProperty()
     strAccountNumber = ndb.StringProperty()
@@ -334,7 +334,7 @@ class PaymentBankAccount(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -833,7 +833,7 @@ class AffiliateHandler(webapp2.RequestHandler):
 
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
-                findRequest = PresentCredits.query(PresentCredits.strUserID == vstrUserID)
+                findRequest = PresentCredits.query(PresentCredits.uid == vstrUserID)
                 CreditList = findRequest.fetch()
 
                 findRequest = Affiliate.query(Affiliate.uid == vstrUserID)
