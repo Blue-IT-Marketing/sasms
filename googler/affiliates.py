@@ -322,10 +322,8 @@ class PresentCredits(ndb.Model):
 
 class PaymentBankAccount(ndb.Model):
     uid = ndb.StringProperty()
-
     account_holder = ndb.StringProperty()
     account_number = ndb.StringProperty()
-
     bank_name = ndb.StringProperty()
     branch_name = ndb.StringProperty()
     branch_code = ndb.StringProperty()
@@ -397,21 +395,20 @@ class PaymentBankAccount(ndb.Model):
             return False
 
 class WithdrawalRequests(ndb.Model):
-
-    strUserID = ndb.StringProperty()
-    strWithdrawalID = ndb.StringProperty()
-    strAmount = ndb.FloatProperty()
-    strMethod = ndb.StringProperty(default="Bank Deposit") # E-Wallet
-    strDateCreated = ndb.DateProperty(auto_now_add=True)
-    strTimeCreated = ndb.TimeProperty(auto_now_add=True)
-    strDateToProcess = ndb.DateProperty()
-    strWithDrawalStatus = ndb.StringProperty(default="Pending") # Complete
+    uid = ndb.StringProperty()
+    withdrawal_id = ndb.StringProperty()
+    amount = ndb.FloatProperty()
+    method = ndb.StringProperty(default="Bank Deposit") # E-Wallet
+    date_created = ndb.DateProperty(auto_now_add=True)
+    time_created = ndb.TimeProperty(auto_now_add=True)
+    date_to_process = ndb.DateProperty()
+    withdrawal_status = ndb.StringProperty(default="Pending") # Complete
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -420,7 +417,7 @@ class WithdrawalRequests(ndb.Model):
     def writeAmount(self,strinput):
         try:
             if isinstance(strinput,float):
-                self.strAmount = strinput
+                self.amount = strinput
                 return True
             else:
                 return False
@@ -430,7 +427,7 @@ class WithdrawalRequests(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strMethod = strinput
+                self.method = strinput
                 return True
             else:
                 return False
@@ -439,7 +436,7 @@ class WithdrawalRequests(ndb.Model):
     def writeDateCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateCreated = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -448,7 +445,7 @@ class WithdrawalRequests(ndb.Model):
     def writeTimeCreated(self,strinput):
         try:
             if isinstance(strinput,datetime.time):
-                self.strTimeCreated = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -457,7 +454,7 @@ class WithdrawalRequests(ndb.Model):
     def writeDateToProcess(self,strinput):
         try:
             if isinstance(strinput,datetime.date):
-                self.strDateToProcess = strinput
+                self.date_to_process = strinput
                 return True
             else:
                 return False
@@ -468,7 +465,7 @@ class WithdrawalRequests(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strWithdrawalID = strinput
+                self.withdrawal_id = strinput
                 return True
             else:
                 return False
@@ -489,7 +486,7 @@ class WithdrawalRequests(ndb.Model):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strWithDrawalStatus = strinput
+                self.withdrawal_status = strinput
                 return True
             else:
                 return False
