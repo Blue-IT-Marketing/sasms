@@ -1,96 +1,100 @@
 import logging
 import os
-import webapp2
 import jinja2
-from google.appengine.ext import ndb
-from google.appengine.api import users
-from google.appengine.api import mail
+from google.cloud import ndb
 import datetime
 
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 from userRights import UserRights
-
 from firebaseadmin import VerifyAndReturnAccount
-class OpenInvites(ndb.Expando):
 
-    strOrganizationID = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
-    strSecurityCode = ndb.StringProperty()
-    strDateSent = ndb.DateProperty(auto_now_add=True)
-    strTimeSent = ndb.TimeProperty(auto_now_add=True)
-    strAccepted = ndb.BooleanProperty(default=False)
 
-    def writeOrganizationID(self,strinput):
+class OpenInvites(ndb.Model):
+    organization_id = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    email = ndb.StringProperty()
+    security_code = ndb.StringProperty()
+    date_sent = ndb.DateProperty(auto_now_add=True)
+    time_sent = ndb.TimeProperty(auto_now_add=True)
+    accepted = ndb.BooleanProperty(default=False)
+
+    def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeCell(self,strinput):
+
+    def writeCell(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeEmail(self,strinput):
+
+    def writeEmail(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeSecurityCode(self,strinput):
+
+    def writeSecurityCode(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSecurityCode = strinput
+                self.security_code = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeDateSent(self,strinput):
+
+    def writeDateSent(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
-                self.strDateSent = strinput
+            if isinstance(strinput, datetime.date):
+                self.date_sent = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeTimeSent(self,strinput):
+
+    def writeTimeSent(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTimeSent = strinput
+                self.time_sent = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeAccepted(self,strinput):
+
+    def writeAccepted(self, strinput):
         try:
-            if strinput in [True,False]:
-                self.strAccepted = strinput
+            if strinput in [True, False]:
+                self.accepted = strinput
                 return True
             else:
                 return False
         except:
             return False
+
     def CreateSecurityCode(self):
-        import random,string
+        import random, string
         try:
             strSecurityCode = ""
             for i in range(6):
@@ -99,100 +103,102 @@ class OpenInvites(ndb.Expando):
         except:
             return None
 
+
 class Accounts(ndb.Expando):
+    uid = ndb.StringProperty()
+    organization_id = ndb.StringProperty()
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
+    cell = ndb.StringProperty()
+    tel = ndb.StringProperty()
+    email = ndb.StringProperty()
+    website = ndb.StringProperty()
+    verified = ndb.BooleanProperty(default=False)
+    verification_id = ndb.StringProperty()
+    suspended = ndb.BooleanProperty(default=False)
 
-    strUserID = ndb.StringProperty()
-    strOrganizationID = ndb.StringProperty()
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
-    strCell = ndb.StringProperty()
-    strTel = ndb.StringProperty()
-    strEmail = ndb.StringProperty()
-    strWebsite = ndb.StringProperty()
-    strVerified = ndb.BooleanProperty(default=False)
-    strVerificationCode = ndb.StringProperty()
-    strSuspended = ndb.BooleanProperty(default=False)
+    photo_url = ndb.StringProperty()
+    provider_data = ndb.StringProperty()
+    access_token = ndb.StringProperty()
 
-    strPhotoURL = ndb.StringProperty()
-    strProviderData = ndb.StringProperty()
-    strAccessToken = ndb.StringProperty()
+    last_sign_in_date = ndb.DateProperty()
+    last_sign_in_time = ndb.TimeProperty()
 
-    strLastSignInDate = ndb.DateProperty()
-    strLastSignInTime = ndb.TimeProperty()
-
-    def writeLastSignInDate(self,strinput):
+    def writeLastSignInDate(self, strinput):
         try:
-            if isinstance(strinput,datetime.date):
-                self.strLastSignInDate = strinput
+            if isinstance(strinput, datetime.date):
+                self.last_sign_in_date = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeLastSignInTime(self,strinput):
+    def writeLastSignInTime(self, strinput):
         try:
-            if isinstance(strinput,datetime.time):
-                self.strLastSignInTime = strinput
+            if isinstance(strinput, datetime.time):
+                self.last_sign_in_time = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writePhotoURL(self,strinput):
-        try:
-            strinput = str(strinput)
-            if strinput != None:
-                self.strPhotoURL = strinput
-                return True
-            else:
-                return False
-        except:
-            return False
-
-    def writeProviderData(self,strinput):
+    def writePhotoURL(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strProviderData = strinput
+                self.photo_url = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeAccessToken(self,strinput):
+    def writeProviderData(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAccessToken = strinput
+                self.provider_data = strinput
                 return True
             else:
                 return False
         except:
             return False
 
-    def writeVerified(self,strinput):
-        try:
-            if strinput in [True,False]:
-                self.strVerified = strinput
-                return True
-            else:
-                return False
-
-        except:
-            return False
-    def writeVerificationCode(self,strinput):
+    def writeAccessToken(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strVerificationCode = strinput
+                self.access_token = strinput
                 return True
             else:
                 return False
         except:
             return False
+
+    def writeVerified(self, strinput):
+        try:
+            if strinput in [True, False]:
+                self.verified = strinput
+                return True
+            else:
+                return False
+
+        except:
+            return False
+
+    def writeVerificationCode(self, strinput):
+        try:
+            strinput = str(strinput)
+            if strinput != None:
+                self.verification_id = strinput
+                return True
+            else:
+                return False
+        except:
+            return False
+
     def CreateVerificationCode(self):
         import random, string
         try:
@@ -202,89 +208,97 @@ class Accounts(ndb.Expando):
             return strVerificationCode
         except:
             return None
-    def writeUserID(self,strinput):
+
+    def writeUserID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeOrganizationID(self,strinput):
+
+    def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeNames(self,strinput):
+
+    def writeNames(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeSurname(self,strinput):
+
+    def writeSurname(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeCell(self,strinput):
+
+    def writeCell(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCell = strinput
+                self.cell = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeTel(self,strinput):
+
+    def writeTel(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strTel = strinput
+                self.tel = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeEmail(self,strinput):
+
+    def writeEmail(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
         except:
             return False
-    def writeWebsite(self,strinput):
+
+    def writeWebsite(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strWebsite = strinput
+                self.website = strinput
                 return True
             else:
                 return False
         except:
             return False
+
 
 class Organization(ndb.Expando):
-
     strUserID = ndb.StringProperty()
     strOrganizationID = ndb.StringProperty()
     strOrganizationName = ndb.StringProperty()
@@ -301,7 +315,7 @@ class Organization(ndb.Expando):
 
     strSuspended = ndb.BooleanProperty(default=False)
 
-    def writeRegisteringLink(self,strinput):
+    def writeRegisteringLink(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -311,16 +325,19 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
+
     def CreateRegisteringLink(self):
-        import random,string
+        import random, string
         try:
             strRegLink = ""
             for i in range(255):
-                strRegLink += random.SystemRandom().choice(string.digits + string.ascii_uppercase + string.digits + string.ascii_lowercase)
+                strRegLink += random.SystemRandom().choice(
+                    string.digits + string.ascii_uppercase + string.digits + string.ascii_lowercase)
             return strRegLink
         except:
             return None
-    def writeVerificationCode(self,strinput):
+
+    def writeVerificationCode(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -330,8 +347,9 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
+
     def CreateVerificiationCode(self):
-        import random,string
+        import random, string
         try:
             strVerificationCode = ""
             for i in range(8):
@@ -339,9 +357,10 @@ class Organization(ndb.Expando):
             return strVerificationCode
         except:
             return None
-    def writeVerified(self,strinput):
+
+    def writeVerified(self, strinput):
         try:
-            if strinput in [True,False]:
+            if strinput in [True, False]:
                 self.strVerified = strinput
                 return True
             else:
@@ -349,7 +368,7 @@ class Organization(ndb.Expando):
         except:
             return False
 
-    def writeUserID(self,strinput):
+    def writeUserID(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -359,6 +378,7 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
+
     def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
@@ -369,7 +389,8 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
-    def writeOrganizationName(self,strinput):
+
+    def writeOrganizationName(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -379,7 +400,8 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
-    def writeDescription(self,strinput):
+
+    def writeDescription(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -389,7 +411,8 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
-    def writeRegistration(self,strinput):
+
+    def writeRegistration(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -399,7 +422,8 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
-    def writeCell(self,strinput):
+
+    def writeCell(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -409,7 +433,8 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
-    def writeTel(self,strinput):
+
+    def writeTel(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -419,7 +444,8 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
-    def writeEmail(self,strinput):
+
+    def writeEmail(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -429,7 +455,8 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
-    def writeWebsite(self,strinput):
+
+    def writeWebsite(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -439,8 +466,9 @@ class Organization(ndb.Expando):
                 return False
         except:
             return False
+
     def CreateOrgID(self):
-        import random,string
+        import random, string
         try:
             strOrganizationID = ""
             for i in range(256):
@@ -450,16 +478,16 @@ class Organization(ndb.Expando):
         except:
             return None
 
-
-    def writeSuspended(self,strinput):
+    def writeSuspended(self, strinput):
         try:
-            if strinput in [True,False]:
+            if strinput in [True, False]:
                 self.strSuspended = strinput
                 return True
             else:
                 return False
         except:
             return False
+
 
 class BankAccountDetails(ndb.Expando):
     strUserID = ndb.StringProperty()
@@ -471,7 +499,6 @@ class BankAccountDetails(ndb.Expando):
     strBranchName = ndb.StringProperty()
     strBranchCode = ndb.StringProperty()
 
-
     def writeUserID(self, strinput):
         try:
             strinput = str(strinput)
@@ -482,6 +509,7 @@ class BankAccountDetails(ndb.Expando):
                 return False
         except:
             return False
+
     def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
@@ -492,7 +520,8 @@ class BankAccountDetails(ndb.Expando):
                 return False
         except:
             return False
-    def writeAccountHolder(self,strinput):
+
+    def writeAccountHolder(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -502,7 +531,8 @@ class BankAccountDetails(ndb.Expando):
                 return False
         except:
             return False
-    def writeAccountNumber(self,strinput):
+
+    def writeAccountNumber(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -512,7 +542,8 @@ class BankAccountDetails(ndb.Expando):
                 return False
         except:
             return False
-    def writeAccountType(self,strinput):
+
+    def writeAccountType(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -522,7 +553,8 @@ class BankAccountDetails(ndb.Expando):
                 return False
         except:
             return False
-    def writeBankName(self,strinput):
+
+    def writeBankName(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -532,7 +564,8 @@ class BankAccountDetails(ndb.Expando):
                 return False
         except:
             return False
-    def writeBranchName(self,strinput):
+
+    def writeBranchName(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -542,7 +575,8 @@ class BankAccountDetails(ndb.Expando):
                 return False
         except:
             return False
-    def writeBranchCode(self,strinput):
+
+    def writeBranchCode(self, strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
@@ -553,11 +587,11 @@ class BankAccountDetails(ndb.Expando):
         except:
             return False
 
+
 class Payments(ndb.Expando):
     strUserID = ndb.StringProperty()
     strOrganizationID = ndb.StringProperty()
     strReference = ndb.StringProperty()
-
 
     def writeUserID(self, strinput):
         try:
@@ -569,6 +603,7 @@ class Payments(ndb.Expando):
                 return False
         except:
             return False
+
     def writeOrganizationID(self, strinput):
         try:
             strinput = str(strinput)
@@ -580,6 +615,7 @@ class Payments(ndb.Expando):
         except:
             return False
 
+
 class OrganizaHandler(webapp2.RequestHandler):
     def get(self):
 
@@ -587,11 +623,11 @@ class OrganizaHandler(webapp2.RequestHandler):
         vstrEmail = self.request.get('vstrEmail')
         vstrAccessToken = self.request.get('vstrAccessToken')
 
-        thisAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+        thisAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
         if thisAccount != None:
 
-            findRequest = Organization.query(Organization.strUserID == thisAccount.strUserID)
+            findRequest = Organization.query(Organization.strUserID == thisAccount.uid)
             thisOrgList = findRequest.fetch()
 
             if len(thisOrgList) > 0:
@@ -599,7 +635,8 @@ class OrganizaHandler(webapp2.RequestHandler):
             else:
                 thisOrg = Organization()
 
-            findRequest = BankAccountDetails.query(BankAccountDetails.strOrganizationID == thisAccount.strOrganizationID)
+            findRequest = BankAccountDetails.query(
+                BankAccountDetails.strOrganizationID == thisAccount.organization_id)
             thisBankAccountList = findRequest.fetch()
 
             if len(thisBankAccountList) > 0:
@@ -607,8 +644,7 @@ class OrganizaHandler(webapp2.RequestHandler):
             else:
                 thisBankAccount = BankAccountDetails()
 
-
-            findRequest = UserRights.query(UserRights.strUserID == vstrUserID,UserRights.strAdminUser == True)
+            findRequest = UserRights.query(UserRights.strUserID == vstrUserID, UserRights.strAdminUser == True)
             thisUserRightsList = findRequest.fetch()
 
             if len(thisUserRightsList) > 0:
@@ -616,18 +652,16 @@ class OrganizaHandler(webapp2.RequestHandler):
             else:
                 thisUserRight = UserRights()
 
-
-
             if thisUserRight.strAdminUser:
                 template = template_env.get_template('templates/organization/org.html')
-                context = {'thisOrg':thisOrg,'thisBankAccount':thisBankAccount}
+                context = {'thisOrg': thisOrg, 'thisBankAccount': thisBankAccount}
                 self.response.write(template.render(context))
             else:
                 template = template_env.get_template('templates/organization/orgread.html')
-                context = {'thisOrg':thisOrg}
+                context = {'thisOrg': thisOrg}
                 self.response.write(template.render(context))
         else:
-            #Account not found new user
+            # Account not found new user
             thisOrg = Organization()
             thisBankAccount = BankAccountDetails()
             template = template_env.get_template('templates/organization/org.html')
@@ -642,19 +676,18 @@ class OrganizaHandler(webapp2.RequestHandler):
         vstrChoice = self.request.get('vstrChoice')
 
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
             vstrOrganization = self.request.get('vstrOrganization')
             vstrDescription = self.request.get('vstrDescription')
-            vstrRegistration  = self.request.get('vstrRegistration')
+            vstrRegistration = self.request.get('vstrRegistration')
             vstrCell = self.request.get('vstrCell')
             vstrTel = self.request.get('vstrTel')
             vstrEmail = self.request.get('vstrEmail')
             vstrWebsite = self.request.get('vstrWebsite')
-
 
             findRequest = Organization.query(Organization.strEmail == vstrEmail)
             thisOrgList = findRequest.fetch()
@@ -662,11 +695,12 @@ class OrganizaHandler(webapp2.RequestHandler):
             if len(thisOrgList) > 0:
                 thisOrg = thisOrgList[0]
 
-                if thisOrg.strVerified:
+                if thisOrg.verified:
 
                     self.response.write("You have already created an account and its verified")
                 else:
-                    self.response.write("Your Organization details already captured please click on verification status to verify your account")
+                    self.response.write(
+                        "Your Organization details already captured please click on verification status to verify your account")
 
             else:
                 thisOrg = Organization()
@@ -684,7 +718,7 @@ class OrganizaHandler(webapp2.RequestHandler):
                 thisOrg.writeVerificationCode(strinput=thisOrg.CreateVerificiationCode())
                 thisOrg.put()
 
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
@@ -713,7 +747,6 @@ class OrganizaHandler(webapp2.RequestHandler):
                 thisUserRight.setGeneralUser(strinput=False)
                 thisUserRight.put()
 
-
                 findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOrg.strOrganizationID)
                 thisSMSAccountList = findRequest.fetch()
 
@@ -724,8 +757,8 @@ class OrganizaHandler(webapp2.RequestHandler):
 
                 thisSMSAccount.writeOrganizationID(strinput=thisOrg.strOrganizationID)
                 thisSMSAccount.put()
-                #Consider using SendMail
-                strMessage= """
+                # Consider using SendMail
+                strMessage = """
                 <h3>Thank you</h3>
                 <p>For registering your organization with Blue IT Marketing Contact and Messaging Management
                 application please click on the link below to activate your account</p>
@@ -736,18 +769,21 @@ class OrganizaHandler(webapp2.RequestHandler):
                 Blue IT Marketing Pty LTD
                 Team
                 """
-                #def SendEmail(strFrom,strTo,strSubject,strBody,strTextType,strAttachFileContent=None,strAttachFileName=None):
-                if SendEmail(strFrom="verifications@sa-sms.appspotmail.com",strTo=thisOrg.strEmail, strSubject="Business Messaging and Contact Management Account Activation",strBody=strMessage,strTextType='text/html'):
-                    self.response.write("Successfully created organization Account an Email is sent to your email address for verification")
+                # def SendEmail(strFrom,strTo,strSubject,strBody,strTextType,strAttachFileContent=None,strAttachFileName=None):
+                if SendEmail(strFrom="verifications@sa-sms.appspotmail.com", strTo=thisOrg.strEmail,
+                             strSubject="Business Messaging and Contact Management Account Activation",
+                             strBody=strMessage, strTextType='text/html'):
+                    self.response.write(
+                        "Successfully created organization Account an Email is sent to your email address for verification")
                 else:
-                    self.response.write("Successfully created organization Account please remember to verify your account")
+                    self.response.write(
+                        "Successfully created organization Account please remember to verify your account")
 
         elif vstrChoice == "1":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
-
 
             vstrAccountHolder = self.request.get('vstrAccountHolder')
             vstrAccountNumber = self.request.get('vstrAccountNumber')
@@ -764,13 +800,14 @@ class OrganizaHandler(webapp2.RequestHandler):
 
                 if thisUserRight.strAdminUser:
 
-                    findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                    findRequest = Accounts.query(Accounts.uid == vstrUserID)
                     thisAccountList = findRequest.fetch()
 
                     if len(thisAccountList) > 0:
                         thisAccount = thisAccountList[0]
 
-                        findRequest = BankAccountDetails.query(BankAccountDetails.strOrganizationID == thisAccount.strOrganizationID)
+                        findRequest = BankAccountDetails.query(
+                            BankAccountDetails.strOrganizationID == thisAccount.organization_id)
                         thisBankAccountList = findRequest.fetch()
 
                         if len(thisBankAccountList) > 0:
@@ -785,7 +822,7 @@ class OrganizaHandler(webapp2.RequestHandler):
                         thisBankAccount.writeBranchName(strinput=vstrBranchName)
                         thisBankAccount.writeBranchCode(strinput=vstrBranchCode)
                         thisBankAccount.writeUserID(strinput=vstrUserID)
-                        thisBankAccount.writeOrganizationID(strinput=thisAccount.strOrganizationID)
+                        thisBankAccount.writeOrganizationID(strinput=thisAccount.organization_id)
                         thisBankAccount.put()
 
                         self.response.write("Organization Bank Account successfully updated")
@@ -796,9 +833,10 @@ class OrganizaHandler(webapp2.RequestHandler):
             else:
                 self.response.write("You have insufficient rights to manage Organization Bank Accounts")
 
+
 class ManageUsersHandler(webapp2.RequestHandler):
     def get(self):
-        #Admin Users
+        # Admin Users
         vstrUserID = self.request.get('vstrUserID')
         vstrEmail = self.request.get('vstrEmail')
         vstrAccessToken = self.request.get('vstrAccessToken')
@@ -806,35 +844,36 @@ class ManageUsersHandler(webapp2.RequestHandler):
         findRequest = UserRights.query(UserRights.strUserID == vstrUserID)
         thisUserRightList = findRequest.fetch()
 
-
-
         if len(thisUserRightList) > 0:
             thisAdmin = thisUserRightList[0]
 
             if thisAdmin.strAdminUser:
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = Accounts.query(Accounts.strOrganizationID == thisAccount.strOrganizationID, Accounts.strVerified == True, Accounts.strSuspended == False)
+                    findRequest = Accounts.query(Accounts.organization_id == thisAccount.organization_id,
+                                                 Accounts.verified == True, Accounts.suspended == False)
                     thisActiveAccountList = findRequest.fetch()
 
-                    findRequest = Accounts.query(Accounts.strOrganizationID == thisAccount.strOrganizationID, Accounts.strVerified == True, Accounts.strSuspended == True)
+                    findRequest = Accounts.query(Accounts.organization_id == thisAccount.organization_id,
+                                                 Accounts.verified == True, Accounts.suspended == True)
                     thisSuspendedAccountList = findRequest.fetch()
 
-                    findRequest = OpenInvites.query(OpenInvites.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = OpenInvites.query(OpenInvites.organization_id == thisAccount.organization_id)
                     thisSentInvitesList = findRequest.fetch()
 
-
                     templates = template_env.get_template('templates/users/users.html')
-                    context = {'thisActiveAccountList':thisActiveAccountList,'thisSuspendedAccountList':thisSuspendedAccountList,'thisAccount':thisAccount,'thisSentInvitesList':thisSentInvitesList}
+                    context = {'thisActiveAccountList': thisActiveAccountList,
+                               'thisSuspendedAccountList': thisSuspendedAccountList, 'thisAccount': thisAccount,
+                               'thisSentInvitesList': thisSentInvitesList}
                     self.response.write(templates.render(context))
                 else:
                     ErrorMessage = "Error accessign users manager please verify your account first"
                     template = template_env.get_template("templates/errors/suberror.html")
-                    context = {'ErrorMessage':ErrorMessage}
+                    context = {'ErrorMessage': ErrorMessage}
                     self.response.write(template.render(context))
 
             else:
@@ -843,16 +882,15 @@ class ManageUsersHandler(webapp2.RequestHandler):
             self.response.write("TODO2- Show an interface allowing the user to create his or her account details")
 
     def post(self):
-        from mysms import SMSAccount,SMSPortalBudget,SMSPortalVodacom,ClickSendSMSPortal
+        from mysms import SMSAccount, SMSPortalBudget, SMSPortalVodacom, ClickSendSMSPortal
         from myTwilio import MyTwilioPortal
 
         vstrChoice = self.request.get('vstrChoice')
         if vstrChoice == "0":
 
-            #'&vstrUserID=' + struid + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrAccessToken = self.request.get('vstrAccessToken')
-
 
             vstrNames = self.request.get('vstrNames')
             vstrSurname = self.request.get('vstrSurname')
@@ -861,7 +899,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrWebsite = self.request.get('vstrWebsite')
 
-            thisAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
             if thisAccount != None:
                 pass
             else:
@@ -872,7 +910,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                 if len(thisOrgList) > 0:
                     thisOrg = thisOrgList[0]
-                    thisAccount.writeOrganizationID(strinput=thisOrg.strOrganizationID)
+                    thisAccount.writeOrganizationID(strinput=thisOrg.organization_id)
 
             thisAccount.writeNames(strinput=vstrNames)
             thisAccount.writeSurname(strinput=vstrSurname)
@@ -888,7 +926,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
 
         elif vstrChoice == "1":
-            #'&vstrUserID=' + struid + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
@@ -896,22 +934,21 @@ class ManageUsersHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             logging.info(vstrCell)
 
-            thisAccount = VerifyAndReturnAccount(strUserID=vstrUserID,strAccessToken=vstrAccessToken)
+            thisAccount = VerifyAndReturnAccount(strUserID=vstrUserID, strAccessToken=vstrAccessToken)
 
             if thisAccount != None:
                 pass
             else:
                 thisAccount = Accounts()
 
-
-            findRequest = UserRights.query(UserRights.strUserID == thisAccount.strUserID)
+            findRequest = UserRights.query(UserRights.strUserID == thisAccount.uid)
             thisUserRightList = findRequest.fetch()
 
             if len(thisUserRightList) > 0:
                 thisUserRight = thisUserRightList[0]
 
                 if thisUserRight.strAdminUser:
-                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
                     thisSMSAccountList = findRequest.fetch()
                     logging.info("User rights ok and inside SMS Account aso the account is ok")
 
@@ -920,7 +957,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                         strMessageHeader = "Blue IT Marketing" + "%0A"
                         strAppName = "Bulk Messaging and Contact Management" + "%0A"
-                        strMessage = "This is an invitation sent by : " + thisAccount.strNames + "  " + thisAccount.strSurname +  "%0A"
+                        strMessage = "This is an invitation sent by : " + thisAccount.names + "  " + thisAccount.surname + "%0A"
                         strMessage2 = " please click the following link to start using our app as part of their team : " + "%0A"
                         strlink = "https://sa-sms.appspot.com/admin/users/invites"
 
@@ -942,7 +979,9 @@ class ManageUsersHandler(webapp2.RequestHandler):
                                 strCellList.append(vstrCell)
                                 logging.info("Sending Message using Vodacom")
 
-                                if thisVodaPortal.CronSendMessages(strCellNumberList=strCellList,strMessage=strInviteMessage,strAccountID=thisAccount.strOrganizationID):
+                                if thisVodaPortal.CronSendMessages(strCellNumberList=strCellList,
+                                                                   strMessage=strInviteMessage,
+                                                                   strAccountID=thisAccount.organization_id):
                                     thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 4
                                     self.response.write("Successfully sent an invitation message")
                                 else:
@@ -956,10 +995,10 @@ class ManageUsersHandler(webapp2.RequestHandler):
                                 else:
                                     thisBudgetPortal = SMSPortalBudget()
 
-
                                 logging.info("Sending message using budget")
 
-                                if thisBudgetPortal.SendCronMessage(strCell=vstrCell,strMessage=strInviteMessage) != None:
+                                if thisBudgetPortal.SendCronMessage(strCell=vstrCell,
+                                                                    strMessage=strInviteMessage) != None:
                                     thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 4
                                     self.response.write("Successfully sent an invite message")
                                 else:
@@ -976,7 +1015,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                                 logging.info("Sending invitations through Twilio Portal")
 
-                                if thisTwilioPortal.sendSMS(strTo=vstrCell,strMessage=strInviteMessage) != None:
+                                if thisTwilioPortal.sendSMS(strTo=vstrCell, strMessage=strInviteMessage) != None:
                                     thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 4
                                     self.response.write("Successfully sent an invite message")
                                 else:
@@ -992,18 +1031,19 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                                 logging.info("Sending Invitations through Click Send Portal")
 
-                                if thisClickSendPortal.SendSMS(strCell=vstrCell,strMessage=strInviteMessage) != None:
+                                if thisClickSendPortal.SendSMS(strCell=vstrCell, strMessage=strInviteMessage) != None:
                                     thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 4
                                     self.response.write("Successfully sent an invite message")
                                 else:
                                     self.response.write("Error sending SMS Invitation")
 
                             else:
-                                self.response.write("Cannot find an useful portal to send messages...please contact the system administrator")
+                                self.response.write(
+                                    "Cannot find an useful portal to send messages...please contact the system administrator")
 
                             thisSMSAccount.put()
 
-                            findRequest = OpenInvites.query(OpenInvites.strCell == vstrCell)
+                            findRequest = OpenInvites.query(OpenInvites.cell == vstrCell)
                             thisOpenInviteList = findRequest.fetch()
 
                             if len(thisOpenInviteList) > 0:
@@ -1015,7 +1055,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
                             strThisDate = thisDateTime.date()
                             strThisTime = thisDateTime.time()
 
-                            thisOpenInvite.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
+                            thisOpenInvite.writeOrganizationID(strinput=thisSMSAccount.organization_id)
                             thisOpenInvite.writeCell(strinput=vstrCell)
                             thisOpenInvite.writeEmail(strinput=vstrEmail)
                             thisOpenInvite.writeSecurityCode(strinput=thisOpenInvite.CreateSecurityCode())
@@ -1025,17 +1065,19 @@ class ManageUsersHandler(webapp2.RequestHandler):
                         else:
                             self.response.write("Cannot send SMS Invitation Please contact your system admin")
                     else:
-                        self.response.write("Cannot Access your SMS Account please contact your system administrator or recreate your account")
+                        self.response.write(
+                            "Cannot Access your SMS Account please contact your system administrator or recreate your account")
                 else:
                     self.response.write("You have insufficient rights to send user invitations")
             else:
                 self.response.write("You have insufficient rights to send user invitations")
 
+
 class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
 
     def get(self):
         from dashboard import Employees
-        from mysms import SMSAccount,SMSPortalVodacom,SMSPortalBudget,ClickSendSMSPortal
+        from mysms import SMSAccount, SMSPortalVodacom, SMSPortalBudget, ClickSendSMSPortal
         from myTwilio import MyTwilioPortal
         import logging
         URL = self.request.url
@@ -1061,9 +1103,8 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                 thisSMSAccount.put()
 
             ReceipientList = []
-            ReceipientList.append(thisOrg.strCell)
-            strMessage = thisOrg.strVerificationCode
-
+            ReceipientList.append(thisOrg.cell)
+            strMessage = thisOrg.verification_id
 
             if thisSMSAccount.strUsePortal == "Vodacom":
                 findRequests = SMSPortalVodacom.query()
@@ -1074,7 +1115,6 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                 else:
                     Voda = SMSPortalVodacom()
                     Voda.put()
-
 
                 if Voda.CronSendMessages(strCellNumberList=ReceipientList, strMessage=strMessage,
                                          strAccountID=thisAdminStaff.strStaffID):
@@ -1112,7 +1152,7 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                     thisClickSend = ClickSendSMSPortal()
 
                 for thisNumber in ReceipientList:
-                    strRef = thisClickSend.SendSMS(strCell=thisNumber,strMessage=strMessage)
+                    strRef = thisClickSend.SendSMS(strCell=thisNumber, strMessage=strMessage)
 
                     if strRef != None:
                         logging.info("Successfully sent Verification Mesage")
@@ -1129,14 +1169,14 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                     thisTwilioPortal = MyTwilioPortal()
 
                 for thisNumber in ReceipientList:
-                    strRef = thisTwilioPortal.sendSMS(strTo=thisNumber,strFrom=thisTwilioPortal.strMySMSNumber,strMessage=strMessage)
+                    strRef = thisTwilioPortal.sendSMS(strTo=thisNumber, strFrom=thisTwilioPortal.strMySMSNumber,
+                                                      strMessage=strMessage)
                     if strRef != None:
                         logging.info("Successfully sent Verification Mesage")
                     else:
                         logging.info("Error Sending Verification Message")
 
-
-            findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOrg.strOrganizationID)
+            findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOrg.organization_id)
             thisSMSAccountList = findRequest.fetch()
 
             if len(thisSMSAccountList) > 0:
@@ -1144,9 +1184,8 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
             else:
                 thisSMSAccount = SMSAccount()
 
-
             templates = template_env.get_template('templates/organization/thisVerification.html')
-            context = {'thisOrg':thisOrg,'thisSMSAccount':thisSMSAccount}
+            context = {'thisOrg': thisOrg, 'thisSMSAccount': thisSMSAccount}
             self.response.write(templates.render(context))
 
     def post(self):
@@ -1168,21 +1207,23 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
             if len(thisOrgList) > 0:
                 thisOrg = thisOrgList[0]
 
-                if thisOrg.strVerificationCode == vstrVerificationCode:
+                if thisOrg.verification_id == vstrVerificationCode:
                     thisOrg.writeVerified(strinput=True)
                     thisOrg.put()
-                    findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                    findRequest = Accounts.query(Accounts.uid == vstrUserID)
                     thisAccountList = findRequest.fetch()
                     if len(thisAccountList) > 0:
                         thisAccount = thisAccountList[0]
                         thisAccount.writeVerified(strinput=True)
                         thisAccount.put()
 
-                    self.response.write("Your Account is verified please buy SMS Credits to start using our Contact and Messaging Management Application")
+                    self.response.write(
+                        "Your Account is verified please buy SMS Credits to start using our Contact and Messaging Management Application")
                 else:
                     self.response.write("Error Verifying your account, please try again")
             else:
                 self.response.write("Fatal Error registering your organization please inform our system administrator")
+
 
 class ThisOrgHandler(webapp2.RequestHandler):
     def get(self):
@@ -1208,23 +1249,29 @@ class ThisOrgHandler(webapp2.RequestHandler):
         else:
             thisSMSAccount = SMSAccount()
 
-        findRequest = Accounts.query(Accounts.strOrganizationID == strOrganizationID,Accounts.strVerified == True,Accounts.strSuspended == False)
+        findRequest = Accounts.query(Accounts.organization_id == strOrganizationID, Accounts.verified == True,
+                                     Accounts.suspended == False)
         thisActiveUserAccountsList = findRequest.fetch()
-        findRequest =  Accounts.query(Accounts.strOrganizationID == strOrganizationID,Accounts.strVerified == False,Accounts.strSuspended == False)
+        findRequest = Accounts.query(Accounts.organization_id == strOrganizationID, Accounts.verified == False,
+                                     Accounts.suspended == False)
         thisNewUserAccountsList = findRequest.fetch()
-        findRequest =  Accounts.query(Accounts.strOrganizationID == strOrganizationID,Accounts.strVerified == True,Accounts.strSuspended == True)
+        findRequest = Accounts.query(Accounts.organization_id == strOrganizationID, Accounts.verified == True,
+                                     Accounts.suspended == True)
         thisSuspendedUserAccountsList = findRequest.fetch()
 
-        findRequest = Orders.query(Orders.strOrganizationID == strOrganizationID,Orders.strFullyPaid == True)
+        findRequest = Orders.query(Orders.strOrganizationID == strOrganizationID, Orders.strFullyPaid == True)
         thisActiveAdvertisingOrdersList = findRequest.fetch()
 
-        findRequest = Orders.query(Orders.strOrganizationID == strOrganizationID,Orders.strFullyPaid == False)
+        findRequest = Orders.query(Orders.strOrganizationID == strOrganizationID, Orders.strFullyPaid == False)
         thisOutStandingAdvertisingOrderList = findRequest.fetch()
 
         templates = template_env.get_template('templates/dashboard/dashfiles/thisorg.html')
-        context = {'thisOrg':thisOrg,'thisSMSAccount':thisSMSAccount,'thisActiveUserAccountsList':thisActiveUserAccountsList,
-                   'thisNewUserAccountsList':thisNewUserAccountsList,'thisSuspendedUserAccountsList':thisSuspendedUserAccountsList,
-                   'thisActiveAdvertisingOrdersList':thisActiveAdvertisingOrdersList,'thisOutStandingAdvertisingOrderList':thisOutStandingAdvertisingOrderList}
+        context = {'thisOrg': thisOrg, 'thisSMSAccount': thisSMSAccount,
+                   'thisActiveUserAccountsList': thisActiveUserAccountsList,
+                   'thisNewUserAccountsList': thisNewUserAccountsList,
+                   'thisSuspendedUserAccountsList': thisSuspendedUserAccountsList,
+                   'thisActiveAdvertisingOrdersList': thisActiveAdvertisingOrdersList,
+                   'thisOutStandingAdvertisingOrderList': thisOutStandingAdvertisingOrderList}
         self.response.write(templates.render(context))
 
     def post(self):
@@ -1233,11 +1280,10 @@ class ThisOrgHandler(webapp2.RequestHandler):
             vstrChoice = self.request.get('vstrChoice')
 
             if vstrChoice == "0":
-                #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+                # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
                 vstrUserID = self.request.get('vstrUserID')
                 vstrEmail = self.request.get('vstrEmail')
                 vstrAccessToken = self.request.get('vstrAccessToken')
-
 
                 vstrOrganizationName = self.request.get('vstrOrganizationName')
                 vstrDescription = self.request.get('vstrDescription')
@@ -1251,7 +1297,7 @@ class ThisOrgHandler(webapp2.RequestHandler):
                 vstrVerified = self.request.get('vstrVerified')
                 vstrSuspended = self.request.get('vstrSuspended')
 
-                findRequest = Organization.query(Organization.strCell == vstrCell,Organization.strEmail == vstrEmail)
+                findRequest = Organization.query(Organization.strCell == vstrCell, Organization.strEmail == vstrEmail)
                 thisOrgList = findRequest.fetch()
 
                 if len(thisOrgList) > 0:
@@ -1283,11 +1329,10 @@ class ThisOrgHandler(webapp2.RequestHandler):
                 self.response.write("Organization details updated successfully")
 
             elif vstrChoice == "1":
-                #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+                # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
                 vstrUserID = self.request.get('vstrUserID')
                 vstrEmail = self.request.get('vstrEmail')
                 vstrAccessToken = self.request.get('vstrAccessToken')
-
 
                 vstrOrganizationID = self.request.get('vstrOrganizationID')
                 vstrCreditAmount = self.request.get('vstrCreditAmount')
@@ -1316,27 +1361,28 @@ class ThisOrgHandler(webapp2.RequestHandler):
                 thisSMSAccount.put()
                 self.response.write("SMS Account successfully updated")
 
+
 class UsersInvitesHandler(webapp2.RequestHandler):
     def get(self):
-        #TODO- check to see if we dont need to return database results here
+        # TODO- check to see if we dont need to return database results here
         template = template_env.get_template('templates/users/invites.html')
         context = {}
         self.response.write(template.render(context))
 
     def post(self):
-        from mysms import SMSAccount,SMSPortalBudget,ClickSendSMSPortal
+        from mysms import SMSAccount, SMSPortalBudget, ClickSendSMSPortal
         from myTwilio import MyTwilioPortal
         vstrChoice = self.request.get('vstrChoice')
 
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAcceptToken = self.request.get('vstrAcceptToken')
 
             vstrCell = self.request.get('vstrCell')
 
-            findRequest = OpenInvites.query(OpenInvites.strCell == vstrCell)
+            findRequest = OpenInvites.query(OpenInvites.cell == vstrCell)
             thisOpenInvitesList = findRequest.fetch()
 
             if len(thisOpenInvitesList) > 0:
@@ -1347,7 +1393,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                 if len(thisOrganizationList) > 0:
                     thisOrg = thisOrganizationList[0]
 
-                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID ==thisOrg.strOrganizationID)
+                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOrg.organization_id)
                     thisSMSAccountList = findRequest.fetch()
 
                     if len(thisSMSAccountList) > 0:
@@ -1358,13 +1404,13 @@ class UsersInvitesHandler(webapp2.RequestHandler):
 
                         if len(thisBudgetPortaList) > 0:
                             thisBudgetPortal = thisBudgetPortaList[0]
-                            thisBudgetPortal.SendCronMessage(strCell=vstrCell,strMessage=thisOpenInvite.strSecurityCode)
+                            thisBudgetPortal.SendCronMessage(strCell=vstrCell,
+                                                             strMessage=thisOpenInvite.security_code)
                             thisSMSAccount.strTotalSMS -= 1
                             thisSMSAccount.put()
 
-
                     template = template_env.get_template('templates/users/sub/accept.html')
-                    context = {'thisOpenInvite':thisOpenInvite,'thisOrg':thisOrg}
+                    context = {'thisOpenInvite': thisOpenInvite, 'thisOrg': thisOrg}
                     self.response.write(template.render(context))
                 else:
                     self.response.write("Your invitation is not present in the system")
@@ -1373,7 +1419,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                 self.response.write("Your invitation is not present in the system")
 
         elif vstrChoice == "1":
-            #'&vstrUserID=' + struid + '&vstrAcceptToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrAcceptToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrAcceptToken = self.request.get('vstrAcceptToken')
 
@@ -1383,17 +1429,17 @@ class UsersInvitesHandler(webapp2.RequestHandler):
             vstrEmail = self.request.get('vstrEmail')
             vstrSecurityCode = self.request.get('vstrSecurityCode')
 
-            findRequest = OpenInvites.query(OpenInvites.strCell == vstrCell)
+            findRequest = OpenInvites.query(OpenInvites.cell == vstrCell)
             thisOpenInviteList = findRequest.fetch()
 
             if len(thisOpenInviteList) > 0:
                 thisOpenInvite = thisOpenInviteList[0]
 
-                if vstrSecurityCode == thisOpenInvite.strSecurityCode:
+                if vstrSecurityCode == thisOpenInvite.security_code:
 
-                    if thisOpenInvite.strCell == vstrCell:
+                    if thisOpenInvite.cell == vstrCell:
 
-                        findRequest = Accounts.query(Accounts.strCell == thisOpenInvite.strCell)
+                        findRequest = Accounts.query(Accounts.cell == thisOpenInvite.cell)
                         thisAccountList = findRequest.fetch()
 
                         if len(thisAccountList) > 0:
@@ -1401,7 +1447,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                             self.response.write("You already have an account in the system")
                         else:
                             thisAccount = Accounts()
-                            thisAccount.writeOrganizationID(strinput=thisAccount.strOrganizationID)
+                            thisAccount.writeOrganizationID(strinput=thisAccount.organization_id)
                             thisAccount.writeCell(strinput=vstrCell)
                             thisAccount.writeEmail(strinput=vstrEmail)
                             thisAccount.writeNames(strinput=vstrNames)
@@ -1418,26 +1464,24 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                 self.response.write("Fatal Error Your cell number is not attached to any invitation")
 
         elif vstrChoice == "2":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAcceptToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAcceptToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAcceptToken = self.request.get('vstrAcceptToken')
 
-
             vstrCell = self.request.get('vstrCell')
 
-            findRequest = OpenInvites.query(OpenInvites.strCell == vstrCell)
+            findRequest = OpenInvites.query(OpenInvites.cell == vstrCell)
             thisOpenInviteList = findRequest.fetch()
 
             if len(thisOpenInviteList) > 0:
                 thisOpenInvite = thisOpenInviteList[0]
 
-                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOpenInvite.strOrganizationID)
+                findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisOpenInvite.organization_id)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]
-
 
                     if thisSMSAccount.strUsePortal == "Budget":
 
@@ -1446,7 +1490,8 @@ class UsersInvitesHandler(webapp2.RequestHandler):
 
                         if len(thisBudgetPortaList) > 0:
                             thisBudgetPortal = thisBudgetPortaList[0]
-                            if thisBudgetPortal.SendCronMessage(strCell=vstrCell, strMessage=thisOpenInvite.strSecurityCode) != None:
+                            if thisBudgetPortal.SendCronMessage(strCell=vstrCell,
+                                                                strMessage=thisOpenInvite.security_code) != None:
                                 thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
                                 thisSMSAccount.put()
                                 self.response.write("Security Code successfully sent please enter the code")
@@ -1460,7 +1505,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                         else:
                             thisTwilioPortal = MyTwilioPortal()
 
-                        if thisTwilioPortal.sendSMS(strTo=vstrCell,strMessage=thisOpenInvite.strSecurityCode) != None:
+                        if thisTwilioPortal.sendSMS(strTo=vstrCell, strMessage=thisOpenInvite.security_code) != None:
                             thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
                             thisSMSAccount.put()
                             self.response.write("Security Code successfully sent please enter the code")
@@ -1474,12 +1519,11 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                         else:
                             thisClickSendPortal = ClickSendSMSPortal()
 
-                        if thisClickSendPortal.SendSMS(strCell=vstrCell,strMessage=thisOpenInvite.strSecurityCode) != None:
+                        if thisClickSendPortal.SendSMS(strCell=vstrCell,
+                                                       strMessage=thisOpenInvite.security_code) != None:
                             thisSMSAccount.strTotalSMS = thisSMSAccount.strTotalSMS - 1
                             thisSMSAccount.put()
                             self.response.write("Security Code successfully sent please enter the code")
-
-
 
 
 class ThisAdvertAccountHandler(webapp2.RequestHandler):
@@ -1505,7 +1549,6 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
         else:
             thisOrder = Orders()
 
-
         # Organization details of the owner of the account
         findRequest = Organization.query(Organization.strOrganizationID == thisOrder.strOrganizationID)
         thisOrgList = findRequest.fetch()
@@ -1515,8 +1558,8 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
         else:
             thisOrg = Organization()
 
-        #Main Account Details of the owner of the account
-        findRequest = Accounts.query(Accounts.strUserID == thisOrder.strUserID)
+        # Main Account Details of the owner of the account
+        findRequest = Accounts.query(Accounts.uid == thisOrder.strUserID)
         thisAccountList = findRequest.fetch()
 
         if len(thisAccountList) > 0:
@@ -1533,7 +1576,7 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
         else:
             thisAdvert = Advert()
 
-        from advertise import Payments # This is to force the use of payments class in adverts
+        from advertise import Payments  # This is to force the use of payments class in adverts
         # Payment details Advert
         findRequest = Payments.query(Payments.strOrderID == thisOrder.strOrderID)
         thisRelatedPaymentList = findRequest.fetch()
@@ -1543,19 +1586,19 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
         thisOrganizationPaymentsList = findRequest.fetch()
 
         template = template_env.get_template('templates/dashboard/payments/AdvertOrders.html')
-        context = {'thisOrder':thisOrder,'thisOrg':thisOrg,'thisAccount':thisAccount,'thisAdvert':thisAdvert,'thisRelatedPaymentList':thisRelatedPaymentList,
-                   'thisOrganizationPaymentsList':thisOrganizationPaymentsList}
+        context = {'thisOrder': thisOrder, 'thisOrg': thisOrg, 'thisAccount': thisAccount, 'thisAdvert': thisAdvert,
+                   'thisRelatedPaymentList': thisRelatedPaymentList,
+                   'thisOrganizationPaymentsList': thisOrganizationPaymentsList}
         self.response.write(template.render(context))
+
     def post(self):
         from advertise import Payments, Orders
         vstrChoice = self.request.get('vstrChoice')
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
-            vstrAccessToken =self.request.get('vstrAccessToken')
-
-
+            vstrAccessToken = self.request.get('vstrAccessToken')
 
             vstrDepositReference = self.request.get('vstrDepositReference')
             vstrAmount = self.request.get('vstrAmount')
@@ -1571,8 +1614,7 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
 
             vstrThisDate = datetime.datetime.now()
             strThisDate = vstrThisDate.date()
-            strThisTime = datetime.time(hour=vstrThisDate.hour,minute=vstrThisDate.minute,second=vstrThisDate.second)
-
+            strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute, second=vstrThisDate.second)
 
             thisPayment = Payments()
             thisPayment.writeOrderID(strinput=thisOrder.strOrderID)
@@ -1583,7 +1625,6 @@ class ThisAdvertAccountHandler(webapp2.RequestHandler):
 
             thisPayment.writeAmountPaid(strinput=vstrAmount)
             thisPayment.writePaymentMethod(strinput=vstrPaymentMethod)
-
 
             thisPayment.writeDatePaid(strinput=strThisDate)
             thisPayment.writeTimePaid(strinput=strThisTime)
@@ -1605,18 +1646,17 @@ class AccountsAPIHandler(webapp2.RequestHandler):
         vstrChoice = self.request.get('vstrChoice')
 
         if vstrChoice == "0":
-            #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+            # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
             vstrUserID = self.request.get('vstrUserID')
             vstrEmail = self.request.get('vstrEmail')
             vstrAccessToken = self.request.get('vstrAccessToken')
 
-
-            findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+            findRequest = Accounts.query(Accounts.uid == vstrUserID)
             thisAccountList = findRequest.fetch()
             if len(thisAccountList) > 0:
                 thisAccount = thisAccountList[0]
-                if thisAccount.strVerified:
-                    findRequest = EndPoints.query(EndPoints.strOrganizationID == thisAccount.strOrganizationID)
+                if thisAccount.verified:
+                    findRequest = EndPoints.query(EndPoints.strOrganizationID == thisAccount.organization_id)
                     thisEndPointList = findRequest.fetch()
 
                     if len(thisEndPointList) > 0:
@@ -1626,36 +1666,34 @@ class AccountsAPIHandler(webapp2.RequestHandler):
                         thisEndPoint.writeAPiKey(strinput=thisEndPoint.CreateAPIKey())
                         thisEndPoint.writeAPISecret(strinput=thisEndPoint.CreateAPISecret())
                         thisEndPoint.writePointID(strinput=thisEndPoint.CreatePointID())
-                        thisEndPoint.writeOrganizationID(strinput=thisAccount.strOrganizationID)
+                        thisEndPoint.writeOrganizationID(strinput=thisAccount.organization_id)
                         thisEndPoint.put()
 
                     template = template_env.get_template('templates/api/UserEndPoint.html')
-                    context = {'thisEndPoint':thisEndPoint}
+                    context = {'thisEndPoint': thisEndPoint}
                     self.response.write(template.render(context))
 
         else:
             self.response.write("No valid choice")
 
-
     def post(self):
         from myapi import EndPoints
         vstrChoice = self.request.get('vstrChoice')
-        #'&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
+        # '&vstrUserID=' + struid + '&vstrEmail=' + email + '&vstrAccessToken=' + accessToken;
         vstrUserID = self.request.get('vstrUserID')
         vstrEmail = self.request.get('vstrEmail')
         vstrAccessToken = self.request.get('vstrAccessToken')
 
-
         if vstrChoice == "0":
             vstrPointURL = self.request.get('vstrPointURL')
 
-            findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+            findRequest = Accounts.query(Accounts.uid == vstrUserID)
             thisAccountList = findRequest.fetch()
 
             if len(thisAccountList) > 0:
                 thisAccount = thisAccountList[0]
 
-                findRequest = EndPoints.query(EndPoints.strOrganizationID == thisAccount.strOrganizationID)
+                findRequest = EndPoints.query(EndPoints.strOrganizationID == thisAccount.organization_id)
                 thisEndPointList = findRequest.fetch()
 
                 if len(thisEndPointList) > 0:
@@ -1679,19 +1717,19 @@ class ManageCreditHandler(webapp2.RequestHandler):
         vstrEmail = self.request.get('vstrEmail')
         vstrAccessToken = self.request.get('vstrAccessToken')
 
-        findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+        findRequest = Accounts.query(Accounts.uid == vstrUserID)
         thisAccountList = findRequest.fetch()
         if len(thisAccountList) > 0:
             thisAccount = thisAccountList[0]
 
-            findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.strOrganizationID)
+            findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
             thisSMSAccountList = findRequest.fetch()
             if len(thisSMSAccountList) > 0:
                 thisSMSAccount = thisSMSAccountList[0]
             else:
                 thisSMSAccount = SMSAccount()
 
-            findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.strOrganizationID)
+            findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
             thisAddAccountList = findRequest.fetch()
 
             if len(thisAddAccountList) > 0:
@@ -1699,7 +1737,7 @@ class ManageCreditHandler(webapp2.RequestHandler):
             else:
                 thisAddAccount = AddAccount()
 
-            findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.strOrganizationID)
+            findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
             thisSurveyAccountList = findRequest.fetch()
 
             if len(thisSurveyAccountList) > 0:
@@ -1716,7 +1754,8 @@ class ManageCreditHandler(webapp2.RequestHandler):
                 thisAffilite = Affiliate()
 
             template = template_env.get_template('templates/account/managecredits.html')
-            context = {'thisSMSAccount':thisSMSAccount,'thisAddAccount':thisAddAccount,'thisSurveyAccount':thisSurveyAccount,'thisAffilite':thisAffilite}
+            context = {'thisSMSAccount': thisSMSAccount, 'thisAddAccount': thisAddAccount,
+                       'thisSurveyAccount': thisSurveyAccount, 'thisAffilite': thisAffilite}
             self.response.write(template.render(context))
 
     def post(self):
@@ -1737,18 +1776,18 @@ class ManageCreditHandler(webapp2.RequestHandler):
             vstrBulkTransferCredits = self.request.get('vstrBulkTransferCredits')
 
             if vstrBulkTransferCredits == "Adverts":
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
 
                     if len(thisAdvertAccountList) > 0:
                         thisAdvertAccount = thisAdvertAccountList[0]
 
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.strOrganizationID)
+                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
 
                         if len(thisSMSAccountList) > 0:
@@ -1758,28 +1797,31 @@ class ManageCreditHandler(webapp2.RequestHandler):
                                 thisAdvertAccount.strTotalCredits += int(vstrBulkCredits)
                                 thisSMSAccount.put()
                                 thisAdvertAccount.put()
-                                self.response.write("Successfully transferred " + vstrBulkCredits + " SMS Credits to your Advert Account")
+                                self.response.write(
+                                    "Successfully transferred " + vstrBulkCredits + " SMS Credits to your Advert Account")
                             else:
-                                self.response.write("Unable to transfer credits insufficient credit in your Bulk SMS Account")
+                                self.response.write(
+                                    "Unable to transfer credits insufficient credit in your Bulk SMS Account")
                         else:
                             self.response.write("Fatal Error transferring Bulk SMS Credits")
                     else:
-                        self.response.write("You do not have an Advertising Account please create an advertising account")
+                        self.response.write(
+                            "You do not have an Advertising Account please create an advertising account")
                 else:
                     self.response.write("Cannot effect credit transfer as you do not have an account yet")
 
             elif vstrBulkTransferCredits == "Surveys":
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
                     thisSurveyAccountList = findRequest.fetch()
 
                     if len(thisSurveyAccountList) > 0:
                         thisSurveyAccount = thisSurveyAccountList[0]
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.strOrganizationID)
+                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
 
                         if len(thisSMSAccountList) > 0:
@@ -1789,9 +1831,11 @@ class ManageCreditHandler(webapp2.RequestHandler):
                                 thisSurveyAccount.strTotalCredits += int(vstrBulkCredits)
                                 thisSMSAccount.put()
                                 thisSurveyAccount.put()
-                                self.response.write("Successfully Transferred " + vstrBulkCredits + " Credits into your Survey Account")
+                                self.response.write(
+                                    "Successfully Transferred " + vstrBulkCredits + " Credits into your Survey Account")
                             else:
-                                self.response.write("Unable to transfer credits insufficient credit in your Bulk SMS Account")
+                                self.response.write(
+                                    "Unable to transfer credits insufficient credit in your Bulk SMS Account")
                         else:
                             self.response.write("Fatal Error transferring Bulk SMS Credits")
                     else:
@@ -1807,29 +1851,33 @@ class ManageCreditHandler(webapp2.RequestHandler):
             vstrAdvertsTransferCredits = self.request.get("vstrAdvertsTransferCredits")
 
             if vstrAdvertsTransferCredits == "BulkSMS":
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
 
                     if len(thisAdvertAccountList) > 0:
                         thisAdvertAccount = thisAdvertAccountList[0]
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.strOrganizationID)
+                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
 
-                            if ((thisAdvertAccount.strTotalCredits >= int(vstrAdvertsCredits)) and (int(vstrAdvertsCredits) > 0)):
-                                thisAdvertAccount.strTotalCredits = thisAdvertAccount.strTotalCredits  - int(vstrAdvertsCredits)
+                            if ((thisAdvertAccount.strTotalCredits >= int(vstrAdvertsCredits)) and (
+                                    int(vstrAdvertsCredits) > 0)):
+                                thisAdvertAccount.strTotalCredits = thisAdvertAccount.strTotalCredits - int(
+                                    vstrAdvertsCredits)
                                 thisSMSAccount.strTotalSMS += int(vstrAdvertsCredits)
                                 thisSMSAccount.put()
                                 thisAdvertAccount.put()
-                                self.response.write("Successfully Transferred " + vstrAdvertsCredits + " Credits into your Bulk SMS Account")
+                                self.response.write(
+                                    "Successfully Transferred " + vstrAdvertsCredits + " Credits into your Bulk SMS Account")
                             else:
-                                self.response.write("Unable to transfer credits insufficient credit in your Advert Account")
+                                self.response.write(
+                                    "Unable to transfer credits insufficient credit in your Advert Account")
                         else:
                             self.response.write("Fatal Error you do not have an active Bulk SMS Account")
                     else:
@@ -1839,30 +1887,34 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
             elif vstrAdvertsTransferCredits == "Surveys":
 
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
                     thisAdvertAccountList = findRequest.fetch()
 
                     if len(thisAdvertAccountList) > 0:
                         thisAdvertAccount = thisAdvertAccountList[0]
-                        findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.strOrganizationID)
+                        findRequest = SurveyAccount.query(
+                            SurveyAccount.strOrganizationID == thisAccount.organization_id)
                         thisSurveyAccountList = findRequest.fetch()
                         if len(thisSurveyAccountList) > 0:
                             thisSurveyAccount = thisSurveyAccountList[0]
 
-                            if ((thisAdvertAccount.strTotalCredits >= int(vstrAdvertsCredits)) and (int(vstrAdvertsCredits) > 0)):
+                            if ((thisAdvertAccount.strTotalCredits >= int(vstrAdvertsCredits)) and (
+                                    int(vstrAdvertsCredits) > 0)):
                                 thisAdvertAccount.strTotalCredits = thisAdvertAccount.strTotalCredits - int(
                                     vstrAdvertsCredits)
                                 thisSurveyAccount.strTotalCredits += int(vstrAdvertsCredits)
                                 thisAdvertAccount.put()
                                 thisSurveyAccount.put()
-                                self.response.write("Successfully Transferred " + vstrAdvertsCredits + " Credits into your Survey Account")
+                                self.response.write(
+                                    "Successfully Transferred " + vstrAdvertsCredits + " Credits into your Survey Account")
                             else:
-                                self.response.write("Unable to transfer credits insufficient credit in your Advert Account")
+                                self.response.write(
+                                    "Unable to transfer credits insufficient credit in your Advert Account")
                         else:
                             self.response.write("Fatal Error you do not have an active Survey Account")
                     else:
@@ -1878,66 +1930,72 @@ class ManageCreditHandler(webapp2.RequestHandler):
             vstrSurveyTransferCredits = self.request.get("vstrSurveyTransferCredits")
 
             if vstrSurveyTransferCredits == "BulkSMS":
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
                     thisSurveyAccountList = findRequest.fetch()
 
                     if len(thisSurveyAccountList) > 0:
                         thisSurveyAccount = thisSurveyAccountList[0]
-                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.strOrganizationID)
+                        findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
                         thisSMSAccountList = findRequest.fetch()
                         if len(thisSMSAccountList) > 0:
                             thisSMSAccount = thisSMSAccountList[0]
 
                             if (thisSurveyAccount.strTotalCredits >= int(vstrSurveyCredits)):
-                                thisSurveyAccount.strTotalCredits = thisSurveyAccount.strTotalCredits - int(vstrSurveyCredits)
+                                thisSurveyAccount.strTotalCredits = thisSurveyAccount.strTotalCredits - int(
+                                    vstrSurveyCredits)
                                 thisSMSAccount.strTotalSMS += int(vstrSurveyCredits)
                                 thisSMSAccount.put()
                                 thisSurveyAccount.put()
-                                self.response.write("Successfully transferred " + vstrSurveyCredits + " Survey Credits to Bulk SMS Credits")
+                                self.response.write(
+                                    "Successfully transferred " + vstrSurveyCredits + " Survey Credits to Bulk SMS Credits")
                             else:
                                 self.response.write("Error Insufficient Credits to effect Transfer")
                         else:
-                            self.response.write("Error Unable to effect Transfer you do not have a valid Bulk SMS Account")
+                            self.response.write(
+                                "Error Unable to effect Transfer you do not have a valid Bulk SMS Account")
                     else:
                         self.response.write("Error unable to effect transfer you do not have a valid Survey Account")
                 else:
                     self.response.write("Error unable to effect transfer you do not have a valid System Account")
 
             elif vstrSurveyTransferCredits == "Adverts":
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
                     thisSurveyAccountList = findRequest.fetch()
 
                     if len(thisSurveyAccountList) > 0:
                         thisSurveyAccount = thisSurveyAccountList[0]
 
-                        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.strOrganizationID)
+                        findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
                         thisAdvertAccountList = findRequest.fetch()
 
                         if len(thisAdvertAccountList) > 0:
                             thisAdvertAccount = thisAdvertAccountList[0]
 
                             if (thisSurveyAccount.strTotalCredits >= int(vstrSurveyCredits)):
-                                thisSurveyAccount.strTotalCredits = thisSurveyAccount.strTotalCredits - int(vstrSurveyCredits)
+                                thisSurveyAccount.strTotalCredits = thisSurveyAccount.strTotalCredits - int(
+                                    vstrSurveyCredits)
                                 thisAdvertAccount.strTotalCredits += int(vstrSurveyCredits)
                                 thisSurveyAccount.put()
                                 thisAdvertAccount.put()
-                                self.response.write("Successfully transferred " + vstrSurveyCredits + " Survey Credits into your Advertising Account")
+                                self.response.write(
+                                    "Successfully transferred " + vstrSurveyCredits + " Survey Credits into your Advertising Account")
                             else:
                                 self.response.write("Error insufficient Credits to effect Transfer")
                         else:
-                            self.response.write("Error unable to effect transfer you do not have a valid Advertising Account")
+                            self.response.write(
+                                "Error unable to effect transfer you do not have a valid Advertising Account")
                     else:
                         self.response.write("Errror unable to effect transfer you do not have a valid Survey Account")
                 else:
@@ -1952,13 +2010,13 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
             if vstrAffiliateTransferCredits == "BulkSMS":
 
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisAccount.organization_id)
                     thisSMSAccountList = findRequest.fetch()
 
                     if len(thisSMSAccountList) > 0:
@@ -1970,13 +2028,16 @@ class ManageCreditHandler(webapp2.RequestHandler):
                             thisAffiliate = thisAffiliateList[0]
 
                             if thisAffiliate.strAvailableCredit >= int(vstrAffiliateCredits):
-                                thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(vstrAffiliateCredits)
+                                thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(
+                                    vstrAffiliateCredits)
                                 thisSMSAccount.strTotalSMS += int(vstrAffiliateCredits)
                                 thisAffiliate.put()
                                 thisSMSAccount.put()
-                                self.response.write("Successfully transferred " + vstrAffiliateCredits + " Affiliate Credits into your Bulk SMS Account")
+                                self.response.write(
+                                    "Successfully transferred " + vstrAffiliateCredits + " Affiliate Credits into your Bulk SMS Account")
                             else:
-                                self.response.write("Error Transferring Credit insufficient Credit on your Affiliate Account")
+                                self.response.write(
+                                    "Error Transferring Credit insufficient Credit on your Affiliate Account")
                         else:
                             self.response.write("Error you do not have an active Affiliate Account")
 
@@ -1987,13 +2048,13 @@ class ManageCreditHandler(webapp2.RequestHandler):
 
             elif vstrAffiliateTransferCredits == "Adverts":
 
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = AddAccount.query(AddAccount.strOrganizationID == thisAccount.organization_id)
                     thisAdvertList = findRequest.fetch()
                     if len(thisAdvertList) > 0:
                         thisAdvert = thisAdvertList[0]
@@ -2004,13 +2065,16 @@ class ManageCreditHandler(webapp2.RequestHandler):
                             thisAffiliate = thisAffiliateList[0]
 
                             if thisAffiliate.strAvailableCredit >= int(vstrAffiliateCredits):
-                                thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(vstrAffiliateCredits)
+                                thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(
+                                    vstrAffiliateCredits)
                                 thisAdvert.strTotalCredits += int(vstrAffiliateCredits)
                                 thisAffiliate.put()
                                 thisAdvert.put()
-                                self.response.write("Successfully transferred " + vstrAffiliateCredits + " Affiliate Credits into your Advertising Account")
+                                self.response.write(
+                                    "Successfully transferred " + vstrAffiliateCredits + " Affiliate Credits into your Advertising Account")
                             else:
-                                self.response.write("Error Transferring Credit insufficient Credit on your Affiliate Account")
+                                self.response.write(
+                                    "Error Transferring Credit insufficient Credit on your Affiliate Account")
                         else:
                             self.response.write("Error you do not have an active Affiliate Account")
                     else:
@@ -2019,13 +2083,13 @@ class ManageCreditHandler(webapp2.RequestHandler):
                     self.response.write("Error you do not have a Valid System Account")
 
             elif vstrAffiliateTransferCredits == "Survey":
-                findRequest = Accounts.query(Accounts.strUserID == vstrUserID)
+                findRequest = Accounts.query(Accounts.uid == vstrUserID)
                 thisAccountList = findRequest.fetch()
 
                 if len(thisAccountList) > 0:
                     thisAccount = thisAccountList[0]
 
-                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.strOrganizationID)
+                    findRequest = SurveyAccount.query(SurveyAccount.strOrganizationID == thisAccount.organization_id)
                     thisSurveyList = findRequest.fetch()
                     if len(thisSurveyList) > 0:
                         thisSurvey = thisSurveyList[0]
@@ -2036,19 +2100,23 @@ class ManageCreditHandler(webapp2.RequestHandler):
                             thisAffiliate = thisAffiliateList[0]
 
                             if thisAffiliate.strAvailableCredit >= int(vstrAffiliateCredits):
-                                thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(vstrAffiliateCredits)
+                                thisAffiliate.strAvailableCredit = thisAffiliate.strAvailableCredit - int(
+                                    vstrAffiliateCredits)
                                 thisSurvey.strTotalCredits += int(vstrAffiliateCredits)
                                 thisAffiliate.put()
                                 thisSurvey.put()
-                                self.response.write("Successfully transferred " + vstrAffiliateCredits + " Affiliate Credits into your survey Account")
+                                self.response.write(
+                                    "Successfully transferred " + vstrAffiliateCredits + " Affiliate Credits into your survey Account")
                             else:
-                                self.response.write("Error Transferring Credit insufficient Credit on your Affiliate Account")
+                                self.response.write(
+                                    "Error Transferring Credit insufficient Credit on your Affiliate Account")
                         else:
                             self.response.write("Error you do not have an active Affiliate Account")
                     else:
                         self.response.write("Error you do not have a valid Survey Account")
                 else:
                     self.response.write("Error you do not have a Valid System Account")
+
 
 app = webapp2.WSGIApplication([
     ('/admin/org', OrganizaHandler),
@@ -2059,7 +2127,5 @@ app = webapp2.WSGIApplication([
     ('/org/advaccounts/.*', ThisAdvertAccountHandler),
     ('/accounts/api', AccountsAPIHandler),
     ('/accounts/credits', ManageCreditHandler)
-
-
 
 ], debug=True)
