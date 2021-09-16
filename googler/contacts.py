@@ -1216,7 +1216,7 @@ class ThisContactHandler():
                             thisOutBox.writeTimeSent(strinput=strThisTime)
                             thisOutBox.put()
 
-                            ref = thisPortal.SendSMS(strMessage=vstrMessage,strCell=vstrCell)
+                            ref = thisPortal.send_sms(cell=vstrCell, message=vstrMessage)
 
                             if ref != None:
 

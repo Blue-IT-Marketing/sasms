@@ -849,7 +849,7 @@ class SMSPortalVodacom(ndb.Model):
         except:
             return False
     def SendMessages(self,strCellNumberList,strMessage):
-        from myemail import SendEmail
+        from myemail import send_email
         try:
             strSubject = ""
             strInvalid = False
@@ -872,7 +872,7 @@ class SMSPortalVodacom(ndb.Model):
 
 
             #def SendEmail(strFrom,strTo,subject,body,strTextType,strAttachFileContent=None,strAttachFileName=None):
-            if SendEmail(strFrom=self.sender_address, strTo=self.email_address, strSubject=strSubject, strBody=strMessage, strTextType="text/plain"):
+            if send_email(strFrom=self.sender_address, strTo=self.email_address, strSubject=strSubject, strBody=strMessage, strTextType="text/plain"):
                 try:
                     self.writeAvailableCredit(strinput=str(self.available_credit - len(strCellNumberList)))
                     self.put()
@@ -886,22 +886,22 @@ class SMSPortalVodacom(ndb.Model):
         except:
             return False
 
-    def CronSendMessages(self,strCellNumberList,strMessage,strAccountID):
+    def cron_send_messages(self,cell_number_list,message,account_id):
         from myemail import SendEmail
         try:
 
             strSubject = ""
             strInvalid = False
-            if isinstance(strCellNumberList,list):
-                for strCell in strCellNumberList:
+            if isinstance(cell_number_list, list):
+                for strCell in cell_number_list:
                     if strSubject == "":
                         strSubject = strCell
                     else:
                         strSubject = strSubject + " " + strCell
 
-            elif "," in strCellNumberList:
-                strCellNumberList = strCellNumberList.split(",")
-                for strCell in strCellNumberList:
+            elif "," in cell_number_list:
+                cell_number_list = cell_number_list.split(",")
+                for strCell in cell_number_list:
                     if strSubject == "":
                         strSubject = strCell
                     else:
@@ -911,25 +911,25 @@ class SMSPortalVodacom(ndb.Model):
 
             if not(strInvalid):
 
-                findRequest = SMSAccount.query(SMSAccount.organization_id == strAccountID)
+                findRequest = SMSAccount.query(SMSAccount.organization_id == account_id)
                 thisSMSAccountList = findRequest.fetch()
 
                 if len(thisSMSAccountList) > 0:
                     thisSMSAccount = thisSMSAccountList[0]
                 else:
                     thisSMSAccount = SMSAccount()
-                    thisSMSAccount.writeOrganizationID(strinput=strAccountID)
+                    thisSMSAccount.writeOrganizationID(strinput=account_id)
                     thisSMSAccount.put()
 
 
-                if thisSMSAccount.total_sms >= len(strCellNumberList):
+                if thisSMSAccount.total_sms >= len(cell_number_list):
 
                     #def SendEmail(strFrom,strTo,subject,body,strTextType,strAttachFileContent=None,strAttachFileName=None):
-                    if SendEmail(strFrom=self.sender_address, strTo=self.email_address, strSubject=strSubject, strBody=strMessage, strTextType="text/plain"):
+                    if SendEmail(strFrom=self.sender_address, strTo=self.email_address, strSubject=strSubject, strBody=message, strTextType="text/plain"):
 
-                        thisSMSAccount.writeTotalSMS(strinput=str(thisSMSAccount.total_sms - len(strCellNumberList)))
+                        thisSMSAccount.writeTotalSMS(strinput=str(thisSMSAccount.total_sms - len(cell_number_list)))
                         thisSMSAccount.put()
-                        self.writeAvailableCredit(strinput=str(self.available_credit - len(strCellNumberList)))
+                        self.writeAvailableCredit(strinput=str(self.available_credit - len(cell_number_list)))
                         self.put()
                         return True
                     else:
@@ -1133,10 +1133,10 @@ class SMSPortalBudget(ndb.Model):
 
         except:
             return False
-    def SendMessage(self,strMessage,strMessageID,strCell):
+    def send_sms(self,message,message_id,cell):
         try:
-            strMessage = strMessage + " Optout:Reply STOP"
-            form_data = 'user=' + self.login_name + '&password=' + self.password + '&cell=' + strCell + '&msg=' + strMessage + '&ref=' + strMessageID
+            message = message + " Optout:Reply STOP"
+            form_data = 'user=' + self.login_name + '&password=' + self.password + '&cell=' + cell + '&msg=' + message + '&ref=' + message_id
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
             result = urlfetch.fetch(url=self.rest_api, payload=form_data, method=urlfetch.POST, headers=headers, validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400) :
@@ -1290,11 +1290,11 @@ class ClickSendSMSPortal(ndb.Model):
     send_from_email = ndb.StringProperty(default=os.environ.get('CLICK_SEND_FROM_EMAIL'))
 
 
-    def SendSMS(self,strCell,strMessage):
+    def send_sms(self,cell,message):
         try:
-            strMessage = strMessage + " Optout : Reply STOP"
+            message = message + " Optout : Reply STOP"
 
-            form_data = "method=http&username=" + self.username + "&key=" + self.api_key + "&to=" + strCell + "&message=" + strMessage
+            form_data = "method=http&username=" + self.username + "&key=" + self.api_key + "&to=" + cell + "&message=" + message
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
             result = urlfetch.fetch(url=self.rest_send_api, payload=form_data, method=urlfetch.POST, headers=headers, validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400):
@@ -2375,7 +2375,8 @@ class thisSMSManagerHandler():
                                 thisDate = datetime.datetime.now()
                                 thisDate = thisDate.date()
 
-                                result = thisClickSendSMS.SendSMS(strCell=thisContact.cell_number, strMessage=thisMessage.message)
+                                result = thisClickSendSMS.send_sms(cell=thisContact.cell_number,
+                                                                   message=thisMessage.message)
 
                                 if result == None:
                                     isSent = False
@@ -2685,7 +2686,8 @@ class BuyCreditsHandler():
                                     thisVodaPortal = SMSPortalVodacom()
                                 RecipientList = []
                                 RecipientList.append(thisOrganization.cell)
-                                if thisVodaPortal.CronSendMessages(strCellNumberList=RecipientList, strMessage=strMessage, strAccountID=thisBankAccount.staff_id):
+                                if thisVodaPortal.cron_send_messages(cell_number_list=RecipientList, message=strMessage,
+                                                                     account_id=thisBankAccount.staff_id):
                                     self.response.write("Successfully sent banking details to your mobile phone")
                                 else:
                                     self.response.write("Error sending banking details to mobile please try again later")
@@ -2712,7 +2714,7 @@ class BuyCreditsHandler():
                                 else:
                                     thisClickSend = ClickSendSMSPortal()
 
-                                    strResult = thisClickSend.SendSMS(strCell=thisOrganization.cell, strMessage=strMessage)
+                                    strResult = thisClickSend.send_sms(cell=thisOrganization.cell, message=strMessage)
 
                                     if strResult != None:
                                         self.response.write("Successfully sent Banking Details to your mobile phone")

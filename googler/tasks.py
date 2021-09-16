@@ -15,226 +15,173 @@
 # limitations under the License.
 #
 import os
-from google.appengine.ext import blobstore
-from google.appengine.ext.webapp import blobstore_handlers
-import webapp2
 import jinja2
-from google.appengine.ext import ndb
-from google.appengine.api import users,mail
-from google.appengine.api import urlfetch
+from google.cloud import ndb
+import requests
 import logging
 import math
 import datetime
 from datetime import timedelta
+
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
-#Use of lambda
-#succ = lambda n: lambda f: lambda x: f(n(f)(x))
 
-def BulkSMSHandler():
+# Use of lambda
+# succ = lambda n: lambda f: lambda x: f(n(f)(x))
 
-    from mysms import MessageSchedule, Messages, SMSContacts, Groups, SMSAccount, SMSPortalVodacom,DeliveryReport, SMSPortalBudget, ClickSendSMSPortal
-    from myTwilio import MyTwilioPortal
-    from accounts import Accounts
-    Today = datetime.datetime.now()
-    thisDate = Today.date()
-    thisTime = Today.time()
+class BulkSMSCron:
+    def __init__(self):
+        pass
 
-    findRequest = MessageSchedule.query(MessageSchedule.status == "Scheduled",
-                                        MessageSchedule.start_date == thisDate,
-                                        MessageSchedule.start_time >= thisTime)
-    thisMessageScheduleList = findRequest.fetch()
+    def bulk_sms_handler(self):
+        from mysms import MessageSchedule, Messages, SMSContacts, Groups, SMSAccount
+        from accounts import Accounts
 
-    if len(thisMessageScheduleList) > 0:
-        logging.info("There are messages scheduled")
+        _today = datetime.datetime.now()
+        this_date = _today.date()
+        this_time = _today.time()
 
-    for thisSchedule in thisMessageScheduleList:
-        findRequest = Messages.query(Messages.message_id == thisSchedule.message_id,
-                                     Messages.submitted == False)
-        thisMessageList = findRequest.fetch()
+        _group_query = MessageSchedule.query(MessageSchedule.status == "Scheduled",
+                                             MessageSchedule.start_date == this_date,
+                                             MessageSchedule.start_time >= this_time)
+        message_schedule_list = _group_query.fetch()
 
-        if len(thisMessageList) > 0:
-            thisMessage = thisMessageList[0]
-        else:
-            thisMessage = Messages()
+        if message_schedule_list:
+            logging.info("There are messages scheduled")
 
-        findRequest = Groups.query(Groups.group_id == thisMessage.group_id)
-        thisGroupList = findRequest.fetch()
+        for schedule in message_schedule_list:
+            _group_query = Messages.query(Messages.message_id == schedule.message_id,
+                                          Messages.submitted == False)
+            message_list = _group_query.fetch()
 
-        if len(thisGroupList) > 0:
-            thisGroup = thisGroupList[0]
-        else:
-            thisGroup = Groups()
+            _message = message_list[0] if message_list else Messages()
 
-        findRequest = SMSAccount.query(SMSAccount.organization_id == thisGroup.organization_id)
-        thisSMSAccountList = findRequest.fetch()
+            _group_query = Groups.query(Groups.group_id == _message.group_id)
+            groups_list = _group_query.fetch()
+            this_group = groups_list[0] if groups_list else Groups()
 
-        if len(thisSMSAccountList) > 0:
-            thisSMSAccount = thisSMSAccountList[0]
+            _group_query = SMSAccount.query(SMSAccount.organization_id == this_group.organization_id)
+            this_sms_account_list = _group_query.fetch()
 
-        else:
-            thisSMSAccount = SMSAccount()
-            thisSMSAccount.writeOrganizationID(strinput=thisGroup.organization_id)
-            thisSMSAccount.put()
+            if this_sms_account_list:
+                this_sms_account = this_sms_account_list[0]
+            else:
+                this_sms_account = SMSAccount()
+                this_sms_account.organization_id = this_group.organization_id
+                this_sms_account.put()
 
-        findRequest = SMSContacts.query(SMSContacts.group_id == thisMessage.group_id)
-        thisContactsList = findRequest.fetch()
+            contacts_list = SMSContacts.query(SMSContacts.group_id == _message.group_id).fetch()
 
-        ReceipientList = []
-        for thisContact in thisContactsList:
-            if not (thisContact.cell_number == None):
-                ReceipientList.append(thisContact.cell_number)
+            recipients_list = [this_contact.cell_number for this_contact in contacts_list if this_contact.cell_number]
 
-        if thisSchedule.notify_on_start == True:
-            findRequest = Accounts.query(Accounts.uid == thisSchedule.uid)
-            thisAccountsList = findRequest.fetch()
+            if schedule.notify_on_start:
 
-            if len(thisAccountsList) > 0:
-                thisAccounts = thisAccountsList[0]
-                if thisAccounts.cell in ReceipientList:
-                    pass
-                else:
-                    ReceipientList.append(thisAccounts.cell)
+                _this_account = Accounts.query(Accounts.uid == schedule.uid).get()
+                if _this_account.cell not in recipients_list:
+                    recipients_list.append(_this_account.cell)
 
-        if thisSMSAccount.total_sms >= len(ReceipientList):
-            if thisSMSAccount.use_portal == "Vodacom":
-                findRequest = SMSPortalVodacom.query()
-                thisVodaList = findRequest.fetch()
+            if this_sms_account.total_sms >= len(recipients_list):
+                if this_sms_account.use_portal == "Vodacom":
+                    self.send_with_vodacom(_message, recipients_list, schedule, this_date, this_sms_account, this_time)
 
-                if len(thisVodaList) > 0:
-                    thisVoda = thisVodaList[0]
-                else:
-                    thisVoda = SMSPortalVodacom()
-                    thisVoda.put()
+                elif this_sms_account.use_portal == "Budget":
+                    self.send_with_budget(_message, recipients_list, schedule, this_date, this_sms_account, this_time)
 
-                if thisVoda.CronSendMessages(strCellNumberList=ReceipientList,
-                                             strMessage=thisMessage.message,
-                                             strAccountID=thisSMSAccount.organization_id):
-                    thisSchedule.writeStatus(strinput="Completed")
-                    thisSchedule.put()
-                    thisMessage.writeDateSubmitted(strinput=thisDate)
-                    thisMessage.writeTimeSubmitted(strinput=thisTime)
-                    thisMessage.writeSubmitted(strinput=True)
-                    thisMessage.put()
-                    for StrCell in ReceipientList:
-                        thisDeliveryReport = DeliveryReport()
-                        thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
-                        thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
-                        thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
-                        thisDeliveryReport.writeReference(strinput="voda")
-                        thisDeliveryReport.writeCell(strinput=StrCell)
-                        thisDeliveryReport.writeDate(strinput=thisDate)
-                        thisDeliveryReport.writeTime(strinput=thisTime)
-                        thisDeliveryReport.writeDelivered(strinput=True)
-                        thisDeliveryReport.put()
-                    logging.info("Bulk SMS Schedule executed")
+                elif this_sms_account.use_portal == "ClickSend":
+                    self.send_with_click_send(_message, recipients_list, schedule, this_date, this_sms_account, this_time)
 
-            elif thisSMSAccount.use_portal == "Budget":
-                findRequest = SMSPortalBudget.query()
-                thisBudgetPortalList = findRequest.fetch()
+                elif this_sms_account.use_portal == "Twilio":
+                    self.send_with_twilio(_message, recipients_list, schedule, this_date, this_sms_account, this_time)
 
-                if len(thisBudgetPortalList) > 0:
-                    thisPortal = thisBudgetPortalList[0]
+    @staticmethod
+    def create_delivery_report(_message, cell_number, reference, this_date, this_sms_account, this_time):
+        from mysms import DeliveryReport
+        delivery_report = DeliveryReport()
+        delivery_report.writeMessageID(strinput=_message.message_id)
+        delivery_report.writeGroupID(strinput=_message.group_id)
+        delivery_report.writeOrganizationID(strinput=this_sms_account.organization_id)
+        delivery_report.writeReference(strinput=reference)
+        delivery_report.writeCell(strinput=cell_number)
+        delivery_report.writeDate(strinput=this_date)
+        delivery_report.writeTime(strinput=this_time)
+        delivery_report.writeDelivered(strinput=True)
+        delivery_report.put()
 
-                    strTotalDelivered = 0
+    @staticmethod
+    def messages_sent(_message, schedule, this_date, this_sms_account, this_time, total_delivered):
+        _message.writeDateSubmitted(strinput=this_date)
+        _message.writeTimeSubmitted(strinput=this_time)
+        _message.writeSubmitted(strinput=True)
+        _message.put()
 
-                    for thisContact in ReceipientList:
-                        ref = thisPortal.SendMessage(strMessage=thisMessage.message,
-                                                     strMessageID=thisMessage.message_id, strCell=thisContact)
-                        ref = ref.strip()
-                        if (ref != None) and (ref != ""):
-                            thisDeliveryReport = DeliveryReport()
-                            thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
-                            thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
-                            thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
-                            thisDeliveryReport.writeReference(strinput=ref)
-                            thisDeliveryReport.writeCell(strinput=thisContact)
-                            thisDeliveryReport.writeDate(strinput=thisDate)
-                            thisDeliveryReport.writeTime(strinput=thisTime)
-                            thisDeliveryReport.writeDelivered(strinput=True)
-                            thisDeliveryReport.put()
-                            strTotalDelivered += 1
+    def send_with_twilio(self, _message, recipients_list, schedule, this_date, this_sms_account, this_time):
+        from myTwilio import MyTwilioPortal
+        _twilio_portal = MyTwilioPortal.query().get()
+        total_delivered = 0
+        for cell_number in recipients_list:
+            # to, message, from_cell=None, media_url=None):
+            reference = _twilio_portal.send_sms(to=cell_number, from_cell=_twilio_portal.sms_number,
+                                                message=_message.message)
+            if reference:
+                self.create_delivery_report(_message, cell_number, reference, this_date, this_sms_account, this_time)
+                total_delivered += 1
+        self.messages_sent(_message, schedule, this_date, this_sms_account, this_time, total_delivered)
+        schedule.put()
+        this_sms_account.writeTotalSMS(strinput=(this_sms_account.total_sms - total_delivered))
+        this_sms_account.put()
 
-                    thisSchedule.put()
-                    thisMessage.writeDateSubmitted(strinput=thisDate)
-                    thisMessage.writeTimeSubmitted(strinput=thisTime)
-                    thisMessage.writeSubmitted(strinput=True)
-                    thisMessage.put()
+    def send_with_click_send(self, _message, recipients_list, schedule, this_date, this_sms_account, this_time):
+        from mysms import ClickSendSMSPortal
+        _click_send = ClickSendSMSPortal.query().get()
+        if not isinstance(_click_send, ClickSendSMSPortal):
+            _click_send = ClickSendSMSPortal()
 
-                    thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.total_sms - strTotalDelivered))
-                    thisSMSAccount.put()
+        total_delivered = 0
+        for cell_number in recipients_list:
+            reference = _click_send.send_sms(cell=cell_number, message=_message.message)
+            if reference:
+                self.create_delivery_report(_message, cell_number, reference, this_date, this_sms_account, this_time)
+                total_delivered += 1
 
-            elif thisSMSAccount.use_portal == "ClickSend":
-                findRequest = ClickSendSMSPortal.query()
-                thisClickSendPortalList = findRequest.fetch()
-                if len(thisClickSendPortalList) > 0:
-                    thisClickSend = thisClickSendPortalList[0]
-                else:
-                    thisClickSend = ClickSendSMSPortal()
+        schedule.put()
+        self.messages_sent(_message, schedule, this_date, this_sms_account, this_time, total_delivered)
+        this_sms_account.writeTotalSMS(strinput=(this_sms_account.total_sms - total_delivered))
+        this_sms_account.put()
 
-                strTotalDelivered = 0
+    def send_with_budget(self, _message, recipients_list, schedule, this_date, this_sms_account, this_time):
+        from mysms import SMSPortalBudget
+        _this_portal = SMSPortalBudget.query().get()
 
-                for thisContact in ReceipientList:
-                    ref = thisClickSend.SendSMS(strCell=thisContact, strMessage=thisMessage.message)
+        total_delivered = 0
 
-                    if (ref != None):
-                        thisDeliveryReport = DeliveryReport()
-                        thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
-                        thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
-                        thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
-                        thisDeliveryReport.writeReference(strinput=ref)
-                        thisDeliveryReport.writeCell(strinput=thisContact)
-                        thisDeliveryReport.writeDate(strinput=thisDate)
-                        thisDeliveryReport.writeTime(strinput=thisTime)
-                        thisDeliveryReport.writeDelivered(strinput=True)
-                        thisDeliveryReport.put()
-                        strTotalDelivered += 1
+        for cell_number in recipients_list:
+            reference = _this_portal.send_sms(message=_message.message, message_id=_message.message_id, cell=cell_number)
 
-                thisSchedule.put()
-                thisMessage.writeDateSubmitted(strinput=thisDate)
-                thisMessage.writeTimeSubmitted(strinput=thisTime)
-                thisMessage.writeSubmitted(strinput=True)
-                thisMessage.put()
+            reference = reference.strip()
+            if reference:
+                self.create_delivery_report(_message, cell_number, reference, this_date, this_sms_account, this_time)
+                total_delivered += 1
 
-                thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.total_sms - strTotalDelivered))
-                thisSMSAccount.put()
+        schedule.put()
+        self.messages_sent(_message, schedule, this_date, this_sms_account, this_time, total_delivered)
+        this_sms_account.writeTotalSMS(strinput=(this_sms_account.total_sms - total_delivered))
+        this_sms_account.put()
 
-            elif thisSMSAccount.use_portal == "Twilio":
-                findRequest = MyTwilioPortal.query()
-                thisTwilioList = findRequest.fetch()
-
-                if len(thisTwilioList) > 0:
-                    thisTwilio = thisTwilioList[0]
-                else:
-                    thisTwilio = MyTwilioPortal()
-
-                strTotalDelivered = 0
-
-                for thisContact in ReceipientList:
-                    ref = thisTwilio.sendSMS(strTo=thisContact, strFrom=thisTwilio.sms_number,
-                                             strMessage=thisMessage.message)
-
-                    if (ref != None):
-                        thisDeliveryReport = DeliveryReport()
-                        thisDeliveryReport.writeMessageID(strinput=thisMessage.message_id)
-                        thisDeliveryReport.writeGroupID(strinput=thisMessage.group_id)
-                        thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.organization_id)
-                        thisDeliveryReport.writeReference(strinput=ref)
-                        thisDeliveryReport.writeCell(strinput=thisContact)
-                        thisDeliveryReport.writeDate(strinput=thisDate)
-                        thisDeliveryReport.writeTime(strinput=thisTime)
-                        thisDeliveryReport.writeDelivered(strinput=True)
-                        thisDeliveryReport.put()
-                        strTotalDelivered += 1
-
-                thisSchedule.put()
-                thisMessage.writeDateSubmitted(strinput=thisDate)
-                thisMessage.writeTimeSubmitted(strinput=thisTime)
-                thisMessage.writeSubmitted(strinput=True)
-                thisMessage.put()
-
-                thisSMSAccount.writeTotalSMS(strinput=(thisSMSAccount.total_sms - strTotalDelivered))
-                thisSMSAccount.put()
+    def send_with_vodacom(self, _message, recipients_list, schedule, this_date, this_sms_account, this_time):
+        from mysms import SMSPortalVodacom
+        _this_voda = SMSPortalVodacom.query().get()
+        if not isinstance(_this_voda, SMSPortalVodacom):
+            _this_voda = SMSPortalVodacom()
+        if _this_voda.cron_send_messages(cell_number_list=recipients_list, message=_message.message,
+                                         account_id=this_sms_account.organization_id):
+            schedule.writeStatus(strinput="Completed")
+            schedule.put()
+            _message.writeDateSubmitted(strinput=this_date)
+            _message.writeTimeSubmitted(strinput=this_time)
+            _message.writeSubmitted(strinput=True)
+            _message.put()
+            for cell_number in recipients_list:
+                self.create_delivery_report(_message, cell_number, "voda", this_date, this_sms_account, this_time)
 
 
 def BulkEmailHandler():
@@ -246,7 +193,6 @@ def SystemStatusHandler():
 
 
 def AdvertContactsHandler():
-
     from advertise import OurContacts
     from mysms import SMSContacts
     from surveys import SurveyContacts
@@ -293,7 +239,6 @@ def AdvertContactsHandler():
 
 
 def SendAdvertsHandler():
-
     from advertise import OurContacts, Advert, Stats, SentReport, Orders
     from mysms import SMSPortalBudget
 
@@ -370,15 +315,13 @@ def SendAdvertsHandler():
 
 
 def SendAdvertCreditHandler():
-
     from advertise import OurContacts, Advert, Stats, SentReport, Orders
-    from mysms import SMSPortalBudget, SMSPortalVodacom,ClickSendSMSPortal
+    from mysms import SMSPortalBudget, SMSPortalVodacom, ClickSendSMSPortal
     from myTwilio import MyTwilioPortal
     import random
 
     findRequest = OurContacts.query()
     thisOurContactList = findRequest.fetch()
-
 
     findRequest = SMSPortalBudget.query()
     thisPortalBudgetList = findRequest.fetch()
@@ -411,8 +354,6 @@ def SendAdvertCreditHandler():
     else:
         thisTwilioPortal = MyTwilioPortal()
 
-
-
     vstrThisDate = datetime.datetime.now()
     strThisDate = vstrThisDate.date()
     strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute, second=vstrThisDate.second)
@@ -422,7 +363,8 @@ def SendAdvertCreditHandler():
     # TODO- and there is still credits available then the advert might run again the next day
 
     # TODO- if ran from credit and assigned credit is greator than 1 and scheduled for a previous date then schedule for the next date
-    findRequest = Advert.query(Advert.assigned_credit > 0, Advert.run_from_credit == True, Advert.start_date == strThisDate)
+    findRequest = Advert.query(Advert.assigned_credit > 0, Advert.run_from_credit == True,
+                               Advert.start_date == strThisDate)
     thisAdvertList = findRequest.fetch()
 
     for thisAdvert in thisAdvertList:
@@ -434,26 +376,28 @@ def SendAdvertCreditHandler():
             try:
 
                 thisContact = random.choice(thisOurContactList)
-                if not(thisContact.cell in sentList):
+                if not (thisContact.cell in sentList):
                     try:
                         if thisAdvert.use_portal == "Budget":
-                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.advert, strCell=thisContact.cell)
+                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.advert,
+                                                                   strCell=thisContact.cell)
                             sentList.append(thisContact.cell)
                         elif thisAdvert.use_portal == "ClickSend":
-                            ref = thisClickSendPortal.SendSMS(strCell=thisContact.cell, strMessage=thisAdvert.advert)
+                            ref = thisClickSendPortal.send_sms(cell=thisContact.cell, message=thisAdvert.advert)
                             sentList.append(thisContact.cell)
 
                         elif thisAdvert.use_portal == "Twilio":
-                            ref = thisTwilioPortal.sendSMS(strTo=thisContact.cell, strFrom=thisTwilioPortal.sms_number, strMessage=thisAdvert.advert)
+                            ref = thisTwilioPortal.sendSMS(strTo=thisContact.cell, strFrom=thisTwilioPortal.sms_number,
+                                                           strMessage=thisAdvert.advert)
                             sentList.append(thisContact.cell)
-                        elif  thisAdvert.use_portal == "Vodacom":
+                        elif thisAdvert.use_portal == "Vodacom":
                             sentList.append(thisContact.cell)
                         else:
-                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.advert, strCell=thisContact.cell)
+                            ref = thisPortalBudget.SendCronMessage(strMessage=thisAdvert.advert,
+                                                                   strCell=thisContact.cell)
                             sentList.append(thisContact.cell)
                     except:
                         ref = None
-
 
                     if ref != None:
                         thisSentReport = SentReport()
@@ -483,7 +427,6 @@ def SendAdvertCreditHandler():
         if thisAdvert.use_portal == "Vodacom":
             thisPortalVodacom.SendAdvert(strCellNumberList=sentList, strMessage=thisAdvert.advert)
 
-
         if thisAdvert.assigned_credit <= 0:
             thisAdvert.run_from_credit = False
         thisAdvert.put()
@@ -496,7 +439,6 @@ def SendAdvertCreditHandler():
 
 
 def RescheduleAdverts():
-
     from advertise import Advert
     vstrThisDate = datetime.datetime.now()
     strThisDate = vstrThisDate.date()
@@ -524,16 +466,15 @@ def BulkMessageStatus():
     """
 
     from advertise import SentReport
-    from mysms import SMSPortalBudget,ClickSendSMSPortal
+    from mysms import SMSPortalBudget, ClickSendSMSPortal
     from myTwilio import MyTwilioPortal
-
 
     vstrThisDate = datetime.datetime.now()
     strThisDate = vstrThisDate.date()
     vstrThisDate -= datetime.timedelta(minutes=10)
     strThisTime = datetime.time(hour=vstrThisDate.hour, minute=vstrThisDate.minute, second=vstrThisDate.second)
 
-    #SENT Report is for adverts Delivery Report is for Bulk SMS,
+    # SENT Report is for adverts Delivery Report is for Bulk SMS,
     findRequest = SentReport.query(SentReport.report_done == False, SentReport.date_sent == strThisDate,
                                    SentReport.time_sent <= strThisTime)
     thisSentReportList = findRequest.fetch()
@@ -544,7 +485,8 @@ def BulkMessageStatus():
 
     for thisReport in thisSentReportList:
         if thisReport.portal_used == "Budget":
-            thisReport.writeMessageStatus(strinput=thisBudgetPortal.CheckMessageStatus(strRef=thisReport.reference, strCell=thisReport.cell))
+            thisReport.writeMessageStatus(
+                strinput=thisBudgetPortal.CheckMessageStatus(strRef=thisReport.reference, strCell=thisReport.cell))
             thisReport.writeReportDone(strinput=True)
             thisReport.put()
         elif thisReport.portal_used == "Twilio":
@@ -557,9 +499,7 @@ def BulkMessageStatus():
             pass
 
 
-
 def CheckAdvertsResponses():
-
     from advertise import SentReport, Responses
     from mysms import SMSPortalBudget
 
@@ -580,12 +520,12 @@ def CheckAdvertsResponses():
 
     thisPortal = SMSPortalBudget()
     for thisReport in thisSentReportList:
-        #TODO- Check the portal used to send the message in order to correctly obtain the response for the message
+        # TODO- Check the portal used to send the message in order to correctly obtain the response for the message
 
         try:
             strResponse = thisPortal.CheckSpecificReply(strRef=thisReport.reference)
             if not (strResponse == None):
-                ThisResponse = Responses() #This is a response for adverts only
+                ThisResponse = Responses()  # This is a response for adverts only
                 ThisResponse.writeResponse(strinput=strResponse)
                 ThisResponse.writeAdvertID(strinput=thisReport.advert_id)
                 ThisResponse.writeReference(strinput=ThisResponse.CreateReference())
@@ -638,9 +578,8 @@ def CheckAdvertsResponses():
 
 
 def GetContactsFromPartners():
-
     from advertise import OurContacts
-    from myapi import PartnerSites,strDefaultWhiteList
+    from myapi import PartnerSites, strDefaultWhiteList
     import json
     findRequest = PartnerSites.query(PartnerSites.service_name == "Contacts")
     thisPartnerSiteList = findRequest.fetch()
@@ -657,47 +596,41 @@ def GetContactsFromPartners():
         findRequest = PartnerSites.query(PartnerSites.service_name == "Contacts")
         thisPartnerSiteList = findRequest.fetch()
 
-
-
     findRequest = OurContacts.query()
     thisContactList = findRequest.fetch()
     numList = []
     for thisContact in thisContactList:
         numList.append(thisContact.cell)
 
-
     for thisPartner in thisPartnerSiteList:
         try:
             strReturnData = thisPartner.FetchContactsJSONList()
             if strReturnData != thisPartner.strNoDataCode:
-                json_objects =  json.load(strReturnData)
+                json_objects = json.load(strReturnData)
                 for contact in json_objects:
-                        cell = contact['cell']
-                        email = contact['email']
-                        names = contact['names']
-                        surname = contact['surname']
+                    cell = contact['cell']
+                    email = contact['email']
+                    names = contact['names']
+                    surname = contact['surname']
 
-                        if cell in numList:
-                            pass
-                        else:
-                            thisContact = OurContacts()
-                            thisContact.writeCell(strinput=cell)
-                            thisContact.writeEmail(strinput=email)
-                            thisContact.writeNames(strinput=names)
-                            thisContact.writeSurname(strinput=surname)
-                            thisContact.writeOurContactID(strinput=thisContact.CreateContactID())
-                            thisContact.put()
-                            numList.append(cell)
+                    if cell in numList:
+                        pass
+                    else:
+                        thisContact = OurContacts()
+                        thisContact.writeCell(strinput=cell)
+                        thisContact.writeEmail(strinput=email)
+                        thisContact.writeNames(strinput=names)
+                        thisContact.writeSurname(strinput=surname)
+                        thisContact.writeOurContactID(strinput=thisContact.CreateContactID())
+                        thisContact.put()
+                        numList.append(cell)
             else:
                 pass
         except:
             pass
 
 
-
-
 def CheckBulkSMSResponses():
-
     from mysms import Messages, SMSPortalBudget, DeliveryReport
     vstrThisDate = datetime.datetime.now()
     strThisDate = vstrThisDate.date()
@@ -753,8 +686,8 @@ def CheckBulkSMSResponses():
 
 
 def ScheduledSendSurveys():
-
-    from surveys import SurveyOrders, SurveySchedules, SurveyContacts, Surveys, MultiChoiceSurveys, GeneralQuestionsSurvey, MultiChoiceSurveyAnswers, SurveyTracker
+    from surveys import SurveyOrders, SurveySchedules, SurveyContacts, Surveys, MultiChoiceSurveys, \
+        GeneralQuestionsSurvey, MultiChoiceSurveyAnswers, SurveyTracker
     from accounts import Accounts, Organization
     from mysms import SMSPortalBudget
 
@@ -835,7 +768,7 @@ def ScheduledSendSurveys():
                             thisSurveyQuestion = thisSurveyQuestionList[i]
                             while not (
                                     thisTracker.current_question_id == thisSurveyQuestion.question_id) and (
-                                        i < len(thisSurveyQuestionList)):
+                                    i < len(thisSurveyQuestionList)):
                                 i += 1
                                 thisSurveyQuestion = thisSurveyQuestionList[i]
                             i += 1
@@ -973,7 +906,6 @@ def SurveysResponses():
 
 
 def BulkSMSStatus():
-
     from mysms import DeliveryReport, SMSPortalBudget, SMSAccount
 
     vstrThisDate = datetime.datetime.now()
@@ -997,7 +929,7 @@ def BulkSMSStatus():
     for thisReport in thisReportList:
 
         # TODO - There could be a timing issue with this task so it should process reports that are at least three minutes old
-        #TODO - Check which Portal was used to send the message and act appropriately
+        # TODO - Check which Portal was used to send the message and act appropriately
         strStatus = thisPortal.CheckMessageStatus(strRef=thisReport.reference, strCell=thisReport.cell)
 
         if not (strStatus == None):
@@ -1022,7 +954,6 @@ def BulkSMSStatus():
                 pass
         else:
             pass
-
 
             # TODO- if message was not sent then process
 
@@ -1056,18 +987,14 @@ def FaxToEmailOrganizer():
 
 def SendSurveysCredits():
     from surveys import Surveys
-    from mysms import SMSAccount,SMSPortalBudget,ClickSendSMSPortal,SMSPortalVodacom
+    from mysms import SMSAccount, SMSPortalBudget, ClickSendSMSPortal, SMSPortalVodacom
     from advertise import OurContacts
 
     pass
-    #TODO- Finish up sending surveys this is very important
-
-
-
+    # TODO- Finish up sending surveys this is very important
 
 
 class TasksRouterHandler(webapp2.RequestHandler):
-
 
     def get(self):
 
@@ -1078,7 +1005,7 @@ class TasksRouterHandler(webapp2.RequestHandler):
 
         if strFunction == "bulk-sms":
             logging.info("sending scheduled bulk sms runs every ten minutes")
-            BulkSMSHandler()
+            bulk_sms_handler()
 
         elif strFunction == "bulk-email":
             logging.info("sending scheduled bulk emails runs every ten minutes")
@@ -1147,8 +1074,9 @@ class TasksRouterHandler(webapp2.RequestHandler):
         else:
             pass
 
-    #TODO- Reduce tasks urls using /tasks/.* and then call the right task for each task this will allow the app ro run thousands of cron jobs
-    #TODO- My Tasks can also call functions through an API to complete each task.
+    # TODO- Reduce tasks urls using /tasks/.* and then call the right task for each task this will allow the app ro run thousands of cron jobs
+    # TODO- My Tasks can also call functions through an API to complete each task.
+
 
 app = webapp2.WSGIApplication([
     ('/tasks/.*', TasksRouterHandler)

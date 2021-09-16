@@ -979,9 +979,9 @@ class ManageUsersHandler(webapp2.RequestHandler):
                                 strCellList.append(vstrCell)
                                 logging.info("Sending Message using Vodacom")
 
-                                if thisVodaPortal.CronSendMessages(strCellNumberList=strCellList,
-                                                                   strMessage=strInviteMessage,
-                                                                   strAccountID=thisAccount.organization_id):
+                                if thisVodaPortal.cron_send_messages(cell_number_list=strCellList,
+                                                                     message=strInviteMessage,
+                                                                     account_id=thisAccount.organization_id):
                                     thisSMSAccount.total_sms = thisSMSAccount.total_sms - 4
                                     self.response.write("Successfully sent an invitation message")
                                 else:
@@ -1031,7 +1031,7 @@ class ManageUsersHandler(webapp2.RequestHandler):
 
                                 logging.info("Sending Invitations through Click Send Portal")
 
-                                if thisClickSendPortal.SendSMS(strCell=vstrCell, strMessage=strInviteMessage) != None:
+                                if thisClickSendPortal.send_sms(cell=vstrCell, message=strInviteMessage) != None:
                                     thisSMSAccount.total_sms = thisSMSAccount.total_sms - 4
                                     self.response.write("Successfully sent an invite message")
                                 else:
@@ -1116,8 +1116,8 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                     Voda = SMSPortalVodacom()
                     Voda.put()
 
-                if Voda.CronSendMessages(strCellNumberList=ReceipientList, strMessage=strMessage,
-                                         strAccountID=thisAdminStaff.staff_id):
+                if Voda.cron_send_messages(cell_number_list=ReceipientList, message=strMessage,
+                                           account_id=thisAdminStaff.staff_id):
                     logging.info("Successfully sent activation message")
                 else:
                     logging.info("Error sending activation message")
@@ -1152,7 +1152,7 @@ class ThisOrgAccountActivationHandler(webapp2.RequestHandler):
                     thisClickSend = ClickSendSMSPortal()
 
                 for thisNumber in ReceipientList:
-                    strRef = thisClickSend.SendSMS(strCell=thisNumber, strMessage=strMessage)
+                    strRef = thisClickSend.send_sms(cell=thisNumber, message=strMessage)
 
                     if strRef != None:
                         logging.info("Successfully sent Verification Mesage")
@@ -1519,8 +1519,7 @@ class UsersInvitesHandler(webapp2.RequestHandler):
                         else:
                             thisClickSendPortal = ClickSendSMSPortal()
 
-                        if thisClickSendPortal.SendSMS(strCell=vstrCell,
-                                                       strMessage=thisOpenInvite.security_code) != None:
+                        if thisClickSendPortal.send_sms(cell=vstrCell, message=thisOpenInvite.security_code) != None:
                             thisSMSAccount.total_sms = thisSMSAccount.total_sms - 1
                             thisSMSAccount.put()
                             self.response.write("Security Code successfully sent please enter the code")
