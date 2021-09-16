@@ -34,11 +34,11 @@ class Groups(ndb.Expando):
     uid = ndb.StringProperty()
     organization_id = ndb.StringProperty()
 
-    strGroupID = ndb.StringProperty()
-    strGroupName = ndb.StringProperty()
-    strGroupDescription = ndb.StringProperty()
+    group_id = ndb.StringProperty()
+    group_name = ndb.StringProperty()
+    description = ndb.StringProperty()
 
-    strTotalNumbers = ndb.IntegerProperty(default=0)
+    total_numbers = ndb.IntegerProperty(default=0)
 
 
     def writeUserID(self,strinput):
@@ -65,7 +65,7 @@ class Groups(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strGroupID = strinput
+                self.group_id = strinput
                 return True
             else:
                 return False
@@ -75,7 +75,7 @@ class Groups(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strGroupName = strinput
+                self.group_name = strinput
                 return True
             else:
                 return False
@@ -85,7 +85,7 @@ class Groups(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strGroupDescription = strinput
+                self.description = strinput
                 return True
             else:
                 return False
@@ -104,7 +104,7 @@ class Groups(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit():
-                self.strTotalNumbers = int(strinput)
+                self.total_numbers = int(strinput)
                 return True
             else:
                 return False
@@ -112,19 +112,19 @@ class Groups(ndb.Expando):
             return False
 
 class SMSContacts(ndb.Expando):
-    strUserID = ndb.StringProperty()
-    strCellNumber = ndb.StringProperty()
-    strEmail = ndb.StringProperty() #TODO intergrate email with the rest of the contacts
-    strNames = ndb.StringProperty()
-    strSurname = ndb.StringProperty()
+    uid = ndb.StringProperty()
+    cell_number = ndb.StringProperty()
+    email = ndb.StringProperty() #TODO intergrate email with the rest of the contacts
+    names = ndb.StringProperty()
+    surname = ndb.StringProperty()
 
-    strGroupID = ndb.StringProperty()
+    group_id = ndb.StringProperty()
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -135,7 +135,7 @@ class SMSContacts(ndb.Expando):
             strinput = str(strinput)
 
             if strinput != None:
-                self.strGroupID = strinput
+                self.group_id = strinput
                 return True
             else:
                 return False
@@ -145,7 +145,7 @@ class SMSContacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strCellNumber = strinput
+                self.cell_number = strinput
                 return True
             else:
                 return False
@@ -155,7 +155,7 @@ class SMSContacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strNames = strinput
+                self.names = strinput
                 return True
             else:
                 return False
@@ -165,7 +165,7 @@ class SMSContacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSurname = strinput
+                self.surname = strinput
                 return True
             else:
                 return False
@@ -175,7 +175,7 @@ class SMSContacts(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmail = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -1420,7 +1420,7 @@ class SMSGroupHandler(webapp2.RequestHandler):
                     thisAdmin = Accounts()
 
 
-                findRequest = Groups.query(Groups.strGroupName == vstrGroupName, Groups.organization_id == thisAdmin.organization_id)
+                findRequest = Groups.query(Groups.group_name == vstrGroupName, Groups.organization_id == thisAdmin.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1511,7 +1511,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
         #TODO- Highly Important consider securing the access here with a login name and password passed as parameters with the get method
         #TODO- This means this will work as an API
-        findRequest = Groups.query(Groups.strGroupID == strGroupID)
+        findRequest = Groups.query(Groups.group_id == strGroupID)
         thisGroupList = findRequest.fetch()
 
         if len(thisGroupList) > 0:
@@ -1540,7 +1540,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = SMSContacts.query(SMSContacts.strGroupID == vstrGroupID)
+                findRequest = SMSContacts.query(SMSContacts.group_id == vstrGroupID)
                 thisContactList = findRequest.fetch()
 
                 template = template_env.get_template('templates/sms/groups/upcontacts.html')
@@ -1565,7 +1565,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
             if (thisMainAccount != None) and (thisMainAccount.email == vstrEmail):
 
 
-                findRequest = SMSContacts.query(SMSContacts.strGroupID == vstrGroupID,SMSContacts.strCellNumber == vstrCellNumber)
+                findRequest = SMSContacts.query(SMSContacts.group_id == vstrGroupID, SMSContacts.cell_number == vstrCellNumber)
                 thisContactList = findRequest.fetch()
 
                 if len(thisContactList) > 0:
@@ -1582,7 +1582,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
                 thisContact.put()
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
+                findRequest = Groups.query(Groups.group_id == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1590,7 +1590,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
                 else:
                     thisGroup = Groups()
 
-                thisGroup.writeTotalNumbers(strinput=str(thisGroup.strTotalNumbers + 1))
+                thisGroup.writeTotalNumbers(strinput=str(thisGroup.total_numbers + 1))
                 thisGroup.put()
 
                 self.response.write("Contact Successfully uploaded")
@@ -1672,14 +1672,14 @@ class GroupManagerHandler(webapp2.RequestHandler):
                     thisSMSContacts.writeGroupID(strinput=strGroupID)
 
                     thisSMSContacts.put()
-                    findRequest = Groups.query(Groups.strGroupID == strGroupID)
+                    findRequest = Groups.query(Groups.group_id == strGroupID)
                     thisGroupsList = findRequest.fetch()
                     if len(thisGroupsList) > 0:
                         thisGroup = thisGroupsList[0]
                     else:
                         thisGroup = Groups()
 
-                    thisGroup.writeTotalNumbers(strinput=str(thisGroup.strTotalNumbers + 1))
+                    thisGroup.writeTotalNumbers(strinput=str(thisGroup.total_numbers + 1))
                     thisGroup.put()
                     strAssigned = True
 
@@ -1700,7 +1700,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
+                findRequest = Groups.query(Groups.group_id == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1708,7 +1708,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
                 else:
                     thisGroup = Groups()
 
-                findRequest = SMSContacts.query(SMSContacts.strGroupID == thisGroup.strGroupID)
+                findRequest = SMSContacts.query(SMSContacts.group_id == thisGroup.group_id)
                 thisSMSContactsList = findRequest.fetch()
 
                 template = template_env.get_template('templates/sms/groups/editGroup.html')
@@ -1728,7 +1728,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
                 vstrGroupName = self.request.get('vstrGroupName')
                 vstrGroupDescription = self.request.get('vstrGroupDescription')
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID)
+                findRequest = Groups.query(Groups.group_id == vstrGroupID)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1754,7 +1754,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
 
                 vstrGroupID = self.request.get('vstrGroupID')
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
+                findRequest = Groups.query(Groups.group_id == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -1780,13 +1780,13 @@ class GroupManagerHandler(webapp2.RequestHandler):
                 vstrGroupID = self.request.get('vstrGroupID')
 
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
+                findRequest = Groups.query(Groups.group_id == vstrGroupID, Groups.organization_id == thisMainAccount.organization_id)
                 thisGroupList = findRequest.fetch()
 
                 for thisGroup in thisGroupList:
                     thisGroup.key.delete()
 
-                findRequest = SMSContacts.query(SMSContacts.strGroupID == vstrGroupID)
+                findRequest = SMSContacts.query(SMSContacts.group_id == vstrGroupID)
                 thisContactList = findRequest.fetch()
 
                 for thisContact in thisContactList:
@@ -1826,7 +1826,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
                             vstrSurname = vstrConList[2]
                             vstrSurname = vstrSurname.strip()
 
-                            findRequest = SMSContacts.query(SMSContacts.strCellNumber == vstrCell,SMSContacts.strGroupID == vstrGroupID)
+                            findRequest = SMSContacts.query(SMSContacts.cell_number == vstrCell, SMSContacts.group_id == vstrGroupID)
                             thisContactList = findRequest.fetch()
 
                             if len(thisContactList) > 0:
@@ -1841,12 +1841,12 @@ class GroupManagerHandler(webapp2.RequestHandler):
                             thisContact.writeUserID(strinput=thisMainAccount.uid)
                             thisContact.put()
 
-                            findRequest = Groups.query(Groups.organization_id == thisMainAccount.organization_id, Groups.strGroupID == vstrGroupID)
+                            findRequest = Groups.query(Groups.organization_id == thisMainAccount.organization_id, Groups.group_id == vstrGroupID)
                             thisGroupList = findRequest.fetch()
 
                             if len(thisGroupList) > 0:
                                 thisGroup = thisGroupList[0]
-                                thisGroup.writeTotalNumbers(strinput=str(thisGroup.strTotalNumbers + 1))
+                                thisGroup.writeTotalNumbers(strinput=str(thisGroup.total_numbers + 1))
                                 thisGroup.put()
                         except:
                             pass
@@ -1880,7 +1880,7 @@ class GroupManagerHandler(webapp2.RequestHandler):
                 vstrGroupID = self.request.get('vstrGroupID')
                 vstrRemoveCell = self.request.get('vstrRemoveCell')
 
-                findRequest = SMSContacts.query(SMSContacts.strGroupID == vstrGroupID,SMSContacts.strCellNumber == vstrRemoveCell)
+                findRequest = SMSContacts.query(SMSContacts.group_id == vstrGroupID, SMSContacts.cell_number == vstrRemoveCell)
                 thisSMSContactsList = findRequest.fetch()
 
                 for thisContact in thisSMSContactsList:
@@ -1904,7 +1904,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
             thisMessage = Messages()
 
 
-        findRequest = Groups.query(Groups.strGroupID == thisMessage.strGroupID)
+        findRequest = Groups.query(Groups.group_id == thisMessage.strGroupID)
         thisGroupList = findRequest.fetch()
 
         if len(thisGroupList) > 0:
@@ -2106,7 +2106,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 else:
                     thisMessage = Messages()
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID)
+                findRequest = Groups.query(Groups.group_id == vstrGroupID)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -2114,7 +2114,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 else:
                     thisGroup = Groups()
 
-                findRequest = SMSContacts.query(SMSContacts.strGroupID == vstrGroupID)
+                findRequest = SMSContacts.query(SMSContacts.group_id == vstrGroupID)
                 thisSMSContactsList = findRequest.fetch()
 
                 findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.organization_id)
@@ -2150,7 +2150,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                 else:
                     thisMessage = Messages()
 
-                findRequest = Groups.query(Groups.strGroupID == vstrGroupID)
+                findRequest = Groups.query(Groups.group_id == vstrGroupID)
                 thisGroupList = findRequest.fetch()
 
                 if len(thisGroupList) > 0:
@@ -2159,7 +2159,7 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                     thisGroup = Groups()
 
 
-                findRequest = SMSContacts.query(SMSContacts.strGroupID == vstrGroupID)
+                findRequest = SMSContacts.query(SMSContacts.group_id == vstrGroupID)
                 thisSMSContactsList = findRequest.fetch()
 
                 findRequest = SMSAccount.query(SMSAccount.strOrganizationID == thisGroup.organization_id)
@@ -2199,16 +2199,16 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                         while (thisSMSAccount.strTotalSMS > 0) and (i < len(thisSMSContactsList)):
                             thisContact = thisSMSContactsList[i]
 
-                            thisMessage = SendEmail(strFrom=thisPortal.strSenderAddress,strTo=thisPortal.strEmailAddress,strSubject=thisContact.strCellNumber,strBody=thisMessage.strMessage,strTextType="text/plain")
+                            thisMessage = SendEmail(strFrom=thisPortal.strSenderAddress, strTo=thisPortal.strEmailAddress, strSubject=thisContact.cell_number, strBody=thisMessage.strMessage, strTextType="text/plain")
                             if thisMessage == True:
-                                self.response.write(""" <tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
+                                self.response.write(""" <tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
                                 i = i + 1
 
                                 thisPortal.strAvailableCredit = thisPortal.strAvailableCredit - 1
                                 thisDeliveryReport = DeliveryReport()
-                                thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
+                                thisDeliveryReport.writeGroupID(thisGroup.group_id)
                                 thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
-                                thisDeliveryReport.writeCell(thisContact.strCellNumber)
+                                thisDeliveryReport.writeCell(thisContact.cell_number)
                                 thisDeliveryReport.writeDelivered(strinput=True)
                                 thisDate = datetime.datetime.now()
                                 strThisDate = thisDate.date()
@@ -2273,22 +2273,22 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 thisDate = datetime.datetime.now()
                                 thisDate = thisDate.date()
 
-                                result = thisBudgetPortal.SendCronMessage(strMessage=thisMessage.strMessage,strCell=thisContact.strCellNumber)
+                                result = thisBudgetPortal.SendCronMessage(strMessage=thisMessage.strMessage, strCell=thisContact.cell_number)
                                 if result == None:
                                     isSent = False
-                                    self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
+                                    self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
                                 else:
                                     isSent = True
                                     logging.info("THIS IS THE RETURNED RESULT : " + str(result))
-                                    self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
+                                    self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
 
                                 if isSent:
                                     i = i + 1
                                     thisBudgetPortal.strAvailableCredit = thisBudgetPortal.strAvailableCredit - 1
                                     thisDeliveryReport = DeliveryReport()
-                                    thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
+                                    thisDeliveryReport.writeGroupID(thisGroup.group_id)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
-                                    thisDeliveryReport.writeCell(thisContact.strCellNumber)
+                                    thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=True)
                                     thisDate = datetime.datetime.now()
                                     strThisDate = thisDate.date()
@@ -2304,9 +2304,9 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     i = i + 1
                                     #thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
-                                    thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
+                                    thisDeliveryReport.writeGroupID(thisGroup.group_id)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
-                                    thisDeliveryReport.writeCell(thisContact.strCellNumber)
+                                    thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=False)
                                     thisDate = datetime.datetime.now()
                                     strThisDate = thisDate.date()
@@ -2375,24 +2375,24 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 thisDate = datetime.datetime.now()
                                 thisDate = thisDate.date()
 
-                                result = thisClickSendSMS.SendSMS(strCell=thisContact.strCellNumber,strMessage=thisMessage.strMessage)
+                                result = thisClickSendSMS.SendSMS(strCell=thisContact.cell_number, strMessage=thisMessage.strMessage)
 
                                 if result == None:
                                     isSent = False
                                     self.response.write(
-                                        """<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
+                                        """<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
                                 else:
                                     isSent = True
                                     logging.info("THIS IS THE RETURNED RESULT : " + str(result))
-                                    self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
+                                    self.response.write("""<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
 
                                 if isSent:
                                     i = i + 1
 
                                     thisDeliveryReport = DeliveryReport()
-                                    thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
+                                    thisDeliveryReport.writeGroupID(thisGroup.group_id)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
-                                    thisDeliveryReport.writeCell(thisContact.strCellNumber)
+                                    thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=True)
                                     thisDate = datetime.datetime.now()
                                     strThisDate = thisDate.date()
@@ -2408,9 +2408,9 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     i = i + 1
                                     #thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
-                                    thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
+                                    thisDeliveryReport.writeGroupID(thisGroup.group_id)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
-                                    thisDeliveryReport.writeCell(thisContact.strCellNumber)
+                                    thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=False)
                                     thisDate = datetime.datetime.now()
                                     strThisDate = thisDate.date()
@@ -2479,25 +2479,25 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                 thisDate = datetime.datetime.now()
                                 thisDate = thisDate.date()
 
-                                result = thisTwilioPortal.sendSMS(strTo=thisContact.strCellNumber,strFrom=thisTwilioPortal.strMySMSNumber,strMessage=thisMessage.strMessage)
+                                result = thisTwilioPortal.sendSMS(strTo=thisContact.cell_number, strFrom=thisTwilioPortal.strMySMSNumber, strMessage=thisMessage.strMessage)
 
                                 if result == None:
                                     isSent = False
                                     self.response.write(
-                                        """<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
+                                        """<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-danger">Not Sent</span> </td></tr>""")
                                 else:
                                     isSent = True
                                     logging.info("THIS IS THE RETURNED RESULT : " + str(result))
                                     self.response.write(
-                                        """<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.strCellNumber + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
+                                        """<tr> <td> """ + thisContact.names + """</td><td> """ + thisContact.surname + """</td><td>""" + thisContact.cell_number + """</td><td> <span class="label label-success">Sent</span> </td></tr>""")
 
                                 if isSent:
                                     i = i + 1
 
                                     thisDeliveryReport = DeliveryReport()
-                                    thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
+                                    thisDeliveryReport.writeGroupID(thisGroup.group_id)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
-                                    thisDeliveryReport.writeCell(thisContact.strCellNumber)
+                                    thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=True)
                                     thisDate = datetime.datetime.now()
                                     strThisDate = thisDate.date()
@@ -2513,9 +2513,9 @@ class thisSMSManagerHandler(webapp2.RequestHandler):
                                     i = i + 1
                                     # thisBudgetPortal.available_credit = thisBudgetPortal.available_credit - 1
                                     thisDeliveryReport = DeliveryReport()
-                                    thisDeliveryReport.writeGroupID(thisGroup.strGroupID)
+                                    thisDeliveryReport.writeGroupID(thisGroup.group_id)
                                     thisDeliveryReport.writeOrganizationID(strinput=thisSMSAccount.strOrganizationID)
-                                    thisDeliveryReport.writeCell(thisContact.strCellNumber)
+                                    thisDeliveryReport.writeCell(thisContact.cell_number)
                                     thisDeliveryReport.writeDelivered(strinput=False)
                                     thisDate = datetime.datetime.now()
                                     strThisDate = thisDate.date()
