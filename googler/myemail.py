@@ -15,18 +15,13 @@
 # limitations under the License.
 import logging
 import os
-
-import webapp2
 import jinja2
 import datetime
-from google.appengine.ext import ndb
-from google.appengine.api import users
-from google.appengine.api import mail
-from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+from google.cloud import ndb
 
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
 
-def SendEmail(strFrom,strTo,strSubject,strBody,strTextType,strAttachFileContent=None,strAttachFileName=None):
+def send_email(strFrom,strTo,strSubject,strBody,strTextType,strAttachFileContent=None,strAttachFileName=None):
     import sendgrid
     from sendgrid.helpers.mail import *
     sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
@@ -92,18 +87,18 @@ def SendEmail(strFrom,strTo,strSubject,strBody,strTextType,strAttachFileContent=
         return False
 
 class MyEmailSettings(ndb.Expando):
-    strUserID = ndb.StringProperty()
-    strEmailAddress = ndb.StringProperty()
-    strName = ndb.StringProperty()
-    strSignature = ndb.StringProperty()
-    strDateCreated = ndb.DateProperty(auto_now_add=True)
-    strTimeCreated = ndb.TimeProperty(auto_now_add=True)
+    uid = ndb.StringProperty()
+    email = ndb.StringProperty()
+    name = ndb.StringProperty()
+    signature = ndb.StringProperty()
+    date_created = ndb.DateProperty(auto_now_add=True)
+    time_created = ndb.TimeProperty(auto_now_add=True)
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -114,7 +109,7 @@ class MyEmailSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmailAddress = strinput
+                self.email = strinput
                 return True
             else:
                 return False
@@ -125,7 +120,7 @@ class MyEmailSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strName = strinput
+                self.name = strinput
                 return True
             else:
                 return False
@@ -137,7 +132,7 @@ class MyEmailSettings(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSignature = strinput
+                self.signature = strinput
                 return True
             else:
                 return False
@@ -148,32 +143,26 @@ class MyEmail(ndb.Expando):
     """
         Thread ID allows send response emails to be saved in a single thread
     """
-    strUserID = ndb.StringProperty()
-    strThreadID = ndb.StringProperty()
-    strEmailID = ndb.StringProperty() # Unique ID for every email
-    strToAddress = ndb.StringProperty()
-    strToName = ndb.StringProperty()
-    strSubject = ndb.StringProperty()
-    strBodyText = ndb.StringProperty()
-    strBodyHTML = ndb.StringProperty()
+    uid = ndb.StringProperty()
+    thread_id = ndb.StringProperty()
+    email_id = ndb.StringProperty() # Unique ID for every email
+    to_address = ndb.StringProperty()
+    to_name = ndb.StringProperty()
+    subject = ndb.StringProperty()
+    body_text = ndb.StringProperty()
+    body_html = ndb.StringProperty()
 
-    strYearSent = ndb.StringProperty()
-    strMonthSent = ndb.StringProperty()
-    strDaySent = ndb.StringProperty()
-    strTimeSent = ndb.TimeProperty()
-
-    strYearCreated = ndb.StringProperty()
-    strMonthCreated = ndb.StringProperty()
-    strDayCreated = ndb.StringProperty()
-    strTimeCreated = ndb.TimeProperty()
-
-    strStatus = ndb.StringProperty(default="Draft") # Sent,  Trash
+    date_sent = ndb.DateProperty()
+    time_sent = ndb.TimeProperty()
+    date_created = ndb.DateProperty()
+    time_created = ndb.TimeProperty()
+    status = ndb.StringProperty(default="Draft") # Sent,  Trash
 
     def writeUserID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strUserID = strinput
+                self.uid = strinput
                 return True
             else:
                 return False
@@ -183,7 +172,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strThreadID = strinput
+                self.thread_id = strinput
                 return True
             else:
                 return False
@@ -203,7 +192,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strEmailID = strinput
+                self.email_id = strinput
                 return True
             else:
                 return False
@@ -213,7 +202,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strToAddress = strinput
+                self.to_address = strinput
                 return True
             else:
                 return False
@@ -223,7 +212,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strToName = strinput
+                self.to_name = strinput
                 return True
             else:
                 return False
@@ -233,7 +222,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSubject = strinput
+                self.subject = strinput
                 return True
             else:
                 return False
@@ -243,7 +232,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBodyText = strinput
+                self.body_text = strinput
                 return True
             else:
                 return False
@@ -253,7 +242,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strBodyHTML = strinput
+                self.body_html = strinput
                 return True
             else:
                 return False
@@ -263,7 +252,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) <= 2100) and (int(strinput) >= 2016):
-                self.strYearSent = strinput
+                self.year_sent = strinput
                 return True
             else:
                 return False
@@ -273,7 +262,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) <= 12) and (int(strinput) >= 1):
-                self.strMonthSent = strinput
+                self.month_sent = strinput
                 return True
             else:
                 return False
@@ -283,7 +272,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) <= 31) and (int(strinput) >= 1):
-                self.strDaySent = strinput
+                self.date_sent = strinput
                 return True
             else:
                 return False
@@ -292,7 +281,7 @@ class MyEmail(ndb.Expando):
     def writeTimeCreated(self,strinput):
         try:
             if strinput is not None:
-                self.strTimeCreated = strinput
+                self.time_created = strinput
                 return True
             else:
                 return False
@@ -332,7 +321,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput.isdigit() and (int(strinput) >= 1) and (int(strinput) <= 31):
-                self.strDayCreated = strinput
+                self.date_created = strinput
                 return True
             else:
                 return False
@@ -342,7 +331,7 @@ class MyEmail(ndb.Expando):
         try:
             strinput = str(strinput)
             if strinput in ['Draft','Sent','Trash']:
-                self.strStatus = strinput
+                self.status = strinput
                 return True
             else:
                 return False
@@ -496,7 +485,7 @@ class myEmailHandler(webapp2.RequestHandler):
         Guser = users.get_current_user()
         if Guser:
 
-            findRequest = MyEmailSettings.query(MyEmailSettings.strUserID == Guser.user_id())
+            findRequest = MyEmailSettings.query(MyEmailSettings.uid == Guser.user_id())
             thisEmailSettingsList = findRequest.fetch()
             if len(thisEmailSettingsList) > 0:
                 thisEmailSettings = thisEmailSettingsList[0]
@@ -518,7 +507,7 @@ class myEmailHandler(webapp2.RequestHandler):
                 vstrName = self.request.get('vstrName')
                 vstrSignature = self.request.get('vstrSignature')
 
-                findRequest = MyEmailSettings.query(MyEmailSettings.strUserID == Guser.user_id())
+                findRequest = MyEmailSettings.query(MyEmailSettings.uid == Guser.user_id())
                 thisEmailSettingsList = findRequest.fetch()
                 if len(thisEmailSettingsList) > 0:
                     thisEmailSetting = thisEmailSettingsList[0]
@@ -541,7 +530,7 @@ class myEmailHandler(webapp2.RequestHandler):
                 self.response.write(template.render(context))
 
             elif vstrChoice == "2":
-                findRequest = MyEmail.query(MyEmail.strUserID == Guser.user_id(),MyEmail.strStatus == "Sent")
+                findRequest = MyEmail.query(MyEmail.uid == Guser.user_id(), MyEmail.status == "Sent")
                 thisSentEmailsList = findRequest.fetch()
 
                 template = template_env.get_template('templates/myemail/email/sent.html')
@@ -549,7 +538,7 @@ class myEmailHandler(webapp2.RequestHandler):
                 self.response.write(template.render(context))
 
             elif vstrChoice == "3":
-                findRequest = MyEmail.query(MyEmail.strUserID == Guser.user_id(), MyEmail.strStatus == "Draft")
+                findRequest = MyEmail.query(MyEmail.uid == Guser.user_id(), MyEmail.status == "Draft")
                 thisEmailDraftsList = findRequest.fetch()
 
                 template = template_env.get_template('templates/myemail/email/drafts.html')
@@ -557,7 +546,7 @@ class myEmailHandler(webapp2.RequestHandler):
                 self.response.write(template.render(context))
 
             elif vstrChoice == "4":
-                findRequest = MyEmailSettings.query(MyEmailSettings.strUserID == Guser.user_id())
+                findRequest = MyEmailSettings.query(MyEmailSettings.uid == Guser.user_id())
                 thisEmailSettingsList = findRequest.fetch()
 
                 if len(thisEmailSettingsList) > 0:
@@ -620,22 +609,22 @@ class myEmailHandler(webapp2.RequestHandler):
                 thisTime = datetime.time(hour=thisTime.hour,minute=thisTime.minute,second=thisTime.second)
                 thisSent.writeTimeCreated(strinput=thisTime)
 
-                findRequest = MyEmailSettings.query(MyEmailSettings.strUserID == Guser.user_id())
+                findRequest = MyEmailSettings.query(MyEmailSettings.uid == Guser.user_id())
                 thisEmailSettingsList = findRequest.fetch()
 
                 if len(thisEmailSettingsList) > 0:
                     thisEmailSetting = thisEmailSettingsList[0]
 
-                    thisEmailSetting.strEmailAddress = thisEmailSetting.strEmailAddress + "@sa-sms.appspotmail.com"
+                    thisEmailSetting.email = thisEmailSetting.email + "@sa-sms.appspotmail.com"
                     try:
                         #message = mail.EmailMessage()
-                        #message.sender = thisEmailSetting.strEmailAddress
-                        #message.to = thisSent.strToAddress
+                        #message.sender = thisEmailSetting.email
+                        #message.to = thisSent.to_address
                         #message.subject = thisSent.subject
-                        #message.body = thisSent.strBodyHTML
+                        #message.body = thisSent.body_html
                         #message.send()
                         #def SendEmail(strFrom,strTo,subject,body,strTextType):
-                        if SendEmail(strFrom=thisEmailSetting.strEmailAddress,strTo=thisSent.strToAddress,strSubject=thisSent.strSubject,strBody=thisSent.strBodyHTML,strTextType="text/html"):
+                        if SendEmail(strFrom=thisEmailSetting.email, strTo=thisSent.to_address, strSubject=thisSent.subject, strBody=thisSent.body_html, strTextType="text/html"):
 
                             Now = datetime.datetime.now()
                             thisYear  = Now.year
