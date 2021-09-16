@@ -37,6 +37,7 @@ class BulkSMSCron:
         **Class BulkSMSCron**
             cron utilities for sending bulk sms messages
     """
+
     def __init__(self):
         pass
 
@@ -125,7 +126,8 @@ class BulkSMSCron:
         this_sms_account.total_sms -= total_delivered
         this_sms_account.put()
 
-    def send_with_click_send(self, _message, recipients_list, schedule, this_date, this_sms_account, this_time):
+    def send_with_click_send(self, _message: Messages, recipients_list: List[str], schedule: MessageSchedule,
+                             this_sms_account: SMSAccount):
         from mysms import ClickSendSMSPortal
         _click_send = ClickSendSMSPortal.query().get()
         if not isinstance(_click_send, ClickSendSMSPortal):
@@ -135,12 +137,13 @@ class BulkSMSCron:
         for cell_number in recipients_list:
             reference = _click_send.send_sms(cell=cell_number, message=_message.message)
             if reference:
-                self.create_delivery_report(_message, cell_number, reference, this_date, this_sms_account, this_time)
+                self.create_delivery_report(_message=_message, cell_number=cell_number, reference=reference,
+                                            this_sms_account=this_sms_account)
                 total_delivered += 1
 
         schedule.put()
-        self.messages_sent(_message, schedule, this_date, this_sms_account, this_time, total_delivered)
-        this_sms_account.writeTotalSMS(strinput=(this_sms_account.total_sms - total_delivered))
+        self.messages_sent(_message)
+        this_sms_account.total_sms -= total_delivered
         this_sms_account.put()
 
     def send_with_budget(self, _message, recipients_list, schedule, this_date, this_sms_account, this_time):
