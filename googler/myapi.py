@@ -1,30 +1,14 @@
 import os
-from google.appengine.api import urlfetch
-import webapp2
 import jinja2
-from google.appengine.ext import ndb
+from google.cloud import ndb
 import logging
 import datetime
 
 template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
-strDefaultWhiteList = ["https://church-admins.appspot.com",
-                       "https://sa-loans.appspot.com",
-                       "https://ab-loan.appspot.com",
-                       "https://pro-finance.appspot.com",
-                       "https://midey-finance.appspot.com",
-                       "https://client-trace.appspot.com",
-                       "https://choosen-loan.appspot.com",
-                       "https://manage-hotels.appspot.com",
-                       "https://p2ptraders-app.appspot.com",
-                       "https://rinde-cashloan.appspot.com",
-                       "https://sa-sms.appspot.com",
-                       "https://sa-fax.appspot.com",
-                       "https://justice-ndou.appspot.com",
-                       "https://freelancing-solutions.appspot.com",
-                       "https://easy-hosting.appspot.com",
-                       "https://cloud-job.appspot.com",]
-class WhiteList(ndb.Expando):
-    strURL = ndb.StringProperty()
+strDefaultWhiteList = []
+
+class WhiteList(ndb.Model):
+    url = ndb.StringProperty()
 
     def writeURL(self,strinput):
         try:
@@ -38,42 +22,42 @@ class WhiteList(ndb.Expando):
             return False
 
 
-class ErrorMessages(ndb.Expando):
+class ErrorMessages(ndb.Model):
 
-    strLangCode = ndb.StringProperty()
-
-    strOrganizationID = ndb.StringProperty() #TODO Allow organization to select Language, then use the translate API to translate all the interfaces and html documents
-
-    strMessReportNotFound = ndb.StringProperty(default="Report not found")
-    strMessAccountNotVerified = ndb.StringProperty(default="Account not verified")
-    strMessAccountNotValid = ndb.StringProperty(default="Account not valid")
-    strMessWebsiteNotAuthorized = ndb.StringProperty(default="Website not authorized for use with API")
-    strMessAuthenticationError = ndb.StringProperty(default="Authentication error")
-    strMessErrorSendingMessage = ndb.StringProperty(default="Error sending message")
-    strMessInsufficientCredit = ndb.StringProperty(default="Insufficient credit")
+    language_code = ndb.StringProperty()
+    # TODO Allow organization to select Language, then use the translate API to translate all the interfaces
+    #  and html documents
+    organization_id = ndb.StringProperty()
+    message_report_not_found = ndb.StringProperty(default="Report not found")
+    message_account_not_verified = ndb.StringProperty(default="Account not verified")
+    message_account_not_valid = ndb.StringProperty(default="Account not valid")
+    message_website_not_verified = ndb.StringProperty(default="Website not authorized for use with API")
+    messaged_authenticated_error = ndb.StringProperty(default="Authentication error")
+    message_error_sending_message = ndb.StringProperty(default="Error sending message")
+    message_insufficient_credit = ndb.StringProperty(default="Insufficient credit")
 
 class Const(ndb.Expando):
-    strNoDataCode = ndb.StringProperty(default="X0001")
-    strDataSplitter = ndb.StringProperty(default="-")
-    strAPIGroupID = ndb.StringProperty(default="APIGROUP")
+    no_data_code = ndb.StringProperty(default="X0001")
+    data_splitter = ndb.StringProperty(default="-")
+    api_group_id = ndb.StringProperty(default="APIGROUP")
 
 class PartnerSites(Const):
     """
         Return data format for contacts
         name-surname-cell-email
     """
-    strSiteName = ndb.StringProperty(default="Church Admin")
-    strServiceName = ndb.StringProperty(default="Contacts")
-    strSiteID = ndb.StringProperty()
-    strURL = ndb.StringProperty(default="https://church-admins.appspot.com")
-    strAPIKey = ndb.StringProperty(default=os.environ.get('BIM_INTERNAL_API'))
-    strAPISecret = ndb.StringProperty(default=os.environ.get('BIM_INTERNAL_SECRET'))
+    site_name = ndb.StringProperty(default="Church Admin")
+    service_name = ndb.StringProperty(default="Contacts")
+    site_id = ndb.StringProperty()
+    url = ndb.StringProperty(default="https://church-admins.appspot.com")
+    api_key = ndb.StringProperty(default=os.environ.get('BIM_INTERNAL_API'))
+    api_secret = ndb.StringProperty(default=os.environ.get('BIM_INTERNAL_SECRET'))
 
     def writeSiteID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSiteID = strinput
+                self.site_id = strinput
                 return True
             else:
                 return False
@@ -93,7 +77,7 @@ class PartnerSites(Const):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strURL = strinput
+                self.url = strinput
                 return True
             else:
                 return False
@@ -103,7 +87,7 @@ class PartnerSites(Const):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAPIKey = strinput
+                self.api_key = strinput
                 return True
             else:
                 return False
@@ -131,7 +115,7 @@ class PartnerSites(Const):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAPISecret = strinput
+                self.api_secret = strinput
                 return True
             else:
                 return False
@@ -141,7 +125,7 @@ class PartnerSites(Const):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strSiteName = strinput
+                self.site_name = strinput
                 return True
             else:
                 return False
@@ -151,7 +135,7 @@ class PartnerSites(Const):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strServiceName = strinput
+                self.service_name = strinput
                 return True
             else:
                 return False
@@ -173,10 +157,10 @@ class PartnerSites(Const):
         :return:
         """
         try:
-            form_data = "&api=" + self.strAPIKey + "&secret=" + self.strAPISecret + "&index=" + str(index)
+            form_data = "&api=" + self.api_key + "&secret=" + self.api_secret + "&index=" + str(index)
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            url = self.strURL + "/epinternal/contacts-get" # The end point for internal contact get
-            result = urlfetch.fetch(url=self.strURL,payload=form_data,method=urlfetch.POST,headers=headers,validate_certificate=True)
+            url = self.url + "/epinternal/contacts-get" # The end point for internal contact get
+            result = urlfetch.fetch(url=self.url, payload=form_data, method=urlfetch.POST, headers=headers, validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400):
                 return result.content
             else:
@@ -191,10 +175,10 @@ class PartnerSites(Const):
         :return:
         """
         try:
-            form_data = "&api=" + self.strAPIKey + "&secret=" + self.strAPISecret
+            form_data = "&api=" + self.api_key + "&secret=" + self.api_secret
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            url = self.strURL + "/epinternal/contacts-get" # The end point for internal contact get
-            result = urlfetch.fetch(url=self.strURL,payload=form_data,method=urlfetch.POST,headers=headers,validate_certificate=True)
+            url = self.url + "/epinternal/contacts-get" # The end point for internal contact get
+            result = urlfetch.fetch(url=self.url, payload=form_data, method=urlfetch.POST, headers=headers, validate_certificate=True)
             if (result.status_code >= 200) and (result.status_code < 400):
                 return result.content
             else:
@@ -208,20 +192,20 @@ class PartnerSites(Const):
 
 class EndPoints(Const):
 
-    strOrganizationID = ndb.StringProperty() #Used only for external API that uses internal resources example message sending API
-    strServiceName = ndb.StringProperty(default="Contacts")
-    strPointID = ndb.StringProperty()
-    strPointURL = ndb.StringProperty()
+    organization_id = ndb.StringProperty() #Used only for external API that uses internal resources example message sending API
+    service_name = ndb.StringProperty(default="Contacts")
+    point_id = ndb.StringProperty()
+    point_url = ndb.StringProperty()
     #TODO- Organizations must be given their own contacts end point key and secret, and also their websites included
     #TODO- in the white list
-    strAPIKey = ndb.StringProperty()
-    strAPISecret = ndb.StringProperty()
+    api_key = ndb.StringProperty()
+    api_secret = ndb.StringProperty()
 
     def writeOrganizationID(self,strinput):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strOrganizationID = strinput
+                self.organization_id = strinput
                 return True
             else:
                 return False
@@ -232,7 +216,7 @@ class EndPoints(Const):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPointID = strinput
+                self.point_id = strinput
                 return True
             else:
                 return False
@@ -243,7 +227,7 @@ class EndPoints(Const):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strPointURL = strinput
+                self.point_url = strinput
                 return True
             else:
                 return False
@@ -254,7 +238,7 @@ class EndPoints(Const):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAPIKey = strinput
+                self.api_key = strinput
                 return True
             else:
                 return False
@@ -265,7 +249,7 @@ class EndPoints(Const):
         try:
             strinput = str(strinput)
             if strinput != None:
-                self.strAPISecret = strinput
+                self.api_secret = strinput
                 return True
             else:
                 return False
@@ -277,7 +261,7 @@ class EndPoints(Const):
         try:
             strPointID = ""
             for i in range(256):
-                self.strPointID += random.SystemRandom().choice(string.digits + string.ascii_uppercase)
+                self.point_id += random.SystemRandom().choice(string.digits + string.ascii_uppercase)
             return strPointID
         except:
             return None
@@ -390,7 +374,7 @@ class RoutesHandler(webapp2.RequestHandler):
                         thisSMSAccount.put()
 
 
-                        thisMessage.writeGroupID(strinput=thisEndPoint.strAPIGroupID)
+                        thisMessage.writeGroupID(strinput=thisEndPoint.api_group_id)
                         thisMessage.writeMessageID(strinput=thisMessage.CreateMessageID())
                         thisMessage.writeMessage(strinput=strMessage)
                         thisMessage.writeDateCreated(strinput=strThisDate)
@@ -405,13 +389,13 @@ class RoutesHandler(webapp2.RequestHandler):
                         ThisDeliveryReport.writeOrganizationID(strinput=thisEndPoint.organization_id)
                         ThisDeliveryReport.writeDelivered(strinput=True)
                         ThisDeliveryReport.writeCell(strinput=strCell)
-                        ThisDeliveryReport.writeGroupID(strinput=thisEndPoint.strAPIGroupID)
+                        ThisDeliveryReport.writeGroupID(strinput=thisEndPoint.api_group_id)
                         ThisDeliveryReport.writeDate(strinput=strThisDate)
                         ThisDeliveryReport.writeTime(strinput=strThisTime)
                         ThisDeliveryReport.writeReference(strinput=ref)
                         ThisDeliveryReport.put()
 
-                        findRequest = SMSContacts.query(SMSContacts.strGroupID == thisEndPoint.strAPIGroupID,
+                        findRequest = SMSContacts.query(SMSContacts.strGroupID == thisEndPoint.api_group_id,
                                                         SMSContacts.strCellNumber == strCell)
                         thisSMSContactList = findRequest.fetch()
 
@@ -422,14 +406,14 @@ class RoutesHandler(webapp2.RequestHandler):
                             thisContact = SMSContacts()
                             thisContact.writeUserID(strinput=thisEndPoint.api)
                             thisContact.writeCellNumber(strinput=strCell)
-                            thisContact.writeGroupID(strinput=thisEndPoint.strAPIGroupID)
+                            thisContact.writeGroupID(strinput=thisEndPoint.api_group_id)
                             thisContact.writeNames(strinput="API")
                             thisContact.writeSurname(strinput="API")
                             thisContact.put()
                             AddContact = True
 
-                        findRequest = Groups.query(Groups.strOrganizationID == thisEndPoint.organization_id,
-                                                   Groups.strGroupID == thisEndPoint.strAPIGroupID)
+                        findRequest = Groups.query(Groups.organization_id == thisEndPoint.organization_id,
+                                                   Groups.strGroupID == thisEndPoint.api_group_id)
                         thisGroupList = findRequest.fetch()
 
                         if len(thisGroupList) > 0:
@@ -437,7 +421,7 @@ class RoutesHandler(webapp2.RequestHandler):
                         else:
                             thisGroup = Groups()
 
-                            thisGroup.writeGroupID(strinput=EndPoints.strAPIGroupID)
+                            thisGroup.writeGroupID(strinput=EndPoints.api_group_id)
                             thisGroup.writeOrganizationID(strinput=thisEndPoint.organization_id)
                             thisGroup.writeUserID(strinput=thisEndPoint.api)  # THE API Key User means the Group is owned by the API Key
                             thisGroup.writeGroupDescription(strinput="API Group for messages sent through the API")
@@ -590,7 +574,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
             if thisAdvertAccount.total_credits <= int(strCreditLimit):
                 thisAdvert = Advert()
-                thisAdvert.writeUserID(strinput=thisEndPoint.strAPIKey)
+                thisAdvert.writeUserID(strinput=thisEndPoint.api_key)
                 thisAdvert.writeOrganizationID(strinput=thisEndPoint.organization_id)
                 thisAdvert.writeAdvert(strinput=strAdvert)
                 thisAdvert.writeAdvertID(strinput=thisAdvert.CreateAdvertID())
@@ -899,7 +883,7 @@ class RoutesHandler(webapp2.RequestHandler):
         if len(thisFaxAccountList) > 0:
             thisFaxAccount = thisFaxAccountList[0]
 
-            if thisFaxAccount.strCreditInPages > 0:
+            if thisFaxAccount.credit_in_pages > 0:
                 #TODO- Check which portal to use if clicksend download the file and send if Twilio send as is
 
                 if thisFaxAccount.use_portal == "ClickSend":
@@ -912,12 +896,12 @@ class RoutesHandler(webapp2.RequestHandler):
 
                 elif thisFaxAccount.use_portal == "Twilio":
                     thisPortal = MyTwilioPortal()
-                    findRequest = FaxSettings.query(FaxSettings.strOrganizationID == thisEndPoint.organization_id)
+                    findRequest = FaxSettings.query(FaxSettings.organization_id == thisEndPoint.organization_id)
                     thisFaxSettingsList = findRequest.fetch()
 
                     if len(thisFaxSettingsList) > 0:
                         thisFaxSettings = thisFaxSettingsList[0]
-                        strRef = thisPortal.sendFax(strFrom=thisFaxSettings.strFaxNumber,strTo=strFaxNumber,strFaxURL=strFaxMediaURL)
+                        strRef = thisPortal.sendFax(strFrom=thisFaxSettings.fax_number, strTo=strFaxNumber, strFaxURL=strFaxMediaURL)
 
                         #TODO- Consider also donwloading the fax file here once obtained send as fax, obtain the filename below
                         strFileName = ""
@@ -927,7 +911,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
                         thisSentFax = SentFax()
                         thisSentFax.writeOrganizationID(strinput=thisEndPoint.organization_id)
-                        thisSentFax.writeUserID(strinput=thisEndPoint.strAPIKey)
+                        thisSentFax.writeUserID(strinput=thisEndPoint.api_key)
                         thisSentFax.writeFaxNumber(strinput=strFaxNumber)
                         thisSentFax.writeDateSent(strinput=strThisDate)
                         thisSentFax.writeTimeSent(strinput=strThisTime)
@@ -960,7 +944,7 @@ class RoutesHandler(webapp2.RequestHandler):
 
         self.response.headers['Content-Type'] = "application/json"
         template = template_env.get_template('templates/api/credit.json')
-        context = {'total_credits': thisFaxAccount.strCreditInPages}
+        context = {'total_credits': thisFaxAccount.credit_in_pages}
         self.response.write(template.render(context))
 
     def get(self):
@@ -1022,14 +1006,14 @@ class RoutesHandler(webapp2.RequestHandler):
         #TODO- find out how self.request.remote_addr is different from self.request.host_url
         logging.info(strOriginURL)
 
-        findRequest = EndPoints.query(EndPoints.strAPIKey == strAPI, EndPoints.strAPISecret == strSecret)
+        findRequest = EndPoints.query(EndPoints.api_key == strAPI, EndPoints.api_secret == strSecret)
         thisEndPointList = findRequest.fetch()
 
         if len(thisEndPointList) > 0:
             thisEndPoint = thisEndPointList[0]
             logging.info("We got my END point ")
 
-            strMyPointURL = str(thisEndPoint.strPointURL)
+            strMyPointURL = str(thisEndPoint.point_url)
             strOriginURL = str(strOriginURL)
 
             if strMyPointURL.startswith(strOriginURL):
@@ -1142,7 +1126,7 @@ class RoutesHandler(webapp2.RequestHandler):
                             self.SurveyCredit(strOrganizationID=thisEndPoint.organization_id)
 
                         elif strFunction == "fax-send":
-                            #def SendFax(self,strFaxMediaURL,strFaxNumber):
+                            #def SendFax(self,strFaxMediaURL,fax_number):
                             strFaxMediaURL = self.request.get('media-url')
                             strFaxNumber = self.request.get('fax-number')
                             self.SendFax(strFaxMediaURL=strFaxMediaURL, strFaxNumber=strFaxNumber, thisEndPoint=thisEndPoint.organization_id)
