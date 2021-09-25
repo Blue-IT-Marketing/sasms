@@ -258,3 +258,5 @@ dist
 .pnp.*
 
 *.xml
+*.csv
+.idea/bulksms.iml
